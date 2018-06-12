@@ -1,0 +1,32 @@
+$(function () {
+
+    var getThisUserUrl = "/user/getThisUser"; //拿到当前用户信息的url
+
+    var contentDiv = $('#main_content');
+    $('#project_monthly_report').click(function () {
+        contentDiv.load('reporter/projectmonthlyreport');
+    })
+    $('#person_info').click(function () {
+        contentDiv.load('user/personinfo');
+    })
+
+
+
+
+
+    getThisUser(getThisUserUrl);
+
+
+
+    function getThisUser(url) {
+        $.getJSON(url, function(data) {
+            if (data.code==1002) {
+                // 从返回的JSON当中获取product对象的信息，并赋值给表单
+                var userInfo = data.data;
+                $('#username .font-bold').html(userInfo.name);
+                $('#name').html(userInfo.username + ' <b class="caret"></b>');
+            }
+        });
+    }
+});
+
