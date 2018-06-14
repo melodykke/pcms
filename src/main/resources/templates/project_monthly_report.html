@@ -10,181 +10,243 @@
 
     <title>项目月报</title>
 
-
-
     <link th:href="@{/css/plugins/iCheck/custom.css}" rel="stylesheet">
-    <link th:href="@{/css/animate.css}" rel="stylesheet">
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-
-    <link th:href="@{/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css}" rel="stylesheet">
-
+    <link th:href="@{/css/plugins/steps/jquery.steps.css}" rel="stylesheet">
+    <link th:href="@{/css/plugins/datapicker/datepicker3.css}" rel="stylesheet">
+    <link th:href="@{/css/plugins/daterangepicker/daterangepicker-bs3.css}" rel="stylesheet">
+    <link th:href="@{/css/plugins/cropper/cropper.min.css}" rel="stylesheet">
+    <link th:href="@{/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+    <link th:href="@{/css/plugins/jasny/jasny-bootstrap.min.css}" rel="stylesheet">
+    
+    <link th:href="@{/css/custom/fileinput.css}"  rel="stylesheet" type="text/css">
 </head>
 
 <body>
 
-    <div id="wrapper">
-        </div>
-            <div class="row wrapper border-bottom white-bg page-heading">
-                <div class="col-lg-10">
-                    <h2>项目月报填报</h2>
-                    <ol class="breadcrumb">
-                        <li>
-                            <a th:href="@{/index}">主页</a>
-                        </li>
-                        <li>
-                            <a>项目储备</a>
-                        </li>
-                        <li class="active">
-                            <strong>月报填报</strong>
-                        </li>
-                    </ol>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>月报新增</h5>
                 </div>
-                <div class="col-lg-2">
+                <div class="ibox-content">
+                    <form id="form" action="#" class="wizard-big">
 
-                </div>
-            </div>
-        <div class="wrapper wrapper-content animated fadeInRight">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>工程部分投资 <small> 下列每项指标需逐项认真填写 </small></h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#">Config option 1</a>
-                                    </li>
-                                    <li><a href="#">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <form method="get" class="form-horizontal">
-                                <div class="form-group"><label class="col-sm-2 control-label">建筑工程</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group"><label class="col-sm-2 control-label">机电设备及安装工程</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"> <span class="help-block m-b-none">A block of help text that breaks onto a new line and may extend beyond one line.</span>
+                        <h1>投资情况</h1>
+                        <fieldset>
+                            <h2>工程部分投资</h2>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>建筑工程(万元)</label><span style="color:red;"> *</span>
+                                        <input id="civil_engineering" type="text" class="form-control required number">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>金属机构设备及安装工程(万元)</label><span style="color:red;"> *</span>
+                                        <input id="metal_mechanism" type="text" class="form-control number">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>独立费用(万元)</label><span style="color:red;"> *</span>
+                                        <input id="independent_cost"  type="text" class="form-control number">
                                     </div>
                                 </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group"><label class="col-sm-2 control-label">金属机构设备及安装工程</label>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>机电设备及安装工程(万元)</label><span style="color:red;"> *</span>
+                                        <input id="electromechanical_equipment" type="text" class="form-control number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>施工临时工程(万元)</label><span style="color:red;"> *</span>
+                                        <input id="temporary_work" type="text" class="form-control number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>基本预备费(万元)</label><span style="color:red;"> *</span>
+                                        <input id="reserve_funds" type="text" class="form-control number">
+                                    </div>
+                                </div>
+                            </div>
 
-                                    <div class="col-sm-10"><input type="password" class="form-control" name="password"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">施工临时工程</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">独立费用</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">基本预备费</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
+                            <div class="hr-line-dashed"></div>
 
-
-
-
-                                <div class="hr-line-dashed"></div>
-                                <h5>移民环境投资<small> 下列每项指标需逐项认真填写 </small></h5>
-                                <div class="hr-line-dashed"></div>
-
-                                <div class="form-group"><label class="col-sm-2 control-label">建筑征地移民安置补偿费</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">水土保持工程投资</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">环境保护工程投资</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">其他</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
+                            <h2>移民、环境投资</h2>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>建设征地移民安置补偿费(万元)</label><span style="color:red;"> *</span>
+                                        <input id="resettlement_arrangement" type="text" class="form-control required number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>环境保护工程投资(万元)</label><span style="color:red;"> *</span>
+                                        <input id="environmental_protection" type="text" class="form-control number">
+                                    </div>
                                 </div>
 
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>水土保持工程投资(万元)</label><span style="color:red;"> *</span>
+                                        <input id="water_conservation" type="text" class="form-control number">
+                                    </div>
+                                     <div class="form-group">
+                                        <label>其他(万元)</label>
+                                        <input id="other_cost" type="text" class="form-control number">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
 
+                        <h1>工程量情况</h1>
+                        <fieldset>
+                            <h2>本月完成工程量</h2>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>土石方明挖（万/m³）</label><span style="color:red;"> *</span>
+                                        <input id="open_dug" type="text" class="form-control required number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>土石方回填（万/m³）</label><span style="color:red;"> *</span>
+                                        <input id="backfill" type="text" class="form-control number ">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>混泥土（万/m³）</label><span style="color:red;"> *</span>
+                                        <input id="concrete" type="text" class="form-control number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>灌浆（m或m³）</label><span style="color:red;"> *</span>
+                                        <input id="grout" type="text" class="form-control number">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>土石方洞挖</label><span style="color:red;"> *</span>
+                                        <input id="hole_dug" type="text" class="form-control required number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>砌石（万/m³）</label><span style="color:red;"> *</span>
+                                        <input id="masonry" type="text" class="form-control number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>钢筋（t）</label><span style="color:red;"> *</span>
+                                        <input id="rebar" type="text" class="form-control number">
+                                    </div>
 
-                                <div class="hr-line-dashed"></div>
-                                <h5> 工程量 <small> 下列每项指标需逐项认真填写 </small></h5>
-                                <div class="hr-line-dashed"></div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
 
-                                <div class="form-group"><label class="col-sm-2 control-label">土石方明挖（万m3）</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">土石方洞挖（万m3）</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">土石方回填（万m3）</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">砌石（万m3）</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">混凝土（万m3）</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">钢筋（t）</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="form-group"><label class="col-sm-2 control-label">灌浆（m或m3）</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
+                        </fieldset>
 
+                        <h1>项目情况</h1>
+                        <fieldset>
 
+                            <div class="row">
 
+                                <div class="col-lg-6">
+                                    <div class="form-group" id="data_4">
+                                        <label class="font-normal">填报月份</label>
+                                        <div class="input-group date">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input id="submit_date" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>劳动力投入（万工日）</label><span style="color:red;"> *</span>
+                                        <input id="labour_force" type="text" class="form-control number">
+                                    </div>
+                                </div>
+                             
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>主要建设内容</label>
+                                        <textarea id="construction_content" class="form-control required" ></textarea>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label>存在困难及问题</label>
+                                        <textarea id="difficulty" class="form-control "></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>下一步建议</label>
+                                        <textarea id="suggestion" class="form-control "></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                	<div class="form-group">
+                                        <label>工程形象进度及节点工期</label>
+                                        <textarea id="visual_progress" class="form-control required" ></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>采取的主要措施</label>
+                                        <textarea id="measure" class="form-control "></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>备注</label>
+                                        <textarea id="remark" class="form-control "></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+                        <h1>附件</h1>
+                        <fieldset>
+                            <h2>图片附件上传</h2>
+                            <br>
+                            <br>
+                            <div class="row">
+                                <form enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-white" type="submit">Cancel</button>
-                                        <button class="btn btn-primary" type="submit">Save changes</button>
+                                    <div class="file-loading">
+                                        <input id="uploadfile" name="uploadfile" type="file" multiple  data-overwrite-initial="false" data-min-file-count="1">
                                     </div>
                                 </div>
                             </form>
-                        </div>
-                    </div>
+                            </div>
+                            <br>
+                            <div class="hr-line-dashed"></div>
+                        </fieldset>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="footer">
-            <div class="pull-right">
-                10GB of <strong>250GB</strong> Free.
-            </div>
-            <div>
-                <strong>Copyright</strong> Example Company &copy; 2014-2017
-            </div>
-        </div>
-
     </div>
+</div>
+
+<script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<!-- Steps -->
+<script th:src="@{/js/plugins/steps/jquery.steps.min.js}"></script>
+
+<!-- Jquery Validate -->
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+<script th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
 
 
+<!-- Data picker -->
+<script th:src="@{/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+<script th:src="@{/js/custom/bootstrap-datepicker.zh-CN.js}"></script>
+<!-- Image cropper -->
+<script th:src="@{/js/plugins/cropper/cropper.min.js}"></script>
+<!-- Tags Input -->
+<script th:src="@{/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js}"></script>
 
-    <!-- Mainly scripts -->
-    <script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
-    <script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/plugins/sweetalert/sweetalert.min.js}"></script>
 
-    <!-- Custom and plugin javascript -->
-    <script th:src="@{/js/inspinia.js}"></script>
-    <script th:src="@{/js/plugins/pace/pace.min.js}"></script>
+<script th:src="@{/js/custom/project_monthly_report.js}"></script>
 
-    <!-- iCheck -->
-    <script th:src="@{/js/plugins/iCheck/icheck.min.js}"></script>
-        <script>
-            $(document).ready(function () {
-                $('.i-checks').iCheck({
-                    checkboxClass: 'icheckbox_square-green',
-                    radioClass: 'iradio_square-green',
-                });
-            });
-        </script>
+
+<script th:src="@{/js/custom/fileinput.min.js}" type="text/javascript"></script>
+
+<script src="https://cdn.bootcss.com/bootstrap-fileinput/4.3.5/js/locales/zh.min.js"></script>
+
 </body>
 
 </html>

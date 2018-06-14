@@ -2,6 +2,7 @@ package com.gzzhsl.pcms.shiro.bean;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gzzhsl.pcms.entity.PersonInfo;
+import com.gzzhsl.pcms.entity.Project;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
@@ -27,6 +28,9 @@ public class UserInfo {
     @JsonManagedReference
     @OneToOne(mappedBy = "userInfo")
     PersonInfo personInfo;
+    @JsonManagedReference
+    @OneToOne(mappedBy = "userInfo")
+    Project project;
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private UserInfo parent;

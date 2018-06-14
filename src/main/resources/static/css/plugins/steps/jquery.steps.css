@@ -7,7 +7,7 @@
 {
     display: block;
     width: 100%;
-    overflow: hidden;
+    height:auto;
 }
 
 .wizard a,
@@ -134,7 +134,7 @@
 
 .wizard > .content
 {
-    background: #eee;
+    background: #ffffff;
     display: block;
     margin: 5px 5px 10px 5px;
     min-height: 120px;
@@ -148,8 +148,14 @@
 }
 
 .wizard-big.wizard > .content {
+    min-height: 600px;
+    overflow-y:auto;
+}
+
+.wizard-tz.wizard > .content {
     min-height: 320px;
 }
+
 .wizard.vertical > .content
 {
     display: inline;
