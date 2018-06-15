@@ -3,14 +3,18 @@ package com.gzzhsl.pcms.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Slf4j
 public class Project {
     @Id
@@ -32,6 +36,8 @@ public class Project {
     private String legalPersonName;
     private String longitude;
     private String latitude;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProjectMonthlyReport> projectMonthlyReportList;
     private Date createTime;
     private Date updateTime;
 }

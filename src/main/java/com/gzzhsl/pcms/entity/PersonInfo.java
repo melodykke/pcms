@@ -3,6 +3,8 @@ package com.gzzhsl.pcms.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,7 +13,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Slf4j
 public class PersonInfo {
     @Id

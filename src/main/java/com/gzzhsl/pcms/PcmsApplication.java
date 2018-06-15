@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -28,4 +29,6 @@ public class PcmsApplication {
 		factory.setMaxRequestSize("10240000KB");
 		return factory.createMultipartConfig();
 	}
+
+
 }

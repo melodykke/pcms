@@ -1,7 +1,7 @@
 $(document).ready(function(){
     var saveReportUrl = '/monthlyreport/savereport';
     var saveFilesUrl = '/monthlyreport/addfiles';
-
+    var rtFileTempPath; // 服务器文件暂存地址
     var uploadFileFlag = true;
     $("#wizard").steps();
     $("#form").steps({
@@ -63,6 +63,7 @@ $(document).ready(function(){
         },
         onFinished: function (event, currentIndex)
         {
+            var rtProjectMonthlyReportVO = {};
             var monthlyReport = {};
             var form = $(this);
             monthlyReport.civilEngineering = $('#civil_engineering').val();
@@ -90,6 +91,12 @@ $(document).ready(function(){
             monthlyReport.visualProgress = $('#visual_progress').val();
             monthlyReport.measure = $('#measure').val();
             monthlyReport.remark = $('#remark').val();
+            if (!rtFileTempPath) {
+                rtProjectMonthlyReportVO.projectMonthlyReport = monthlyReport;
+            } else {
+                rtProjectMonthlyReportVO.rtFileTempPath = rtFileTempPath;
+                rtProjectMonthlyReportVO.projectMonthlyReport = monthlyReport;
+            }
             if (uploadFileFlag == true) {
                 swal({
                     title: "确认提交吗?",
@@ -103,7 +110,7 @@ $(document).ready(function(){
                     $.ajax({
                         url: saveReportUrl,
                         type: 'POST',
-                        data: JSON.stringify(monthlyReport),
+                        data: JSON.stringify(rtProjectMonthlyReportVO),
                         contentType: 'application/json',
                         success: function (data) {
                             alert('chenggong')
@@ -196,8 +203,11 @@ $(document).ready(function(){
     });
     //同步上传返回结果处理
     $("#uploadfile").on("filebatchuploadsuccess", function (event, data, previewId, index) {
-        uploadFileFlag = true;
-        console.log(data.response.code)
+        if (data.response.code == 1002) {
+            uploadFileFlag = true;
+            rtFileTempPath = data.response.data;
+            console.log(rtFileTempPath)
+        }
     });
 
 

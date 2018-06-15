@@ -42,8 +42,8 @@ public class ImageUtil {
         mkDirPath(targetAddr);
         String relativeAddr = targetAddr + realFileName + extension;
         logger.debug("相对路径 relativeAddr {}", relativeAddr);
-        File dest = new File(PathUtil.getFileBasePath() + relativeAddr);
-        logger.debug("绝对路径: {}", PathUtil.getFileBasePath() + relativeAddr);
+        File dest = new File(PathUtil.getFileBasePath(false) + relativeAddr);
+        logger.debug("绝对路径: {}", PathUtil.getFileBasePath(false) + relativeAddr);
         try {
             Thumbnails.of(thumbnail.getImage()).size(200, 200)
                     .watermark(Positions.BOTTOM_RIGHT,
@@ -78,7 +78,7 @@ public class ImageUtil {
      * 创建目标路径所涉及到的目录，即/home/work/melodykke/xxx.jpg, 那么home work melodykke这三个文件都得自动创建
      */
     public static void mkDirPath(String targetAddr){
-        String realFileParentPath = PathUtil.getFileBasePath() +  targetAddr;
+        String realFileParentPath = PathUtil.getFileBasePath(false) +  targetAddr;
         File dirPath = new File(realFileParentPath);
         if(!dirPath.exists()){
             dirPath.mkdirs();
@@ -92,7 +92,7 @@ public class ImageUtil {
      * @param storePath
      */
     public static void deleteFileOrPath(String storePath){
-        File fileOrPath = new File(PathUtil.getFileBasePath() + storePath);
+        File fileOrPath = new File(PathUtil.getFileBasePath(false) + storePath);
         if (fileOrPath.exists()) {
             if (fileOrPath.isDirectory()) {
                 File[] files = fileOrPath.listFiles();
@@ -118,8 +118,8 @@ public class ImageUtil {
         String relativeAddr = targetAddr + realFileName + extension;
         logger.debug("current relativeAddr is :" + relativeAddr);
         // 获取文件要保存到的目标路径
-        File dest = new File(PathUtil.getFileBasePath() + relativeAddr);
-        logger.debug("current complete addr is :" + PathUtil.getFileBasePath() + relativeAddr);
+        File dest = new File(PathUtil.getFileBasePath(false) + relativeAddr);
+        logger.debug("current complete addr is :" + PathUtil.getFileBasePath(false) + relativeAddr);
         // 调用Thumbnails生成带有水印的图片
         try {
             Thumbnails.of(thumbnail.getImage()).size(337, 640)

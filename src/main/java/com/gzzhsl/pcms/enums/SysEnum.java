@@ -11,7 +11,8 @@ public enum SysEnum {
     DATA_CALLBACK_SUCCESS(1002, "数据成功返回"),
     DATA_CALLBACK_FAILED(1003, "数据返回错误"),
     DATA_SUBMIT_FAILED(1004, "数据提交错误"),
-    MONTHLY_REPORT_IMG_ERROR(1100, "月报图片错误")
+    MONTHLY_REPORT_IMG_ERROR(1100, "月报图片错误"),
+    MONTHLY_REPORT_ERROR(1101, "月报错误")
     ;
 
     private Integer code;

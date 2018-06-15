@@ -2,6 +2,8 @@ package com.gzzhsl.pcms.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -11,7 +13,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Slf4j
 public class ProjectMonthlyReport {
     @Id
@@ -48,7 +51,10 @@ public class ProjectMonthlyReport {
     private String measure; // 采取的主要措施
     private String suggestion; // 下一步建议
     private String remark; // 备注
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "projectMonthlyReport")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "projectMonthlyReport")
     private List<ProjectMonthlyReportImg> projectMonthlyReportImgList;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
 }
