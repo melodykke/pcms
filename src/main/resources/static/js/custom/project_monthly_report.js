@@ -63,39 +63,35 @@ $(document).ready(function(){
         },
         onFinished: function (event, currentIndex)
         {
-            var rtProjectMonthlyReportVO = {};
-            var monthlyReport = {};
+            var projectMonthlyReportVO = {};
             var form = $(this);
-            monthlyReport.civilEngineering = $('#civil_engineering').val();
-            monthlyReport.metalMechanism = $('#metal_mechanism').val();
-            monthlyReport.independentCost = $('#independent_cost').val();
-            monthlyReport.electromechanicalEquipment = $('#electromechanical_equipment').val();
-            monthlyReport.temporaryWork = $('#temporary_work').val();
-            monthlyReport.reserveFunds = $('#reserve_funds').val();
-            monthlyReport.resettlementArrangement = $('#resettlement_arrangement').val();
-            monthlyReport.environmentalProtection = $('#environmental_protection').val();
-            monthlyReport.waterConservationl = $('#water_conservation').val();
-            monthlyReport.otherCost = $('#other_cost').val();
-            monthlyReport.openDug = $('#open_dug').val();
-            monthlyReport.backfill = $('#backfill').val();
-            monthlyReport.concrete = $('#concrete').val();
-            monthlyReport.grout = $('#grout').val();
-            monthlyReport.holeDug = $('#hole_dug').val();
-            monthlyReport.masonry = $('#masonry').val();
-            monthlyReport.rebar = $('#rebar').val();
-            monthlyReport.submitDate = $('#submit_date').val();
-            monthlyReport.labourForce = $('#labour_force').val();
-            monthlyReport.constructionContent = $('#construction_content').val();
-            monthlyReport.difficulty = $('#difficulty').val();
-            monthlyReport.suggestion = $('#suggestion').val();
-            monthlyReport.visualProgress = $('#visual_progress').val();
-            monthlyReport.measure = $('#measure').val();
-            monthlyReport.remark = $('#remark').val();
-            if (!rtFileTempPath) {
-                rtProjectMonthlyReportVO.projectMonthlyReport = monthlyReport;
-            } else {
-                rtProjectMonthlyReportVO.rtFileTempPath = rtFileTempPath;
-                rtProjectMonthlyReportVO.projectMonthlyReport = monthlyReport;
+            projectMonthlyReportVO.civilEngineering = $('#civil_engineering').val();
+            projectMonthlyReportVO.metalMechanism = $('#metal_mechanism').val();
+            projectMonthlyReportVO.independentCost = $('#independent_cost').val();
+            projectMonthlyReportVO.electromechanicalEquipment = $('#electromechanical_equipment').val();
+            projectMonthlyReportVO.temporaryWork = $('#temporary_work').val();
+            projectMonthlyReportVO.reserveFunds = $('#reserve_funds').val();
+            projectMonthlyReportVO.resettlementArrangement = $('#resettlement_arrangement').val();
+            projectMonthlyReportVO.environmentalProtection = $('#environmental_protection').val();
+            projectMonthlyReportVO.waterConservation = $('#water_conservation').val();
+            projectMonthlyReportVO.otherCost = $('#other_cost').val();
+            projectMonthlyReportVO.openDug = $('#open_dug').val();
+            projectMonthlyReportVO.backfill = $('#backfill').val();
+            projectMonthlyReportVO.concrete = $('#concrete').val();
+            projectMonthlyReportVO.grout = $('#grout').val();
+            projectMonthlyReportVO.holeDug = $('#hole_dug').val();
+            projectMonthlyReportVO.masonry = $('#masonry').val();
+            projectMonthlyReportVO.rebar = $('#rebar').val();
+            projectMonthlyReportVO.submitDate = $('#submit_date').val()+'-01';
+            projectMonthlyReportVO.labourForce = $('#labour_force').val();
+            projectMonthlyReportVO.constructionContent = $('#construction_content').val();
+            projectMonthlyReportVO.difficulty = $('#difficulty').val();
+            projectMonthlyReportVO.suggestion = $('#suggestion').val();
+            projectMonthlyReportVO.visualProgress = $('#visual_progress').val();
+            projectMonthlyReportVO.measure = $('#measure').val();
+            projectMonthlyReportVO.remark = $('#remark').val();
+            if (rtFileTempPath) {
+                projectMonthlyReportVO.rtFileTempPath = rtFileTempPath;
             }
             if (uploadFileFlag == true) {
                 swal({
@@ -110,13 +106,18 @@ $(document).ready(function(){
                     $.ajax({
                         url: saveReportUrl,
                         type: 'POST',
-                        data: JSON.stringify(rtProjectMonthlyReportVO),
+                        data: JSON.stringify(projectMonthlyReportVO),
                         contentType: 'application/json',
                         success: function (data) {
-                            alert('chenggong')
+                           if (data.code == 1002) {
+                               swal("成功!", "已经成功提交!", "success");
+                           } else {
+                               alert(data)
+                               swal("失败!", data.msg, "error");
+                           }
                         }
                     })
-                    swal("成功!", "已经成功提交!", "success");
+
                 });
             } else {
                 swal({
@@ -159,13 +160,13 @@ $(document).ready(function(){
 
 
     //获得额外参数的方法
-    submitDate = function() {
+  /*  submitDate = function() {
         var remindTime = $("#submit_date").val();
         var str = remindTime.toString();
         str = str.replace("/-/g", "/");
         var oDate = new Date(str);
         return oDate.getFullYear()+"/"+parseInt(oDate.getMonth()+1);
-    };
+    };*/
 
     // 文件上传
     $("#uploadfile").fileinput({
@@ -181,17 +182,18 @@ $(document).ready(function(){
       /*  slugCallback: function(filename) {
             uploadFileFlag = false;
             return filename.replace('(', '_').replace(']', '_');
-        },*/
+        },
         uploadExtraData: function(previewId, index) {   //额外参数的关键点
             var obj = {};
             obj.date = submitDate();
             return obj;
-        }
+        }*/
 
     });
     /* 清空文件后响应事件*/
     $("#uploadfile").on("filecleared",function(event, data, msg){
         uploadFileFlag = true;
+        rtFileTempPath = null;
     });
     /*选择文件后处理事件*/
     $("#uploadfile").on("filebatchselected", function(event, files) {

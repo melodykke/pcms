@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -22,6 +23,7 @@ import sun.plugin.util.UIUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -75,57 +77,17 @@ public class MonthlyReportController {
 
     @PostMapping("/savereport")
     @ResponseBody
-    public ResultVO saveReport(@RequestBody ProjectMonthlyReportVO projectMonthlyReportVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        
+    public ResultVO saveReport(@Valid @RequestBody ProjectMonthlyReportVO projectMonthlyReportVO, BindingResult bindingResult) {
         if (projectMonthlyReportVO == null) {
             log.error("【月报错误】 存储月报错误，没有收到有效的projectMonthlyReportVO , " +
-                            "实际projectMonthlyReportVO = {}", projectMonthlyReportVO);
+                    "实际projectMonthlyReportVO = {}", projectMonthlyReportVO);
             throw new SysException(SysEnum.MONTHLY_REPORT_ERROR);
         }
-        if (projectMonthlyReportVO.getRtFileTempPath() == null|| projectMonthlyReportVO.getRtFileTempPath() == "") {
-            // 没有上传图片的情况，直接对表格进行存储
-            if (projectMonthlyReportVO.getProjectMonthlyReport() == null) {
-                log.error("【月报错误】 存储月报信息为空，没有收到有效的projectMonthlyReportVO , " +
-                        "实际projectMonthlyReportVO = {}", projectMonthlyReportVO);
-                throw new SysException(SysEnum.MONTHLY_REPORT_ERROR);
-            } else {
-                ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportVO.getProjectMonthlyReport();
-                projectMonthlyReport.setProject(thisUser.getProject()); // TODO 如果当前用户没有想对应的project水库工程，则.....;
-                projectMonthlyReportService.save(projectMonthlyReport);
-            }
-        } else {
-            // 上传图片的情况，需考虑转存
-            if (projectMonthlyReportVO.getProjectMonthlyReport() == null) {
-                log.error("【月报错误】 存储月报信息为空，没有收到有效的projectMonthlyReportVO , " +
-                        "实际projectMonthlyReportVO = {}", projectMonthlyReportVO);
-                throw new SysException(SysEnum.MONTHLY_REPORT_ERROR);
-            } else {
-                Project thisProject = thisUser.getProject();
-                ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportVO.getProjectMonthlyReport();
-                String rtFileTempPath = projectMonthlyReportVO.getRtFileTempPath();
-                ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportService.save(projectMonthlyReport);
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(projectMonthlyReportRt.getSubmitDate());
-                String date = String.valueOf(cal.get(Calendar.YEAR))+ "/" + String.valueOf(cal.get(Calendar.MONTH)+1);
-                String sourceDest = PathUtil.getFileBasePath(true) + rtFileTempPath;
-                String targetDest = PathUtil.getFileBasePath(false)+PathUtil.getMonthlyReportImagePath(thisProject.getPlantName(), date);
-
-                File sourceFile = new File(sourceDest);
-                File[] files = sourceFile.listFiles();
-                if (files.length > 0) {
-                    for (File file : files) {
-                        File targetFile = new File(PathUtil.getFileBasePath(false)+PathUtil.getMonthlyReportImagePath(thisProject.getPlantName(), date) + file.getName());
-                        if (!targetFile.exists()) {
-                            targetFile.getParentFile().mkdirs();
-                        }
-                       file.renameTo(targetFile);
-                    }
-                }
-            }
+        if(bindingResult.hasErrors()){
+            log.error("【月报错误】参数验证错误， 参数不正确 projectMonthlyReportVO = {}， 错误：{}", projectMonthlyReportVO, bindingResult.getFieldError().getDefaultMessage());
+            throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
-
-        System.out.println(projectMonthlyReportVO);
+        projectMonthlyReportService.save(projectMonthlyReportVO);
         return ResultUtil.success();
     }
 }
