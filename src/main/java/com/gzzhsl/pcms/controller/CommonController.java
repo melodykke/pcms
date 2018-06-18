@@ -1,6 +1,7 @@
 package com.gzzhsl.pcms.controller;
 
 import com.gzzhsl.pcms.enums.SysEnum;
+import com.gzzhsl.pcms.exception.InactivatedException;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.form.UserSigninForm;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
@@ -57,6 +58,9 @@ public class CommonController {
             if (UnknownAccountException.class.getName().equals(exception)) {
                 log.error("UnknownAccountException -- > 账号不存在  userSigninForm = {}", userSigninForm);
                 msg = "账号不存在或账号尚未激活，请确认后重试！";
+            } else if (InactivatedException.class.getName().equals(exception) ) {
+                log.error("InactivatedException -- > 账号未激活");
+                msg = "账号未激活！";
             } else if (IncorrectCredentialsException.class.getName().equals(exception)) {
                 log.error("IncorrectCredentialsException -- > 密码不正确：", userSigninForm);
                 msg = "密码不正确，请重新输入！";

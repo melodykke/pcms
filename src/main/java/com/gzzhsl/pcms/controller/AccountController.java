@@ -3,16 +3,25 @@ package com.gzzhsl.pcms.controller;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.AccountService;
+import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
+import com.gzzhsl.pcms.vo.AccountPasswordVO;
 import com.gzzhsl.pcms.vo.AccountVO;
 import com.gzzhsl.pcms.vo.ResultVO;
+import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/account")
@@ -21,6 +30,8 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/accountconfig")
     public String accountConfig(){
@@ -29,22 +40,87 @@ public class AccountController {
 
     @PostMapping("/modifypassword")
     @ResponseBody
-    public ResultVO modifyPassword(@Valid @RequestBody AccountVO accountVO, BindingResult bindingResult) {
+    public ResultVO modifyPassword(@Valid @RequestBody AccountPasswordVO accountPasswordVO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            log.error("【账户错误】参数验证错误， 参数不正确 accountVO = {}， 错误：{}", accountVO, bindingResult.getFieldError().getDefaultMessage());
+            log.error("【账户错误】参数验证错误， 参数不正确 AccountPasswordVO = {}， 错误：{}", accountPasswordVO, bindingResult.getFieldError().getDefaultMessage());
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
-        if (!accountVO.getNewPassword().equals(accountVO.getReNewPassword())) {
-            log.error("【账户错误】参数验证错误， 新密码和确认密码不一致 accountVO = {}", accountVO);
+        if (!accountPasswordVO.getNewPassword().equals(accountPasswordVO.getReNewPassword())) {
+            log.error("【账户错误】参数验证错误， 新密码和确认密码不一致 AccountPasswordVO = {}", accountPasswordVO);
             throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
         }
         // 判断若新密码与本账号密码是否相同
-        if (accountService.modifyPassword(accountVO)) {
-            return ResultUtil.success(SysEnum.DATA_CONFIG_SUCCESS.getCode(), accountVO.getNewPassword());
+        if (accountService.modifyPassword(accountPasswordVO)) {
+            return ResultUtil.success(SysEnum.DATA_CONFIG_SUCCESS.getCode(), accountPasswordVO.getNewPassword());
         } else {
             return ResultUtil.failed(SysEnum.DATA_SUBMIT_FAILED.getCode(), "密码更新失败，请重试！");
         }
     }
 
+    @PostMapping("/addsubaccount")
+    @ResponseBody
+    public ResultVO addSubAccount(@Valid @RequestBody AccountVO accountVO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            log.error("【账户错误】参数验证错误， 参数不正确 accountVO = {}， 错误：{}", accountVO, bindingResult.getFieldError().getDefaultMessage());
+            throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
+        }
+        // 判断密码是否一致
+        if (!accountVO.getPassword().equals(accountVO.getRePassword())) {
+            log.error("【账户错误】参数验证错误， 密码和确认密码不一致 accountVO = {}", accountVO);
+            throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
+        }
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        // 目前允许一个账号有一个子账号
+        if (!(thisUser.getChildren() == null) || (thisUser.getChildren().size()>1)) {
+            log.error("【账户错误】 本账号已存在子账号，目前只允许一个主账号添加一个子账号");
+            throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
+        }
+        if (accountService.createSubAccount(accountVO, thisUser)) {
+            return ResultUtil.success(thisUser.getUserId());
+        } else {
+            return ResultUtil.failed();
+        }
+    }
+
+    @GetMapping("/getsubaccountinfo")
+    @ResponseBody
+    public ResultVO getSubAccountInfo() {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        List<UserInfo> children = thisUser.getChildren();
+        if (children == null) {
+            return ResultUtil.failed();
+        } else if (children.size() == 1){
+            UserInfo child = children.get(0);
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUsername(child.getUsername());
+            userInfo.setActive(child.getActive());
+            return ResultUtil.success(userInfo);
+        } else {
+            log.error("【账户错误】 获取子账号出错，系统错误");
+            throw new SysException(SysEnum.Sys_INNER_ERROR);
+        }
+    }
+
+    @PostMapping("/activate")
+    @ResponseBody
+    public ResultVO activate(@RequestBody Map<String, Object> params) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        List<UserInfo> children = thisUser.getChildren();
+        if (children == null) {
+            return ResultUtil.failed();
+        } else if (children.size() == 1){
+            UserInfo child = children.get(0);
+            if(child.getActive()==0){
+                child.setActive((byte)1);
+            }else if(child.getActive()==1){
+                child.setActive((byte)0);
+            }
+            userService.save(child);
+            return ResultUtil.success();
+        } else {
+            log.error("【账户错误】 获取子账号出错，系统错误");
+            throw new SysException(SysEnum.Sys_INNER_ERROR);
+        }
+    }
 
 }

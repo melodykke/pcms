@@ -5,11 +5,11 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class AccountVO {
+public class AccountPasswordVO {
     @NotNull
-    private String username;
+    private String oriPassword;
     @NotNull
-    private String password;
+    private String newPassword;
     @NotNull
-    private String rePassword;
+    private String reNewPassword;
 }

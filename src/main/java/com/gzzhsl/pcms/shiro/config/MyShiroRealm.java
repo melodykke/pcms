@@ -1,6 +1,7 @@
 
 package com.gzzhsl.pcms.shiro.config;
 
+import com.gzzhsl.pcms.exception.InactivatedException;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.SysPermission;
 import com.gzzhsl.pcms.shiro.bean.SysRole;
@@ -56,7 +57,7 @@ public class MyShiroRealm extends AuthorizingRealm{
 			return null;
 		}
 		if (userInfo.getActive() == 0) {
-			return null;
+			throw new InactivatedException("用户名错误！");
 		}
 		// 3. 加密， 使用SimpleAuthenticationInfo 进行身份处理
 		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(userInfo, userInfo.getPassword(), ByteSource.Util.bytes(userInfo.getSalt()), this.getName());

@@ -35,8 +35,8 @@ public class UserInfo {
     @JoinColumn(name = "parent_id")
     private UserInfo parent;
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<UserInfo> children = new HashSet<UserInfo>();
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<UserInfo> children = new ArrayList<UserInfo>();
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "sys_user_role", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns ={@JoinColumn(name = "roleId") })
     private List<SysRole> sysRoleList = new ArrayList<>();
     private Date createTime;
