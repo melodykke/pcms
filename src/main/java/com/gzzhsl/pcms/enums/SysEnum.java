@@ -12,8 +12,11 @@ public enum SysEnum {
     DATA_CALLBACK_SUCCESS(1002, "数据成功返回"),
     DATA_CALLBACK_FAILED(1003, "数据返回错误"),
     DATA_SUBMIT_FAILED(1004, "数据提交错误"),
+
     MONTHLY_REPORT_IMG_ERROR(1100, "月报图片错误"),
     MONTHLY_REPORT_ERROR(1101, "月报错误"),
+
+    ACCOUNT_PASSWORD_INCONSISTENCY(1201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ;
 
     private Integer code;

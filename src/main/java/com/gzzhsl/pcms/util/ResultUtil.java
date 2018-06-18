@@ -52,4 +52,11 @@ public class ResultUtil {
         resultVO.setMsg(msg);
         return resultVO;
     }
+    public static ResultVO failed(Object object){
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(SysEnum.DATA_CALLBACK_FAILED.getCode());
+        resultVO.setMsg(SysEnum.DATA_CALLBACK_FAILED.getMsg());
+        resultVO.setData(object);
+        return resultVO;
+    }
 }

@@ -9,7 +9,9 @@ $(function () {
     $('#person_info').click(function () {
         contentDiv.load('user/personinfo');
     })
-
+    $('#account_config').click(function () {
+        contentDiv.load('account/accountconfig');
+    })
 
 
 

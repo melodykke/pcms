@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA | Social feed</title>
+
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>账号配置</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">主页</a>
+                </li>
+                <li class="active">
+                    <strong>账号配置</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+
+                        <h3 class="m-b-xxs">更改密码</h3>
+                        <small>修改本账号密码</small>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="modify_password_form" class="form-horizontal">
+                            <div class="form-group"><label class="col-sm-2 control-label">原密码 </label>
+                                <div class="col-sm-10"><input id="ori_password" type="password" name="ori_password" class="form-control required"></div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">密码: </label>
+                                <div class="col-sm-10"><input id="new_password" type="password" name="new_password" class="form-control required"></div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">确认密码: </label>
+                                <div class="col-sm-10"><input id="re_new_password" type="password" name="re_new_password" class="form-control required"></div>
+                            </div>
+
+
+                            <div id="modify_ops" class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button id="modify_password_btn" class="btn btn-primary" type="submit">修改</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+
+                        <h3 class="m-b-xxs">子账号</h3>
+                        <small>子账号开通</small>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="sub_account_form" class="form-horizontal">
+                            <div class="form-group"><label class="col-sm-2 control-label">子账号: </label>
+                                <div class="col-sm-10"><input id="username" type="text" name="username" class="form-control required"></div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">密码: </label>
+                                <div class="col-sm-10"><input id="password" type="password" name="password" class="form-control required"></div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">确认密码: </label>
+                                <div class="col-sm-10"><input id="confirm_password" type="password" name="confirm_password" class="form-control required"></div>
+                            </div>
+
+
+                            <div id="sub_account_ops" class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button id="delete_btn" class="btn btn-white" type="submit">删除</button>
+                                    <button id="sub_account_create_btn" class="btn btn-primary" type="submit">开通</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="mymodal"></div>
+
+
+<!-- Jquery Validate -->
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+<script th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
+<script th:src="@{/js/custom/account_config.js}"></script>
+</body>
+
+</html>
+

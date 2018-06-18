@@ -37,7 +37,6 @@ public class UserController {
     @Autowired
     private PersonService personService;
 
-
     @GetMapping("/personinfo")
     public String personInfo() {
         return "/person_info";
@@ -91,4 +90,5 @@ public class UserController {
         }
         return ResultUtil.success();
     }
+
 }
