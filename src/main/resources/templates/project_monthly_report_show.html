@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <div class="row">
+        <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>已填报月报信息</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-lg-offset-8 col-lg-2">
+                                            <div class="form-group" id="mr_show_date">
+                                                <div class="input-group date btn-outline btn-info ">
+                                                    <span class="input-group-addon btn-outline btn-info"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="2017-12">
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <a class="btn btn-info btn-facebook btn-outline">
+                                                <i class="fa fa-check"> </i> 提交
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-offset-1 col-lg-6">
+                                        <div class="m-b-md">
+                                            <h2>思南县沙坝水库工程</h2>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <dl class="dl-horizontal">
+                                            <dt>月份:</dt> <dd><span class="label label-primary">12月</span></dd>
+                                        </dl>
+                                        <dl class="dl-horizontal">
+                                            <dt>状态:</dt> <dd><span class="label label-info">待审核</span></dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>项目负责人:</dt> <dd>小刘</dd>
+                                            <dt>上报人:</dt> <dd>  老王</dd>
+                                            <dt>上报人电话:</dt> <dd> 18586878889 </dd>
+                                            <dt>审核人:</dt> <dd><a href="#" class="text-navy">老张</a> </dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-lg-7" id="cluster_info">
+                                        <dl class="dl-horizontal" >
+
+                                            <dt>最近修改时间:</dt> <dd>2018-8-8 12:15:57</dd>
+                                            <dt>填报时间:</dt> <dd> 	2018-7-7 23:36:57 </dd>
+                                            <dt>xxxxxxx:</dt>
+                                            <dd class="project-people">
+                                                <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <dl class="dl-horizontal">
+                                            <dt>月报提交进度:</dt>
+                                            <dd>
+                                                <div class="progress progress-striped active m-b-sm">
+                                                    <div style="width: 50%;" class="progress-bar"></div>
+                                                </div>
+                                                <small>月报提交情况： <strong>等待领导审批</strong> </small>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="tabs-container">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-line-chart"></i> 投资情况</a></li>
+                                                <li class=""><a data-toggle="tab" href="#tab-2"> <i class="fa fa-wrench"></i>工程量情况</a></li>
+                                                <li class=""><a data-toggle="tab" href="#tab-3"> <i class="fa fa-book"></i>项目情况</a></li>
+                                                <li class=""><a data-toggle="tab" href="#tab-4"> <i class="fa fa-file-text"></i>附件</a></li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div id="tab-1" class="tab-pane active">
+                                                    <div class="panel-body">
+                                                        <fieldset class="form-horizontal">
+                                                            <div class="col-lg-6">
+                                                                <div class="ibox" id="ibox1">
+                                                                    <div class="ibox-title">
+                                                                        <h4>工程部分投资</h4>
+                                                                    </div>
+                                                                    <div class="ibox-content">
+                                                                        <div class="sk-spinner sk-spinner-double-bounce">
+                                                                            <div class="sk-double-bounce1">123</div>
+                                                                            <div class="sk-double-bounce2">333</div>
+                                                                        </div>
+                                                                        <ul class="sortable-list connectList agile-list ui-sortable" id="todo3">
+                                                                            <li class="warning-element" id="task1">
+                                                                                    <span style="font-size: 15px;">建筑工程：</span>
+                                                                                    <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300.50</span>
+                                                                                    <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                            <li class="success-element" id="task2">
+                                                                                    <span style="font-size: 15px;">机电设备及安装工程： </span>
+                                                                                    <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300.50</span>
+                                                                                    <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                            <li class="info-element" id="task3">
+                                                                                <span style="font-size: 15px;">金属机构设备及安装工程： </span>
+                                                                                <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300.50</span>
+                                                                                <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                            <li class="danger-element" id="task4">
+                                                                                <span style="font-size: 15px;">施工临时工程：  </span>
+                                                                                <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300300.50</span>
+                                                                                <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                            <li class="warning-element" id="task5">
+                                                                                <span style="font-size: 15px;">独立费用：</span>
+                                                                                <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300300.50</span>
+                                                                                <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                            <li class="success-element" id="task6">
+                                                                                <span style="font-size: 15px;">基本预备费：</span>
+                                                                                <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300300.50</span>
+                                                                                <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="ibox" id="ibox2">
+                                                                    <div class="ibox-title">
+                                                                        <h4>移民、环境投资</h4>
+                                                                    </div>
+                                                                    <div class="ibox-content">
+                                                                        <div class="sk-spinner sk-spinner-double-bounce">
+                                                                            <div class="sk-double-bounce1"></div>
+                                                                            <div class="sk-double-bounce2"></div>
+                                                                        </div>
+                                                                        <ul class="sortable-list connectList agile-list ui-sortable" id="todo1">
+                                                                            <li class="warning-element" id="task7">
+                                                                                <span style="font-size: 15px;">建设征地移民安置补偿费 ：</span>
+                                                                                <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300300.50</span>
+                                                                                <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                            <li class="success-element" id="task8">
+                                                                                <span style="font-size: 15px;">水土保持工程投资：</span>
+                                                                                <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300300.50</span>
+                                                                                <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                            <li class="info-element" id="task9">
+                                                                                <span style="font-size: 15px;">环境保护工程投资：</span>
+                                                                                <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300300.50</span>
+                                                                                <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                            <li class="danger-element" id="task10">
+                                                                                <span style="font-size: 15px;">其他：</span>
+                                                                                <span style="font-size: 15px;"><i class="fa fa-rmb"></i> 300300.50</span>
+                                                                                <span style="font-size: 15px;">(万元) </span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+
+                                                    </div>
+                                                </div>
+                                                <div id="tab-2" class="tab-pane">
+                                                    <div class="panel-body">
+                                                        <fieldset class="form-horizontal">
+                                                            <div class="col-lg-12">
+                                                                <div class="ibox" id="ibox3">
+                                                                    <div class="ibox-title">
+                                                                        <h4>工程量情况</h4>
+                                                                    </div>
+                                                                    <div class="ibox-content">
+                                                                        <div class="sk-spinner sk-spinner-double-bounce">
+                                                                            <div class="sk-double-bounce1">123</div>
+                                                                            <div class="sk-double-bounce2">333</div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-lg-6">
+                                                                                <ul class="sortable-list connectList agile-list ui-sortable">
+                                                                                    <li class="warning-element" id="task11">
+                                                                                        <span style="font-size: 15px;">土石方明挖：</span>
+                                                                                        <span style="font-size: 15px;">300.50</span>
+                                                                                        <span style="font-size: 15px;">(万/m³) </span>
+                                                                                    </li>
+                                                                                    <li class="success-element" id="task12">
+                                                                                        <span style="font-size: 15px;">土石方洞挖：</span>
+                                                                                        <span style="font-size: 15px;">300.50</span>
+                                                                                        <span style="font-size: 15px;">(万/m³) </span>
+                                                                                    </li>
+                                                                                    <li class="info-element" id="task13">
+                                                                                        <span style="font-size: 15px;">土石方回填：</span>
+                                                                                        <span style="font-size: 15px;">300.50</span>
+                                                                                        <span style="font-size: 15px;">(万/m³) </span>
+                                                                                    </li>
+                                                                                    <li class="danger-element" id="task17">
+                                                                                        <span style="font-size: 15px;">灌浆：</span>
+                                                                                        <span style="font-size: 15px;">300.50(m或m³)</span>
+                                                                                        <span style="font-size: 15px;">(m或m³) </span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div class="col-lg-6">
+                                                                                <ul class="sortable-list connectList agile-list ui-sortable">
+                                                                                    <li class="warning-element" id="task14">
+                                                                                        <span style="font-size: 15px;">砌石：  </span>
+                                                                                        <span style="font-size: 15px;">300.50</span>
+                                                                                        <span style="font-size: 15px;">300.50(万/m³)</span>
+
+                                                                                    </li>
+                                                                                    <li class="success-element" id="task15">
+                                                                                        <span style="font-size: 15px;">混泥土：</span>
+                                                                                        <span style="font-size: 15px;">300.50</span>
+                                                                                        <span style="font-size: 15px;">300.50(万/m³)</span>
+                                                                                    </li>
+                                                                                    <li class="info-element" id="task16">
+                                                                                        <span style="font-size: 15px;">钢筋：</span>
+                                                                                        <span style="font-size: 15px;">300.50(t)</span>
+                                                                                        <span style="font-size: 15px;">300.50(t)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+
+
+                                                    </div>
+                                                </div>
+                                                <div id="tab-3" class="tab-pane">
+                                                    <div class="panel-body">
+                                                        <div class="col-lg-12">
+                                                            <div class="ibox">
+                                                                <div class="ibox-title">
+                                                                    <h4><i class="fa fa-book"></i> 项目情况 </h4>
+                                                                </div>
+                                                                <div class="ibox-content">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6">
+                                                                        <ul class="sortable-list connectList agile-list ui-sortable" id="todo4">
+                                                                            <li class="success-element" id="task18">
+                                                                                <span style="font-size: 15px;"> <i class="fa fa-calendar"></i> 填报月份 ：</span>
+                                                                                <span style="font-size: 15px;">2018.08</span>
+                                                                            </li>
+                                                                        </ul>
+                                                                        </div>
+                                                                        <div class="col-lg-offset-1 col-lg-4">
+                                                                            <ul class="sortable-list connectList agile-list ui-sortable" id="todo5">
+                                                                                <li class="success-element" id="task19">
+                                                                                    <span style="font-size: 15px;"><i class="fa fa-user-circle"></i> 劳动力投入（万工日） ：</span>
+                                                                                    <span style="font-size: 15px;"> 3000</span>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="panel panel-info">
+                                                                                <div class="panel-heading">
+                                                                                    主要建设内容
+                                                                                </div>
+                                                                                <div class="panel-body">
+                                                                                    <p>因目前建管云平台的项目月报中三个报表填报困难和繁琐，通过会议商订改为以简单的几种数据口径填报方式进行。
+                                                                                        在对工程部进行实际需求调研的过程中发现，数据口径的填报方式无法统一，同时没有具体的实施方案和实施细则。与工程部具体协商后，按其意见及建议把监管系统改变为精细化管理，将现有的结果数据化管理模式变更为原始数据填报模式。在填报原始数据后，系统根据具体需求完成对数据的汇总、分析，在满足业务人员工作需求的同时提供宏观数据展示以便于领导查看及做出决策。
+                                                                                        在原始数据的标准制定中，因工作量较大，需要相关专员（对水</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="panel panel-info">
+                                                                                <div class="panel-heading">
+                                                                                    其他
+                                                                                </div>
+                                                                                <div class="panel-body">
+                                                                                    <p>对工程部进行实际需求调研的过程中发现，数据口径的填报方式无法统一，同时没有具体的实施方案和实施细则。与工程部具体协商后，按其意见及建议把监.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-offset-1 col-lg-4">
+                                                                            <div class="panel panel-success">
+                                                                                <div class="panel-heading">
+                                                                                    工程形象进度及节点工期
+                                                                                </div>
+                                                                                <div class="panel-body">
+                                                                                    <p>对工程部进行实际需求调研的过程中发现，数据口径的填报方式无法统一，同时没有具体的实施方案和实施细则。与工程部具体协商后，
+                                                                                       </p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="panel panel-success">
+                                                                                <div class="panel-heading">
+                                                                                    存在困难及问题
+                                                                                </div>
+                                                                                <div class="panel-body">
+                                                                                    <p>对工程部进行实际需求调研的过程中发现，数据口径的填报方式无法统一，同时没有具体的实施方案和实施细则。与工程部具体协商后，.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="panel panel-success">
+                                                                                <div class="panel-heading">
+                                                                                    采取的主要措施
+                                                                                </div>
+                                                                                <div class="panel-body">
+                                                                                    <p>对工程部进行实际需求调研的过程中发现，数据口径的填报方式无法统一，同时没有具体的实施方案和实施细则。与工程部具体协商后，</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="panel panel-success">
+                                                                                <div class="panel-heading">
+                                                                                    下一步建议
+                                                                                </div>
+                                                                                <div class="panel-body">
+                                                                                    <p>ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="tab-4" class="tab-pane">
+                                                    <div class="panel-body">
+                                                        <div class="col-lg-12">
+                                                            <div class="ibox">
+                                                                <div class="ibox-title">
+                                                                    <h4><i class="fa fa-file-text"></i> 上传附件</h4>
+                                                                </div>
+                                                                <div class="ibox-content">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12">
+                                                                            <div class="file-box">
+                                                                                <div class="file">
+                                                                                        <span class="corner"></span>
+                                                                                        <div class="icon">
+                                                                                        </div>
+                                                                                        <div class="file-name">
+                                                                                            Document_2014.doc
+                                                                                            <br/>
+                                                                                            <small>Added: Jan 11, 2014</small>
+                                                                                            <button class="btn-primary pull-right">下载</button>
+                                                                                        </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="file-box">
+                                                                                <div class="file">
+                                                                                        <span class="corner"></span>
+
+                                                                                        <div class="image">
+                                                                                            <img alt="image" class="" src="img/p1.jpg">
+                                                                                        </div>
+                                                                                        <div class="file-name">
+                                                                                            Italy street.jpg
+                                                                                            <br/>
+                                                                                            <small>Added: Jan 6, 2014</small>
+                                                                                            <button class="btn-primary pull-right">下载</button>
+                                                                                        </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="file-box">
+                                                                                <div class="file">
+                                                                                        <span class="corner"></span>
+
+                                                                                        <div class="image">
+                                                                                            <img alt="image" class="img-responsive" src="img/p2.jpg">
+                                                                                        </div>
+                                                                                        <div class="file-name">
+                                                                                            My feel.png
+                                                                                            <br/>
+                                                                                            <small>Added: Jan 7, 2014</small>
+                                                                                            <button class="btn-primary pull-right">下载</button>
+                                                                                        </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="file-box">
+                                                                                <div class="file">
+                                                                                        <span class="corner"></span>
+
+                                                                                        <div class="icon">
+                                                                                            <i class="fa fa-music"></i>
+                                                                                        </div>
+                                                                                        <div class="file-name">
+                                                                                            Michal Jackson.mp3
+                                                                                            <br/>
+                                                                                            <small>Added: Jan 22, 2014</small>
+                                                                                            <button class="btn-primary pull-right">下载</button>
+                                                                                        </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="file-box">
+                                                                                <div class="file">
+                                                                                        <span class="corner"></span>
+
+                                                                                        <div class="image">
+                                                                                            <img alt="image" class="img-responsive" src="img/p3.jpg">
+                                                                                        </div>
+                                                                                        <div class="file-name">
+                                                                                            Document_2014.doc
+                                                                                            <br/>
+                                                                                            <small>Added: Fab 11, 2014</small>
+                                                                                            <button class="btn-primary pull-right">下载</button>
+                                                                                        </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="file-box">
+                                                                                <div class="file">
+                                                                                        <span class="corner"></span>
+
+                                                                                        <div class="icon">
+                                                                                            <i class="img-responsive fa fa-film"></i>
+                                                                                        </div>
+                                                                                        <div class="file-name">
+                                                                                            Monica's birthday.mpg4
+                                                                                            <br/>
+                                                                                            <small>Added: Fab 18, 2014</small>
+                                                                                            <button class="btn-primary pull-right">下载</button>
+                                                                                        </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="file-box">
+                                                                                    <div class="file">
+                                                                                        <span class="corner"></span>
+
+                                                                                        <div class="icon">
+                                                                                            <i class="fa fa-bar-chart-o"></i>
+                                                                                        </div>
+                                                                                        <div class="file-name">
+                                                                                            Annual report 2014.xls
+                                                                                            <br/>
+                                                                                            <small>Added: Fab 22, 2014</small>
+                                                                                            <button class="btn-primary pull-right">下载</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                            <div class="file-box">
+                                                                                <div class="file">
+                                                                                        <span class="corner"></span>
+
+                                                                                        <div class="icon">
+                                                                                            <i class="fa fa-file"></i>
+                                                                                        </div>
+                                                                                        <div class="file-name">
+                                                                                            Document_2014.doc
+                                                                                            <br/>
+                                                                                            <small>Added: Jan 11, 2014</small>
+                                                                                            <button class="btn-primary pull-right">下载</button>
+                                                                                        </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    </div>
+
+
+    <!-- Mainly scripts -->
+
+
+
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+    <script src="js/plugins/pace/pace.min.js"></script>
+
+    <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+    <!-- blueimp gallery -->
+    <script src="js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#mr_show_date .input-group.date').datepicker({
+                minViewMode: 1,
+                keyboardNavigation: false,
+                forceParse: false,
+                forceParse: false,
+                autoclose: true,
+                todayHighlight: true
+            });
+            
+        })
+    </script>
+
+    <script>
+        $button1.click(function(){
+            var $eleForm = $("<form method='get'></form>");
+            $eleForm.attr("action","https://codeload.github.com/douban/douban-client/legacy.zip/master");
+            $(document.body).append($eleForm);
+            //提交表单，实现下载
+            $eleForm.submit();
+        });
+    </script>
+</body>
+
+</html>
