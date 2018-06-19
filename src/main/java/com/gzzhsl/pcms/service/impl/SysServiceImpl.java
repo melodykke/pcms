@@ -18,6 +18,9 @@ public class SysServiceImpl {
     @Autowired
     private ProjectService projectService;
 
+    /**
+     * 把所有工程的加外键指向userInfo 的 userid
+     */
     public void userinfoidToprojectFKuserid() {
         List<UserInfo> allUserInfos = userService.getAllUser();
         List<Project> allProjects = projectService.getAllProject();

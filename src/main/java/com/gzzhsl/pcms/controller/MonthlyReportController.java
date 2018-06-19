@@ -90,35 +90,7 @@ public class MonthlyReportController {
         projectMonthlyReportService.save(projectMonthlyReportVO);
         return ResultUtil.success();
     }
+
+
+
 }
-  /*  public ResultVO saveFiles(HttpServletRequest request) {
-        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("uploadfile");
-        if (files == null || files.size() < 1) { return ResultUtil.failed(); }
-        String date = HttpServletRequestUtil.getString(request, "date");
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        Project thisProject = thisUser.getProject();
-        if (thisUser == null || thisProject.getPlantName() == null || thisProject.getPlantName() == "") {
-            log.error("【月报错误】 所登录账号不具备月报图片上传功能 , thisUser = {}, thisProject = {}"
-                    , thisUser, thisProject);
-            throw new SysException(SysEnum.MONTHLY_REPORT_IMG_ERROR);
-        }
-        for (MultipartFile file : files) {
-            String oriFileName = file.getOriginalFilename();
-            String suffixName = ImageUtil.getFileExtension(oriFileName);
-            String destFileName = ImageUtil.getRandomFileName() + suffixName;
-
-            File dest = new File(PathUtil.getFileBasePath(false) + PathUtil.getMonthlyReportImagePath(thisProject
-                    .getPlantName(), date) + destFileName);
-            if (!dest.getParentFile().exists()) {
-                dest.getParentFile().mkdirs();
-            }
-            try {
-                file.transferTo(dest);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return ResultUtil.success();
-    }
-*/
