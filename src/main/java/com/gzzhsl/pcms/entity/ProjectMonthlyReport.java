@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.Getter;
@@ -53,8 +54,11 @@ public class ProjectMonthlyReport {
     private String remark; // 备注
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "projectMonthlyReport")
     private List<ProjectMonthlyReportImg> projectMonthlyReportImgList;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
+    private String submitter;
+    private Byte state;
 
 }

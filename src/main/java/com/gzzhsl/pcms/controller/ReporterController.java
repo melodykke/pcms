@@ -17,4 +17,9 @@ public class ReporterController {
         return "/project_monthly_report";
     }
 
+    @GetMapping("/projectmonths")
+    @RequiresRoles(value = {"reporter", "checker"}, logical = Logical.OR)
+    public String projectMonths() {
+        return "/project_months";
+    }
 }

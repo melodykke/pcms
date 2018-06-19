@@ -1,6 +1,7 @@
 package com.gzzhsl.pcms.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import lombok.Data;
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class Project {
     private String legalPersonName;
     private String longitude;
     private String latitude;
+    @JsonManagedReference
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectMonthlyReport> projectMonthlyReportList;
     private Date createTime;

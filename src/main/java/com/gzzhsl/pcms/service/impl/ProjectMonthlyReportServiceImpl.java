@@ -11,13 +11,23 @@ import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.PathUtil;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -69,6 +79,38 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             log.error("【月报错误】 系统内部错误，可能是JDBC出错");
             throw new SysException(SysEnum.Sys_INNER_ERROR);
         }
+    }
+
+    /**
+     * 获取某时段内特定工程的月报
+     * @param projectId
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @Override
+    public List<ProjectMonthlyReport> getMonthlyReportsByProjectIdAndYear(String projectId, String startDate, String endDate) {
+        List<ProjectMonthlyReport> projectMonthlyReports = null;
+        Specification<ProjectMonthlyReport> querySpecification = new Specification<ProjectMonthlyReport>() {
+            @Override
+            public Predicate toPredicate(Root<ProjectMonthlyReport> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<>();
+                if (StringUtils.isNotBlank(startDate)) {
+                    //大于等于传入开始时间
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("submitDate").as(String.class), startDate));
+                }
+                if (StringUtils.isNotBlank(endDate)) {
+                    //小于或等于传入时间
+                    predicates.add(cb.lessThanOrEqualTo(root.get("submitDate").as(String.class), endDate));
+                }
+                if (StringUtils.isNotBlank(projectId)) {
+                    predicates.add(cb.equal(root.join("project").get("projectId").as(String.class), projectId));
+                }
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+        projectMonthlyReports = projectMonthlyReportRepository.findAll(querySpecification);
+        return projectMonthlyReports;
     }
 
 }

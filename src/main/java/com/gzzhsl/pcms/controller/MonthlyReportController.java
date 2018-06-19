@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/monthlyreport")
@@ -91,6 +92,31 @@ public class MonthlyReportController {
         return ResultUtil.success();
     }
 
-
+    @PostMapping("/getmonthlyreports")
+    @ResponseBody
+    public ResultVO getMonthlyReports(@RequestBody Map<String, Object> params) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        Project thisProject = thisUser.getProject();
+        if (thisProject == null || thisProject.getProjectId() == null ||  thisProject.getProjectId() == "") {
+            log.error("【月报错误】 获取用户所在工程月报集出错 , thisProject = {}", thisProject);
+            throw new SysException(SysEnum.MONTHLY_REPORTS_FETCH_ERROR);
+        }
+        String year = (String) params.get("year"); // 从前端取到年份
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String endTime = simpleDateFormat.format(new Date()); // 查询时间范围的截止日期应为当前
+        String endDate = new Date().toString();
+        if (year == null || year == "") { // 如果从前端没有取到查询年份，则默认当前时间年份
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            year = String.valueOf(calendar.get(Calendar.YEAR));
+        }
+        String startDate = year+"-01-01 00:00:00";
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear(thisProject.getProjectId(), startDate, endDate);
+        if (projectMonthlyReports == null || projectMonthlyReports.size() == 0){
+            log.error("【月报错误】获取月报列表空，该工程指定年无月报记录");
+            throw new SysException(SysEnum.DATA_CALLBACK_FAILED);
+        }
+        return ResultUtil.success(projectMonthlyReports);
+    }
 
 }

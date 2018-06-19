@@ -6,6 +6,9 @@ $(function () {
     $('#project_monthly_report').click(function () {
         contentDiv.load('reporter/projectmonthlyreport');
     })
+    $('#project_months').click(function () {
+        contentDiv.load('reporter/projectmonths');
+    })
     $('#person_info').click(function () {
         contentDiv.load('user/personinfo');
     })

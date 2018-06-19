@@ -15,6 +15,7 @@ public enum SysEnum {
 
     MONTHLY_REPORT_IMG_ERROR(1100, "月报图片错误"),
     MONTHLY_REPORT_ERROR(1101, "月报错误"),
+    MONTHLY_REPORTS_FETCH_ERROR(1102, "获取月报集错误"),
 
     ACCOUNT_PASSWORD_INCONSISTENCY(1201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(1202, "已存在相同账号名的用户"),
