@@ -45,7 +45,7 @@ $(document).ready(function(){
             }
 
             // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
-            if (currentIndex === 2 && priorIndex === 3)
+            if (currentIndex === 2 && priorIndex === 2)
             {
                 $(this).steps("previous");
             }

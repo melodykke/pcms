@@ -70,13 +70,14 @@ public class AccountController {
             throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
         }
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
         // 目前允许一个账号有一个子账号
-        if (!(thisUser.getChildren() == null) || (thisUser.getChildren().size()>1)) {
+        if (children == null || children.size() > 0) {
             log.error("【账户错误】 本账号已存在子账号，目前只允许一个主账号添加一个子账号");
             throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
         }
         if (accountService.createSubAccount(accountVO, thisUser)) {
-            return ResultUtil.success(thisUser.getUserId());
+            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), accountVO.getUsername());
         } else {
             return ResultUtil.failed();
         }
@@ -86,9 +87,9 @@ public class AccountController {
     @ResponseBody
     public ResultVO getSubAccountInfo() {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        List<UserInfo> children = thisUser.getChildren();
-        if (children == null) {
-            return ResultUtil.failed();
+        List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
+        if (children == null || children.size() == 0) {
+            return ResultUtil.failed("没有对应的子账号");
         } else if (children.size() == 1){
             UserInfo child = children.get(0);
             UserInfo userInfo = new UserInfo();
@@ -96,16 +97,16 @@ public class AccountController {
             userInfo.setActive(child.getActive());
             return ResultUtil.success(userInfo);
         } else {
-            log.error("【账户错误】 获取子账号出错，系统错误");
+            log.error("【账户错误】 获取子账号出错");
             throw new SysException(SysEnum.Sys_INNER_ERROR);
         }
     }
 
     @PostMapping("/activate")
     @ResponseBody
-    public ResultVO activate(@RequestBody Map<String, Object> params) {
+    public ResultVO activate() {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        List<UserInfo> children = thisUser.getChildren();
+        List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
         if (children == null) {
             return ResultUtil.failed();
         } else if (children.size() == 1){

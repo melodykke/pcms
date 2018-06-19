@@ -118,6 +118,7 @@ $(function () {
                             $('#mymodal').html(getModal(modal_title, sub_title, modal_content));
                             $('#myModal2').modal('show');
                             $('#sub_account_form')[0].reset();
+                            getSubAccountInfo();
 
                         } else if (data.code == 1202) {
                             var modal_title = '出错！';
@@ -153,21 +154,21 @@ $(function () {
                         var templateHtml = '<p>'+ activeBtnHtml +'<span class="badge badge-primary">'+ stateHtml +'</span></p> <h5> 已配置的子账号：'+ data.data.username +'</h5>\n';
                         $('#sub_account_content').html(templateHtml)
                     }
+
                 }
             }
         });
     };
+
     $('#sub_account_content').on('click','button', function (e) {
         $.ajax({
             url: 'account/activate',
             type: 'POST',
-            data: JSON.stringify({"active": active}),
             contentType: 'application/json',
-            success: function () {
+            success: function (data) {
                 getSubAccountInfo();
             }
         })
     });
-
 });
 

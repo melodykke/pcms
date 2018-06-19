@@ -11,11 +11,16 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SysServiceImplTest {
+
+
     @Autowired
     private SysServiceImpl sysService;
     @Test
     public void userinfoidToprojectFKuserid() throws Exception {
         sysService.userinfoidToprojectFKuserid();
     }
-
+    @Test
+    public void setAllUserRole() throws Exception {
+        sysService.setAllUserRole();
+    }
 }
