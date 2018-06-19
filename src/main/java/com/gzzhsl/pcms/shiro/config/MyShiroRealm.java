@@ -57,7 +57,7 @@ public class MyShiroRealm extends AuthorizingRealm{
 			return null;
 		}
 		if (userInfo.getActive() == 0) {
-			throw new InactivatedException("用户名错误！");
+			throw new InactivatedException("账号未激活！");
 		}
 		// 3. 加密， 使用SimpleAuthenticationInfo 进行身份处理
 		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(userInfo, userInfo.getPassword(), ByteSource.Util.bytes(userInfo.getSalt()), this.getName());

@@ -2,6 +2,7 @@ package com.gzzhsl.pcms.shiro.config;
 
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.gzzhsl.pcms.cors.MyFormAuthenticationFilter;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
@@ -66,6 +67,9 @@ public class ShiroConfiguration {
 		//<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
 		//<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
 		filterChainDefinitionMap.put("/**", "authc");
+		Map map = new LinkedHashMap();
+		map.put("authc", new MyFormAuthenticationFilter());
+		shiroFilterFactoryBean.setFilters(map);
 		// 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
 		shiroFilterFactoryBean.setLoginUrl("/login");       // 在拦截器中不设置对login路径的anon，由shiro去拦截，自动将请求
                                                              // 交由realm去操作。以此判别login post进来的用户是否合法。这一步主要是执行doAuthentication方法。

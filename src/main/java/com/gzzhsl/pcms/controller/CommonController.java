@@ -58,15 +58,15 @@ public class CommonController {
             if (UnknownAccountException.class.getName().equals(exception)) {
                 log.error("UnknownAccountException -- > 账号不存在  userSigninForm = {}", userSigninForm);
                 msg = "账号不存在或账号尚未激活，请确认后重试！";
-            } else if (InactivatedException.class.getName().equals(exception) ) {
-                log.error("InactivatedException -- > 账号未激活");
-                msg = "账号未激活！";
-            } else if (IncorrectCredentialsException.class.getName().equals(exception)) {
+            }  else if (IncorrectCredentialsException.class.getName().equals(exception)) {
                 log.error("IncorrectCredentialsException -- > 密码不正确：", userSigninForm);
                 msg = "密码不正确，请重新输入！";
             } else if ("kaptchaValidateFailed".equals(exception)) {
                 log.error("kaptchaValidateFailed -- > 验证码错误", userSigninForm);
                 msg = "验证码错误，请重新输入！";
+            } else if (InactivatedException.class.getName().equals(exception) ) {
+                log.error("InactivatedException -- > 账号未激活");
+                msg = "账号未激活！";
             } else {
                 log.error("else -- >" + exception);
                 msg = "未知错误，请稍后重试 ";
