@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.controller;
 
+import com.gzzhsl.pcms.converter.ProjectMonthlyReport2ProjectMonthVO;
 import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
 import com.gzzhsl.pcms.enums.SysEnum;
@@ -9,6 +10,7 @@ import com.gzzhsl.pcms.service.ProjectService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
+import com.gzzhsl.pcms.vo.ProjectMonthVO;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/monthlyreport")
@@ -102,7 +105,7 @@ public class MonthlyReportController {
             throw new SysException(SysEnum.MONTHLY_REPORTS_FETCH_ERROR);
         }
         String year = (String) params.get("year"); // 从前端取到年份
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String endTime = simpleDateFormat.format(new Date()); // 查询时间范围的截止日期应为当前
         String endDate = new Date().toString();
         if (year == null || year == "") { // 如果从前端没有取到查询年份，则默认当前时间年份
@@ -116,7 +119,8 @@ public class MonthlyReportController {
             log.error("【月报错误】获取月报列表空，该工程指定年无月报记录");
             throw new SysException(SysEnum.DATA_CALLBACK_FAILED);
         }
-        return ResultUtil.success(projectMonthlyReports);
+        List<ProjectMonthVO> projectMonthVOs = projectMonthlyReports.stream().map(e -> ProjectMonthlyReport2ProjectMonthVO.convert(e)).collect(Collectors.toList());
+        return ResultUtil.success(projectMonthVOs);
     }
 
 }

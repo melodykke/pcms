@@ -11,7 +11,40 @@ $(function () {
             dataType: "json",
             cache : false,
             success: function (data) {
-                console.log(data)
+                var projectMonths = data.data;
+                $('#projectMonthsDiv').html('');
+                var tempHtml = '';
+                projectMonths.map(function (item, index) {
+                    var state = '';
+                    if (item.state == 0) {
+                        state = '未审核';
+                    } else if (item.state == 0) {
+                        state = '已审核';
+                    } else {
+                        state = '未知状态';
+                    }
+                    tempHtml += '<div class="col-md-3">\n' +
+                    '                <div class="ibox">\n' +
+                    '                    <div class="ibox-content product-box">\n' +
+                    '\n' +
+                    '                        <div class="product-imitation">\n' +
+                    '                        </div>\n' +
+                    '                        <div class="product-desc">\n' +
+                    '                                <span class="product-price">\n' +
+                    '                                    '+ item.month +'月\n' +
+                    '                                </span>\n' +
+                    '                            <p class="text-muted">填报人：<strong>'+ item.submitter +'</strong></p>\n' +
+                    '                            <p class="text-muted">月报审核状态：<span class="label label-primary">'+ state +'</span></p>\n' +
+                    '                            <div class="col-sm-offset-9 m-t text-righ">\n' +
+                    '\n' +
+                    '                                <a href="#" class="btn btn-xs btn-outline btn-primary">详情 <i class="fa fa-long-arrow-right"></i> </a>\n' +
+                    '                            </div>\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>';
+                })
+                $('#projectMonthsDiv').append(tempHtml);
             }
         });
     }
