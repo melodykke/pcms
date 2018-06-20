@@ -9,4 +9,5 @@ public class ProjectMonthVO {
     private String submitter;
     private String pId;
     private Byte state;
+    private String thumbnailUrl;
 }

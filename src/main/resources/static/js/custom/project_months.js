@@ -14,6 +14,7 @@ $(function () {
                 var projectMonths = data.data;
                 $('#projectMonthsDiv').html('');
                 var tempHtml = '';
+                if (projectMonths == null) {projectMonths = []}
                 projectMonths.map(function (item, index) {
                     var state = '';
                     if (item.state == 0) {
@@ -27,7 +28,7 @@ $(function () {
                     '                <div class="ibox">\n' +
                     '                    <div class="ibox-content product-box">\n' +
                     '\n' +
-                    '                        <div class="product-imitation">\n' +
+                    '                         <div class="product-imitation" style="background:url(' + ((item.thumbnailUrl==null)? "#":item.thumbnailUrl) + ');background-size:cover;">\n' +
                     '                        </div>\n' +
                     '                        <div class="product-desc">\n' +
                     '                                <span class="product-price">\n' +

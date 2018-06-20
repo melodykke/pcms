@@ -110,9 +110,15 @@ $(document).ready(function(){
                         contentType: 'application/json',
                         success: function (data) {
                            if (data.code == 1002) {
-                               swal("成功!", "已经成功提交!", "success");
+                               swal({
+                                   title: "成功",
+                                   text: "月报提交成功！",
+                                   type: "success",
+                               }, function () {
+                                   parent.$('#main_content').load('reporter/projectmonths');
+                               })
                            } else {
-                               alert(data)
+                               console.log(data)
                                swal("失败!", data.msg, "error");
                            }
                         }
@@ -158,27 +164,20 @@ $(document).ready(function(){
         todayHighlight: true
     });
 
-
-    //获得额外参数的方法
-  /*  submitDate = function() {
-        var remindTime = $("#submit_date").val();
-        var str = remindTime.toString();
-        str = str.replace("/-/g", "/");
-        var oDate = new Date(str);
-        return oDate.getFullYear()+"/"+parseInt(oDate.getMonth()+1);
-    };*/
-
     // 文件上传
     $("#uploadfile").fileinput({
         language:'zh',
         theme: 'fa',
         uploadUrl: saveFilesUrl, // you must set a valid URL here else you will get an error
         uploadAsync:false,
-        allowedFileExtensions: ['jpg', 'png', 'gif'],
+        allowedFileExtensions: ['jpg', 'png', 'gif', 'docx', 'doc', 'xlsx','xls', 'pdf', 'pjeg', 'mp4','3gp','avi'],
         overwriteInitial: false,
         maxFileSize: 1000000,
         maxFilesNum: 10,
-        allowedFileTypes: ['image', 'video', 'flash'],
+        layoutTemplates:{
+            actionUpload:'',
+            actionDelete:''
+        }
       /*  slugCallback: function(filename) {
             uploadFileFlag = false;
             return filename.replace('(', '_').replace(']', '_');
@@ -198,6 +197,7 @@ $(document).ready(function(){
     /*选择文件后处理事件*/
     $("#uploadfile").on("filebatchselected", function(event, files) {
         uploadFileFlag = false;
+
     });
     //同步上传错误处理
     $('#uploadfile').on('filebatchuploaderror', function(event, data, msg) {
@@ -208,11 +208,13 @@ $(document).ready(function(){
         if (data.response.code == 1002) {
             uploadFileFlag = true;
             rtFileTempPath = data.response.data;
-            console.log(rtFileTempPath)
+
         }
     });
 
-
+    $('#uploadfile').click(function () {
+        $("#uploadfile").fileinput('refresh');
+    })
 });
 
 
