@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,14 +49,31 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             throw new SysException(SysEnum.MONTHLY_REPORT_ERROR);
         }
         try {
-            ProjectMonthlyReport projectMonthlyReport = MonthlyReportVO2MonthlyReport.convert(projectMonthlyReportVO);
+            // 在审批状态为“已审批”的状态下，若月报提交月份重复，则不允许提交
+            Date monthReportDate = projectMonthlyReportVO.getSubmitDate();
+            List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportRepository.findAll();
+            for (ProjectMonthlyReport projectMonthlyReport : projectMonthlyReports) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+                String dateString = simpleDateFormat.format(projectMonthlyReport.getSubmitDate());
+                String monthReportDateString = simpleDateFormat.format(monthReportDate);
+                if (dateString.equals(monthReportDateString)) {
+                    if (projectMonthlyReport.getState() == 1 || projectMonthlyReport.getState() == null) {
+                        log.error("【月报错误】 插入月报与某已存在月报月份一致，并且该已存在月报状态为空或已审批");
+                        throw new SysException(SysEnum.MONTHLY_REPORTS_INSERT_ERROR);
+                    } else {
+                        projectMonthlyReportRepository.delete(projectMonthlyReport);
+                    }
+                }
+            }
+            ProjectMonthlyReport projectMonthlyReport = MonthlyReportVO2MonthlyReport.convert(projectMonthlyReportVO, thisUser);
+
             if (projectMonthlyReportVO.getRtFileTempPath() == null || projectMonthlyReportVO.getRtFileTempPath() == "") {
                 // 没有上传图片的情况，直接对表格进行存储
                 projectMonthlyReport.setProject(thisProject);
                 ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportRepository.save(projectMonthlyReport);
                 return projectMonthlyReportRt;
             } else {
-                // 上传图片的情况，需考虑转存
+                // 上传图片的情况，考虑转存
                 String rtFileTempPath = projectMonthlyReportVO.getRtFileTempPath();
                 projectMonthlyReport.setProject(thisProject);
                 ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportRepository.save(projectMonthlyReport);
@@ -109,7 +128,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         };
-        projectMonthlyReports = projectMonthlyReportRepository.findAll(querySpecification);
+        Sort sort = new Sort(Sort.Direction.DESC,"submitDate");
+        projectMonthlyReports = projectMonthlyReportRepository.findAll(querySpecification, sort);
         return projectMonthlyReports;
     }
 

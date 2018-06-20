@@ -18,7 +18,7 @@ $(function () {
                     var state = '';
                     if (item.state == 0) {
                         state = '未审核';
-                    } else if (item.state == 0) {
+                    } else if (item.state == 1) {
                         state = '已审核';
                     } else {
                         state = '未知状态';
