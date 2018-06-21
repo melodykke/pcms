@@ -1,28 +1,17 @@
-package com.gzzhsl.pcms.entity;
+package com.gzzhsl.pcms.vo;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.gzzhsl.pcms.entity.Project;
+import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@Slf4j
-public class ProjectMonthlyReport {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String pId;
-    /*工程部分投资*/
+@Data
+public class ProjectMonthlyReportShowVO {
+
+
     private BigDecimal civilEngineering; // 建筑工程(万元) *
     private BigDecimal metalMechanism; // 金属机构设备及安装工程(万元) *
     private BigDecimal independentCost; // 独立费用(万元) *
@@ -43,8 +32,7 @@ public class ProjectMonthlyReport {
     private BigDecimal masonry; // 砌石（万/m³） *
     private BigDecimal rebar; // 钢筋（t） *
     /*其他情况*/
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM")
-    private Date submitDate; // 填报月份
+
     private BigDecimal labourForce; // 劳动力投入（万工日） *
     private String constructionContent; // 主要建设内容
     private String visualProgress; // 工程形象进度及节点工期
@@ -52,14 +40,12 @@ public class ProjectMonthlyReport {
     private String measure; // 采取的主要措施
     private String suggestion; // 下一步建议
     private String remark; // 备注
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "projectMonthlyReport")
-    private List<ProjectMonthlyReportImg> projectMonthlyReportImgList;
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    private List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList;
+    private String plantName;
+    private Date createTime;
+    private Integer year; // 填报年份
+    private Integer month; // 填报月份
     private String submitter;
     private Byte state;
 
-    private Date createTime;
 }

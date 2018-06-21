@@ -1,6 +1,8 @@
 package com.gzzhsl.pcms.controller;
 
+import com.gzzhsl.pcms.converter.MonthReport2MonthReportShowVO;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReport2ProjectMonthVO;
+import com.gzzhsl.pcms.converter.ProjectMonthlyReportImg2VO;
 import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
 import com.gzzhsl.pcms.enums.SysEnum;
@@ -10,9 +12,7 @@ import com.gzzhsl.pcms.service.ProjectService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
-import com.gzzhsl.pcms.vo.ProjectMonthVO;
-import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
-import com.gzzhsl.pcms.vo.ResultVO;
+import com.gzzhsl.pcms.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -121,6 +118,16 @@ public class MonthlyReportController {
         }
         List<ProjectMonthVO> projectMonthVOs = projectMonthlyReports.stream().map(e -> ProjectMonthlyReport2ProjectMonthVO.convert(e)).collect(Collectors.toList());
         return ResultUtil.success(projectMonthVOs);
+    }
+
+    @GetMapping("/projectmonthlyreportshow/{pId}")
+    public String projectMonthlyReportShow(@PathVariable(name = "pId") String pId, Map<String,Object> modelMap){
+        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getBypId(pId);
+        ProjectMonthlyReportShowVO projectMonthlyReportShowVO = MonthReport2MonthReportShowVO.convert(projectMonthlyReport);
+        List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList = projectMonthlyReport.getProjectMonthlyReportImgList().stream().map(e -> ProjectMonthlyReportImg2VO.convert(e)).collect(Collectors.toList());
+        projectMonthlyReportShowVO.setProjectMonthlyReportImgVOList(projectMonthlyReportImgVOList);
+        modelMap.put("projectMonthlyReportShowVO" , projectMonthlyReportShowVO);
+        return "/project_monthly_report_show";
     }
 
 }

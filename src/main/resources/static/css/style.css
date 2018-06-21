@@ -1724,9 +1724,8 @@ div.dt-button-info {
 #animation_box {
   background-color: #f9f8f8;
   border-radius: 16px;
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
-  padding-top: 80px;
 }
 .animation-text-box {
   position: absolute;

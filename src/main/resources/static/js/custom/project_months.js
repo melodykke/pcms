@@ -38,7 +38,7 @@ $(function () {
                     '                            <p class="text-muted">月报审核状态：<span class="label label-primary">'+ state +'</span></p>\n' +
                     '                            <div class="col-sm-offset-9 m-t text-righ">\n' +
                     '\n' +
-                    '                                <a href="#" class="btn btn-xs btn-outline btn-primary">详情 <i class="fa fa-long-arrow-right"></i> </a>\n' +
+                    '                                <a href="#" class="btn btn-xs btn-outline btn-primary" data-pid="'+ item.pid +'">详情 <i class="fa fa-long-arrow-right"></i> </a>\n' +
                     '                            </div>\n' +
                     '                        </div>\n' +
                     '                    </div>\n' +
@@ -49,4 +49,10 @@ $(function () {
             }
         });
     }
+
+    $('#projectMonthsDiv').on('click', 'a', function (e) {
+        var target = $(e.currentTarget);
+        var pId = e.currentTarget.dataset.pid;
+        $('#main_content', parent.document).load('monthlyreport/projectmonthlyreportshow/'+pId)
+    })
 })
