@@ -17,6 +17,8 @@ public enum SysEnum {
     MONTHLY_REPORT_ERROR(1101, "月报错误"),
     MONTHLY_REPORTS_FETCH_ERROR(1102, "获取月报集错误"),
     MONTHLY_REPORTS_INSERT_ERROR(1103, "插入月报与某已存在月报月份一致，并且该已存在月报状态为已审批"),
+    MONTHLY_REPORTS_MULTIPLE_PER_MONTH_ERROR(1104, "同一月存在多分月报"),
+    MONTHLY_REPORTS_NONE_PER_MONTH_ERROR(1105, "查询月无月报"),
 
     ACCOUNT_PASSWORD_INCONSISTENCY(1201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(1202, "已存在相同账号名的用户"),

@@ -53,6 +53,6 @@ $(function () {
     $('#projectMonthsDiv').on('click', 'a', function (e) {
         var target = $(e.currentTarget);
         var pId = e.currentTarget.dataset.pid;
-        $('#main_content', parent.document).load('monthlyreport/projectmonthlyreportshow/'+pId)
+        $('#main_content', parent.document).load('monthlyreport/projectmonthlyreportshow?pId='+pId)
     })
 })

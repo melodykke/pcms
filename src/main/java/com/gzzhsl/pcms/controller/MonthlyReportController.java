@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,6 +43,8 @@ public class MonthlyReportController {
 
     @Autowired
     private ProjectMonthlyReportService projectMonthlyReportService;
+    String pId = "";
+
 
     @PostMapping("/addfiles")
     @ResponseBody
@@ -120,14 +123,52 @@ public class MonthlyReportController {
         return ResultUtil.success(projectMonthVOs);
     }
 
-    @GetMapping("/projectmonthlyreportshow/{pId}")
-    public String projectMonthlyReportShow(@PathVariable(name = "pId") String pId, Map<String,Object> modelMap){
-        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getBypId(pId);
-        ProjectMonthlyReportShowVO projectMonthlyReportShowVO = MonthReport2MonthReportShowVO.convert(projectMonthlyReport);
-        List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList = projectMonthlyReport.getProjectMonthlyReportImgList().stream().map(e -> ProjectMonthlyReportImg2VO.convert(e)).collect(Collectors.toList());
-        projectMonthlyReportShowVO.setProjectMonthlyReportImgVOList(projectMonthlyReportImgVOList);
-        modelMap.put("projectMonthlyReportShowVO" , projectMonthlyReportShowVO);
+    // 进入某一个月报展示页面（将pId藏进html）
+    @GetMapping("/projectmonthlyreportshow")
+    public String projectMonthlyReportShow(String pId){
+        this.pId = pId;
         return "/project_monthly_report_show";
     }
 
+    @PostMapping("/getprojectmonthlyreportbypid")
+    @ResponseBody
+    public ResultVO getProjectMonthlyReportByInternalPid(){
+        String pId = this.pId;
+        if (this.pId == "" || this.pId == null) {
+            log.error("【月报错误】内部pId错误");
+            throw new SysException(SysEnum.Sys_INNER_ERROR);
+        }
+        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getBypId(pId);
+        this.pId = "";
+        ProjectMonthlyReportShowVO projectMonthlyReportShowVO = MonthReport2MonthReportShowVO.convert(projectMonthlyReport);
+        List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList = projectMonthlyReport.getProjectMonthlyReportImgList().stream().map(e -> ProjectMonthlyReportImg2VO.convert(e)).collect(Collectors.toList());
+        projectMonthlyReportShowVO.setProjectMonthlyReportImgVOList(projectMonthlyReportImgVOList);
+        return ResultUtil.success(projectMonthlyReportShowVO);
+    }
+
+
+
+    @PostMapping("/getprojectmonthlyreportshowbytime")
+    @ResponseBody
+    public ResultVO getProjectMonthlyReportShow(@RequestBody Map<String, Object> params) {
+        String time = (String) params.get("time");
+        String startDate = time + "-01 00:00:00";
+        String endDate = time + "-28 23:59:59";
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String projectId = thisUser.getProject().getProjectId();
+        List<ProjectMonthlyReport> projectMonthlyReportList = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear(projectId, startDate, endDate);
+        if (projectMonthlyReportList == null || projectMonthlyReportList.size() == 0) {
+            log.error("【月报错误】读取月报错误 未在指定时间区间内读取到月报内容");
+            throw new SysException(SysEnum.MONTHLY_REPORTS_NONE_PER_MONTH_ERROR);
+        }
+        if (projectMonthlyReportList.size() > 1) {
+            log.error("【月报错误】读取月报错误 同一月存在多分月报");
+            throw new SysException(SysEnum.MONTHLY_REPORTS_MULTIPLE_PER_MONTH_ERROR);
+        }
+        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportList.get(0);
+        ProjectMonthlyReportShowVO projectMonthlyReportShowVO = MonthReport2MonthReportShowVO.convert(projectMonthlyReport);
+        List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList = projectMonthlyReport.getProjectMonthlyReportImgList().stream().map(e -> ProjectMonthlyReportImg2VO.convert(e)).collect(Collectors.toList());
+        projectMonthlyReportShowVO.setProjectMonthlyReportImgVOList(projectMonthlyReportImgVOList);
+        return ResultUtil.success(projectMonthlyReportShowVO);
+    }
 }

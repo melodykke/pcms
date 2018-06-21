@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
 import lombok.Data;
@@ -42,6 +43,7 @@ public class ProjectMonthlyReportShowVO {
     private String remark; // 备注
     private List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList;
     private String plantName;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")
     private Date createTime;
     private Integer year; // 填报年份
     private Integer month; // 填报月份

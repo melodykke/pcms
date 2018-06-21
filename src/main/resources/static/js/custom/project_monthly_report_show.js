@@ -1,24 +1,51 @@
 $(function () {
+    var getprojectmonthlyreportbypidUrl = "monthlyreport/getprojectmonthlyreportbypid"; // 依靠内部pId获取月报
+    var getprojectmonthlyreportshowbytimeUrl = '/monthlyreport/getprojectmonthlyreportshowbytime'; // 根据时间区间获取月报
 
-    $('#last_month').click( function(){
+    getProjectMonthlyReport();
+    
+    function getProjectMonthlyReport() {
         $.ajax({
-            url: 'http://www.baidu.com',
+            url: getprojectmonthlyreportbypidUrl,
             type: 'POST',
-            data: {month:123},
             contentType: 'application/json',
             beforeSend:function () {
                 $('#loading').show();
             },
             success: function (data) {
-                if (data.success){
-                    // ...
+                refreshContents(data);
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            error: function (data) {
+                console.info("error: " + data.msg);
+            }
+        });
+    }
+
+
+
+    $('#last_month').click( function(){
+        var lastMonth = $('#year_tag').text()+'-0'+ (parseInt($('#month').text())-1);
+        $.ajax({
+            url: getprojectmonthlyreportshowbytimeUrl,
+            type: 'POST',
+            data: JSON.stringify({"time":lastMonth}),
+            contentType: 'application/json',
+            beforeSend:function () {
+                $('#loading').show();
+            },
+            success: function (data) {
+                if (data.code == 1002) {
+                    refreshContents(data);
                 }
             },
             complete: function () {
-                $("loading").hide();
+                $("#loading").hide();
             },
             error: function (data) {
-                console.info("error: " + data.responseText);
+                console.info("error: " + data.msg);
             }
         });
 
@@ -34,24 +61,25 @@ $(function () {
         return false;
     });
     $('#next_month').click( function(){
+        var lastMonth = $('#year_tag').text()+'-0'+ (parseInt($('#month').text())+1);
         $.ajax({
-            url: 'http://www.baidu.com',
+            url: getprojectmonthlyreportshowbytimeUrl,
             type: 'POST',
-            data: {month:123},
+            data: JSON.stringify({"time":lastMonth}),
             contentType: 'application/json',
             beforeSend:function () {
                 $('#loading').show();
             },
             success: function (data) {
-                if (data.success){
-                    // ...
+                if (data.code == 1002) {
+                    refreshContents(data);
                 }
             },
             complete: function () {
-                $("loading").hide();
+                $("#loading").hide();
             },
             error: function (data) {
-                console.info("error: " + data.responseText);
+                console.info("error: " + data.msg);
             }
         });
 
@@ -79,25 +107,23 @@ $(function () {
     }).on('changeDate',function () {
         var time=$('#input_time').val();
         $.ajax({
-            url: 'http://www.baidu.com',
+            url: getprojectmonthlyreportshowbytimeUrl,
             type: 'POST',
-            data: {month:123},
+            data: JSON.stringify({"time":time}),
             contentType: 'application/json',
             beforeSend:function () {
                 $('#loading').show();
-
-
             },
             success: function (data) {
-                if (data.success){
-                    // ...
+                if (data.code == 1002) {
+                    refreshContents(data);
                 }
             },
             complete: function () {
-                $("loading").hide();
+                $("#loading").hide();
             },
             error: function (data) {
-                console.info("error: " + data.responseText);
+                console.info("error: " + data.msg);
             }
         });
 
@@ -139,4 +165,62 @@ $(function () {
         ]
 
     });
+
+
+    function refreshContents(data){
+        console.log(data)
+        $('#plantName').text(data.data.plantName);
+        $('#year_tag').text(data.data.year);
+        $('#month').text(data.data.month+' 月');
+        data.data.state == 0 ? $('#state').text("待审核") :  $('#state').text("已审核");
+        $('#submitter').text(data.data.submitter);
+        $('#submitTime').text(data.data.createTime);
+        data.data.state == 0 ? $('#state_bar').css("width", "50%") : $('#state_bar').css("width", "100%");
+        data.data.state == 0 ? $('#state_msg').text("等待上级审批") : $('#state_msg').text("审核通过");
+        $('#civilEngineering').text(data.data.civilEngineering);
+        $('#electromechanicalEquipment').text(data.data.electromechanicalEquipment);
+        $('#metalMechanism').text(data.data.metalMechanism);
+        $('#temporaryWork').text(data.data.temporaryWork);
+        $('#independentCost').text(data.data.independentCost);
+        $('#reserveFunds').text(data.data.reserveFunds);
+        $('#resettlementArrangement').text(data.data.resettlementArrangement);
+        $('#waterConservation').text(data.data.waterConservation);
+        $('#environmentalProtection').text(data.data.environmentalProtection);
+        $('#otherCost').text(data.data.otherCost);
+        $('#openDug').text(data.data.openDug);
+        $('#holeDug').text(data.data.holeDug);
+        $('#backfill').text(data.data.backfill);
+        $('#grout').text(data.data.grout);
+        $('#masonry').text(data.data.masonry);
+        $('#concrete').text(data.data.concrete);
+        $('#rebar').text(data.data.rebar);
+        $('#report_year').text(data.data.year);
+        $('#report_month').text(data.data.month);
+        $('#labourForce').text(data.data.labourForce);
+        $('#constructionContent').text(data.data.constructionContent);
+        $('#remark').text(data.data.remark);
+        $('#visualProgress').text(data.data.visualProgress);
+        $('#difficulty').text(data.data.difficulty);
+        $('#measure').text(data.data.measure);
+        $('#suggestion').text(data.data.suggestion);
+        var projectMonthlyReportImgVOList = data.data.projectMonthlyReportImgVOList;
+        var file_display_html = '';
+        projectMonthlyReportImgVOList.map(function (item, index) {
+            file_display_html += '<div class="file-box">\n' +
+                '                                                                                    <div class="file">\n' +
+                '                                                                                        <span class="corner"></span>\n' +
+                '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
+                '                                                                                        </div>\n' +
+                '                                                                                        <div class="file-name">\n' +
+                '                                                                                            文件\n' +
+                '                                                                                            <br/>\n' +
+                '                                                                                            <small>'+ item.createTime +'</small>\n' +
+                '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/downloadFile?fileId='+item.imgAddr+'">下载</a>\n' +
+                '                                                                                        </div>\n' +
+                '                                                                                    </div>\n' +
+                '                                                                                </div>'
+        });
+        $('#files_display_div').html("");
+        $('#files_display_div').html(file_display_html);
+    }
 })
