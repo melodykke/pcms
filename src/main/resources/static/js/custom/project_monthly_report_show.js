@@ -166,6 +166,25 @@ $(function () {
 
     });
 
+    $('#project_monthly_report_content_div').mouseenter(function () {
+        window.onmousewheel=function(){
+            return false
+        };
+    });
+    $('#project_monthly_report_content_div').mouseleave(function () {
+        window.onmousewheel=function(){
+            return true
+        };
+    });
+    $('#project_monthly_report_content_div').mousewheel(function (e, delta) {
+
+        if (delta > 0) {
+            $('#last_month').trigger("click");
+        }else {
+            $('#next_month').trigger("click");
+        }
+
+    });
 
     function refreshContents(data){
         console.log(data)
