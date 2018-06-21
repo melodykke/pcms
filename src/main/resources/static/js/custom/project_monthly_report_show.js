@@ -1,7 +1,5 @@
 $(function () {
-    // 从URL里获取projectMonthlyReport pId参数的值
-    var pId = getQueryString('pId');
-    alert(pId)
+
     $('#last_month').click( function(){
         $.ajax({
             url: 'http://www.baidu.com',
@@ -114,4 +112,31 @@ $(function () {
         return false;
     });
 
+
+    $('.dataTables-example').DataTable({
+        bFilter: false,    //去掉搜索框
+        bInfo:false,       //去掉显示信息
+
+        paging: false,
+        ordering:false,
+        // autoWidth:auto,
+        lengthChange: false,
+        responsive: true,
+        dom: '<"html5buttons"B>lTfgitp',
+        buttons: [
+            { extend: 'copy'},
+            {extend: 'excel', title: 'ExampleFile'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                }
+            }
+        ]
+
+    });
 })

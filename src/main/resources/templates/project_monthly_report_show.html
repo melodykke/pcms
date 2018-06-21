@@ -11,7 +11,7 @@
 <body>
 <div id="loading" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f8f8;opacity:0.6;z-index:1000;">
 
-<div id="loading_gif" style="text-align:center;position:fixed;z-index: 9999;top:50%;left: 50%;">
+<div id="loading_gif" style="text-align:center;position:fixed;z-index: 9999;top:25%;left: 45%;">
     <div class="sk-spinner sk-spinner-cube-grid">
         <div class="sk-cube"></div>
         <div class="sk-cube"></div>
@@ -40,6 +40,247 @@
         </ol>
     </div>
 </div>
+<div class="modal fade" id="data_table_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="max-height:95%;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">月报信息表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover dataTables-example" >
+                                        <thead>
+                                        <tr>
+                                            <th rowspan="2" style="text-align: center;padding-top:30px">编号</th>
+                                            <th rowspan="2" style="text-align: center;padding-top:30px">工程或费用名称</th>
+                                            <th rowspan="2" style="text-align: center;padding-top:30px">初步设计批复</th>
+                                            <th colspan="3" style="text-align: center;">合同签订情况</th>
+                                            <th rowspan="2" style="text-align: center;padding-top:30px">本月</th>
+                                            <th rowspan="2" style="text-align: center;padding-top:30px">本年度累计</th>
+                                            <th rowspan="2" style="text-align: center;padding-top:30px">建设至今累计</th>
+                                            <th rowspan="2" style="text-align: center;padding-top:30px">备注</th>
+                                        </tr>
+                                        <tr>
+                                            <th >合同内</th>
+                                            <th >合同外</th>
+                                            <th >合计</th>
+                                        </tr>
+
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>Ⅰ</td>
+                                            <td>工程部分投资</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>第一部分：建筑工程</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>第二部分：机电设备及安装工程</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>第三部分：金属机构设备及安装工程</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>第四部分：施工临时工程</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>第五部分：独立费用</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>一至五部分合计</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>基本预备费</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>静态总投资</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ⅱ</td>
+                                            <td>移民环境投资</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td>一</td>
+                                            <td>建设征地移民安置补偿费</td>
+                                            <td>3333</td>
+                                            <td class="center">1242.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12e33</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td>二</td>
+                                            <td>水保环保投资</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>水土保持工程投资</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>环境保护工程投资</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td>三</td>
+                                            <td>其他</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ⅲ</td>
+                                            <td>静态总投资（Ⅰ+Ⅱ）</td>
+                                            <td>3333</td>
+                                            <td class="center">123124142.123</td>
+                                            <td class="center">1212.3</td>
+                                            <td class="center">123123</td>
+                                            <td class="center">12233</td>
+                                            <td class="center">123</td>
+                                            <td class="center">12ewqwrq1233</td>
+                                            <td class="center">123</td>
+                                        </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--主页面内容-->
 <div class="wrapper wrapper-content animated fadeInRight">
                 <!--动画内容-->
@@ -126,6 +367,7 @@
                                                     <li class=""><a data-toggle="tab" href="#tab-2"> <i class="fa fa-wrench"></i>工程量情况</a></li>
                                                     <li class=""><a data-toggle="tab" href="#tab-3"> <i class="fa fa-book"></i>项目情况</a></li>
                                                     <li class=""><a data-toggle="tab" href="#tab-4"> <i class="fa fa-file-text"></i>附件</a></li>
+                                                    <li class=""><a data-toggle="modal" data-target="#data_table_modal"> <i class="fa fa-pie-chart"></i>表格生成</a></li>
                                                 </ul>
                                                 <div class="tab-content" th:object="${projectMonthlyReportShowVO}">
                                                     <div id="tab-1" class="tab-pane active">
@@ -421,10 +663,11 @@
     <script th:src="@{/js/plugins/pace/pace.min.js}"></script>
 
     <script th:src="@{/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+    <script th:src="@{/js/plugins/dataTables/datatables.min.js}"></script>
 
     <!-- blueimp gallery -->
     <script th:src="@{/js/plugins/blueimp/jquery.blueimp-gallery.min.js}"></script>
-
+    <script th:src="@{/js/custom/project_monthly_report_show.js}"></script>
 </body>
 
 </html>
