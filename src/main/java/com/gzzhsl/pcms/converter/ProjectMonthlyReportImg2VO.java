@@ -20,7 +20,9 @@ public class ProjectMonthlyReportImg2VO {
         } else {
             thumbnailAddr = "/files/"+(oriAddr.replace("\\", "/"));
         }
-        projectMonthlyReportImgVO.setThumbnailAddr(thumbnailAddr);
+        projectMonthlyReportImgVO.setThumbnailAddr(thumbnailAddr); // 缩略图
+
+        projectMonthlyReportImgVO.setImgAddr(projectMonthlyReportImg.getProjectMonthlyReportImgId()); // 实际上给的是文件ID
         return projectMonthlyReportImgVO;
     }
 }

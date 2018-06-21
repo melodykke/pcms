@@ -382,7 +382,7 @@
                                                                                                 文件
                                                                                                 <br/>
                                                                                                 <small th:text="${projectMonthlyReportVOImg.createTime}"></small>
-                                                                                                <button class="btn-primary pull-right">下载</button>
+                                                                                                <a type="button" class="btn-primary pull-right" th:href="@{'download/downloadFile?fileId='+${projectMonthlyReportVOImg.imgAddr}}">下载</a>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
