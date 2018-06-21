@@ -29,8 +29,9 @@ public class UserInfo {
     @OneToOne(mappedBy = "userInfo")
     PersonInfo personInfo;
     @JsonManagedReference
-    @OneToOne(mappedBy = "userInfo")
-    Project project;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private UserInfo parent;

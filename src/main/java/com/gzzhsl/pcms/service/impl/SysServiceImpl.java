@@ -26,15 +26,15 @@ public class SysServiceImpl {
     /**
      * 把所有工程的加外键指向userInfo 的 userid
      */
-    public void userinfoidToprojectFKuserid() {
+    public void projectidToUserinfoFKprojectid() {
         List<UserInfo> allUserInfos = userService.getAllUser();
         List<Project> allProjects = projectService.getAllProject();
 
         for (UserInfo userInfo : allUserInfos) {
             for (Project project : allProjects) {
                 if (userInfo.getName().equals(project.getPlantName())) {
-                    project.setUserInfo(userInfo);
-                    projectService.save(project);
+                    userInfo.setProject(project);
+                    userService.save(userInfo);
                 }
             }
         }

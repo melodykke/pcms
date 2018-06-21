@@ -23,9 +23,8 @@ public class Project {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String projectId;
     @JsonBackReference
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private UserInfo userInfo;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserInfo> userInfoList;
     private String plantName;
     private String parentId;
     private String remark;

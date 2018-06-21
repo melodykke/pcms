@@ -2,8 +2,10 @@ package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.repository.RoleRepository;
 import com.gzzhsl.pcms.service.AccountService;
 import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.AccountVO2UserInfo;
 import com.gzzhsl.pcms.util.UserUtil;
@@ -23,6 +25,10 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserService userService;
+    @Autowired
+    private SysServiceImpl sysService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -50,6 +56,9 @@ public class AccountServiceImpl implements AccountService {
         }
         UserInfo subUser = AccountVO2UserInfo.convert(accountVO, thisUser);
         subUser.setParent(thisUser);
+        List<SysRole> sysRoles = new ArrayList<>();
+        sysRoles.add(roleRepository.findByRole("reporter"));
+        subUser.setSysRoleList(sysRoles);
         try {
             userService.save(subUser);
         } catch (Exception e) {

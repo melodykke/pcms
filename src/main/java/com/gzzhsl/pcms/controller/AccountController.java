@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.Account;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -59,6 +60,7 @@ public class AccountController {
 
     @PostMapping("/addsubaccount")
     @ResponseBody
+    @RequiresRoles(value = {"checker"})
     public ResultVO addSubAccount(@Valid @RequestBody AccountVO accountVO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.error("【账户错误】参数验证错误， 参数不正确 accountVO = {}， 错误：{}", accountVO, bindingResult.getFieldError().getDefaultMessage());

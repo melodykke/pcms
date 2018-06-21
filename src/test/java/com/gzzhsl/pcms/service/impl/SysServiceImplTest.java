@@ -12,15 +12,18 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class SysServiceImplTest {
 
-
     @Autowired
     private SysServiceImpl sysService;
-    @Test
-    public void userinfoidToprojectFKuserid() throws Exception {
-        sysService.userinfoidToprojectFKuserid();
-    }
+
     @Test
     public void setAllUserRole() throws Exception {
         sysService.setAllUserRole();
     }
+
+    @Test
+    public void projectidToUserinfoFKprojectid() throws Exception {
+        sysService.projectidToUserinfoFKprojectid();
+    }
+
+
 }

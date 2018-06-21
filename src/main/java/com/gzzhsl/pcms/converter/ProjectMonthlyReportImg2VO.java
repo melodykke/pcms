@@ -17,8 +17,10 @@ public class ProjectMonthlyReportImg2VO {
             thumbnailAddr = "img/word.jpg";
         } else if (".pdf".equals(extension)) {
             thumbnailAddr = "img/pdf.jpg";
-        } else {
+        } else if (".jpg".equals(extension) || ".jpeg".equals(extension) || ".png".equals(extension)) {
             thumbnailAddr = "/files/"+(oriAddr.replace("\\", "/"));
+        } else {
+            thumbnailAddr = "img/default.png";
         }
         projectMonthlyReportImgVO.setThumbnailAddr(thumbnailAddr); // 缩略图
 
