@@ -30,7 +30,7 @@ public class ProjectMonthlyReport2ProjectMonthVO {
                 String extension = fileRelativePath.substring(fileRelativePath.lastIndexOf("."));
                 for (int i = 0; i < acceptableExtention.length; i++) {
                     if (acceptableExtention[i].equals(extension)) {
-                        projectMonthVO.setThumbnailUrl("/files/"+(projectMonthlyReportImgList.get(0).getImgAddr()).replace("\\", "/"));
+                        projectMonthVO.setThumbnailUrl("/files/"+(projectMonthlyReportImg.getImgAddr()).replace("\\", "/"));
                         hasRepresentiveImg = true;
                         break;
                     }
