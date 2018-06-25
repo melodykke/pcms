@@ -145,8 +145,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
     @Override
     @Transactional
-    public ProjectMonthlyReport getBypId(String pId) {
-        return projectMonthlyReportRepository.findByPId(pId);
+    public ProjectMonthlyReport getByProjectMonthlyReportId(String projectMonthlyReportId) {
+        return projectMonthlyReportRepository.findByProjectMonthlyReportId(projectMonthlyReportId);
     }
 
 }

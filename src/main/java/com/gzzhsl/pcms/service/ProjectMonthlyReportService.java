@@ -9,5 +9,5 @@ import java.util.List;
 public interface ProjectMonthlyReportService {
     ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO);
     List<ProjectMonthlyReport> getMonthlyReportsByProjectIdAndYear(String projectId, String startDate, String endDate);
-    ProjectMonthlyReport getBypId(String pId);
+    ProjectMonthlyReport getByProjectMonthlyReportId(String projectMonthlyReportId);
 }

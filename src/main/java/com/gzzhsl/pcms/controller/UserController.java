@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.converter.PersonInfo2VO;
 import com.gzzhsl.pcms.entity.PersonInfo;
+import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.PersonService;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
@@ -43,7 +45,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/getThisUser")
+    @GetMapping("/getthisuser")
     @RequiresUser
     @ResponseBody
     public ResultVO getSubject(){
@@ -52,6 +54,21 @@ public class UserController {
         BeanUtils.copyProperties(userInfo, userInfoVO);
         return ResultUtil.success(userInfoVO);
     }
+
+    @GetMapping("/getthisproject")
+    @RequiresUser
+    @ResponseBody
+    public ResultVO getThisProject(HttpServletRequest request, HttpServletResponse response){
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        Project thisProject = thisUser.getProject();
+        if (thisProject == null || thisProject.getProjectId() == null) {
+            return ResultUtil.failed(SysEnum.NO_PROJECT_IN_THISUSER);
+        }else {
+            request.getSession().setAttribute("thisProject", thisProject);
+            return ResultUtil.success();
+        }
+    }
+
 
     @GetMapping("/doesthisuserhaspersoninfo")
     @ResponseBody

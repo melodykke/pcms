@@ -37,7 +37,7 @@ public class PlantProject {
     private String cellProjectOverview; // 单元工程概况
     private String mark; // 备注
     private String projectSource; // 项目来源
-    private Region county;
+    private Region county; // 所在县
     private BigDecimal utilizablCapacity; // 兴利库容
     private String supervisorBid; // 监理、施工招标情况
     private int hasSignedConstructionContract; // 是否签订枢纽工程施工承包合同（是/否）
@@ -45,7 +45,7 @@ public class PlantProject {
     private int hasAcceptCompletion; // 是否竣工验收（是/否）
     private BigDecimal ruralHumanWater; // 农村人饮（万人）
     private BigDecimal livestock; // 大牲畜（万头）
-    private BigDecimal waterSupplyPopulation;
+    private BigDecimal waterSupplyPopulation; // 城镇供水人口（万人)
     private BigDecimal centralAccumulativePayment ; // 中央累计拨付（万元）
     private BigDecimal provincialAccumulativePayment; // 省级累计拨付（万元）
     private BigDecimal localAccumulativePayment; // 市县累计拨付（万元）

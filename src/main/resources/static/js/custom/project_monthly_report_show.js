@@ -1,12 +1,15 @@
 $(function () {
-    var getprojectmonthlyreportbypidUrl = "monthlyreport/getprojectmonthlyreportbypid"; // 依靠内部pId获取月报
+    var getprojectmonthlyreportbyprojectmonthlyreportidurl = "monthlyreport/getprojectmonthlyreportbyprojectmonthlyreportid"; // 依靠内部pId获取月报
     var getprojectmonthlyreportshowbytimeUrl = '/monthlyreport/getprojectmonthlyreportshowbytime'; // 根据时间区间获取月报
 
     getProjectMonthlyReport();
-    
+
+    //  增加一个可以藏起来PID的页面元素 TODO
+
+
     function getProjectMonthlyReport() {
         $.ajax({
-            url: getprojectmonthlyreportbypidUrl,
+            url: getprojectmonthlyreportbyprojectmonthlyreportidurl,
             type: 'POST',
             contentType: 'application/json',
             beforeSend:function () {
@@ -139,32 +142,60 @@ $(function () {
     });
 
 
-    $('.dataTables-example').DataTable({
-        bFilter: false,    //去掉搜索框
-        bInfo:false,       //去掉显示信息
+    $('#mr_table').click(function () {
+        var  labelItemListDataTable = $('.dataTables-example').dataTable();
+        labelItemListDataTable.fnClearTable();
+        labelItemListDataTable.fnDestroy();
+        $.ajax({
+            url: 'monthlyreport/getmonthlyreportexcelbyprojectid',
+            type: 'GET',
+            data: {projectMonthlyReportId: $('#plantName').attr('projectMonthlyReportId')
+                ,currentDate: $('#year_tag').text()+'-0'+ (parseInt($('#month').text()))},
+            contentType: 'application/json',
+            beforeSend:function () {
+                $('#loading').show();
+            },
+            success: function (data) {
+                console.log(data)
+                if (data.code == 1002){
+                    $('#data_table_modal').modal();
+                    $('.dataTables-example').DataTable({
+                        bFilter: false,    //去掉搜索框
+                        retrieve: true,
+                        destroy:true,
+                        bInfo:false,       //去掉显示信息
+                        data:data.data,
+                        paging: false,
+                        ordering:false,
+                        // autoWidth:auto,
+                        lengthChange: false,
+                        responsive: true,
+                        dom: '<"html5buttons"B>lTfgitp',
+                        buttons: [
+                            { extend: 'copy'},
+                            {extend: 'excel', title: 'ExampleFile'},
+                            {extend: 'print',
+                                customize: function (win){
+                                    $(win.document.body).addClass('white-bg');
+                                    $(win.document.body).css('font-size', '10px');
 
-        paging: false,
-        ordering:false,
-        // autoWidth:auto,
-        lengthChange: false,
-        responsive: true,
-        dom: '<"html5buttons"B>lTfgitp',
-        buttons: [
-            { extend: 'copy'},
-            {extend: 'excel', title: 'ExampleFile'},
-            {extend: 'print',
-                customize: function (win){
-                    $(win.document.body).addClass('white-bg');
-                    $(win.document.body).css('font-size', '10px');
-
-                    $(win.document.body).find('table')
-                        .addClass('compact')
-                        .css('font-size', 'inherit');
+                                    $(win.document.body).find('table')
+                                        .addClass('compact')
+                                        .css('font-size', 'inherit');
+                                }
+                            }
+                        ]
+                    });
                 }
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            error: function (data) {
+                console.info("error: " + data.msg);
             }
-        ]
-
-    });
+        })
+    })
 
     $('#project_monthly_report_content_div').mouseenter(function () {
         window.onmousewheel=function(){
@@ -187,7 +218,6 @@ $(function () {
     });
 
     function refreshContents(data){
-        console.log(data)
         $('#plantName').text(data.data.plantName);
         $('#year_tag').text(data.data.year);
         $('#month').text(data.data.month+' 月');
@@ -222,6 +252,7 @@ $(function () {
         $('#difficulty').text(data.data.difficulty);
         $('#measure').text(data.data.measure);
         $('#suggestion').text(data.data.suggestion);
+        $('#plantName').attr('projectMonthlyReportId', data.data.projectMonthlyReportId);
         var projectMonthlyReportImgVOList = data.data.projectMonthlyReportImgVOList;
         var file_display_html = '';
         projectMonthlyReportImgVOList.map(function (item, index) {

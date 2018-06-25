@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ProjectMonthlyReportRepository extends JpaRepository<ProjectMonthlyReport, String>
         , JpaSpecificationExecutor<ProjectMonthlyReport> {
-    ProjectMonthlyReport findByPId(String pId);
+    ProjectMonthlyReport findByProjectMonthlyReportId(String projectMonthlyReportId);
 }

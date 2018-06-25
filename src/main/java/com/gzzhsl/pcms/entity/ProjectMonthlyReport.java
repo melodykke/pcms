@@ -21,7 +21,7 @@ public class ProjectMonthlyReport {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String pId;
+    private String projectMonthlyReportId;
     /*工程部分投资*/
     private BigDecimal civilEngineering; // 建筑工程(万元) *
     private BigDecimal metalMechanism; // 金属机构设备及安装工程(万元) *

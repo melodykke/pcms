@@ -39,6 +39,8 @@ public class Project {
     @JsonManagedReference
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectMonthlyReport> projectMonthlyReportList;
+    @OneToOne(mappedBy = "project")
+    private HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics;
     private Date createTime;
     private Date updateTime;
 }

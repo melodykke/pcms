@@ -7,6 +7,7 @@ import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.service.MonthlyReportExcelService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
 import com.gzzhsl.pcms.service.ProjectService;
 import com.gzzhsl.pcms.service.UserService;
@@ -43,7 +44,10 @@ public class MonthlyReportController {
 
     @Autowired
     private ProjectMonthlyReportService projectMonthlyReportService;
-    String pId = "";
+    @Autowired
+    private MonthlyReportExcelService monthlyReportExcelService;
+
+    String projectMonthlyReportId = "";
 
 
     @PostMapping("/addfiles")
@@ -125,24 +129,24 @@ public class MonthlyReportController {
 
     // 进入某一个月报展示页面（将pId藏进html）
     @GetMapping("/projectmonthlyreportshow")
-    public String projectMonthlyReportShow(String pId){
-        this.pId = pId;
+    public String projectMonthlyReportShow(String projectMonthlyReportId){
+        this.projectMonthlyReportId = projectMonthlyReportId;
         return "/project_monthly_report_show";
     }
 
-    @PostMapping("/getprojectmonthlyreportbypid")
+    @PostMapping("/getprojectmonthlyreportbyprojectmonthlyreportid")
     @ResponseBody
-    public ResultVO getProjectMonthlyReportByInternalPid(){
-        String pId = this.pId;
-        if (this.pId == "" || this.pId == null) {
-            log.error("【月报错误】内部pId错误");
+    public ResultVO getProjectMonthlyReportByInternalProjectMonthlyReportId(){
+        String projectMonthlyReportId = this.projectMonthlyReportId;
+        if (this.projectMonthlyReportId == "" || this.projectMonthlyReportId == null) {
+            log.error("【月报错误】内部projectMonthlyReportId错误");
             throw new SysException(SysEnum.Sys_INNER_ERROR);
         }
-        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getBypId(pId);
-        this.pId = "";
+        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
         ProjectMonthlyReportShowVO projectMonthlyReportShowVO = MonthReport2MonthReportShowVO.convert(projectMonthlyReport);
         List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList = projectMonthlyReport.getProjectMonthlyReportImgList().stream().map(e -> ProjectMonthlyReportImg2VO.convert(e)).collect(Collectors.toList());
         projectMonthlyReportShowVO.setProjectMonthlyReportImgVOList(projectMonthlyReportImgVOList);
+        this.projectMonthlyReportId = "";
         return ResultUtil.success(projectMonthlyReportShowVO);
     }
 
@@ -170,5 +174,37 @@ public class MonthlyReportController {
         List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList = projectMonthlyReport.getProjectMonthlyReportImgList().stream().map(e -> ProjectMonthlyReportImg2VO.convert(e)).collect(Collectors.toList());
         projectMonthlyReportShowVO.setProjectMonthlyReportImgVOList(projectMonthlyReportImgVOList);
         return ResultUtil.success(projectMonthlyReportShowVO);
+    }
+
+    @GetMapping("/getmonthlyreportexcelbyprojectid")
+    @ResponseBody
+    public ResultVO getMonthlyReportExcelByProjectMonthlyReportId(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
+        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
+        String projectId = ((Project) request.getSession().getAttribute("thisProject")).getProjectId();
+        Date yearEndDate = new Date(); // 当前时间
+        String historyPointTime = "2000-01-01 00:00:00";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String yearEndTime = currentDate+"-28 23:59:59"; // 查询时间范围的截止日期应为当前
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(yearEndDate);
+        String yearStartTime = String.valueOf(calendar.get(Calendar.YEAR))+"-01-01 00:00:00"; // 当前时间的年度头一天头一秒
+        List<ProjectMonthlyReport> yearProjectMonthlyReports = projectMonthlyReportService.
+                getMonthlyReportsByProjectIdAndYear(projectId, yearStartTime, yearEndTime); // 查询截止目前 本年的统计情况;
+        List<ProjectMonthlyReport> sofarProjectMonthlyReports = projectMonthlyReportService.
+                getMonthlyReportsByProjectIdAndYear(projectId, historyPointTime, yearEndTime); // 查询截止目前 历史的统计情况;;
+        MonthlyReportExcelModel monthlyReportExcelModel = new MonthlyReportExcelModel();
+        MonthlyReportExcelModel monthlyReportExcelModelWithMonthParams = monthlyReportExcelService.getMonthExcelModelWithMonthParams(monthlyReportExcelModel, projectMonthlyReport);
+        MonthlyReportExcelModel monthlyReportExcelModelWithMonthYearParams = monthlyReportExcelService.getMonthExcelModelWithYearParams(monthlyReportExcelModelWithMonthParams, yearProjectMonthlyReports);
+        // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        Project thisProject = thisUser.getProject();
+        MonthlyReportExcelModel monthlyReportExcelModelWithSofarParams = null;
+        if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {  // 是否存在历史数据
+            monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, thisProject.getHistoryMonthlyReportExcelStatistics());
+        } else {
+            monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, null);
+        }
+        ;
+        return ResultUtil.success(MonthlyReportExcelCalcUtil.buildMonthlyReportExcel(monthlyReportExcelModelWithSofarParams));
     }
 }
