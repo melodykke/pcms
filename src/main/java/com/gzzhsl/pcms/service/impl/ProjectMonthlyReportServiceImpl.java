@@ -1,18 +1,17 @@
 package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.converter.MonthlyReportVO2MonthlyReport;
-import com.gzzhsl.pcms.entity.Notification;
-import com.gzzhsl.pcms.entity.Project;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
+import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportImgRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportRepository;
+import com.gzzhsl.pcms.service.OperationLogService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.util.OperationUtil;
 import com.gzzhsl.pcms.util.PathUtil;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +45,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     private ProjectMonthlyReportImgRepository projectMonthlyReportImgRepository;
     @Autowired
     private NotificationRepository notificationRepository;
-
+    @Autowired
+    private OperationLogService operationLogService;
     @Override
     @Transactional
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
@@ -92,6 +92,10 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             notification.setProjectId(thisUser.getProject().getProjectId());
             notification.setUrl("/monthlyreport/projectmonthlyreportshow");
             notificationRepository.save(notification);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
+                    projectMonthlyReportRt.getCreateTime(),
+                    "提交了没有附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
+                            getProjectMonthlyReportId()));
             return projectMonthlyReportRt;
         } else {
             // 上传图片的情况，考虑转存
@@ -135,6 +139,10 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             notification.setProjectId(thisUser.getProject().getProjectId());
             notification.setUrl("/monthlyreport/projectmonthlyreportshow");
             notificationRepository.save(notification);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
+                    projectMonthlyReportRt.getCreateTime(),
+                    "提交了带附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
+                            getProjectMonthlyReportId()));
             return projectMonthlyReportRtWithImg;
         }
     }

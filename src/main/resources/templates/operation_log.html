@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <link th:href="@{/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css}" rel="stylesheet">
+    <link th:href="@{/css/plugins/jqGrid/ui.jqgrid.css}" rel="stylesheet">
+    <style>
+        .ui-jqgrid {
+            font-size: 20px;
+        }
+
+
+        .ui-jqgrid-view {
+            font-size: 20px;
+        }
+
+
+        .ui-jqgrid .ui-jqgrid-htable th {
+            height: 38px;
+            font-size: 16px;
+        }
+
+
+        .ui-jqgrid .ui-jqgrid-pager {
+            height: 24px;
+            font-size: 16px;
+        }
+
+
+        .ui-jqgrid .ui-pg-input {
+            font-size: 1em;
+            height: 20px;
+        }
+
+
+        .ui-jqgrid .i-pg-selbox {
+            font-size: 0.9em;
+            height: 20px;
+        }
+
+
+        .ui-jqgrid tr.ui-row-ltr td {
+            font-size: 1.4em;
+            height: 36px;
+            text-align: center;
+        }
+    </style>
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>操作日志</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/index">主页</a>
+                </li>
+                <li class="active">
+                    <strong>用户操作日志</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>用户的每一个关键动作都会记录并保存于此</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="jqGrid_wrapper">
+                            <table id="table_list_1"></table>
+                            <div id="pager_list_1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Mainly scripts -->
+<script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<!-- Peity -->
+<script th:src="@{/js/plugins/peity/jquery.peity.min.js}"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/js/plugins/jqGrid/i18n/grid.locale-en.js}"></script>
+<script th:src="@{/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{/js/inspinia.js}"></script>
+<script th:src="@{/js/plugins/pace/pace.min.js}"></script>
+
+<script th:src="@{/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Custom and plugin javascript -->
+<script th:src="@{/js/custom/operation_log.js}"></script>
+
+
+</html>

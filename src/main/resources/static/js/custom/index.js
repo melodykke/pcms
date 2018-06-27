@@ -22,7 +22,9 @@ $(function () {
             contentDiv.load('notification/tonotification');
         }
     })
-
+    $('#operation_log').click(function () {
+        contentDiv.load('operationlog/tooperationlog');
+    })
 
 
     getThisUser(getThisUserUrl);

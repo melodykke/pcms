@@ -273,4 +273,32 @@ $(function () {
         $('#files_display_div').html("");
         $('#files_display_div').html(file_display_html);
     }
+
+
+    $("[name='my-checkbox']").bootstrapSwitch({
+        onText : "拒绝",
+        offText : "通过",
+        onColor : "danger",
+        offColor : "success",
+        size : "large",
+        onSwitchChange : function() {
+            var checkedOfAll=$("#my-checkbox").prop("checked");
+            if (checkedOfAll==false){
+                $('#approve_input').hide()
+            }
+            else {
+                $('#approve_input').show()
+            }
+        }
+    });
+
+    $('#submit').click(function () {
+        var checkedOfAll=$("#my-checkbox").prop("checked");
+        var checkinfo=$('#approve_area').val();
+        alert(checkedOfAll)
+        alert(checkinfo)
+    })
+
+
+
 })
