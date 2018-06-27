@@ -38,6 +38,8 @@ public class ProjectMonthlyReport2ProjectMonthVO {
                 if (hasRepresentiveImg == true) break;
             }
             if (hasRepresentiveImg == false) projectMonthVO.setThumbnailUrl("img/default.png");
+        } else {
+            if (hasRepresentiveImg == false) projectMonthVO.setThumbnailUrl("img/default.png");
         }
         return projectMonthVO;
     }

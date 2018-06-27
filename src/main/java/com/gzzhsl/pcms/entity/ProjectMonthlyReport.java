@@ -2,6 +2,7 @@ package com.gzzhsl.pcms.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,13 +54,14 @@ public class ProjectMonthlyReport {
     private String suggestion; // 下一步建议
     private String remark; // 备注
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "projectMonthlyReport")
+    @JsonManagedReference
     private List<ProjectMonthlyReportImg> projectMonthlyReportImgList;
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
     private String submitter;
-    private Byte state;
+    private Byte state; // 0 未审批 1 审批 -1 拒绝
 
     private Date createTime;
 }

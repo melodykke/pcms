@@ -1,11 +1,14 @@
 package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.converter.MonthlyReportVO2MonthlyReport;
+import com.gzzhsl.pcms.entity.Notification;
 import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
+import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportImgRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportRepository;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
@@ -41,6 +44,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     private ProjectMonthlyReportRepository projectMonthlyReportRepository;
     @Autowired
     private ProjectMonthlyReportImgRepository projectMonthlyReportImgRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -75,6 +80,18 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             // 没有上传图片的情况，直接对表格进行存储
             projectMonthlyReport.setProject(thisProject);
             ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportRepository.save(projectMonthlyReport);
+            // 把通知提醒也一并存入数据库
+            Notification notification = new Notification();
+            notification.setCreateTime(new Date());
+            notification.setSubmitter(projectMonthlyReportRt.getSubmitter());
+            notification.setType(NotificationTypeEnum.MONTHLY_REPORT.getMsg());
+            notification.setTypeId(projectMonthlyReportRt.getProjectMonthlyReportId()); // 这里是月报ID
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
+            notification.setYearmonth(formatter.format(projectMonthlyReportRt.getSubmitDate()));
+            notification.setChecked(false);
+            notification.setProjectId(thisUser.getProject().getProjectId());
+            notification.setUrl("/monthlyreport/projectmonthlyreportshow");
+            notificationRepository.save(notification);
             return projectMonthlyReportRt;
         } else {
             // 上传图片的情况，考虑转存
@@ -106,6 +123,18 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             }
             projectMonthlyReport.setProjectMonthlyReportImgList(projectMonthlyReportImgs);
             ProjectMonthlyReport projectMonthlyReportRtWithImg = projectMonthlyReportRepository.save(projectMonthlyReport);
+            // 把通知提醒也一并存入数据库
+            Notification notification = new Notification();
+            notification.setCreateTime(new Date());
+            notification.setSubmitter(projectMonthlyReportRt.getSubmitter());
+            notification.setType(NotificationTypeEnum.MONTHLY_REPORT.getMsg());
+            notification.setTypeId(projectMonthlyReportRt.getProjectMonthlyReportId()); // 这里是月报ID
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
+            notification.setYearmonth(formatter.format(projectMonthlyReportRt.getSubmitDate()));
+            notification.setChecked(false);
+            notification.setProjectId(thisUser.getProject().getProjectId());
+            notification.setUrl("/monthlyreport/projectmonthlyreportshow");
+            notificationRepository.save(notification);
             return projectMonthlyReportRtWithImg;
         }
     }
@@ -148,5 +177,22 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     public ProjectMonthlyReport getByProjectMonthlyReportId(String projectMonthlyReportId) {
         return projectMonthlyReportRepository.findByProjectMonthlyReportId(projectMonthlyReportId);
     }
+
+    @Override
+    public List<ProjectMonthlyReport> findByProjectIdAndState(String projectId, byte state) {
+        List<ProjectMonthlyReport> projectMonthlyReports = null;
+        Specification<ProjectMonthlyReport> querySpecification = new Specification<ProjectMonthlyReport>() {
+            @Override
+            public Predicate toPredicate(Root<ProjectMonthlyReport> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(cb.equal(root.join("project").get("projectId").as(String.class), projectId));
+                predicates.add(cb.equal(root.get("state").as(Byte.class), state));
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+        Sort sort = new Sort(Sort.Direction.DESC, "submitDate");
+        return projectMonthlyReportRepository.findAll(querySpecification, sort);
+    }
+
 
 }

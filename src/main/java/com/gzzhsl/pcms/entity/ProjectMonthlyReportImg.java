@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class ProjectMonthlyReportImg {
     private Date createTime;
     @ManyToOne
     @JoinColumn(name = "project_monthly_report_id")
+    @JsonBackReference
     private ProjectMonthlyReport projectMonthlyReport;
 
 

@@ -3,14 +3,13 @@ package com.gzzhsl.pcms.controller;
 import com.gzzhsl.pcms.converter.MonthReport2MonthReportShowVO;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReport2ProjectMonthVO;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReportImg2VO;
+import com.gzzhsl.pcms.entity.Notification;
 import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
+import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
-import com.gzzhsl.pcms.service.MonthlyReportExcelService;
-import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
-import com.gzzhsl.pcms.service.ProjectService;
-import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.service.*;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.*;
@@ -46,6 +45,8 @@ public class MonthlyReportController {
     private ProjectMonthlyReportService projectMonthlyReportService;
     @Autowired
     private MonthlyReportExcelService monthlyReportExcelService;
+    @Autowired
+    private NotificationService notificationService;
 
     String projectMonthlyReportId = "";
 
@@ -95,7 +96,8 @@ public class MonthlyReportController {
             log.error("【月报错误】参数验证错误， 参数不正确 projectMonthlyReportVO = {}， 错误：{}", projectMonthlyReportVO, bindingResult.getFieldError().getDefaultMessage());
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
-        projectMonthlyReportService.save(projectMonthlyReportVO);
+        ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportService.save(projectMonthlyReportVO);
+
         return ResultUtil.success();
     }
 

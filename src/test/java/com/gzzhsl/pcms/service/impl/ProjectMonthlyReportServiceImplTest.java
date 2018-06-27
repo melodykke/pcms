@@ -27,4 +27,10 @@ public class ProjectMonthlyReportServiceImplTest {
         System.out.println(projectMonthlyReports);
     }
 
+    @Test
+    public void findByProjectIdAndState() throws Exception {
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.findByProjectIdAndState("747d74c5-a7be-442a-903c-72277118eec6", (byte) 0);
+        System.out.println(projectMonthlyReports);
+    }
+
 }
