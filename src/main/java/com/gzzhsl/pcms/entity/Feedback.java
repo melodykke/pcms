@@ -17,8 +17,10 @@ public class Feedback {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String feedbackId;
+    private String type;
+    private String targetId;
     private String userId;
     private String msg;
     private Date createTime;
-    private Boolean state;
+    private Byte state;
 }

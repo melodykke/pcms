@@ -222,6 +222,9 @@ $(function () {
         $('#year_tag').text(data.data.year);
         $('#month').text(data.data.month+' 月');
         data.data.state == 0 ? $('#state').text("待审核") :  $('#state').text("已审核");
+        if (data.data.state == 1) {
+            $('#check_btn').html('<span class="label label-primary"><i class="fa fa-check"></i> 已审批通过</span>');
+        }
         $('#submitter').text(data.data.submitter);
         $('#submitTime').text(data.data.createTime);
         data.data.state == 0 ? $('#state_bar').css("width", "50%") : $('#state_bar').css("width", "100%");
@@ -306,7 +309,17 @@ $(function () {
             },
             success: function (data) {
                 if (data.code == 1002) {
-
+                    $('#monthly_report_check_div').html('');
+                    $('#monthly_report_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 成 功</h1></div> <div class="modal-footer">\n' +
+                        '                <button type="button" id="check_result_confirm_btn" class="btn btn-white" data-dismiss="modal">确定</button>\n' +
+                        '            </div>');
+                } else {
+                    $('#monthly_report_check_div').html('');
+                    $('#monthly_report_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 出 错</h1></div>   <div class="modal-body">\n' +
+                        '                <div class="form-group animated fadeIn" ><label style="font-size: 15px;">'+ data.msg +'</label></div>\n' +
+                        '            </div><div class="modal-footer">\n' +
+                        '                <button type="button" id="check_result_confirm_btn" class="btn btn-white" data-dismiss="modal">确定</button>\n' +
+                        '            </div>');
                 }
             },
             complete: function () {
@@ -317,7 +330,8 @@ $(function () {
             }
         });
     })
-
-
+    $('#monthly_report_check_div').on('click', '#check_result_confirm_btn', function (e) {
+        $('#main_content', parent.document).load('reporter/projectmonths');
+    })
 
 })

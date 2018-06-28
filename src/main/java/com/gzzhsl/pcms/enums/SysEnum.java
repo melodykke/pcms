@@ -22,6 +22,8 @@ public enum SysEnum {
     MONTHLY_REPORTS_NONE_PER_MONTH_ERROR(1105, "查询月无月报"),
     MONTHLY_REPORTS_APPROVEAL_ERROR(1201, "月报审批错误，月报ID为空"),
     MONTHLY_REPORTS_NO_CORRESPOND_REPORT_ERROR(1202, "审批月报错误，无月报实体对应月报ID"),
+    MONTHLY_REPORTS_CHECKED_OTHERS_ERROR(1203, "不能审批不属于本用户所属工程的月报"),
+    MONTHLY_REPORTS_CHECK_CHECKED_ERROR(1204, "当前审批月报已经审批过，不能重复审批"),
 
     ACCOUNT_PASSWORD_INCONSISTENCY(1201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(1202, "已存在相同账号名的用户"),

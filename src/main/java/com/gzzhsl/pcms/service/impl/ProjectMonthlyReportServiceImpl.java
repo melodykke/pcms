@@ -8,9 +8,11 @@ import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportImgRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportRepository;
+import com.gzzhsl.pcms.service.FeedbackService;
 import com.gzzhsl.pcms.service.OperationLogService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.util.FeedbackUtil;
 import com.gzzhsl.pcms.util.OperationUtil;
 import com.gzzhsl.pcms.util.PathUtil;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
@@ -47,6 +49,9 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     private NotificationRepository notificationRepository;
     @Autowired
     private OperationLogService operationLogService;
+    @Autowired
+    private FeedbackService feedbackService;
+
     @Override
     @Transactional
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
@@ -147,6 +152,11 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         }
     }
 
+    @Override
+    public ProjectMonthlyReport save(ProjectMonthlyReport projectMonthlyReport) {
+        return projectMonthlyReportRepository.save(projectMonthlyReport);
+    }
+
     /**
      * 获取某时段内特定工程的月报
      * @param projectId
@@ -161,6 +171,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             @Override
             public Predicate toPredicate(Root<ProjectMonthlyReport> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>();
+                predicates.add(cb.notEqual(root.get("state").as(Byte.class), (byte) -1));
                 if (StringUtils.isNotBlank(startDate)) {
                     //大于等于传入开始时间
                     predicates.add(cb.greaterThanOrEqualTo(root.get("submitDate").as(String.class), startDate));
@@ -200,6 +211,27 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         };
         Sort sort = new Sort(Sort.Direction.DESC, "submitDate");
         return projectMonthlyReportRepository.findAll(querySpecification, sort);
+    }
+
+    @Override
+    public Feedback approveMonthlyReport(UserInfo thisUser, Boolean switchState, String checkinfo, String projectMonthlyReportId, ProjectMonthlyReport projectMonthlyReportRt) {
+        Feedback feedbackRt = null;
+        if (switchState == false) {
+            projectMonthlyReportRt.setState((byte) 1); // 审批通过
+            ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(),"月报", projectMonthlyReportId, new Date(),
+                    "审批通过", (byte) 1);
+            feedbackRt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的月报"));
+        } else {
+            projectMonthlyReportRt.setState((byte) -1); // 审批未通过
+            ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(), "月报",projectMonthlyReportId, new Date(),
+                    "审批未通过：" + checkinfo, (byte) -1);
+            feedbackRt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的月报"));
+        }
+        return feedbackRt;
     }
 
 

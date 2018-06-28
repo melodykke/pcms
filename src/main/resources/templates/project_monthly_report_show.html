@@ -316,7 +316,7 @@
 
                             </div>
                             <shiro:hasRole name="checker">
-                                <div class="col-lg-1">
+                                <div class="col-lg-1" id="check_btn">
                                     <a id="" class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#approve_modal">
                                         审批
                                     </a>
@@ -644,7 +644,7 @@
 <!--审批modal-->
 <div class="modal inmodal" id="approve_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content animated bounceInRight">
+        <div class="modal-content animated bounceInRight" id="monthly_report_check_div">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                     <h1 class="modal-title">月 报 审 批</h1>

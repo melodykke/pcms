@@ -3,9 +3,7 @@ package com.gzzhsl.pcms.controller;
 import com.gzzhsl.pcms.converter.MonthReport2MonthReportShowVO;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReport2ProjectMonthVO;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReportImg2VO;
-import com.gzzhsl.pcms.entity.Notification;
-import com.gzzhsl.pcms.entity.Project;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
+import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
@@ -48,6 +46,8 @@ public class MonthlyReportController {
     private MonthlyReportExcelService monthlyReportExcelService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private FeedbackService feedbackService;
 
     String projectMonthlyReportId = "";
 
@@ -216,8 +216,7 @@ public class MonthlyReportController {
     @RequiresRoles(value = {"checker"})
     public ResultVO approveMonthlyReport(@RequestBody Map<String, Object> params) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        String projectId = thisUser.getProject().getProjectId();
-        Boolean switchState = (boolean) params.get("switchState");
+        Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");
         String projectMonthlyReportId = (String) params.get("projectMonthlyReportId");
         if (projectMonthlyReportId == null || projectMonthlyReportId == "") {
@@ -229,11 +228,14 @@ public class MonthlyReportController {
             log.error("【月报错误】审批月报错误，无月报实体对应月报ID");
             throw new SysException(SysEnum.MONTHLY_REPORTS_NO_CORRESPOND_REPORT_ERROR);
         }
-        thisUser.getProject().getProjectId().equals()
-        projectMonthlyReportRt.getProject().getProjectId()
-        System.out.println(switchState);
-        System.out.println(checkinfo);
-        System.out.println(projectMonthlyReportId);
-        return ResultUtil.success();
+        if (!thisUser.getProject().getProjectId().equals(projectMonthlyReportRt.getProject().getProjectId())) {
+            log.error("【月报错误】月报错误，不能审批不属于本用户所属工程的月报");
+            throw new SysException(SysEnum.MONTHLY_REPORTS_CHECKED_OTHERS_ERROR);
+        }
+        if (projectMonthlyReportRt.getState() != (byte) 0) {
+            log.error("【月报错误】当前审批月报已经审批过，不能重复审批");
+            throw new SysException(SysEnum.MONTHLY_REPORTS_CHECK_CHECKED_ERROR);
+        }
+        return ResultUtil.success(projectMonthlyReportService.approveMonthlyReport(thisUser, switchState, checkinfo, projectMonthlyReportId, projectMonthlyReportRt));
     }
 }
