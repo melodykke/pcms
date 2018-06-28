@@ -315,11 +315,13 @@
                                 </a>
 
                             </div>
-                            <div class="col-lg-1">
-                                <a id="" class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#approve_modal">
-                                    审批
-                                </a>
-                            </div>
+                            <shiro:hasRole name="checker">
+                                <div class="col-lg-1">
+                                    <a id="" class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#approve_modal">
+                                        审批
+                                    </a>
+                                </div>
+                            </shiro:hasRole>
                         </div>
                     </div>
                     <div class="ibox-content" id="project_monthly_report_content_div">

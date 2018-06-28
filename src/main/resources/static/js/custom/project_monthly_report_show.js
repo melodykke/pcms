@@ -293,10 +293,29 @@ $(function () {
     });
 
     $('#submit').click(function () {
-        var checkedOfAll=$("#my-checkbox").prop("checked");
-        var checkinfo=$('#approve_area').val();
-        alert(checkedOfAll)
-        alert(checkinfo)
+        var switchState = $("#my-checkbox").prop("checked");  // true: 按钮为通过 false：按钮通过
+        var checkinfo = $('#approve_area').val();
+        var projectMonthlyReportId = $('#plantName').attr("projectmonthlyreportid");
+        $.ajax({
+            url: "monthlyreport/approvemonthlyreport",
+            type: 'POST',
+            data: JSON.stringify({"switchState":switchState, "checkinfo":checkinfo, "projectMonthlyReportId":projectMonthlyReportId}),
+            contentType: 'application/json',
+            beforeSend:function () {
+                $('#loading').show();
+            },
+            success: function (data) {
+                if (data.code == 1002) {
+
+                }
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            error: function (data) {
+                console.info("error: " + data.msg);
+            }
+        });
     })
 
 

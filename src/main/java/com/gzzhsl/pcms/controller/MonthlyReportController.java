@@ -15,6 +15,7 @@ import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -208,5 +209,31 @@ public class MonthlyReportController {
         }
         ;
         return ResultUtil.success(MonthlyReportExcelCalcUtil.buildMonthlyReportExcel(monthlyReportExcelModelWithSofarParams));
+    }
+
+    @PostMapping("/approvemonthlyreport")
+    @ResponseBody
+    @RequiresRoles(value = {"checker"})
+    public ResultVO approveMonthlyReport(@RequestBody Map<String, Object> params) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String projectId = thisUser.getProject().getProjectId();
+        Boolean switchState = (boolean) params.get("switchState");
+        String checkinfo = (String) params.get("checkinfo");
+        String projectMonthlyReportId = (String) params.get("projectMonthlyReportId");
+        if (projectMonthlyReportId == null || projectMonthlyReportId == "") {
+            log.error("【月报错误】审批月报错误 月报ID projectMonthlyReportId为空");
+            throw new SysException(SysEnum.MONTHLY_REPORTS_APPROVEAL_ERROR);
+        }
+        ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
+        if (projectMonthlyReportRt == null) {
+            log.error("【月报错误】审批月报错误，无月报实体对应月报ID");
+            throw new SysException(SysEnum.MONTHLY_REPORTS_NO_CORRESPOND_REPORT_ERROR);
+        }
+        thisUser.getProject().getProjectId().equals()
+        projectMonthlyReportRt.getProject().getProjectId()
+        System.out.println(switchState);
+        System.out.println(checkinfo);
+        System.out.println(projectMonthlyReportId);
+        return ResultUtil.success();
     }
 }
