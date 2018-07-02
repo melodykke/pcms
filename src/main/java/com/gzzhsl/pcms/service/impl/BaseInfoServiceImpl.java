@@ -1,38 +1,45 @@
 package com.gzzhsl.pcms.service.impl;
 
-import com.gzzhsl.pcms.entity.BaseInfo;
+import com.gzzhsl.pcms.converter.BaseInfo2VO;
+import com.gzzhsl.pcms.converter.BaseInfoImg2VO;
+import com.gzzhsl.pcms.converter.BaseInfoVO2BaseInfo;
+import com.gzzhsl.pcms.converter.MonthlyReportVO2MonthlyReport;
+import com.gzzhsl.pcms.entity.*;
+import com.gzzhsl.pcms.enums.NotificationTypeEnum;
+import com.gzzhsl.pcms.enums.SysEnum;
+import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.BaseInfoRepository;
 import com.gzzhsl.pcms.repository.UserRepository;
 import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.util.OperationUtil;
+import com.gzzhsl.pcms.util.PathUtil;
+import com.gzzhsl.pcms.vo.BaseInfoImgVO;
+import com.gzzhsl.pcms.vo.BaseInfoVO;
+import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @Transactional
 public class BaseInfoServiceImpl implements BaseInfoService {
 
-    @Autowired
+/*    @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private BaseInfoRepository baseInfoRepository;
-
-    @Override
-    public List<BaseInfo> getAllProject() {
-        return baseInfoRepository.findAll();
-    }
-
-    @Override
-    public BaseInfo save(BaseInfo baseInfo) {
-        return baseInfoRepository.save(baseInfo);
-    }
 
     @Override
     public Boolean connectBaseInfoAndUserInfo() {
@@ -46,6 +53,94 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             }
         }
         return true;
+    }*/
+    @Autowired
+    private BaseInfoRepository baseInfoRepository;
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public List<BaseInfo> getAllProject() {
+        return baseInfoRepository.findAll();
     }
 
+    @Override
+    public BaseInfo save(BaseInfo baseInfo) {
+        return baseInfoRepository.save(baseInfo);
+    }
+
+    @Override
+    public BaseInfoVO getBaseInfoById(String baseInfoId) {
+        BaseInfo baseInfo = baseInfoRepository.findByBaseInfoId(baseInfoId);
+        BaseInfoVO baseInfoVO = BaseInfo2VO.convert(baseInfo);
+        if (baseInfo.getBaseInfoImgs() != null && baseInfo.getBaseInfoImgs().size() > 0) {
+            List<BaseInfoImgVO> baseInfoImgVOs = baseInfo.getBaseInfoImgs().stream().map(e -> BaseInfoImg2VO.convert(e)).collect(Collectors.toList());
+            baseInfoVO.setBaseInfoImgVOs(baseInfoImgVOs);
+        }
+        return baseInfoVO;
+    }
+
+    @Override
+    public BaseInfo save(BaseInfoVO baseInfoVO) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        BaseInfo thisProject = thisUser.getBaseInfo();
+        if (thisProject != null) {
+            log.error("【基本信息错误】 该账户已经存在配置过的项目基本信息，无需重新配置 ");
+            throw new SysException(SysEnum.BASE_INFO_DUPLICATED);
+        }
+        thisProject = BaseInfoVO2BaseInfo.convert(baseInfoVO);
+
+        if (baseInfoVO.getRtFileTempPath() == null || baseInfoVO.getRtFileTempPath() == "") {
+            // 没有上传图片的情况，直接对表格进行存储
+            BaseInfo baseInfoRt = baseInfoRepository.save(thisProject);
+            thisUser.setBaseInfo(baseInfoRt);
+            userService.save(thisUser);
+            return baseInfoRt;
+        } else {
+            // 上传图片的情况，考虑转存
+            String rtFileTempPath = baseInfoVO.getRtFileTempPath();
+            BaseInfo baseInfoRt = baseInfoRepository.save(thisProject);
+            File sourceDestFolder = new File(PathUtil.getFileBasePath(true) + rtFileTempPath);
+            String targetDest = PathUtil.getFileBasePath(false) + PathUtil.getBaseInfoImagePath(thisProject.getPlantName());
+            File[] sourceFiles = sourceDestFolder.listFiles();
+            List<BaseInfoImg> baseInfoImgs = new ArrayList<>();
+            if (sourceFiles.length > 0) {
+                for (File sourceFile : sourceFiles) {
+                    File targetFile = new File(targetDest + sourceFile.getName());
+                    if (!targetFile.exists()) {
+                        targetFile.getParentFile().mkdirs();
+                    }
+                    String imgRelativePath = PathUtil.getBaseInfoImagePath(thisProject.getPlantName()) + sourceFile.getName();
+                    sourceFile.renameTo(targetFile);
+                    // 把存储到新地址的图片的相对路径拿出来构建月报图片对象。
+                    BaseInfoImg baseInfoImg = new BaseInfoImg();
+                    baseInfoImg.setCreateTime(new Date());
+                    baseInfoImg.setImgAddr(imgRelativePath);
+                    baseInfoImg.setBaseInfo(baseInfoRt);
+                    baseInfoImgs.add(baseInfoImg);
+                }
+            }
+            baseInfoRt.setBaseInfoImgs(baseInfoImgs);
+            BaseInfo baseInfoRtWithImg = baseInfoRepository.save(baseInfoRt);
+            thisUser.setBaseInfo(baseInfoRtWithImg);
+            userService.save(thisUser);
+            // 把通知提醒也一并存入数据库
+          /*  Notification notification = new Notification();
+            notification.setCreateTime(new Date());
+            notification.setSubmitter(projectMonthlyReportRt.getSubmitter());
+            notification.setType(NotificationTypeEnum.MONTHLY_REPORT.getMsg());
+            notification.setTypeId(projectMonthlyReportRt.getProjectMonthlyReportId()); // 这里是月报ID
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
+            notification.setYearmonth(formatter.format(projectMonthlyReportRt.getSubmitDate()));
+            notification.setChecked(false);
+            notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
+            notification.setUrl("/monthlyreport/projectmonthlyreportshow");
+            notificationRepository.save(notification);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
+                    projectMonthlyReportRt.getCreateTime(),
+                    "提交了带附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
+                            getProjectMonthlyReportId()));*/
+            return baseInfoRtWithImg;
+        }
+    }
 }

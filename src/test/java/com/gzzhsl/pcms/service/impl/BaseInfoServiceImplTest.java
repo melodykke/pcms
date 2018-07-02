@@ -16,11 +16,11 @@ public class BaseInfoServiceImplTest {
 
     @Autowired
     private BaseInfoService baseInfoService;
-
+/*
     @Test
     public void connectBaseInfoAndUserInfo() throws Exception {
         baseInfoService.connectBaseInfoAndUserInfo();
-    }
+    }*/
 
 
 }

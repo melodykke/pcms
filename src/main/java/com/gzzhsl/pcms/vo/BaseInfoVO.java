@@ -1,28 +1,18 @@
-package com.gzzhsl.pcms.entity;
+package com.gzzhsl.pcms.vo;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import com.gzzhsl.pcms.entity.BaseInfoImg;
+import lombok.Data;
+
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-public class BaseInfo {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String baseInfoId;
-    @JsonBackReference
-    @OneToMany(mappedBy = "baseInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<UserInfo> userInfoList;
+@Data
+public class BaseInfoVO {
+    private String rtFileTempPath;
+
     private String plantName;
     private String parentId;
     private String remark;
@@ -34,11 +24,6 @@ public class BaseInfo {
     private String legalPersonName;
     private String longitude;
     private String latitude;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "baseInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ProjectMonthlyReport> projectMonthlyReportList;
-    @OneToOne(mappedBy = "baseInfo")
-    private HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics;
 
     private BigDecimal storage; // 库容
     private String scale; // 规模
@@ -82,9 +67,7 @@ public class BaseInfo {
     private BigDecimal localAccumulativePayment; // 市县累计拨付（万元）
     private BigDecimal provincialLoan; // 省级配套融资贷款（万元）
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "baseInfo")
-    @JsonManagedReference
-    private List<BaseInfoImg> baseInfoImgs;
+    private List<BaseInfoImgVO> baseInfoImgVOs;
 
     private String owner; // 上报人
     private Boolean state;

@@ -1,6 +1,8 @@
 package com.gzzhsl.pcms.controller;
 
+import com.gzzhsl.pcms.entity.BaseInfoImg;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
+import com.gzzhsl.pcms.service.BaseInfoImgService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportImgService;
 import com.gzzhsl.pcms.util.PathUtil;
 import org.apache.commons.io.IOUtils;
@@ -24,15 +26,30 @@ public class DownLoadController {
 
     @Autowired
     private ProjectMonthlyReportImgService projectMonthlyReportImgService;
+    @Autowired
+    private BaseInfoImgService baseInfoImgService;
+
 
     //fileId 就是 img_id
-    @GetMapping("/downloadFile")
-    public void downloadFileAction(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
+    @GetMapping("/monthlyreportfile")
+    public void monthlyReportFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
         ProjectMonthlyReportImg projectMonthlyReportImg = projectMonthlyReportImgService.getById(fileId);
+        String downloadPath = PathUtil.getFileBasePath(false)+projectMonthlyReportImg.getImgAddr();
+        this.downloadFileAction(downloadPath, request, response);
+    }
+
+    @GetMapping("/baseinfofile")
+    public void baseInfoFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
+        BaseInfoImg baseInfoImg = baseInfoImgService.getByBaseInfoImgId(fileId);
+        String downloadPath = PathUtil.getFileBasePath(false)+baseInfoImg.getImgAddr();
+        this.downloadFileAction(downloadPath, request, response);
+    }
+
+
+    private void downloadFileAction(String downloadPath, HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding(request.getCharacterEncoding());
         response.setContentType("application/octet-stream");
         FileInputStream fis = null;
-        String downloadPath = PathUtil.getFileBasePath(false)+projectMonthlyReportImg.getImgAddr();
         try {
             File file = new File(downloadPath);
             fis = new FileInputStream(file);
@@ -54,5 +71,3 @@ public class DownLoadController {
         }
     }
 }
-
- /**/

@@ -25,10 +25,14 @@ public enum SysEnum {
     MONTHLY_REPORTS_CHECKED_OTHERS_ERROR(1203, "不能审批不属于本用户所属工程的月报"),
     MONTHLY_REPORTS_CHECK_CHECKED_ERROR(1204, "当前审批月报已经审批过，不能重复审批"),
 
-    ACCOUNT_PASSWORD_INCONSISTENCY(1201, "新输入密码与确认密码不一致或新密码与原密码相同"),
-    ACCOUNT_DUPLICATED(1202, "已存在相同账号名的用户"),
-    ACCOUNT_NO_PROJECT(1203, "没有水库工程，请优先配置水库工程"),
-    ACCOUNT_SUBACCOUNT_ALREDY_EXIST(1204, "本账号已存在子账号，目前只允许一个主账号添加一个子账号")
+    BASE_INFO_NO_RECORD_ERROR(1304, "请优先配置项目基本信息"),
+    BASE_INFO_VO_PARAMS_ERROR(1305, "项目基本信息VO参数错误"),
+    BASE_INFO_DUPLICATED(1306, "该账户已经存在配置过的项目基本信息，无需重新配置"),
+
+    ACCOUNT_PASSWORD_INCONSISTENCY(2201, "新输入密码与确认密码不一致或新密码与原密码相同"),
+    ACCOUNT_DUPLICATED(2202, "已存在相同账号名的用户"),
+    ACCOUNT_NO_PROJECT(2203, "没有水库工程，请优先配置水库工程"),
+    ACCOUNT_SUBACCOUNT_ALREDY_EXIST(2204, "本账号已存在子账号，目前只允许一个主账号添加一个子账号")
     ;
 
     private Integer code;

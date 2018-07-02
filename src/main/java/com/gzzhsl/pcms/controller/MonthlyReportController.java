@@ -130,7 +130,7 @@ public class MonthlyReportController {
         return ResultUtil.success(projectMonthVOs);
     }
 
-    // 进入某一个月报展示页面（将pId藏进html）
+    // 进入某一个月报展示页面（projectMonthlyReportId）
     @GetMapping("/projectmonthlyreportshow")
     public String projectMonthlyReportShow(String projectMonthlyReportId){
         this.projectMonthlyReportId = projectMonthlyReportId;

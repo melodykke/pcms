@@ -23,12 +23,17 @@ public class PathUtil {
         basePath = basePath.replace("/", separator);
         return basePath;
     }
-    // relative path
+    // relative path  月报
     public static String getMonthlyReportImagePath(String projectName, String date){
         String imagePath = "upload/monthlyreport/"+ projectName + "/" + date + "/";
         return imagePath.replace("/", separator);
     }
 
+    // relative path  基础信息
+    public static String getBaseInfoImagePath(String projectName){
+        String imagePath = "upload/baseinfo/"+ projectName + "/";
+        return imagePath.replace("/", separator);
+    }
     public static void main(String[] args) {
         System.out.println(PathUtil.getFileBasePath(false));
     }

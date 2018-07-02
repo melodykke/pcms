@@ -268,7 +268,7 @@ $(function () {
                 '                                                                                            文件\n' +
                 '                                                                                            <br/>\n' +
                 '                                                                                            <small>'+ item.createTime +'</small>\n' +
-                '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/downloadFile?fileId='+item.imgAddr+'">下载</a>\n' +
+                '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/monthlyreportfile?fileId='+item.imgAddr+'">下载</a>\n' +
                 '                                                                                        </div>\n' +
                 '                                                                                    </div>\n' +
                 '                                                                                </div>'
