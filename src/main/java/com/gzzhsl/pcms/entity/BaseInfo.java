@@ -1,24 +1,45 @@
 package com.gzzhsl.pcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class PlantProject {
+public class BaseInfo {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String plantId;
+    private String projectId;
+    @JsonBackReference
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserInfo> userInfoList;
+    private String plantName;
+    private String parentId;
+    private String remark;
+    private String projectType;
+    private String location;
+    private String legalRepresentativeId;
+    private String legalRepresentativeName;
+    private String legalPersonId;
+    private String legalPersonName;
+    private String longitude;
+    private String latitude;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProjectMonthlyReport> projectMonthlyReportList;
+    @OneToOne(mappedBy = "project")
+    private HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics;
+
     private BigDecimal storage; // 库容
     private String scale; // 规模
     private BigDecimal timeLimit; // 工期
@@ -46,8 +67,8 @@ public class PlantProject {
     private String branchProjectOverview; // 分部工程概况
     private int cellProjectAmount; // 单元工程数
     private String cellProjectOverview; // 单元工程概况
-    private String mark; // 备注
     private String projectSource; // 项目来源
+    private String county; // 所在县
     private BigDecimal utilizablCapacity; // 兴利库容
     private String supervisorBid; // 监理、施工招标情况
     private int hasSignedConstructionContract; // 是否签订枢纽工程施工承包合同（是/否）
@@ -60,10 +81,9 @@ public class PlantProject {
     private BigDecimal provincialAccumulativePayment; // 省级累计拨付（万元）
     private BigDecimal localAccumulativePayment; // 市县累计拨付（万元）
     private BigDecimal provincialLoan; // 省级配套融资贷款（万元）
-    private String countyName;
+
     private String owner; // 上报人
+
     private Date createTime;
     private Date updateTime;
-
-
 }

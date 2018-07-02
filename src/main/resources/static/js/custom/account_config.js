@@ -120,7 +120,7 @@ $(function () {
                             $('#sub_account_form')[0].reset();
                             getSubAccountInfo();
 
-                        } else if (data.code == 1202) {
+                        } else {
                             var modal_title = '出错！';
                             var sub_title = '添加子账号出错！';
                             var modal_content = '<p> 错误信息： ' + data.msg + '</p>';
