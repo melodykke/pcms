@@ -1,8 +1,8 @@
 package com.gzzhsl.pcms.service.impl;
 
-import com.gzzhsl.pcms.entity.Project;
+import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.repository.RoleRepository;
-import com.gzzhsl.pcms.service.ProjectService;
+import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
@@ -19,7 +19,7 @@ public class SysServiceImpl {
     @Autowired
     private UserService userService;
     @Autowired
-    private ProjectService projectService;
+    private BaseInfoService baseInfoService;
     @Autowired
     private RoleRepository roleRepository;
 
@@ -28,12 +28,12 @@ public class SysServiceImpl {
      */
     public void projectidToUserinfoFKprojectid() {
         List<UserInfo> allUserInfos = userService.getAllUser();
-        List<Project> allProjects = projectService.getAllProject();
+        List<BaseInfo> allProjects = baseInfoService.getAllProject();
 
         for (UserInfo userInfo : allUserInfos) {
-            for (Project project : allProjects) {
+            for (BaseInfo project : allProjects) {
                 if (userInfo.getName().equals(project.getPlantName())) {
-                    userInfo.setProject(project);
+                    userInfo.setBaseInfo(project);
                     userService.save(userInfo);
                 }
             }

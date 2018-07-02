@@ -58,8 +58,8 @@ public class ProjectMonthlyReport {
     private List<ProjectMonthlyReportImg> projectMonthlyReportImgList;
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @JoinColumn(name = "base_info_id")
+    private BaseInfo baseInfo;
     private String submitter;
     private Byte state; // 0 未审批 1 审批 -1 拒绝
 

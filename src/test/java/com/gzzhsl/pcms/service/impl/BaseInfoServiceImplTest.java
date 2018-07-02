@@ -13,11 +13,14 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BaseInfoServiceImplTest {
+
     @Autowired
     private BaseInfoService baseInfoService;
+
     @Test
-    public void saveAll() throws Exception {
-        baseInfoService.saveAll();
+    public void connectBaseInfoAndUserInfo() throws Exception {
+        baseInfoService.connectBaseInfoAndUserInfo();
     }
+
 
 }

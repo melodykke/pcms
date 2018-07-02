@@ -1,6 +1,6 @@
 package com.gzzhsl.pcms.util;
 
-import com.gzzhsl.pcms.entity.Project;
+import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
@@ -18,12 +18,12 @@ public class AccountVO2UserInfo {
         subUserInfo.setName(thisUser.getName());
         subUserInfo.setSalt("salt");
         subUserInfo.setActive((byte) 0);
-        Project project = thisUser.getProject();
+        BaseInfo project = thisUser.getBaseInfo();
         if (project == null) {
             log.error("【账户错误】配置子账户错误，该账号没有优先配置水库工程");
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);
         }
-        subUserInfo.setProject(project);
+        subUserInfo.setBaseInfo(project);
         subUserInfo.setCreateTime(new Date());
         subUserInfo.setUpdateTime(new Date());
         subUserInfo.setPassword(UserUtil.getEncriPwd(accountVO.getPassword()));

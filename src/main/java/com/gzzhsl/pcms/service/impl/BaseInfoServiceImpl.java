@@ -1,12 +1,11 @@
 package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.entity.BaseInfo;
-import com.gzzhsl.pcms.entity.PlantProject;
-import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.repository.BaseInfoRepository;
-import com.gzzhsl.pcms.repository.PlantProjectRepository;
-import com.gzzhsl.pcms.repository.ProjectRepository;
+import com.gzzhsl.pcms.repository.UserRepository;
 import com.gzzhsl.pcms.service.BaseInfoService;
+import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,27 +20,32 @@ import java.util.List;
 public class BaseInfoServiceImpl implements BaseInfoService {
 
     @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private PlantProjectRepository plantProjectRepository;
+    private UserRepository userRepository;
     @Autowired
     private BaseInfoRepository baseInfoRepository;
 
     @Override
-    public Boolean saveAll() {
-        List<Project> projects = projectRepository.findAll();
-        List<PlantProject> plantProjects = plantProjectRepository.findAll();
-        for (Project project : projects) {
-            for (PlantProject plantProject : plantProjects) {
-                if (project.getProjectId().toUpperCase().equals(plantProject.getPlantId().toUpperCase())) {
-                    BaseInfo baseInfo = new BaseInfo();
-                    BeanUtils.copyProperties(plantProject, baseInfo);
-                    baseInfo.setCounty(plantProject.getCountyName());
-                    BeanUtils.copyProperties(project, baseInfo);
-                    baseInfoRepository.save(baseInfo);
+    public List<BaseInfo> getAllProject() {
+        return baseInfoRepository.findAll();
+    }
+
+    @Override
+    public BaseInfo save(BaseInfo baseInfo) {
+        return baseInfoRepository.save(baseInfo);
+    }
+
+    @Override
+    public Boolean connectBaseInfoAndUserInfo() {
+        List<UserInfo> userInfos = userRepository.findAll();
+        List<BaseInfo> baseInfos = baseInfoRepository.findAll();
+        for (UserInfo userInfo : userInfos) {
+            for (BaseInfo baseInfo : baseInfos) {
+                if (userInfo.getName().equals(baseInfo.getPlantName())) {
+                    userInfo.setBaseInfo(baseInfo);
                 }
             }
         }
         return true;
     }
+
 }

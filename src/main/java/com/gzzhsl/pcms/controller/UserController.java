@@ -1,11 +1,9 @@
 package com.gzzhsl.pcms.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.converter.PersonInfo2VO;
+import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.PersonInfo;
-import com.gzzhsl.pcms.entity.Project;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.PersonService;
@@ -60,8 +58,8 @@ public class UserController {
     @ResponseBody
     public ResultVO getThisProject(HttpServletRequest request, HttpServletResponse response){
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        Project thisProject = thisUser.getProject();
-        if (thisProject == null || thisProject.getProjectId() == null) {
+        BaseInfo thisProject = thisUser.getBaseInfo();
+        if (thisProject == null || thisProject.getBaseInfoId() == null) {
             return ResultUtil.failed(SysEnum.NO_PROJECT_IN_THISUSER);
         }else {
             request.getSession().setAttribute("thisProject", thisProject);

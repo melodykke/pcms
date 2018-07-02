@@ -26,8 +26,8 @@ public class HistoryMonthlyReportExcelStatistics {
     private BigDecimal historyWaterConservation;
     private BigDecimal historyOtherCost;
     @OneToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @JoinColumn(name = "base_info_id")
+    private BaseInfo baseInfo;
 
 
 }

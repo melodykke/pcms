@@ -41,12 +41,12 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<Notification> getByProjectId(String projectId) {
+    public List<Notification> getByBaseInfoId(String baseInfoId) {
         List<Notification> notifications = null;
         Specification querySpecification = new Specification() {
             @Override
             public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                Predicate predicate = cb.equal(root.get("projectId"), projectId);
+                Predicate predicate = cb.equal(root.get("baseInfoId"), baseInfoId);
                 return predicate;
             }
         };

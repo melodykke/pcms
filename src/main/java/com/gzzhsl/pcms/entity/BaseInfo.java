@@ -19,9 +19,9 @@ public class BaseInfo {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String projectId;
+    private String baseInfoId;
     @JsonBackReference
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "baseInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserInfo> userInfoList;
     private String plantName;
     private String parentId;
@@ -35,9 +35,9 @@ public class BaseInfo {
     private String longitude;
     private String latitude;
     @JsonManagedReference
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "baseInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectMonthlyReport> projectMonthlyReportList;
-    @OneToOne(mappedBy = "project")
+    @OneToOne(mappedBy = "baseInfo")
     private HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics;
 
     private BigDecimal storage; // 库容

@@ -25,6 +25,6 @@ public class Notification {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")
     private Date createTime;
     private boolean checked;
-    private String projectId;
+    private String baseInfoId;
     private String url;
 }

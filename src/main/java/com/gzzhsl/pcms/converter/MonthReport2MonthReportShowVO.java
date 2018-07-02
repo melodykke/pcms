@@ -15,7 +15,7 @@ public class MonthReport2MonthReportShowVO {
         calendar.setTime(projectMonthlyReport.getSubmitDate());
         projectMonthlyReportShowVO.setYear(calendar.get(Calendar.YEAR));
         projectMonthlyReportShowVO.setMonth(calendar.get(Calendar.MONTH)+1);
-        projectMonthlyReportShowVO.setPlantName(projectMonthlyReport.getProject().getPlantName());
+        projectMonthlyReportShowVO.setPlantName(projectMonthlyReport.getBaseInfo().getPlantName());
         return projectMonthlyReportShowVO;
     }
 }

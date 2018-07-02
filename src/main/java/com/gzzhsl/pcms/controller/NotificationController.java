@@ -1,13 +1,11 @@
 package com.gzzhsl.pcms.controller;
 
+import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.Notification;
-import com.gzzhsl.pcms.entity.Project;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.NotificationService;
-import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.util.TimeUtil;
@@ -42,16 +40,16 @@ public class NotificationController {
     @ResponseBody
     public ResultVO getAllUnChecked() {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        Project thisProject = thisUser.getProject();
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisUser == null || thisUser.getUserId() == null || thisUser.getUserId() == "") {
             log.error("【通知错误】未读取到用户信息");
             throw new SysException(SysEnum.SIGNIN_PARAM_ERROR);
         }
-        if (thisProject == null || thisProject.getProjectId() == null || thisProject.getProjectId() == "") {
+        if (thisProject == null || thisProject.getBaseInfoId() == null || thisProject.getBaseInfoId() == "") {
             log.error("【通知错误】未读取到该账户下的水库信息");
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);
         }
-        List<Notification> notifications = notificationService.getByProjectId(thisProject.getProjectId()); // 总的提醒
+        List<Notification> notifications = notificationService.getByBaseInfoId(thisProject.getBaseInfoId()); // 总的提醒
         List<Notification> monthlyReportNotifications = new ArrayList<>(); // 月报的提醒
         List<Notification> projectBasicInfoNotifications = new ArrayList<>(); // 项目基础信息的提醒
                                                                               // ......

@@ -58,7 +58,7 @@ public class MonthlyReportController {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("uploadfile");
         if (files == null || files.size() < 1) { return ResultUtil.failed(); }
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        Project thisProject = thisUser.getProject();
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisUser == null || thisProject.getPlantName() == null || thisProject.getPlantName() == "") {
             log.error("【月报错误】 所登录账号不具备月报图片上传功能 , thisUser = {}, thisProject = {}"
                     , thisUser, thisProject);
@@ -106,8 +106,8 @@ public class MonthlyReportController {
     @ResponseBody
     public ResultVO getMonthlyReports(@RequestBody Map<String, Object> params) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        Project thisProject = thisUser.getProject();
-        if (thisProject == null || thisProject.getProjectId() == null ||  thisProject.getProjectId() == "") {
+        BaseInfo thisProject = thisUser.getBaseInfo();
+        if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【月报错误】 获取用户所在工程月报集出错 , thisProject = {}", thisProject);
             throw new SysException(SysEnum.MONTHLY_REPORTS_FETCH_ERROR);
         }
@@ -121,7 +121,7 @@ public class MonthlyReportController {
             year = String.valueOf(calendar.get(Calendar.YEAR));
         }
         String startDate = year+"-01-01 00:00:00";
-        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear(thisProject.getProjectId(), startDate, endDate);
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear(thisProject.getBaseInfoId(), startDate, endDate);
         if (projectMonthlyReports == null || projectMonthlyReports.size() == 0){
             log.error("【月报错误】获取月报列表空，该工程指定年无月报记录");
             throw new SysException(SysEnum.DATA_CALLBACK_FAILED);
@@ -162,7 +162,7 @@ public class MonthlyReportController {
         String startDate = time + "-01 00:00:00";
         String endDate = time + "-28 23:59:59";
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        String projectId = thisUser.getProject().getProjectId();
+        String projectId = thisUser.getBaseInfo().getBaseInfoId();
         List<ProjectMonthlyReport> projectMonthlyReportList = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear(projectId, startDate, endDate);
         if (projectMonthlyReportList == null || projectMonthlyReportList.size() == 0) {
             log.error("【月报错误】读取月报错误 未在指定时间区间内读取到月报内容");
@@ -183,7 +183,7 @@ public class MonthlyReportController {
     @ResponseBody
     public ResultVO getMonthlyReportExcelByProjectMonthlyReportId(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
         ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
-        String projectId = ((Project) request.getSession().getAttribute("thisProject")).getProjectId();
+        String projectId = ((BaseInfo) request.getSession().getAttribute("thisProject")).getBaseInfoId();
         Date yearEndDate = new Date(); // 当前时间
         String historyPointTime = "2000-01-01 00:00:00";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -200,7 +200,7 @@ public class MonthlyReportController {
         MonthlyReportExcelModel monthlyReportExcelModelWithMonthYearParams = monthlyReportExcelService.getMonthExcelModelWithYearParams(monthlyReportExcelModelWithMonthParams, yearProjectMonthlyReports);
         // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        Project thisProject = thisUser.getProject();
+        BaseInfo thisProject = thisUser.getBaseInfo();
         MonthlyReportExcelModel monthlyReportExcelModelWithSofarParams = null;
         if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {  // 是否存在历史数据
             monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, thisProject.getHistoryMonthlyReportExcelStatistics());
@@ -228,7 +228,7 @@ public class MonthlyReportController {
             log.error("【月报错误】审批月报错误，无月报实体对应月报ID");
             throw new SysException(SysEnum.MONTHLY_REPORTS_NO_CORRESPOND_REPORT_ERROR);
         }
-        if (!thisUser.getProject().getProjectId().equals(projectMonthlyReportRt.getProject().getProjectId())) {
+        if (!thisUser.getBaseInfo().getBaseInfoId().equals(projectMonthlyReportRt.getBaseInfo().getBaseInfoId())) {
             log.error("【月报错误】月报错误，不能审批不属于本用户所属工程的月报");
             throw new SysException(SysEnum.MONTHLY_REPORTS_CHECKED_OTHERS_ERROR);
         }

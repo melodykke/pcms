@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, String>, JpaSpecificationExecutor<Notification> {
     List<Notification> findByTypeId(String typeId);
-    List<Notification> findByProjectId(String projectId);
+    List<Notification> findByBaseInfoId(String baseInfoId);
 }

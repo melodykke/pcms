@@ -56,7 +56,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     @Transactional
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        Project thisProject = thisUser.getProject();
+        BaseInfo thisProject = thisUser.getBaseInfo();
         // 如果用户对应的Project不存在，则报错
         if (thisProject == null) {
             log.error("【月报错误】 用户对应Project为空，需首先绑定对应的水库工程");
@@ -83,7 +83,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
         if (projectMonthlyReportVO.getRtFileTempPath() == null || projectMonthlyReportVO.getRtFileTempPath() == "") {
             // 没有上传图片的情况，直接对表格进行存储
-            projectMonthlyReport.setProject(thisProject);
+            projectMonthlyReport.setBaseInfo(thisProject);
             ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportRepository.save(projectMonthlyReport);
             // 把通知提醒也一并存入数据库
             Notification notification = new Notification();
@@ -94,7 +94,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
             notification.setYearmonth(formatter.format(projectMonthlyReportRt.getSubmitDate()));
             notification.setChecked(false);
-            notification.setProjectId(thisUser.getProject().getProjectId());
+            notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
             notification.setUrl("/monthlyreport/projectmonthlyreportshow");
             notificationRepository.save(notification);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
@@ -105,7 +105,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         } else {
             // 上传图片的情况，考虑转存
             String rtFileTempPath = projectMonthlyReportVO.getRtFileTempPath();
-            projectMonthlyReport.setProject(thisProject);
+            projectMonthlyReport.setBaseInfo(thisProject);
             ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportRepository.save(projectMonthlyReport);
             Calendar cal = Calendar.getInstance();
             cal.setTime(projectMonthlyReportRt.getSubmitDate());
@@ -141,7 +141,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
             notification.setYearmonth(formatter.format(projectMonthlyReportRt.getSubmitDate()));
             notification.setChecked(false);
-            notification.setProjectId(thisUser.getProject().getProjectId());
+            notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
             notification.setUrl("/monthlyreport/projectmonthlyreportshow");
             notificationRepository.save(notification);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
@@ -165,7 +165,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
      * @return
      */
     @Override
-    public List<ProjectMonthlyReport> getMonthlyReportsByProjectIdAndYear(String projectId, String startDate, String endDate) {
+    public List<ProjectMonthlyReport> getMonthlyReportsByProjectIdAndYear(String baseInfoId, String startDate, String endDate) {
         List<ProjectMonthlyReport> projectMonthlyReports = null;
         Specification<ProjectMonthlyReport> querySpecification = new Specification<ProjectMonthlyReport>() {
             @Override
@@ -180,8 +180,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                     //小于或等于传入时间
                     predicates.add(cb.lessThanOrEqualTo(root.get("submitDate").as(String.class), endDate));
                 }
-                if (StringUtils.isNotBlank(projectId)) {
-                    predicates.add(cb.equal(root.join("project").get("projectId").as(String.class), projectId));
+                if (StringUtils.isNotBlank(baseInfoId)) {
+                    predicates.add(cb.equal(root.join("baseInfo").get("baseInfoId").as(String.class), baseInfoId));
                 }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             }

@@ -8,6 +8,6 @@ public interface NotificationService {
     Notification save(Notification notification);
     List<Notification> getByTypeId(String typeId);
     List<Notification> getAll();
-    List<Notification> getByProjectId(String projectId);
+    List<Notification> getByBaseInfoId(String baseInfoId) ;
     Notification getById(String notificationId);
 }
