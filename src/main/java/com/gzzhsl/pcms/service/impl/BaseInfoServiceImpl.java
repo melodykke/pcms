@@ -12,9 +12,11 @@ import com.gzzhsl.pcms.repository.BaseInfoRepository;
 import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.repository.UserRepository;
 import com.gzzhsl.pcms.service.BaseInfoService;
+import com.gzzhsl.pcms.service.FeedbackService;
 import com.gzzhsl.pcms.service.OperationLogService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.util.FeedbackUtil;
 import com.gzzhsl.pcms.util.OperationUtil;
 import com.gzzhsl.pcms.util.PathUtil;
 import com.gzzhsl.pcms.vo.BaseInfoImgVO;
@@ -64,6 +66,8 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     private NotificationRepository notificationRepository;
     @Autowired
     private OperationLogService operationLogService;
+    @Autowired
+    private FeedbackService feedbackService;
     @Override
     public List<BaseInfo> getAllProject() {
         return baseInfoRepository.findAll();
@@ -95,11 +99,17 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     public BaseInfo save(BaseInfoVO baseInfoVO) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = thisUser.getBaseInfo();
-        if (thisProject != null) {
+        String origId = null;
+        if (thisProject != null && thisProject.getState().equals((byte) 1)) {
             log.error("【基本信息错误】 该账户已经存在配置过的项目基本信息，无需重新配置 ");
             throw new SysException(SysEnum.BASE_INFO_DUPLICATED);
         }
+        if (thisProject != null) {
+            origId = thisProject.getBaseInfoId();
+        }
         thisProject = BaseInfoVO2BaseInfo.convert(baseInfoVO);
+        thisProject.setOwner(thisUser.getUsername());
+        thisProject.setBaseInfoId(origId);
         BaseInfo baseInfoRt = null;
         if (baseInfoVO.getRtFileTempPath() == null || baseInfoVO.getRtFileTempPath() == "") {
             // 没有上传图片的情况，直接对表格进行存储
@@ -150,5 +160,28 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         thisUser.setBaseInfo(baseInfoRt);
         userService.save(thisUser);
         return baseInfoRt;
+    }
+
+    @Override
+    public Feedback approveBaseInfo(UserInfo thisUser, Boolean switchState, String checkinfo, String baseInfoId) {
+        Feedback feedbackRt = null;
+        if (switchState == false) {
+            BaseInfo baseInfoRt = baseInfoRepository.findByBaseInfoId(baseInfoId);
+            baseInfoRt.setState((byte) 1); // 审批通过
+            BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(),"项目基本信息", baseInfoId, new Date(),
+                    "审批通过", (byte) 1);
+            feedbackRt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的项目基本信息"));
+        } else {
+            BaseInfo baseInfoRt = baseInfoRepository.findByBaseInfoId(baseInfoId);
+            baseInfoRt.setState((byte) -1); // 审批未通过
+            BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(), "项目基本信息",baseInfoId, new Date(),
+                    "审批未通过：" + checkinfo, (byte) -1);
+            feedbackRt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的项目基本信息"));
+        }
+        return feedbackRt;
     }
 }

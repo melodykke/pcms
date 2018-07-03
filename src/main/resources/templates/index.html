@@ -42,7 +42,7 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li id="person_info" data-toggle="modal" data-target="#person_info_modal"><a>个人设置</a></li>
+                            <li id="person_info"><a>个人设置</a></li>
                             <li><a href="#" id="account_config">账号设置</a></li>
                             <li class="divider"></li>
 
@@ -65,7 +65,7 @@
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <li>
-                            <a id="menu_2" href="#">基本信息维护 <span class="fa arrow"></span></a>
+                            <a id="menu_2" href="#">项目前期 <span class="fa arrow"></span></a>
                             <ul class="nav nav-third-level">
                                 <li>
                                     <a href="#">前期进度</a>
@@ -1069,7 +1069,7 @@
                                                 <div class="form-group">
                                                     <label>所在县</label><span style="color:red;"> *</span>
                                                     <input id="county" type="text" name="county"
-                                                           class="form-control number " maxlength="10">
+                                                           class="form-control required " maxlength="10">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>经度</label><span style="color:red;"> *</span>
@@ -1129,7 +1129,7 @@
                                                 <div class="form-group">
                                                     <label>项目来源</label><span style="color:red;"> *</span>
                                                     <input id="projectSource" type="text" name="projectSource"
-                                                           class="form-control number " maxlength="10">
+                                                           class="form-control required" maxlength="10">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>纬度</label><span style="color:red;"> *</span>
@@ -1398,6 +1398,7 @@
 </div>
 
 <!--个人信息modal-->
+
 <div class="modal fade" id="person_info_modal" data-backdrop="static" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" style="max-height:95%;">
     <div class="modal-dialog modal-lg" role="document">
@@ -1451,11 +1452,17 @@
                             </div>
                             <div id="person_info_ops_btns" class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
-                                    <button id="reset" class="btn btn-white" type="submit">清空</button>
-                                    <button id="person_info_submit" class="btn btn-primary" type="submit">保存</button>
+                                    <button id="reset" class="btn btn-white" >清空</button>
+                                    <button id="person_info_submit" class="btn btn-primary">保存</button>
                                 </div>
                             </div>
                         </form>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <h3 id="person_info_rt_msg"></h3>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

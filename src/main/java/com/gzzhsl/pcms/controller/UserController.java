@@ -80,6 +80,17 @@ public class UserController {
             return ResultUtil.success(personInfoVO);
         }
     }
+    @GetMapping("/haspersoninfo")
+    @ResponseBody
+    public ResultVO hasPersonInfo(){
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        PersonInfo personInfo = personService.getByUserInfo(thisUser);
+        if (personInfo == null) {
+            return ResultUtil.failed();
+        } else {
+            return ResultUtil.success();
+        }
+    }
 
     @PostMapping("/personinfosubmit")
     @ResponseBody
@@ -90,8 +101,10 @@ public class UserController {
         try {
             PersonInfo personInfo = objectMapper.readValue(personInfoStr, PersonInfo.class);
             UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-            //TODO 如果用户信息已存在，则创建新的PersonINfo记录无效 即通过当前UserInfo的userId遍历所有PersonInfo记录
-            //TODO 如果存在已使用的userId，则当前插入无效。
+            if (userInfo.getPersonInfo() != null) {
+                log.error("【个人信息】 重复提交个人信息");
+                throw new SysException(SysEnum.PERSON_INFO_DUPLICATED);
+            }
             personInfo.setUserInfo(userInfo);
             personInfo.setCreateTime(new Date());
             PersonInfo personInfoRt = personService.save(personInfo);

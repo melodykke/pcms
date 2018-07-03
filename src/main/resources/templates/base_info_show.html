@@ -55,7 +55,7 @@
                                             <i class=" fa fa-calendar fa-lg">&nbsp;&nbsp;<span id="year_tag"></span></i>
                                         </div>
                                         <shiro:hasRole name="checker">
-                                            <div class="col-lg-offset-8 col-lg-1">
+                                            <div class="col-lg-offset-8 col-lg-1" id="check_btn">
                                                 <a class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#person_approve_modal">
                                                     审批
                                                 </a>
@@ -80,18 +80,14 @@
                                         <div class="row">
                                             <div class="col-lg-5">
                                                 <dl class="dl-horizontal">
-                                                    <dt>项目负责人:</dt> <dd>小刘</dd>
-                                                    <dt id="submitter">上报人:</dt> <dd>  老王</dd>
+                                                    <dt>上报人:</dt> <dd id="owner"></dd>
                                                     <dt>上报人电话:</dt> <dd> 18586878889 </dd>
                                                     <dt>审核人:</dt> <dd><a href="#" class="text-navy">老张</a> </dd>
                                                 </dl>
                                             </div>
                                             <div class="col-lg-7" id="cluster_info">
                                                 <dl class="dl-horizontal" >
-
-                                                    <dt>最近修改时间:</dt> <dd>2018-8-8 12:15:57</dd>
-                                                    <dt id="submitTime">填报时间:</dt> <dd> 	2018-7-7 23:36:57 </dd>
-
+                                                    <dt>填报时间:</dt> <dd id="submitTime"> 	2018-7-7 23:36:57 </dd>
                                                 </dl>
                                             </div>
                                         </div>
@@ -487,20 +483,20 @@
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
                 </button>
-                <h1 class="modal-title">月 报 审 批</h1>
+                <h1 class="modal-title">项目基本信息审批</h1>
                 <br>
-                <input type="checkbox" name="person-checkbox" id="person-checkbox">
+                <input type="checkbox" name="baseinfo-checkbox" id="baseinfo-checkbox">
             </div>
             <div class="modal-body">
-                <div class="form-group animated fadeIn" id="person_approve_input" style="display:none;">
+                <div class="form-group animated fadeIn" id="base_info_approve_input" style="display:none;">
                     <label style="font-size: 15px;">若不通过，请说明原因:</label>
-                    <textarea id="person_approve_area" rows="5" placeholder="填写内容请控制在250字以内。" class="form-control" maxlength="250">
+                    <textarea id="base_info_approve_area" rows="5" placeholder="填写内容请控制在250字以内。" class="form-control" maxlength="250">
                                                             </textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="person_approve_submit">提交</button>
+                <button type="button" class="btn btn-primary" id="base_info_approve_submit">提交</button>
             </div>
         </div>
     </div>

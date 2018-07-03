@@ -1,6 +1,7 @@
 package com.gzzhsl.pcms.controller;
 
 import com.gzzhsl.pcms.entity.BaseInfo;
+import com.gzzhsl.pcms.entity.Feedback;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
@@ -16,6 +17,7 @@ import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -28,6 +30,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/baseinfo")
@@ -92,6 +95,7 @@ public class BaseInfoController {
     @PostMapping("/savebaseinfo")
     @ResponseBody
     public ResultVO saveReport(@Valid @RequestBody BaseInfoVO baseInfoVO, BindingResult bindingResult) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         if (baseInfoVO == null) {
             log.error("【基本信息错误】 没有收到有效的baseInfoVO , " +
                     "实际baseInfoVO = {}", baseInfoVO);
@@ -104,5 +108,39 @@ public class BaseInfoController {
         BaseInfo baseInfoRt = baseInfoService.save(baseInfoVO);
 
         return ResultUtil.success();
+    }
+
+    @PostMapping("/approvebaseinfo")
+    @ResponseBody
+    @RequiresRoles(value = {"checker"})
+    public ResultVO approveBaseInfo(@RequestBody Map<String, Object> params) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
+        String checkinfo = (String) params.get("checkinfo");
+        String baseInfoId = (String) params.get("baseInfoId");
+        if (baseInfoId == null || baseInfoId == "") {
+            log.error("【基础信息错误】审批基础信息错误 基础信息ID baseInfoId为空");
+            throw new SysException(SysEnum.BASE_INFO_APPROVEAL_ERROR);
+        }
+        BaseInfoVO baseInfoVORt = baseInfoService.getBaseInfoById(baseInfoId);
+        if (baseInfoVORt == null) {
+            log.error("【基础信息错误】审批查询的基础信息所对应ID无记录");
+            throw new SysException(SysEnum.BASE_INFO_NO_CORRESPOND_RECORD_ERROR);
+        }
+        if (!thisUser.getBaseInfo().getBaseInfoId().equals(baseInfoVORt.getBaseInfoId())) {
+            log.error("【基础信息错误】不能审批不属于本用户所属工程的项目基本信息");
+            throw new SysException(SysEnum.BASE_INFO_CHECKED_OTHERS_ERROR);
+        }
+        if (baseInfoVORt.getState() != (byte) 0) {
+            log.error("【基础信息错误】当前项目基础信息已经审批过，不能重复审批");
+            throw new SysException(SysEnum.BASE_INFO_CHECK_CHECKED_ERROR);
+        }
+        Feedback feedback = baseInfoService.approveBaseInfo(thisUser, switchState, checkinfo, baseInfoId);
+        if (feedback.equals((byte) 1)) {
+            return ResultUtil.success(feedback);
+        } else {
+            return ResultUtil.failed(feedback);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gzzhsl.pcms.entity.BaseInfoImg;
 import lombok.Data;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 public class BaseInfoVO {
     private String rtFileTempPath;
-
+    private String baseInfoId;
     private String plantName;
     private String parentId;
     private String remark;
@@ -71,7 +72,9 @@ public class BaseInfoVO {
     private List<BaseInfoImgVO> baseInfoImgVOs;
 
     private String owner; // 上报人
-    private Boolean state;
+    private Byte state;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")
     private Date createTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")
     private Date updateTime;
 }

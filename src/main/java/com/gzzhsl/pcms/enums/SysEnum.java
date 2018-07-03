@@ -13,6 +13,7 @@ public enum SysEnum {
     DATA_CALLBACK_SUCCESS(1002, "数据成功返回"),
     DATA_CALLBACK_FAILED(1003, "数据返回错误"),
     DATA_SUBMIT_FAILED(1004, "数据提交错误"),
+    PERSON_INFO_DUPLICATED(1005, "重复提交个人信息"),
 
     MONTHLY_REPORT_IMG_ERROR(1100, "月报图片错误"),
     MONTHLY_REPORT_ERROR(1101, "月报错误"),
@@ -28,6 +29,10 @@ public enum SysEnum {
     BASE_INFO_NO_RECORD_ERROR(1304, "请优先配置项目基本信息"),
     BASE_INFO_VO_PARAMS_ERROR(1305, "项目基本信息VO参数错误"),
     BASE_INFO_DUPLICATED(1306, "该账户已经存在配置过的项目基本信息，无需重新配置"),
+    BASE_INFO_APPROVEAL_ERROR(1401, "审批基础信息错误，ID为空"),
+    BASE_INFO_NO_CORRESPOND_RECORD_ERROR(1402, "审批基础信息错误，审批查询的基础信息所对应ID无记录"),
+    BASE_INFO_CHECKED_OTHERS_ERROR(1403, "不能审批不属于本用户所属工程的项目基本信息"),
+    BASE_INFO_CHECK_CHECKED_ERROR(1404, "当前项目基础信息已经审批过，不能重复审批"),
 
     ACCOUNT_PASSWORD_INCONSISTENCY(2201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(2202, "已存在相同账号名的用户"),

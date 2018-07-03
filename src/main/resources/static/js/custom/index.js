@@ -5,7 +5,8 @@ $(function () {
     var getAllUnreadUrl = "/notification/getallunchecked";
     var saveFilesUrl = '/baseinfo/addfiles';
     var saveBaseInfoUrl = '/baseinfo/savebaseinfo';
-
+    // 提交个人信息
+    var savePersonInfoUrl = '/user/personinfosubmit';
     var rtFileTempPath; // 服务器文件暂存地址
     var uploadFileFlag = true;
 
@@ -16,9 +17,9 @@ $(function () {
     $('#project_months').click(function () {
         contentDiv.load('reporter/projectmonths');
     })
-    $('#person_info').click(function () {
+/*    $('#person_info').click(function () {
         contentDiv.load('user/personinfo');
-    })
+    })*/
     $('#account_config').click(function () {
         contentDiv.load('account/accountconfig');
     })
@@ -322,10 +323,129 @@ $(function () {
 
         }
     });
-
     $('#uploadfile').click(function () {
         $("#uploadfile").fileinput('refresh');
-    })
+    });
+
+    /*处理用户个人信息 判断是否已经填写过个人信息*/
+    function hasPersonInfo() {
+        var flag = false;
+        $.getJSON('user/haspersoninfo', function (data) {
+           flag = true;
+        })
+
+        return flag;
+    }
+    // 显示用户个人信息
+    $('#person_info').click(function () {
+        $.getJSON('/user/haspersoninfo', function (data) {
+            if (data.code == 1003) {
+                $('#person_info_modal').modal('show')
+            } else if (data.code == 1002) {
+                contentDiv.load('user/personinfo');
+            }
+        })
+    });
+
+    /*$('#person_info_submit').click(function () {
+        if (confirm("若以上信息确认无误，请确认提交!")) {
+            var formData = new FormData();
+            var personInfo = {};  // 空对象
+            personInfo.name = $('#person_name').val();
+            personInfo.tel = $('#tel').val();
+            personInfo.qq = $('#qq').val();
+            personInfo.email = $('#email').val();
+            personInfo.id_num = $('#id_num').val();
+            personInfo.title = $('#title').val();
+            personInfo.address = $('#address').val();
+            formData.append('personInfoStr', JSON.stringify(personInfo));
+            $.ajax({
+                url: savePersonInfoUrl,
+                type: 'POST',
+                data: formData,
+                contentType : false,
+                processData : false,
+                cache : false,
+                success: function (data) {
+                    if (data.code == 1002) {
+                        $('#person_info_modal').modal('hide');
+                        $('#person_info').click();
+                    } else {
+                        $('#person_info_rt_msg').text("错误("+data.code+")："+data.msg);
+                    }
+                }
+            });
+        }
+    })*/
+    $("#person_info_form").validate({
+        rules : {
+            name : {
+                required:true,
+                minlength:2,
+                maxlength:64
+            },
+            tel : {
+                required:true,
+                minlength:2,
+                maxlength:64
+            },
+            qq : {
+                required:true,
+                digits:true
+            },
+            email : {
+                required:true,
+                email: true
+            },
+            id_num : {
+                required:true,
+                minlength:18,
+                maxlength:18
+            },
+            title : {
+                required:true,
+                minlength:2,
+                maxlength:64
+            },
+            address : {
+                required:true,
+                minlength:10,
+                maxlength:64
+            }
+        },
+        submitHandler:function(form) {
+            if (confirm("若以上信息确认无误，请确认提交!")) {
+                var formData = new FormData();
+                var personInfo = {};  // 空对象
+                personInfo.name = $('#person_name').val();
+                personInfo.tel = $('#tel').val();
+                personInfo.qq = $('#qq').val();
+                personInfo.email = $('#email').val();
+                personInfo.id_num = $('#id_num').val();
+                personInfo.title = $('#title').val();
+                personInfo.address = $('#address').val();
+                formData.append('personInfoStr', JSON.stringify(personInfo));
+                $.ajax({
+                    url: savePersonInfoUrl,
+                    type: 'POST',
+                    data: formData,
+                    contentType : false,
+                    processData : false,
+                    cache : false,
+                    success: function (data) {
+                        if (data.code == 1002) {
+                            $('#person_info_modal').modal('hide');
+                            $('#person_info').click();
+                        } else {
+                            $('#person_info_rt_msg').text("错误("+data.code+")："+data.msg);
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+
 
     /*配置向导*/
     var enjoyhint_script_data =[
@@ -337,7 +457,9 @@ $(function () {
         },
         {
             selector:'#person_info',
-            event:'click',
+            event:'custom',
+            event_type:'next',
+            "nextButton": {text:"下一步"},
             description:'请点击个人设置',
             "skipButton" : {text: "退出"},
         },
