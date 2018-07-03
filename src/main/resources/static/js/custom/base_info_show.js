@@ -79,7 +79,13 @@ $(function () {
         $('#cellProjectOverview').text(data.data.cellProjectOverview);
         $('#branchProjectAmount').text(data.data.branchProjectAmount);
         $('#branchProjectOverview').text(data.data.branchProjectOverview);
-        $('#remark').text(data.data.remark);
+        $('#constructionLand').text(data.data.constructionLand);
+        $('#county').text(data.data.county);
+        $('#landReclamationPlan').text(data.data.landReclamationPlan);
+        $('#overview').text(data.data.overview);
+        $('#projectSource').text(data.data.projectSource);
+        $('#projectTask').text(data.data.projectTask);
+
         var baseInfoImgVOs = data.data.baseInfoImgVOs;
         var file_display_html = '';
         baseInfoImgVOs.map(function (item, index) {
@@ -100,6 +106,29 @@ $(function () {
         $('#files_display_div').html("");
         $('#files_display_div').html(file_display_html);
     }
+
+    <!--审批modal-->
+    $("[name='person-checkbox']").bootstrapSwitch({
+        onText : "拒绝",
+        offText : "通过",
+        onColor : "danger",
+        offColor : "success",
+        size : "large",
+        onSwitchChange : function() {
+            var checkedOfAll=$("#person-checkbox").prop("checked");
+            if (checkedOfAll==false){
+                $('#person_approve_input').hide()
+            }
+            else {
+                $('#person_approve_input').show()
+            }
+        }
+    });
+    $('#person_approve_submit').click(function () {
+        var checkedOfAll=$("#person-checkbox").prop("checked");
+        var checkinfo=$('#person_approve_area').val();
+        alert(checkedOfAll+checkinfo)
+    })
 
 
 

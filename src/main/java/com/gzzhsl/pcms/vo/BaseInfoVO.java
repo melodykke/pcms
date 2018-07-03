@@ -65,6 +65,7 @@ public class BaseInfoVO {
     private BigDecimal centralAccumulativePayment ; // 中央累计拨付（万元）
     private BigDecimal provincialAccumulativePayment; // 省级累计拨付（万元）
     private BigDecimal localAccumulativePayment; // 市县累计拨付（万元）
+    private BigDecimal totalAccumulativePayment; // 总的累计拨付
     private BigDecimal provincialLoan; // 省级配套融资贷款（万元）
 
     private List<BaseInfoImgVO> baseInfoImgVOs;

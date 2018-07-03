@@ -211,7 +211,6 @@ $(function () {
             baseInfoVO.livestock = $('#livestock').val();
             baseInfoVO.waterSupplyPopulation = $('#waterSupplyPopulation').val();
             baseInfoVO.provincialInvestment = $('#provincialInvestment').val();
-            baseInfoVO.totalInvestment = $('#totalInvestment').val();
             baseInfoVO.provincialAccumulativePayment = $('#provincialAccumulativePayment').val();
             baseInfoVO.unitProjectAmount = $('#unitProjectAmount').val();
             baseInfoVO.unitProjectOverview = $('#unitProjectOverview').val();
@@ -220,7 +219,12 @@ $(function () {
             baseInfoVO.branchProjectAmount = $('#branchProjectAmount').val();
             baseInfoVO.branchProjectOverview = $('#branchProjectOverview').val();
             baseInfoVO.remark = $('#remark').val();
-
+            baseInfoVO.constructionLand = $('#constructionLand').val();
+            baseInfoVO.county = $('#county').val();
+            baseInfoVO.landReclamationPlan = $('#landReclamationPlan').val();
+            baseInfoVO.overview = $('#overview').val();
+            baseInfoVO.projectSource = $('#projectSource').val();
+            baseInfoVO.projectTask = $('#projectTask').val();
             if (rtFileTempPath) {
                 baseInfoVO.rtFileTempPath = rtFileTempPath;
             }

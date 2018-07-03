@@ -87,7 +87,7 @@ public class BaseInfo {
     private List<BaseInfoImg> baseInfoImgs;
 
     private String owner; // 上报人
-    private Boolean state;
+    private Byte state;
     private Date createTime;
     private Date updateTime;
 }

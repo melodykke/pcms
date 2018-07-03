@@ -9,8 +9,10 @@ import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.BaseInfoRepository;
+import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.repository.UserRepository;
 import com.gzzhsl.pcms.service.BaseInfoService;
+import com.gzzhsl.pcms.service.OperationLogService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.OperationUtil;
@@ -58,7 +60,10 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     private BaseInfoRepository baseInfoRepository;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private NotificationRepository notificationRepository;
+    @Autowired
+    private OperationLogService operationLogService;
     @Override
     public List<BaseInfo> getAllProject() {
         return baseInfoRepository.findAll();
@@ -76,7 +81,13 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (baseInfo.getBaseInfoImgs() != null && baseInfo.getBaseInfoImgs().size() > 0) {
             List<BaseInfoImgVO> baseInfoImgVOs = baseInfo.getBaseInfoImgs().stream().map(e -> BaseInfoImg2VO.convert(e)).collect(Collectors.toList());
             baseInfoVO.setBaseInfoImgVOs(baseInfoImgVOs);
+        } else {
+            List<BaseInfoImgVO> baseInfoImgVOs = new ArrayList<>();
+            baseInfoVO.setBaseInfoImgVOs(baseInfoImgVOs);
         }
+        baseInfoVO.setTotalInvestment(baseInfo.getCentralInvestment().add(baseInfo.getProvincialInvestment().add(baseInfo.getLocalInvestment())));
+        baseInfoVO.setTotalAccumulativePayment(baseInfo.getCentralAccumulativePayment().add(baseInfo.getProvincialAccumulativePayment().add(baseInfo.getLocalAccumulativePayment())));
+
         return baseInfoVO;
     }
 
@@ -89,17 +100,14 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             throw new SysException(SysEnum.BASE_INFO_DUPLICATED);
         }
         thisProject = BaseInfoVO2BaseInfo.convert(baseInfoVO);
-
+        BaseInfo baseInfoRt = null;
         if (baseInfoVO.getRtFileTempPath() == null || baseInfoVO.getRtFileTempPath() == "") {
             // 没有上传图片的情况，直接对表格进行存储
-            BaseInfo baseInfoRt = baseInfoRepository.save(thisProject);
-            thisUser.setBaseInfo(baseInfoRt);
-            userService.save(thisUser);
-            return baseInfoRt;
+            baseInfoRt = baseInfoRepository.save(thisProject);
         } else {
             // 上传图片的情况，考虑转存
             String rtFileTempPath = baseInfoVO.getRtFileTempPath();
-            BaseInfo baseInfoRt = baseInfoRepository.save(thisProject);
+            baseInfoRt = baseInfoRepository.save(thisProject);
             File sourceDestFolder = new File(PathUtil.getFileBasePath(true) + rtFileTempPath);
             String targetDest = PathUtil.getFileBasePath(false) + PathUtil.getBaseInfoImagePath(thisProject.getPlantName());
             File[] sourceFiles = sourceDestFolder.listFiles();
@@ -121,26 +129,26 @@ public class BaseInfoServiceImpl implements BaseInfoService {
                 }
             }
             baseInfoRt.setBaseInfoImgs(baseInfoImgs);
-            BaseInfo baseInfoRtWithImg = baseInfoRepository.save(baseInfoRt);
-            thisUser.setBaseInfo(baseInfoRtWithImg);
-            userService.save(thisUser);
-            // 把通知提醒也一并存入数据库
-          /*  Notification notification = new Notification();
-            notification.setCreateTime(new Date());
-            notification.setSubmitter(projectMonthlyReportRt.getSubmitter());
-            notification.setType(NotificationTypeEnum.MONTHLY_REPORT.getMsg());
-            notification.setTypeId(projectMonthlyReportRt.getProjectMonthlyReportId()); // 这里是月报ID
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
-            notification.setYearmonth(formatter.format(projectMonthlyReportRt.getSubmitDate()));
-            notification.setChecked(false);
-            notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
-            notification.setUrl("/monthlyreport/projectmonthlyreportshow");
-            notificationRepository.save(notification);
-            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
-                    projectMonthlyReportRt.getCreateTime(),
-                    "提交了带附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
-                            getProjectMonthlyReportId()));*/
-            return baseInfoRtWithImg;
+            baseInfoRt = baseInfoRepository.save(baseInfoRt);
+
         }
+        // 把通知提醒也一并存入数据库
+        Notification notification = new Notification();
+        notification.setCreateTime(new Date());
+        notification.setSubmitter(thisUser.getUsername());
+        notification.setType(NotificationTypeEnum.PROJECT_BASIC_INFO.getMsg());
+        notification.setTypeId(baseInfoRt.getBaseInfoId()); // 这里是月报ID
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
+        notification.setYearmonth(formatter.format(baseInfoRt.getUpdateTime()));
+        notification.setChecked(false);
+        notification.setTypeId(baseInfoRt.getBaseInfoId());
+        notification.setUrl("/baseinfo/getbaseinfo");
+        notificationRepository.save(notification);
+        operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
+                baseInfoRt.getUpdateTime(),
+                "提交了ID:"+ baseInfoRt.getBaseInfoId() +"的水库项目基本信息"));
+        thisUser.setBaseInfo(baseInfoRt);
+        userService.save(thisUser);
+        return baseInfoRt;
     }
 }

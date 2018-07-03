@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link th:href="@{/css/plugins/datapicker/datepicker3.css}" rel="stylesheet">
-
+    <link th:href="@{/css/custom/bootstrap-switch.min.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -52,8 +52,15 @@
                                 <div class="ibox-title">
                                     <div class="row">
                                         <div class="col-lg-2">
-                                            <i class=" fa fa-calendar fa-lg">&nbsp;&nbsp;<span id="year_tag">2018</span></i>
+                                            <i class=" fa fa-calendar fa-lg">&nbsp;&nbsp;<span id="year_tag"></span></i>
                                         </div>
+                                        <shiro:hasRole name="checker">
+                                            <div class="col-lg-offset-8 col-lg-1">
+                                                <a class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#person_approve_modal">
+                                                    审批
+                                                </a>
+                                            </div>
+                                        </shiro:hasRole>
                                     </div>
                                 </div>
                                 <div class="ibox-content">
@@ -138,6 +145,10 @@
                                                                                             <span style="font-size: 15px;">工程等别： </span>
                                                                                             <span style="font-size: 15px;" id="level"></span>
                                                                                         </li>
+                                                                                        <li class="warning-element">
+                                                                                            <span style="font-size: 15px;">所在县： </span>
+                                                                                            <span style="font-size: 15px;" id="county"></span>
+                                                                                        </li>
                                                                                         <li class="danger-element">
                                                                                             <span style="font-size: 15px;">经度： </span>
                                                                                             <span style="font-size: 15px;" id="longitude"></span>
@@ -174,8 +185,12 @@
                                                                                             <span style="font-size: 15px;">所在地： </span>
                                                                                             <span style="font-size: 15px;" id="location"></span>
                                                                                         </li>
+                                                                                        <li class="warning-element">
+                                                                                            <span style="font-size: 15px;">项目来源： </span>
+                                                                                            <span style="font-size: 15px;" id="projectSource"></span>
+                                                                                        </li>
                                                                                         <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">维度： </span>
+                                                                                            <span style="font-size: 15px;">纬度： </span>
                                                                                             <span style="font-size: 15px;" id="latitude"></span>
                                                                                         </li>
                                                                                         <li class="warning-element">
@@ -327,7 +342,7 @@
                                                                                         项目概况
                                                                                     </div>
                                                                                     <div class="panel-body">
-                                                                                        <p></p>
+                                                                                        <p id="overview"></p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -337,7 +352,7 @@
                                                                                         工程任务及主要建筑物
                                                                                     </div>
                                                                                     <div class="panel-body">
-                                                                                        <p></p>
+                                                                                        <p id="projectTask"></p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -347,7 +362,7 @@
                                                                                         建设用地
                                                                                     </div>
                                                                                     <div class="panel-body">
-                                                                                        <p></p>
+                                                                                        <p id="constructionLand"></p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -357,7 +372,7 @@
                                                                                         土地复垦方案
                                                                                     </div>
                                                                                     <div class="panel-body">
-                                                                                        <p></p>
+                                                                                        <p id="landReclamationPlan"></p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -464,8 +479,36 @@
                 </div>
     </div>
 
+<!--审批modal-->
+<div class="modal inmodal" id="person_approve_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                </button>
+                <h1 class="modal-title">月 报 审 批</h1>
+                <br>
+                <input type="checkbox" name="person-checkbox" id="person-checkbox">
+            </div>
+            <div class="modal-body">
+                <div class="form-group animated fadeIn" id="person_approve_input" style="display:none;">
+                    <label style="font-size: 15px;">若不通过，请说明原因:</label>
+                    <textarea id="person_approve_area" rows="5" placeholder="填写内容请控制在250字以内。" class="form-control" maxlength="250">
+                                                            </textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="person_approve_submit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Mainly scripts -->
+
+
+<!-- Mainly scripts -->
 
     <script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
     <script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
@@ -481,6 +524,7 @@
     <script th:src="@{/js/plugins/blueimp/jquery.blueimp-gallery.min.js}"></script>
 
     <script th:src="@{/js/custom/base_info_show.js}"></script>
+    <script th:src="@{/js/custom/bootstrap-switch.min.js}"></script>
 </body>
 
 </html>
