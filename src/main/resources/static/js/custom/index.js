@@ -89,8 +89,7 @@ $(function () {
 
 
     <!--水库基本信息填报js-->
-    $("#base_info").click(function() {
-
+    $("#base_info").click(function () {
         $.ajax({
             url: 'baseinfo/hasbaseinfo',
             type: 'GET',
@@ -100,7 +99,6 @@ $(function () {
                     contentDiv.load('baseinfo/baseinfoshow');
                     $('#small-chat').hide();
                 } else {
-                    // 若有数据则
                     swal({
                             title: "未查到项目信息",
                             text: "请先填写项目基本信息!",
@@ -115,14 +113,13 @@ $(function () {
                             } else {
                                 $(location).attr("href", "index.html")
                             }
-                            ;
                         }
                     );
                 }
-
             }
         });
     });
+
 
     $("#basic_info_form").steps({
         bodyTag: "fieldset",
@@ -226,6 +223,7 @@ $(function () {
             baseInfoVO.overview = $('#overview').val();
             baseInfoVO.projectSource = $('#projectSource').val();
             baseInfoVO.projectTask = $('#projectTask').val();
+            console.log(baseInfoVO);
             if (rtFileTempPath) {
                 baseInfoVO.rtFileTempPath = rtFileTempPath;
             }

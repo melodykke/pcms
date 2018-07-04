@@ -55,7 +55,7 @@
                                             <i class=" fa fa-calendar fa-lg">&nbsp;&nbsp;<span id="year_tag"></span></i>
                                         </div>
                                         <shiro:hasRole name="checker">
-                                            <div class="col-lg-offset-8 col-lg-1" id="check_btn">
+                                            <div class="col-lg-offset-8 col-lg-2" id="check_btn">
                                                 <a class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#person_approve_modal">
                                                     审批
                                                 </a>
@@ -478,7 +478,7 @@
 <!--审批modal-->
 <div class="modal inmodal" id="person_approve_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content animated bounceInRight">
+        <div class="modal-content animated bounceInRight" id="base_info_check_div">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
@@ -502,7 +502,385 @@
     </div>
 </div>
 
+<!--重新上报水库基本信息填报modal-->
+<div class="modal fade" id="re_base_info_modal" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" style="max-height:95%;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="index.html">
+                    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                </a>
+                <h4 class="modal-title" id="myModalLabel">基本信息填报</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>项目信息填写</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <form id="re_basic_info_form" action="#" class="wizard-big">
+                                    <h1><i class="fa fa-line-chart"></i> 基本信息</h1>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>项目名称</label><span style="color:red;"> *</span>
+                                                    <input id="re_plantName" type="text" name="re_plantName"
+                                                           class="form-control required " maxlength="15">
+                                                </div>
 
+                                                <div class="form-group">
+                                                    <label>项目类型</label><span style="color:red;"> *</span>
+                                                    <input id="re_projectType" type="text" name="re_projectType"
+                                                           class="form-control required " maxlength="15">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>工程等别</label><span style="color:red;"> *</span>
+                                                    <select class="form-control m-b required" id="re_level" name="re_level">
+                                                        <option selected="selected" disabled="disabled"
+                                                                style="display: none"></option>
+                                                        <option>Ⅰ</option>
+                                                        <option>Ⅱ</option>
+                                                        <option>Ⅲ</option>
+                                                        <option>Ⅳ</option>
+                                                        <option>Ⅴ</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>所在县</label><span style="color:red;"> *</span>
+                                                    <input id="re_county" type="text" name="re_county"
+                                                           class="form-control required " maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>经度</label><span style="color:red;"> *</span>
+                                                    <input id="re_longitude" type="text" name="re_longitude"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>规模</label><span style="color:red;"> *</span>
+                                                    <select class="form-control m-b required" id="re_scale" name="re_scale">
+                                                        <option selected="selected" disabled="disabled"
+                                                                style="display: none"></option>
+                                                        <option>大（1）型</option>
+                                                        <option>大（2）型</option>
+                                                        <option>中型</option>
+                                                        <option>小（1）型</option>
+                                                        <option>小（2）型</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>总库容(万/m3)</label><span style="color:red;"> *</span>
+                                                    <input id="re_storage" type="text" name="re_storage"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>是否签订枢纽工程施工承包合同（是/否）</label><span style="color:red;"> *</span>
+                                                    <select class="form-control m-b required"
+                                                            id="re_hasSignedConstructionContract"
+                                                            name="re_hasSignedConstructionContract">
+                                                        <option selected="selected" disabled="disabled"
+                                                                style="display: none"></option>
+                                                        <option>是</option>
+                                                        <option>否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>监理、施工招标情况</label><span style="color:red;"> *</span>
+                                                    <input id="re_supervisorBid" type="text" name="re_supervisorBid"
+                                                           class="form-control required" maxlength="10">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>项目法人</label><span style="color:red;"> *</span>
+                                                    <input id="re_legalPersonName" name="re_legalPersonName" type="text"
+                                                           class="form-control required" maxlength="15">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>法人代表</label><span style="color:red;"> *</span>
+                                                    <input id="re_legalRepresentativeName" name="re_legalRepresentativeName"
+                                                           type="text" class="form-control required" maxlength="12">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>所在地</label><span style="color:red;"> *</span>
+                                                    <input id="re_location" type="text" name="re_location"
+                                                           class="form-control required" maxlength="20">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>项目来源</label><span style="color:red;"> *</span>
+                                                    <input id="re_projectSource" type="text" name="re_projectSource"
+                                                           class="form-control required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>纬度</label><span style="color:red;"> *</span>
+                                                    <input id="re_latitude" type="text" name="re_latitude"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>工期(月）</label><span style="color:red;"> *</span>
+                                                    <input id="re_timeLimit" type="text" name="re_timeLimit"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>兴利库容（万/m3）</label><span style="color:red;"> *</span>
+                                                    <input id="re_utilizablCapacity" type="text" name="re_utilizablCapacity"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>枢纽工程是否完工（是/否）
+                                                    </label><span style="color:red;"> *</span>
+                                                    <select class="form-control m-b required" id="re_hasProjectCompleted"
+                                                            name="re_hasProjectCompleted">
+                                                        <option selected="selected" disabled="disabled"
+                                                                style="display: none"></option>
+                                                        <option>是</option>
+                                                        <option>否</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>是否竣工验收（是/否）
+                                                    </label><span style="color:red;"> *</span>
+                                                    <select class="form-control m-b required" id="re_hasAcceptCompletion"
+                                                            name="re_hasAcceptCompletion">
+                                                        <option selected="selected" disabled="disabled"
+                                                                style="display: none"></option>
+                                                        <option>是</option>
+                                                        <option>否</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                    </fieldset>
+
+                                    <h1><i class="fa fa-book"></i> 详细情况1</h1>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>坝型</label><span style="color:red;"> *</span>
+                                                    <input id="re_damType" type="text" name="re_damType"
+                                                           class="form-control required " maxlength="15">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>最大坝高（m）</label><span style="color:red;"> *</span>
+                                                    <input id="re_maxDamHeight" type="text" name="re_maxDamHeight"
+                                                           class="form-control number required" maxlength="15">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>度汛里程</label><span style="color:red;"> *</span>
+                                                    <input id="re_floodControlElevation" type="text"
+                                                           name="re_floodControlElevation"
+                                                           class="form-control number required" maxlength="20">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>供水量（万m3/年)</label><span style="color:red;"> *</span>
+                                                    <input id="re_watersupply" type="text" name="re_watersupply"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>工程占地（亩）</label><span style="color:red;"> *</span>
+                                                    <input id="re_areaCoverage" type="text" name="re_areaCoverage"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>农村人饮（万人）</label><span style="color:red;"> *</span>
+                                                    <input id="re_ruralHumanWater" type="text" name="re_ruralHumanWater"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>中央投资（万元）</label><span style="color:red;"> *</span>
+                                                    <input id="re_centralInvestment" type="text" name="re_centralInvestment"
+                                                           class="form-control required number " maxlength="15">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>市县投资（万元）</label><span style="color:red;"> *</span>
+                                                    <input id="re_localInvestment" type="text" name="re_localInvestment"
+                                                           class="form-control number required" maxlength="15">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>省级累计拨付（万元）亩</label><span style="color:red;"> *</span>
+                                                    <input id="re_provincialAccumulativePayment" type="text"
+                                                           name="re_provincialAccumulativePayment"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>省级配套融资贷款（万元）</label><span style="color:red;"> *</span>
+                                                    <input id="re_provincialLoan" type="text" name="re_provincialLoan"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>积水面积</label><span style="color:red;"> *</span>
+                                                    <input id="re_catchmentArea" name="re_catchmentArea" type="text"
+                                                           class="form-control number required" maxlength="15">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>溢洪道（m）</label><span style="color:red;"> *</span>
+                                                    <input id="re_spillway" name="re_spillway" type="text"
+                                                           class="form-control number required" maxlength="12">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>灌溉面积(万亩）</label><span style="color:red;"> *</span>
+                                                    <input id="re_irrigatedArea" type="text" name="re_irrigatedArea"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>装机容积（Kw）</label><span style="color:red;"> *</span>
+                                                    <input id="re_installedCapacity" type="text" name="re_installedCapacity"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>大牲畜（万头）</label><span style="color:red;"> *</span>
+                                                    <input id="re_livestock" type="text" name="re_livestock"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>城镇供水人口（万人)</label><span style="color:red;"> *</span>
+                                                    <input id="re_waterSupplyPopulation" type="text"
+                                                           name="re_waterSupplyPopulation"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>省级投资（万元）</label><span style="color:red;"> *</span>
+                                                    <input id="re_provincialInvestment" name="re_provincialInvestment"
+                                                           type="text" class="form-control number required"
+                                                           maxlength="15">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>中央累计拨付（万元）</label><span style="color:red;"> *</span>
+                                                    <input id="re_centralAccumulativePayment" type="text"
+                                                           name="re_centralAccumulativePayment"
+                                                           class="form-control number required" maxlength="20">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>市县累计拨付（万元）</label><span style="color:red;"> *</span>
+                                                    <input id="re_localAccumulativePayment" type="text"
+                                                           name="re_localAccumulativePayment"
+                                                           class="form-control number required" maxlength="10">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <h1><i class="fa fa-book"></i> 详细情况2</h1>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label>项目概况</label><span style="color:red;"> *</span>
+                                                    <textarea id="re_overview" name="re_overview" class="form-control "
+                                                              rows="5" maxlength="250"
+                                                              placeholder="填写内容在250字内"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>工程任务及主要建筑物</label><span style="color:red;"> *</span>
+                                                    <textarea id="re_projectTask" name="re_projectTask" class="form-control "
+                                                              rows="3" maxlength="250"
+                                                              placeholder="填写内容在250字内"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>建设用地</label><span style="color:red;"> *</span>
+                                                    <textarea id="re_constructionLand" name="re_constructionLand"
+                                                              class="form-control " rows="3" maxlength="250"
+                                                              placeholder="填写内容在250字内"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>土地复垦方案</label><span style="color:red;"> *</span>
+                                                    <textarea id="re_landReclamationPlan" name="re_landReclamationPlan"
+                                                              class="form-control " rows="3" maxlength="250"
+                                                              placeholder="填写内容在250字内"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>单位工程数</label><span style="color:red;"> *</span>
+                                                    <input id="re_unitProjectAmount" type="text" name="re_unitProjectAmount"
+                                                           class="form-control number " maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>单位工程概况</label><span style="color:red;"> *</span>
+                                                    <textarea id="re_unitProjectOverview" name="re_unitProjectOverview"
+                                                              class="form-control " rows="5" maxlength="250"
+                                                              placeholder="填写内容在250字内"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label> 单元工程数</label><span style="color:red;"> *</span>
+                                                    <input id="re_cellProjectAmount" type="text" name="re_cellProjectAmount"
+                                                           class="form-control number " maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>单元工程概况</label><span style="color:red;"> *</span>
+                                                    <textarea id="re_cellProjectOverview" name="re_cellProjectOverview"
+                                                              class="form-control" rows="5" maxlength="250"
+                                                              placeholder="填写内容在250字内"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label> 分部工程数</label><span style="color:red;"> *</span>
+                                                    <input id="re_branchProjectAmount" type="text"
+                                                           name="re_branchProjectAmount" class="form-control number "
+                                                           maxlength="10">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>分布工程概况</label><span style="color:red;"> *</span>
+                                                    <textarea id="re_branchProjectOverview" name="re_branchProjectOverview"
+                                                              class="form-control" rows="5" maxlength="250"
+                                                              placeholder="填写内容在250字内"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label>备注</label>
+                                                    <textarea id="re_remark" name="re_remark" class="form-control" rows="3"
+                                                              maxlength="250" placeholder="填写内容在250字内"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <h1><i class="fa fa-file-text"></i> 附件</h1>
+                                    <fieldset>
+                                        <h2>图片、附件上传</h2>
+                                        <br>
+                                        <br>
+                                        <div class="row">
+                                            <form enctype="multipart/form-data">
+                                                <div class="form-group">
+                                                    <div class="file-loading">
+                                                        <input id="re_uploadfile" name="re_uploadfile" type="file" multiple
+                                                               data-overwrite-initial="false" data-min-file-count="1">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="index.html">
+                    <button type="button" class="btn btn-info">关闭</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Mainly scripts -->
 
