@@ -68,6 +68,8 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     private OperationLogService operationLogService;
     @Autowired
     private FeedbackService feedbackService;
+    @Autowired
+    private BaseInfoImgServiceImpl baseInfoImgService;
     @Override
     public List<BaseInfo> getAllProject() {
         return baseInfoRepository.findAll();
@@ -106,11 +108,14 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         }
         if (thisProject != null) {
             origId = thisProject.getBaseInfoId();
+            // 需要把之前的baseinfoimg们都删除掉
+            baseInfoImgService.deleteByBaseInfo(thisProject);
         }
         thisProject = BaseInfoVO2BaseInfo.convert(baseInfoVO);
         thisProject.setOwner(thisUser.getUsername());
         thisProject.setBaseInfoId(origId);
         BaseInfo baseInfoRt = null;
+
         if (baseInfoVO.getRtFileTempPath() == null || baseInfoVO.getRtFileTempPath() == "") {
             // 没有上传图片的情况，直接对表格进行存储
             baseInfoRt = baseInfoRepository.save(thisProject);

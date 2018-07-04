@@ -51,6 +51,8 @@ public class BaseInfoController {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         if (thisUser.getBaseInfo() == null) {
             return ResultUtil.failed();
+        } else if (thisUser.getBaseInfo().getState().equals((byte) -1)) {
+                return ResultUtil.success(1310, "审批未通过");
         } else {
             return ResultUtil.success();
         }
@@ -64,8 +66,10 @@ public class BaseInfoController {
             log.error("【基本信息】没有配置该用户的项目基本信息");
             throw new SysException(SysEnum.BASE_INFO_NO_RECORD_ERROR);
         }
+        System.out.println("!!!!!!!!!!"+thisUser.getBaseInfo().getBaseInfoId());
         BaseInfoVO baseInfoVO = baseInfoService.getBaseInfoById(thisUser.getBaseInfo().getBaseInfoId());
         return ResultUtil.success(baseInfoVO);
+
     }
 
     @PostMapping("/addfiles")
@@ -106,7 +110,6 @@ public class BaseInfoController {
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
         BaseInfo baseInfoRt = baseInfoService.save(baseInfoVO);
-
         return ResultUtil.success();
     }
 

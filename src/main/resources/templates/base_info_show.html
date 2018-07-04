@@ -44,427 +44,420 @@
 </div>
 <!--主页面内容-->
 <div class="wrapper wrapper-content animated fadeInRight">
-                <!--动画内容-->
-                <div id="animation_box" class="animated">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="ibox">
-                                <div class="ibox-title">
-                                    <div class="row">
-                                        <div class="col-lg-2">
-                                            <i class=" fa fa-calendar fa-lg">&nbsp;&nbsp;<span id="year_tag"></span></i>
-                                        </div>
-                                        <shiro:hasRole name="checker">
-                                            <div class="col-lg-offset-8 col-lg-2" id="check_btn">
-                                                <a class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#person_approve_modal">
-                                                    审批
-                                                </a>
-                                            </div>
-                                        </shiro:hasRole>
+    <!--动画内容-->
+    <div id="animation_box" class="animated">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <i class=" fa fa-calendar fa-lg">&nbsp;&nbsp;<span id="year_tag"></span></i>
+                            </div>
+                            <shiro:hasRole name="checker">
+                                <div class="col-lg-offset-8 col-lg-2" id="check_btn">
+                                    <a class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#person_approve_modal">
+                                        审批
+                                    </a>
+                                </div>
+                            </shiro:hasRole>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="basic_info">
+                            <div class="row">
+                                <div class="col-lg-offset-1 col-lg-6">
+                                    <div class="m-b-md">
+                                        <h2 id="re_plantName"></h2>
                                     </div>
                                 </div>
-                                <div class="ibox-content">
-                                    <div id="basic_info">
-                                        <div class="row">
-                                            <div class="col-lg-offset-1 col-lg-6">
-                                                <div class="m-b-md">
-                                                    <h2 id="plantName"></h2>
-                                                </div>
+                                <div class="col-lg-12">
+                                    <dl class="dl-horizontal">
+                                        <dt>状态:</dt> <dd><span class="label label-info">待审核</span></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <dl class="dl-horizontal">
+                                        <dt>上报人:</dt> <dd id="owner"></dd>
+                                        <dt>上报人电话:</dt> <dd> 18586878889 </dd>
+                                        <dt>审核人:</dt> <dd><a href="#" class="text-navy">老张</a> </dd>
+                                    </dl>
+                                </div>
+                                <div class="col-lg-7" id="cluster_info">
+                                    <dl class="dl-horizontal" >
+                                        <dt>填报时间:</dt> <dd id="submitTime"> 	2018-7-7 23:36:57 </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="row" id="basic_jd">
+                                <div class="col-lg-12">
+                                    <dl class="dl-horizontal">
+                                        <dt>项目提交进度:</dt>
+                                        <dd>
+                                            <div class="progress progress-striped active m-b-sm">
+                                                <div style="width: 50%;" class="progress-bar" id="state_bar"></div>
                                             </div>
-                                            <div class="col-lg-12">
-                                                <dl class="dl-horizontal">
-                                                    <dt>状态:</dt> <dd><span class="label label-info">待审核</span></dd>
-                                                </dl>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-5">
-                                                <dl class="dl-horizontal">
-                                                    <dt>上报人:</dt> <dd id="owner"></dd>
-                                                    <dt>上报人电话:</dt> <dd> 18586878889 </dd>
-                                                    <dt>审核人:</dt> <dd><a href="#" class="text-navy">老张</a> </dd>
-                                                </dl>
-                                            </div>
-                                            <div class="col-lg-7" id="cluster_info">
-                                                <dl class="dl-horizontal" >
-                                                    <dt>填报时间:</dt> <dd id="submitTime"> 	2018-7-7 23:36:57 </dd>
-                                                </dl>
-                                            </div>
-                                        </div>
-                                        <div class="row" id="basic_jd">
-                                            <div class="col-lg-12">
-                                                <dl class="dl-horizontal">
-                                                    <dt>项目提交进度:</dt>
-                                                    <dd>
-                                                        <div class="progress progress-striped active m-b-sm">
-                                                            <div style="width: 50%;" class="progress-bar" id="state_bar"></div>
+                                            <small>项目提交情况： <strong id="state_msg">等待领导审批</strong> </small>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="tabs-container">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-line-chart"></i> 基本信息</a></li>
+                                        <li class=""><a data-toggle="tab" href="#tab-2"> <i class="fa fa-book"></i>详细信息1</a></li>
+                                        <li class=""><a data-toggle="tab" href="#tab-3"> <i class="fa fa-book"></i>详细信息2</a></li>
+                                        <li class=""><a data-toggle="tab" href="#tab-4"> <i class="fa fa-file-text"></i>附件</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div id="tab-1"  class="tab-pane animated fadeInUp active">
+                                            <div class="panel-body">
+                                                <fieldset class="form-horizontal">
+                                                    <div class="col-lg-12">
+                                                        <div class="ibox">
+                                                            <div class="ibox-title">
+                                                                <h4>基本信息</h4>
+                                                            </div>
+                                                            <div class="ibox-content">
+                                                                <div class="row">
+                                                                    <div class="col-lg-6">
+                                                                        <ul class="sortable-list connectList agile-list ui-sortable" id="todo3">
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">项目名称: </span>
+                                                                                <span style="font-size: 15px;" id="re_plantName_h2"></span>
+                                                                            </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">项目类型： </span>
+                                                                                <span style="font-size: 15px;" id="re_projectType"> </span>
+                                                                            </li>
+                                                                            <li class="info-element">
+                                                                                <span style="font-size: 15px;">工程等别： </span>
+                                                                                <span style="font-size: 15px;" id="re_level"></span>
+                                                                            </li>
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">所在县： </span>
+                                                                                <span style="font-size: 15px;" id="re_county"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">经度： </span>
+                                                                                <span style="font-size: 15px;" id="re_longitude"></span>
+                                                                            </li>
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">规模： </span>
+                                                                                <span style="font-size: 15px;" id="re_scale"></span>
+                                                                            </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">总库容： </span>
+                                                                                <span style="font-size: 15px;" id="re_storage"></span>
+                                                                            </li>
+                                                                            <li class="info-element">
+                                                                                <span style="font-size: 15px;">是否签订枢纽工程施工承包合同： </span>
+                                                                                <span style="font-size: 15px;" id="re_hasSignedConstructionContract"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">监理、施工招标情况 ： </span>
+                                                                                <span style="font-size: 15px;"id="re_supervisorBid"></span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <ul class="sortable-list connectList agile-list ui-sortable">
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">项目法人: </span>
+                                                                                <span style="font-size: 15px;" id="re_legalPersonName"></span>
+                                                                            </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">法人代表： </span>
+                                                                                <span style="font-size: 15px;" id="re_legalRepresentativeName"> </span>
+                                                                            </li>
+                                                                            <li class="info-element">
+                                                                                <span style="font-size: 15px;">所在地： </span>
+                                                                                <span style="font-size: 15px;" id="re_location"></span>
+                                                                            </li>
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">项目来源： </span>
+                                                                                <span style="font-size: 15px;" id="re_projectSource"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">纬度： </span>
+                                                                                <span style="font-size: 15px;" id="re_latitude"></span>
+                                                                            </li>
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">工期（月）： </span>
+                                                                                <span style="font-size: 15px;" id="re_timeLimit"></span>
+                                                                            </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">兴利库容（万/m³）： </span>
+                                                                                <span style="font-size: 15px;" id="re_utilizablCapacity"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">枢纽工程是否完工： </span>
+                                                                                <span style="font-size: 15px;" id="re_hasProjectCompleted"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">是否竣工验收： </span>
+                                                                                <span style="font-size: 15px;" id="re_hasAcceptCompletion"></span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <small>项目提交情况： <strong id="state_msg">等待领导审批</strong> </small>
-                                                    </dd>
-                                                </dl>
+                                                    </div>
+                                                </fieldset>
                                             </div>
                                         </div>
-                                    </div>
-                                    <br>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="tabs-container">
-                                                <ul class="nav nav-tabs">
-                                                    <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-line-chart"></i> 基本信息</a></li>
-                                                    <li class=""><a data-toggle="tab" href="#tab-2"> <i class="fa fa-book"></i>详细信息1</a></li>
-                                                    <li class=""><a data-toggle="tab" href="#tab-3"> <i class="fa fa-book"></i>详细信息2</a></li>
-                                                    <li class=""><a data-toggle="tab" href="#tab-4"> <i class="fa fa-file-text"></i>附件</a></li>
-                                                </ul>
-                                                <div class="tab-content">
-                                                    <div id="tab-1"  class="tab-pane animated fadeInUp active">
-                                                        <div class="panel-body">
-                                                            <fieldset class="form-horizontal">
+                                        <div id="tab-2" class="tab-pane animated fadeInUp">
+                                            <div class="panel-body">
+                                                <fieldset class="form-horizontal">
+                                                    <div class="col-lg-12">
+                                                        <div class="ibox" id="ibox3">
+                                                            <div class="ibox-title">
+                                                                <h4>详细信息1</h4>
+                                                            </div>
+                                                            <div class="ibox-content">
+                                                                <div class="row">
+                                                                    <div class="col-lg-6">
+                                                                        <ul class="sortable-list connectList agile-list ui-sortable">
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">坝型: </span>
+                                                                                <span style="font-size: 15px;" id="re_damType"></span>
+                                                                            </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">最大坝高（m）： </span>
+                                                                                <span style="font-size: 15px;" id="re_maxDamHeight"> </span>
+                                                                            </li>
+                                                                            <li class="info-element">
+                                                                                <span style="font-size: 15px;">度汛高程： </span>
+                                                                                <span style="font-size: 15px;" id="re_floodControlElevation"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">供水量（万m³/年)： </span>
+                                                                                <span style="font-size: 15px;" id="re_watersupply"></span>
+                                                                            </li> <li class="warning-element">
+                                                                            <span style="font-size: 15px;">工程占地（亩）: </span>
+                                                                            <span style="font-size: 15px;" id="re_areaCoverage"></span>
+                                                                        </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">农村人饮（万人）： </span>
+                                                                                <span style="font-size: 15px;" id="re_ruralHumanWater"> </span>
+                                                                            </li>
+                                                                            <li class="info-element">
+                                                                                <span style="font-size: 15px;">中央投资（万元）： </span>
+                                                                                <span style="font-size: 15px;" id="re_centralInvestment"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">市县投资（万元）： </span>
+                                                                                <span style="font-size: 15px;" id="re_localInvestment"></span>
+                                                                            </li>
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">中央累计拨付（万元）: </span>
+                                                                                <span style="font-size: 15px;" id="re_centralAccumulativePayment"></span>
+                                                                            </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">市县累计拨付（万元）： </span>
+                                                                                <span style="font-size: 15px;" id="re_localAccumulativePayment"> </span>
+                                                                            </li>
+                                                                            <li class="info-element">
+                                                                                <span style="font-size: 15px;">省级配套融资贷款（万元）： </span>
+                                                                                <span style="font-size: 15px;" id="re_provincialLoan"></span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <ul class="sortable-list connectList agile-list ui-sortable">
+                                                                            <li class="warning-element">
+                                                                                <span style="font-size: 15px;">积水面积: </span>
+                                                                                <span style="font-size: 15px;" id="re_catchmentArea"></span>
+                                                                            </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">溢洪道（m）： </span>
+                                                                                <span style="font-size: 15px;" id="re_spillway"> </span>
+                                                                            </li>
+                                                                            <li class="info-element">
+                                                                                <span style="font-size: 15px;">灌溉面积(万亩）： </span>
+                                                                                <span style="font-size: 15px;" id="re_irrigatedArea"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">装机容积（Kw）： </span>
+                                                                                <span style="font-size: 15px;" id="re_installedCapacity"></span>
+                                                                            </li> <li class="warning-element">
+                                                                            <span style="font-size: 15px;">大牲畜（万头）: </span>
+                                                                            <span style="font-size: 15px;" id="re_livestock"></span>
+                                                                        </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">城镇供水人口（万人)： </span>
+                                                                                <span style="font-size: 15px;" id="re_waterSupplyPopulation"> </span>
+                                                                            </li>
+                                                                            <li class="info-element">
+                                                                                <span style="font-size: 15px;">省级投资（万元）： </span>
+                                                                                <span style="font-size: 15px;" id="re_provincialInvestment"></span>
+                                                                            </li>
+                                                                            <li class="danger-element">
+                                                                                <span style="font-size: 15px;">总投资（万元）： </span>
+                                                                                <span style="font-size: 15px;" id="re_totalInvestment"></span>
+                                                                            </li> <li class="warning-element">
+                                                                            <span style="font-size: 15px;">省级累计拨付（万元）亩 : </span>
+                                                                            <span style="font-size: 15px;" id="re_provincialAccumulativePayment"></span>
+                                                                        </li>
+                                                                            <li class="success-element">
+                                                                                <span style="font-size: 15px;">总累计拨付（万元）： </span>
+                                                                                <span style="font-size: 15px;" id="re_totalAccumulativePayment"> </span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div id="tab-3" class="tab-pane animated fadeInUp">
+                                            <div class="panel-body">
+                                                <fieldset class="form-horizontal">
+                                                <div class="col-lg-12">
+                                                    <div class="ibox">
+                                                        <div class="ibox-title">
+                                                            <h4><i class="fa fa-book"></i> 详细信息2 </h4>
+                                                        </div>
+                                                        <div class="ibox-content">
+                                                            <div class="row">
                                                                 <div class="col-lg-12">
-                                                                    <div class="ibox">
-                                                                        <div class="ibox-title">
-                                                                            <h4>基本信息</h4>
+                                                                    <div class="panel panel-info">
+                                                                        <div class="panel-heading">
+                                                                            项目概况
                                                                         </div>
-                                                                        <div class="ibox-content">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-6">
-                                                                                    <ul class="sortable-list connectList agile-list ui-sortable" id="todo3">
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">项目名称: </span>
-                                                                                            <span style="font-size: 15px;" id="plantName_h2"></span>
-                                                                                        </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">项目类型： </span>
-                                                                                            <span style="font-size: 15px;" id="projectType"> </span>
-                                                                                        </li>
-                                                                                        <li class="info-element">
-                                                                                            <span style="font-size: 15px;">工程等别： </span>
-                                                                                            <span style="font-size: 15px;" id="level"></span>
-                                                                                        </li>
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">所在县： </span>
-                                                                                            <span style="font-size: 15px;" id="county"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">经度： </span>
-                                                                                            <span style="font-size: 15px;" id="longitude"></span>
-                                                                                        </li>
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">规模： </span>
-                                                                                            <span style="font-size: 15px;" id="scale"></span>
-                                                                                        </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">总库容： </span>
-                                                                                            <span style="font-size: 15px;" id="storage"></span>
-                                                                                        </li>
-                                                                                        <li class="info-element">
-                                                                                            <span style="font-size: 15px;">是否签订枢纽工程施工承包合同： </span>
-                                                                                            <span style="font-size: 15px;" id="hasSignedConstructionContract"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">监理、施工招标情况 ： </span>
-                                                                                            <span style="font-size: 15px;"id="supervisorBid"></span>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                                <div class="col-lg-6">
-                                                                                    <ul class="sortable-list connectList agile-list ui-sortable">
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">项目法人: </span>
-                                                                                            <span style="font-size: 15px;" id="legalPersonName"></span>
-                                                                                        </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">法人代表： </span>
-                                                                                            <span style="font-size: 15px;" id="legalRepresentativeName"> </span>
-                                                                                        </li>
-                                                                                        <li class="info-element">
-                                                                                            <span style="font-size: 15px;">所在地： </span>
-                                                                                            <span style="font-size: 15px;" id="location"></span>
-                                                                                        </li>
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">项目来源： </span>
-                                                                                            <span style="font-size: 15px;" id="projectSource"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">纬度： </span>
-                                                                                            <span style="font-size: 15px;" id="latitude"></span>
-                                                                                        </li>
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">工期（月）： </span>
-                                                                                            <span style="font-size: 15px;" id="timeLimit"></span>
-                                                                                        </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">兴利库容（万/m³）： </span>
-                                                                                            <span style="font-size: 15px;" id="utilizablCapacity"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">枢纽工程是否完工： </span>
-                                                                                            <span style="font-size: 15px;" id="hasProjectCompleted"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">是否竣工验收： </span>
-                                                                                            <span style="font-size: 15px;" id="hasAcceptCompletion"></span>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
+                                                                        <div class="panel-body">
+                                                                            <p id="re_overview"></p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
-                                                    <div id="tab-2" class="tab-pane animated fadeInUp">
-                                                        <div class="panel-body">
-                                                            <fieldset class="form-horizontal">
                                                                 <div class="col-lg-12">
-                                                                    <div class="ibox" id="ibox3">
-                                                                        <div class="ibox-title">
-                                                                            <h4>详细信息1</h4>
+                                                                    <div class="panel panel-info">
+                                                                        <div class="panel-heading">
+                                                                            工程任务及主要建筑物
                                                                         </div>
-                                                                        <div class="ibox-content">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-6">
-                                                                                    <ul class="sortable-list connectList agile-list ui-sortable">
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">坝型: </span>
-                                                                                            <span style="font-size: 15px;" id="damType"></span>
-                                                                                        </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">最大坝高（m）： </span>
-                                                                                            <span style="font-size: 15px;" id="maxDamHeight"> </span>
-                                                                                        </li>
-                                                                                        <li class="info-element">
-                                                                                            <span style="font-size: 15px;">度汛高程： </span>
-                                                                                            <span style="font-size: 15px;" id="floodControlElevation"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">供水量（万m³/年)： </span>
-                                                                                            <span style="font-size: 15px;" id="watersupply"></span>
-                                                                                        </li> <li class="warning-element">
-                                                                                        <span style="font-size: 15px;">工程占地（亩）: </span>
-                                                                                        <span style="font-size: 15px;" id="areaCoverage"></span>
-                                                                                    </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">农村人饮（万人）： </span>
-                                                                                            <span style="font-size: 15px;" id="ruralHumanWater"> </span>
-                                                                                        </li>
-                                                                                        <li class="info-element">
-                                                                                            <span style="font-size: 15px;">中央投资（万元）： </span>
-                                                                                            <span style="font-size: 15px;" id="centralInvestment"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">市县投资（万元）： </span>
-                                                                                            <span style="font-size: 15px;" id="localInvestment"></span>
-                                                                                        </li>
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">中央累计拨付（万元）: </span>
-                                                                                            <span style="font-size: 15px;" id="centralAccumulativePayment"></span>
-                                                                                        </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">市县累计拨付（万元）： </span>
-                                                                                            <span style="font-size: 15px;" id="localAccumulativePayment"> </span>
-                                                                                        </li>
-                                                                                        <li class="info-element">
-                                                                                            <span style="font-size: 15px;">省级配套融资贷款（万元）： </span>
-                                                                                            <span style="font-size: 15px;" id="provincialLoan"></span>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                                <div class="col-lg-6">
-                                                                                    <ul class="sortable-list connectList agile-list ui-sortable">
-                                                                                        <li class="warning-element">
-                                                                                            <span style="font-size: 15px;">积水面积: </span>
-                                                                                            <span style="font-size: 15px;" id="catchmentArea"></span>
-                                                                                        </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">溢洪道（m）： </span>
-                                                                                            <span style="font-size: 15px;" id="spillway"> </span>
-                                                                                        </li>
-                                                                                        <li class="info-element">
-                                                                                            <span style="font-size: 15px;">灌溉面积(万亩）： </span>
-                                                                                            <span style="font-size: 15px;" id="irrigatedArea"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">装机容积（Kw）： </span>
-                                                                                            <span style="font-size: 15px;" id="installedCapacity"></span>
-                                                                                        </li> <li class="warning-element">
-                                                                                        <span style="font-size: 15px;">大牲畜（万头）: </span>
-                                                                                        <span style="font-size: 15px;" id="livestock"></span>
-                                                                                    </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">城镇供水人口（万人)： </span>
-                                                                                            <span style="font-size: 15px;" id="waterSupplyPopulation"> </span>
-                                                                                        </li>
-                                                                                        <li class="info-element">
-                                                                                            <span style="font-size: 15px;">省级投资（万元）： </span>
-                                                                                            <span style="font-size: 15px;" id="provincialInvestment"></span>
-                                                                                        </li>
-                                                                                        <li class="danger-element">
-                                                                                            <span style="font-size: 15px;">总投资（万元）： </span>
-                                                                                            <span style="font-size: 15px;" id="totalInvestment"></span>
-                                                                                        </li> <li class="warning-element">
-                                                                                        <span style="font-size: 15px;">省级累计拨付（万元）亩 : </span>
-                                                                                        <span style="font-size: 15px;" id="provincialAccumulativePayment"></span>
-                                                                                    </li>
-                                                                                        <li class="success-element">
-                                                                                            <span style="font-size: 15px;">总累计拨付（万元）： </span>
-                                                                                            <span style="font-size: 15px;" id="totalAccumulativePayment"> </span>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
+                                                                        <div class="panel-body">
+                                                                            <p id="re_projectTask"></p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </fieldset>
-
-
-                                                        </div>
-                                                    </div>
-                                                    <div id="tab-3" class="tab-pane animated fadeInUp">
-                                                        <div class="panel-body">
-                                                            <fieldset class="form-horizontal">
-                                                            <div class="col-lg-12">
-                                                                <div class="ibox">
-                                                                    <div class="ibox-title">
-                                                                        <h4><i class="fa fa-book"></i> 详细信息2 </h4>
-                                                                    </div>
-                                                                    <div class="ibox-content">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12">
-                                                                                <div class="panel panel-info">
-                                                                                    <div class="panel-heading">
-                                                                                        项目概况
-                                                                                    </div>
-                                                                                    <div class="panel-body">
-                                                                                        <p id="overview"></p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="panel panel-info">
-                                                                                    <div class="panel-heading">
-                                                                                        工程任务及主要建筑物
-                                                                                    </div>
-                                                                                    <div class="panel-body">
-                                                                                        <p id="projectTask"></p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="panel panel-info">
-                                                                                    <div class="panel-heading">
-                                                                                        建设用地
-                                                                                    </div>
-                                                                                    <div class="panel-body">
-                                                                                        <p id="constructionLand"></p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="panel panel-info">
-                                                                                    <div class="panel-heading">
-                                                                                        土地复垦方案
-                                                                                    </div>
-                                                                                    <div class="panel-body">
-                                                                                        <p id="landReclamationPlan"></p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <ul class="sortable-list connectList agile-list ui-sortable" id="">
-                                                                                    <li class="success-element">
-                                                                                        <span style="font-size: 15px;"> <i class="fa fa-calendar"></i> 单位工程数 ：</span>
-                                                                                        <span style="font-size: 15px;" id="unitProjectAmount"></span>
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="panel panel-info">
-                                                                                    <div class="panel-heading">
-                                                                                        单位工程概况
-                                                                                    </div>
-                                                                                    <div class="panel-body">
-                                                                                        <p id="unitProjectOverview"></p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <ul class="sortable-list connectList agile-list ui-sortable">
-                                                                                    <li class="success-element" >
-                                                                                        <span style="font-size: 15px;"><i class="fa fa-user-circle"></i> 单元工程数 ：</span>
-                                                                                        <span style="font-size: 15px;" id="cellProjectAmount"></span>
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="panel panel-info">
-                                                                                    <div class="panel-heading">
-                                                                                        单元工程概况
-                                                                                    </div>
-                                                                                    <div class="panel-body">
-                                                                                        <p id="cellProjectOverview"> </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <ul class="sortable-list connectList agile-list ui-sortable">
-                                                                                    <li class="success-element">
-                                                                                        <span style="font-size: 15px;"> <i class="fa fa-calendar"></i> 分布工程数 ：</span>
-                                                                                        <span style="font-size: 15px;" id="branchProjectAmount"></span>
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="panel panel-info">
-                                                                                    <div class="panel-heading">
-                                                                                        分布工程概况
-                                                                                    </div>
-                                                                                    <div class="panel-body">
-                                                                                        <p id="branchProjectOverview"> </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="panel panel-info">
-                                                                                    <div class="panel-heading">
-                                                                                        备注
-                                                                                    </div>
-                                                                                    <div class="panel-body" id="remark">
-                                                                                        <p> </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="panel panel-info">
+                                                                        <div class="panel-heading">
+                                                                            建设用地
                                                                         </div>
+                                                                        <div class="panel-body">
+                                                                            <p id="re_constructionLand"></p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
-                                                    <div id="tab-4" class="tab-pane animated fadeInUp">
-                                                        <div class="panel-body">
-                                                            <fieldset class="form-horizontal">
-                                                            <div class="col-lg-12">
-                                                                <div class="ibox">
-                                                                    <div class="ibox-title">
-                                                                        <h4><i class="fa fa-file-text"></i> 上传附件</h4>
+                                                                <div class="col-lg-12">
+                                                                    <div class="panel panel-info">
+                                                                        <div class="panel-heading">
+                                                                            土地复垦方案
+                                                                        </div>
+                                                                        <div class="panel-body">
+                                                                            <p id="re_landReclamationPlan"></p>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="ibox-content">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12" id="files_display_div">
-                                                                            </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <ul class="sortable-list connectList agile-list ui-sortable" id="">
+                                                                        <li class="success-element">
+                                                                            <span style="font-size: 15px;"> <i class="fa fa-calendar"></i> 单位工程数 ：</span>
+                                                                            <span style="font-size: 15px;" id="re_unitProjectAmount"></span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="panel panel-info">
+                                                                        <div class="panel-heading">
+                                                                            单位工程概况
+                                                                        </div>
+                                                                        <div class="panel-body">
+                                                                            <p id="re_unitProjectOverview"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <ul class="sortable-list connectList agile-list ui-sortable">
+                                                                        <li class="success-element" >
+                                                                            <span style="font-size: 15px;"><i class="fa fa-user-circle"></i> 单元工程数 ：</span>
+                                                                            <span style="font-size: 15px;" id="re_cellProjectAmount"></span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="panel panel-info">
+                                                                        <div class="panel-heading">
+                                                                            单元工程概况
+                                                                        </div>
+                                                                        <div class="panel-body">
+                                                                            <p id="re_cellProjectOverview"> </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <ul class="sortable-list connectList agile-list ui-sortable">
+                                                                        <li class="success-element">
+                                                                            <span style="font-size: 15px;"> <i class="fa fa-calendar"></i> 分布工程数 ：</span>
+                                                                            <span style="font-size: 15px;" id="re_branchProjectAmount"></span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="panel panel-info">
+                                                                        <div class="panel-heading">
+                                                                            分布工程概况
+                                                                        </div>
+                                                                        <div class="panel-body">
+                                                                            <p id="re_branchProjectOverview"> </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="panel panel-info">
+                                                                        <div class="panel-heading">
+                                                                            备注
+                                                                        </div>
+                                                                        <div class="panel-body" id="re_remark">
+                                                                            <p> </p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            </fieldset>
-
-
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div id="tab-4" class="tab-pane animated fadeInUp">
+                                            <div class="panel-body">
+                                                <fieldset class="form-horizontal">
+                                                <div class="col-lg-12">
+                                                    <div class="ibox">
+                                                        <div class="ibox-title">
+                                                            <h4><i class="fa fa-file-text"></i> 上传附件</h4>
+                                                        </div>
+                                                        <div class="ibox-content">
+                                                            <div class="row">
+                                                                <div class="col-lg-12" id="files_display_div">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                </fieldset>
                                             </div>
                                         </div>
                                     </div>
@@ -473,7 +466,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
     </div>
+</div>
 
 <!--审批modal-->
 <div class="modal inmodal" id="person_approve_modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -502,385 +498,6 @@
     </div>
 </div>
 
-<!--重新上报水库基本信息填报modal-->
-<div class="modal fade" id="re_base_info_modal" data-backdrop="static" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" style="max-height:95%;">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <a href="index.html">
-                    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span>
-                    </button>
-                </a>
-                <h4 class="modal-title" id="myModalLabel">基本信息填报</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="ibox">
-                            <div class="ibox-title">
-                                <h5>项目信息填写</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <form id="re_basic_info_form" action="#" class="wizard-big">
-                                    <h1><i class="fa fa-line-chart"></i> 基本信息</h1>
-                                    <fieldset>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>项目名称</label><span style="color:red;"> *</span>
-                                                    <input id="re_plantName" type="text" name="re_plantName"
-                                                           class="form-control required " maxlength="15">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label>项目类型</label><span style="color:red;"> *</span>
-                                                    <input id="re_projectType" type="text" name="re_projectType"
-                                                           class="form-control required " maxlength="15">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label>工程等别</label><span style="color:red;"> *</span>
-                                                    <select class="form-control m-b required" id="re_level" name="re_level">
-                                                        <option selected="selected" disabled="disabled"
-                                                                style="display: none"></option>
-                                                        <option>Ⅰ</option>
-                                                        <option>Ⅱ</option>
-                                                        <option>Ⅲ</option>
-                                                        <option>Ⅳ</option>
-                                                        <option>Ⅴ</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>所在县</label><span style="color:red;"> *</span>
-                                                    <input id="re_county" type="text" name="re_county"
-                                                           class="form-control required " maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>经度</label><span style="color:red;"> *</span>
-                                                    <input id="re_longitude" type="text" name="re_longitude"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>规模</label><span style="color:red;"> *</span>
-                                                    <select class="form-control m-b required" id="re_scale" name="re_scale">
-                                                        <option selected="selected" disabled="disabled"
-                                                                style="display: none"></option>
-                                                        <option>大（1）型</option>
-                                                        <option>大（2）型</option>
-                                                        <option>中型</option>
-                                                        <option>小（1）型</option>
-                                                        <option>小（2）型</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>总库容(万/m3)</label><span style="color:red;"> *</span>
-                                                    <input id="re_storage" type="text" name="re_storage"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>是否签订枢纽工程施工承包合同（是/否）</label><span style="color:red;"> *</span>
-                                                    <select class="form-control m-b required"
-                                                            id="re_hasSignedConstructionContract"
-                                                            name="re_hasSignedConstructionContract">
-                                                        <option selected="selected" disabled="disabled"
-                                                                style="display: none"></option>
-                                                        <option>是</option>
-                                                        <option>否</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>监理、施工招标情况</label><span style="color:red;"> *</span>
-                                                    <input id="re_supervisorBid" type="text" name="re_supervisorBid"
-                                                           class="form-control required" maxlength="10">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>项目法人</label><span style="color:red;"> *</span>
-                                                    <input id="re_legalPersonName" name="re_legalPersonName" type="text"
-                                                           class="form-control required" maxlength="15">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>法人代表</label><span style="color:red;"> *</span>
-                                                    <input id="re_legalRepresentativeName" name="re_legalRepresentativeName"
-                                                           type="text" class="form-control required" maxlength="12">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>所在地</label><span style="color:red;"> *</span>
-                                                    <input id="re_location" type="text" name="re_location"
-                                                           class="form-control required" maxlength="20">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>项目来源</label><span style="color:red;"> *</span>
-                                                    <input id="re_projectSource" type="text" name="re_projectSource"
-                                                           class="form-control required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>纬度</label><span style="color:red;"> *</span>
-                                                    <input id="re_latitude" type="text" name="re_latitude"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>工期(月）</label><span style="color:red;"> *</span>
-                                                    <input id="re_timeLimit" type="text" name="re_timeLimit"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>兴利库容（万/m3）</label><span style="color:red;"> *</span>
-                                                    <input id="re_utilizablCapacity" type="text" name="re_utilizablCapacity"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label>枢纽工程是否完工（是/否）
-                                                    </label><span style="color:red;"> *</span>
-                                                    <select class="form-control m-b required" id="re_hasProjectCompleted"
-                                                            name="re_hasProjectCompleted">
-                                                        <option selected="selected" disabled="disabled"
-                                                                style="display: none"></option>
-                                                        <option>是</option>
-                                                        <option>否</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>是否竣工验收（是/否）
-                                                    </label><span style="color:red;"> *</span>
-                                                    <select class="form-control m-b required" id="re_hasAcceptCompletion"
-                                                            name="re_hasAcceptCompletion">
-                                                        <option selected="selected" disabled="disabled"
-                                                                style="display: none"></option>
-                                                        <option>是</option>
-                                                        <option>否</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="hr-line-dashed"></div>
-                                    </fieldset>
-
-                                    <h1><i class="fa fa-book"></i> 详细情况1</h1>
-                                    <fieldset>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>坝型</label><span style="color:red;"> *</span>
-                                                    <input id="re_damType" type="text" name="re_damType"
-                                                           class="form-control required " maxlength="15">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label>最大坝高（m）</label><span style="color:red;"> *</span>
-                                                    <input id="re_maxDamHeight" type="text" name="re_maxDamHeight"
-                                                           class="form-control number required" maxlength="15">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label>度汛里程</label><span style="color:red;"> *</span>
-                                                    <input id="re_floodControlElevation" type="text"
-                                                           name="re_floodControlElevation"
-                                                           class="form-control number required" maxlength="20">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>供水量（万m3/年)</label><span style="color:red;"> *</span>
-                                                    <input id="re_watersupply" type="text" name="re_watersupply"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>工程占地（亩）</label><span style="color:red;"> *</span>
-                                                    <input id="re_areaCoverage" type="text" name="re_areaCoverage"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>农村人饮（万人）</label><span style="color:red;"> *</span>
-                                                    <input id="re_ruralHumanWater" type="text" name="re_ruralHumanWater"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>中央投资（万元）</label><span style="color:red;"> *</span>
-                                                    <input id="re_centralInvestment" type="text" name="re_centralInvestment"
-                                                           class="form-control required number " maxlength="15">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label>市县投资（万元）</label><span style="color:red;"> *</span>
-                                                    <input id="re_localInvestment" type="text" name="re_localInvestment"
-                                                           class="form-control number required" maxlength="15">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>省级累计拨付（万元）亩</label><span style="color:red;"> *</span>
-                                                    <input id="re_provincialAccumulativePayment" type="text"
-                                                           name="re_provincialAccumulativePayment"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>省级配套融资贷款（万元）</label><span style="color:red;"> *</span>
-                                                    <input id="re_provincialLoan" type="text" name="re_provincialLoan"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>积水面积</label><span style="color:red;"> *</span>
-                                                    <input id="re_catchmentArea" name="re_catchmentArea" type="text"
-                                                           class="form-control number required" maxlength="15">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>溢洪道（m）</label><span style="color:red;"> *</span>
-                                                    <input id="re_spillway" name="re_spillway" type="text"
-                                                           class="form-control number required" maxlength="12">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>灌溉面积(万亩）</label><span style="color:red;"> *</span>
-                                                    <input id="re_irrigatedArea" type="text" name="re_irrigatedArea"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>装机容积（Kw）</label><span style="color:red;"> *</span>
-                                                    <input id="re_installedCapacity" type="text" name="re_installedCapacity"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>大牲畜（万头）</label><span style="color:red;"> *</span>
-                                                    <input id="re_livestock" type="text" name="re_livestock"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>城镇供水人口（万人)</label><span style="color:red;"> *</span>
-                                                    <input id="re_waterSupplyPopulation" type="text"
-                                                           name="re_waterSupplyPopulation"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>省级投资（万元）</label><span style="color:red;"> *</span>
-                                                    <input id="re_provincialInvestment" name="re_provincialInvestment"
-                                                           type="text" class="form-control number required"
-                                                           maxlength="15">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>中央累计拨付（万元）</label><span style="color:red;"> *</span>
-                                                    <input id="re_centralAccumulativePayment" type="text"
-                                                           name="re_centralAccumulativePayment"
-                                                           class="form-control number required" maxlength="20">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>市县累计拨付（万元）</label><span style="color:red;"> *</span>
-                                                    <input id="re_localAccumulativePayment" type="text"
-                                                           name="re_localAccumulativePayment"
-                                                           class="form-control number required" maxlength="10">
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </fieldset>
-
-                                    <h1><i class="fa fa-book"></i> 详细情况2</h1>
-                                    <fieldset>
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label>项目概况</label><span style="color:red;"> *</span>
-                                                    <textarea id="re_overview" name="re_overview" class="form-control "
-                                                              rows="5" maxlength="250"
-                                                              placeholder="填写内容在250字内"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>工程任务及主要建筑物</label><span style="color:red;"> *</span>
-                                                    <textarea id="re_projectTask" name="re_projectTask" class="form-control "
-                                                              rows="3" maxlength="250"
-                                                              placeholder="填写内容在250字内"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>建设用地</label><span style="color:red;"> *</span>
-                                                    <textarea id="re_constructionLand" name="re_constructionLand"
-                                                              class="form-control " rows="3" maxlength="250"
-                                                              placeholder="填写内容在250字内"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>土地复垦方案</label><span style="color:red;"> *</span>
-                                                    <textarea id="re_landReclamationPlan" name="re_landReclamationPlan"
-                                                              class="form-control " rows="3" maxlength="250"
-                                                              placeholder="填写内容在250字内"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>单位工程数</label><span style="color:red;"> *</span>
-                                                    <input id="re_unitProjectAmount" type="text" name="re_unitProjectAmount"
-                                                           class="form-control number " maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>单位工程概况</label><span style="color:red;"> *</span>
-                                                    <textarea id="re_unitProjectOverview" name="re_unitProjectOverview"
-                                                              class="form-control " rows="5" maxlength="250"
-                                                              placeholder="填写内容在250字内"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label> 单元工程数</label><span style="color:red;"> *</span>
-                                                    <input id="re_cellProjectAmount" type="text" name="re_cellProjectAmount"
-                                                           class="form-control number " maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>单元工程概况</label><span style="color:red;"> *</span>
-                                                    <textarea id="re_cellProjectOverview" name="re_cellProjectOverview"
-                                                              class="form-control" rows="5" maxlength="250"
-                                                              placeholder="填写内容在250字内"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label> 分部工程数</label><span style="color:red;"> *</span>
-                                                    <input id="re_branchProjectAmount" type="text"
-                                                           name="re_branchProjectAmount" class="form-control number "
-                                                           maxlength="10">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>分布工程概况</label><span style="color:red;"> *</span>
-                                                    <textarea id="re_branchProjectOverview" name="re_branchProjectOverview"
-                                                              class="form-control" rows="5" maxlength="250"
-                                                              placeholder="填写内容在250字内"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label>备注</label>
-                                                    <textarea id="re_remark" name="re_remark" class="form-control" rows="3"
-                                                              maxlength="250" placeholder="填写内容在250字内"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <h1><i class="fa fa-file-text"></i> 附件</h1>
-                                    <fieldset>
-                                        <h2>图片、附件上传</h2>
-                                        <br>
-                                        <br>
-                                        <div class="row">
-                                            <form enctype="multipart/form-data">
-                                                <div class="form-group">
-                                                    <div class="file-loading">
-                                                        <input id="re_uploadfile" name="re_uploadfile" type="file" multiple
-                                                               data-overwrite-initial="false" data-min-file-count="1">
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a href="index.html">
-                    <button type="button" class="btn btn-info">关闭</button>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Mainly scripts -->
 

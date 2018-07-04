@@ -88,6 +88,7 @@ public class BaseInfo {
 
     private String owner; // 上报人
     private Byte state;
+    private Integer repeatTimes;
     private Date createTime;
     private Date updateTime;
 }

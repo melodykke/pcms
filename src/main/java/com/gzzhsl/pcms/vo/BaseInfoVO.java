@@ -73,6 +73,7 @@ public class BaseInfoVO {
 
     private String owner; // 上报人
     private Byte state;
+    private Integer repeatTimes;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")
     private Date createTime;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")

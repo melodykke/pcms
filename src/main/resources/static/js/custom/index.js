@@ -41,6 +41,13 @@ $(function () {
         getAllUnread(getAllUnreadUrl)
     }, 30000);
 
+    function getpn() {
+        console.log($('#plantName'));
+    }
+
+
+
+
 
     function getThisUser(url) {
         $.getJSON(url, function(data) {
@@ -95,10 +102,7 @@ $(function () {
             type: 'GET',
             contentType: 'application/json',
             success: function (data) {
-                if (data.code == 1002) {
-                    contentDiv.load('baseinfo/baseinfoshow');
-                    $('#small-chat').hide();
-                } else {
+                if (data.code == 1003) {
                     swal({
                             title: "未查到项目信息",
                             text: "请先填写项目基本信息!",
@@ -111,7 +115,29 @@ $(function () {
                             if (isConfirm) {
                                 $('#base_info_modal').modal();
                             } else {
-                                $(location).attr("href", "index.html")
+                                $(location).attr("href", "index.html");
+                            }
+                        }
+                    );
+                } else if (data.code == 1002) {
+                    contentDiv.load('baseinfo/baseinfoshow');
+                    $('#small-chat').hide();
+                } else if (data.code == 1310) {
+
+                    swal({
+                            title: "项目信息",
+                            text: "项目基础信息申报未通过!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "查看",
+                            cancelButtonText: "重新填报"
+                        }, function (isConfirm) {
+                            if (isConfirm) {
+                                contentDiv.load('baseinfo/baseinfoshow');
+                                $('#small-chat').hide();
+                            } else {
+                                $('#base_info_modal').modal();
                             }
                         }
                     );
@@ -173,8 +199,11 @@ $(function () {
         },
         onFinished: function (event, currentIndex)
         {
+            getpn();
             var baseInfoVO = {};
             var form = $(this);
+            console.log($('#plantName'))
+            console.log($('#plantName').val())
             baseInfoVO.plantName = $('#plantName').val();
             baseInfoVO.projectType = $('#projectType').val();
             baseInfoVO.level = $('#level').val();
@@ -245,13 +274,13 @@ $(function () {
                         success: function (data) {
                             if (data.code == 1002) {
                                 swal({
-                                    title: "成功",
-                                    text: "项目基础信息提交成功！",
+                                    title: "项目基础信息提交成功",
+                                    text: "请至项目概况栏目中查看详情",
                                     type: "success",
                                 }, function () {
                                     $("#base_info_modal").modal('hide');
-                                    parent.$('#main_content').load('baseinfo/baseinfoshow');
                                     $('#small-chat').hide();
+                                    top.location.reload()
                                 })
                             } else {
                                 console.log(data)
@@ -345,36 +374,6 @@ $(function () {
         })
     });
 
-    /*$('#person_info_submit').click(function () {
-        if (confirm("若以上信息确认无误，请确认提交!")) {
-            var formData = new FormData();
-            var personInfo = {};  // 空对象
-            personInfo.name = $('#person_name').val();
-            personInfo.tel = $('#tel').val();
-            personInfo.qq = $('#qq').val();
-            personInfo.email = $('#email').val();
-            personInfo.id_num = $('#id_num').val();
-            personInfo.title = $('#title').val();
-            personInfo.address = $('#address').val();
-            formData.append('personInfoStr', JSON.stringify(personInfo));
-            $.ajax({
-                url: savePersonInfoUrl,
-                type: 'POST',
-                data: formData,
-                contentType : false,
-                processData : false,
-                cache : false,
-                success: function (data) {
-                    if (data.code == 1002) {
-                        $('#person_info_modal').modal('hide');
-                        $('#person_info').click();
-                    } else {
-                        $('#person_info_rt_msg').text("错误("+data.code+")："+data.msg);
-                    }
-                }
-            });
-        }
-    })*/
     $("#person_info_form").validate({
         rules : {
             name : {
@@ -514,6 +513,23 @@ $(function () {
         enjoyhint_instance.setScript(enjoyhint_script_data);
         enjoyhint_instance.runScript();
     })
+
+
+
+
+
+
+
+
+    $('body').on('hidden.bs.modal', '.modal', function () {
+        $('#basic_info_form')[0].reset()
+    });
+
+
+    $('#basic_info_repeat1').click(function () {
+        $('#base_info_modal').modal();
+    })
+
 
 });
 
