@@ -275,12 +275,12 @@ $(function () {
                             if (data.code == 1002) {
                                 swal({
                                     title: "项目基础信息提交成功",
-                                    text: "请至项目概况栏目中查看详情",
+                                    text: "请至 项目概况 栏目中查看详情",
                                     type: "success",
                                 }, function () {
                                     $("#base_info_modal").modal('hide');
                                     $('#small-chat').hide();
-                                    top.location.reload()
+
                                 })
                             } else {
                                 console.log(data)
@@ -513,22 +513,14 @@ $(function () {
         enjoyhint_instance.setScript(enjoyhint_script_data);
         enjoyhint_instance.runScript();
     })
-
-
-
-
-
-
-
-
-    $('body').on('hidden.bs.modal', '.modal', function () {
+/*    $('body').on('hidden.bs.modal', '.modal', function () {
         $('#basic_info_form')[0].reset()
-    });
-
-
+    });*/
     $('#basic_info_repeat1').click(function () {
         $('#base_info_modal').modal();
     })
+
+
 
 
 });

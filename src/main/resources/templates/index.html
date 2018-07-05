@@ -13,12 +13,17 @@
 
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet">
-    <link th:href="@{/css/animate.css}" rel="stylesheet">
-    <link th:href="@{/css/style.css}" rel="stylesheet">
+
     <link th:href="@{/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
     <link th:href="@{/css/plugins/steps/jquery.steps.css}" rel="stylesheet">
     <link th:href="@{/css/custom/fileinput.css}" rel="stylesheet" type="text/css">
+    <!-- 导航 style -->
     <link th:href="@{/css/custom/enjoyhint.css}" rel="stylesheet" type="text/css">
+    <!-- Toastr style -->
+    <link th:href="@{/css/plugins/toastr/toastr.min.css}" rel="stylesheet">
+
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 
 <body class="md-skin fixed-nav no-skin-config">
@@ -86,7 +91,7 @@
                                     <a href="#">参建单位</a>
                                 </li>
                                 <li>
-                                    <a id="basic_info_repeat1" data-toggle="tooltip" data-placement="bottom" title="点击后重新填报！"><i class="fa fa-repeat fa-lg"></i></a>
+                                    <button type="button" class="btn btn-primary" id="showtoast">Show Toast</button>
                                 </li>
                             </ul>
                         </li>
@@ -1521,6 +1526,7 @@
 <script th:src="@{/js/custom/websocket_plugin.js}"></script>
 <script th:src="@{/js/custom/fileinput.min.js}" type="text/javascript"></script>
 <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.3.5/js/locales/zh.min.js"></script>
-
+<!-- Toastr script -->
+<script th:src="@{/js/plugins/toastr/toastr.min.js}"></script>
 </body>
 </html>

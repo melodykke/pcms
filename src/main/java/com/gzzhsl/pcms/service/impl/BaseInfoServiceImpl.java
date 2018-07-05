@@ -15,6 +15,7 @@ import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.FeedbackService;
 import com.gzzhsl.pcms.service.OperationLogService;
 import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.FeedbackUtil;
 import com.gzzhsl.pcms.util.OperationUtil;
@@ -24,6 +25,7 @@ import com.gzzhsl.pcms.vo.BaseInfoVO;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,22 +44,6 @@ import java.util.stream.Collectors;
 @Transactional
 public class BaseInfoServiceImpl implements BaseInfoService {
 
-/*    @Autowired
-    private UserRepository userRepository;
-
-    @Override
-    public Boolean connectBaseInfoAndUserInfo() {
-        List<UserInfo> userInfos = userRepository.findAll();
-        List<BaseInfo> baseInfos = baseInfoRepository.findAll();
-        for (UserInfo userInfo : userInfos) {
-            for (BaseInfo baseInfo : baseInfos) {
-                if (userInfo.getName().equals(baseInfo.getPlantName())) {
-                    userInfo.setBaseInfo(baseInfo);
-                }
-            }
-        }
-        return true;
-    }*/
     @Autowired
     private BaseInfoRepository baseInfoRepository;
     @Autowired
@@ -70,6 +56,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     private FeedbackService feedbackService;
     @Autowired
     private BaseInfoImgServiceImpl baseInfoImgService;
+    @Autowired
+    private WebSocket webSocket;
+
     @Override
     public List<BaseInfo> getAllProject() {
         return baseInfoRepository.findAll();
@@ -145,7 +134,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             }
             baseInfoRt.setBaseInfoImgs(baseInfoImgs);
             baseInfoRt = baseInfoRepository.save(baseInfoRt);
-
         }
         // 把通知提醒也一并存入数据库
         Notification notification = new Notification();
@@ -164,6 +152,20 @@ public class BaseInfoServiceImpl implements BaseInfoService {
                 "提交了ID:"+ baseInfoRt.getBaseInfoId() +"的水库项目基本信息"));
         thisUser.setBaseInfo(baseInfoRt);
         userService.save(thisUser);
+        // 判断本账号是否是ckecker 如果是并且其有子账号，则将该水库信息保存一份至子账号
+        List<SysRole> roles = thisUser.getSysRoleList();
+        for (SysRole role : roles) {
+            if ("checker".equals(role.getRole())) {
+                if (thisUser.getChildren() != null && thisUser.getChildren().size() > 0) {
+                    for (UserInfo child : thisUser.getChildren()) {
+                        child.setBaseInfo(baseInfoRt);
+                        userService.save(child);
+                    }
+                }
+            }
+        }
+        // 创建webSocket消息
+        webSocket.sendMessage("有新的项目消息！");
         return baseInfoRt;
     }
 

@@ -24,16 +24,30 @@ $(function () {
     function refreshContents(data){
         $('#re_plantName').text(data.data.plantName);
         $('#re_plantName').attr("data-id",data.data.baseInfoId );
-            data.data.state == 0 ? $('#state').text("待审核") :  $('#state').text("已审核");
+            if (data.data.state == 0) {
+                $('#state').text("待审核");
+                $('#repost_div').html(' <a id="basic_info_repeat" data-toggle="tooltip" data-placement="bottom" title="点击后重新填报！"><i class="fa fa-repeat fa-lg"></i></a>');
+            } else if (data.data.state == -1){
+                $('#state').text("审核未通过");
+                $('#repost_div').html(' <a id="basic_info_repeat" data-toggle="tooltip" data-placement="bottom" title="点击后重新填报！"><i class="fa fa-repeat fa-lg"></i></a>');
+            } else if (data.data.state == 1) {
+                $('#state').text("审核通过");
+            }
             if (data.data.state == 1) {
                 $('#check_btn').html('<span class="label label-primary"><i class="fa fa-check"></i> 已审批通过</span>');
             } else if(data.data.state == -1){
-                $('#check_btn').html('<span class="label label-danger"><i class="fa fa-times"></i> 审批未通过</span><a id="basic_info_repeat" data-toggle="tooltip" data-placement="bottom" title="点击后重新填报！"><i class="fa fa-repeat fa-lg"></i></a>');
+                $('#check_btn').html('<span class="label label-danger"><i class="fa fa-times"></i> 审批未通过</span>');
             }
         $('#owner').text(data.data.owner);
         $('#submitTime').text(data.data.createTime);
         data.data.state == 0 ? $('#state_bar').css("width", "50%") : $('#state_bar').css("width", "100%");
-        data.data.state == 0 ? $('#state_msg').text("等待上级审批") : $('#state_msg').text("审核通过");
+        if (data.data.state == 0) {
+            $('#state_msg').text("等待上级审批");
+        } else if (data.data.state == 1) {
+            $('#state_msg').text("审核通过");
+        } else if (data.data.state == -1) {
+            $('#state_msg').text("审核未通过");
+        }
 
         $('#re_plantName_h2').text(data.data.plantName);
         $('#re_projectType').text(data.data.projectType);
@@ -170,7 +184,7 @@ $(function () {
     })
 
 
-    $('#check_btn').on('click', '#basic_info_repeat', function (e) {
+    $('#repost_div').on('click', '#basic_info_repeat', function (e) {
         $('#base_info_modal', parent.document).modal();
     })
 
