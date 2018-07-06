@@ -47,11 +47,18 @@ public class OperationLogServiceImpl implements OperationLogService {
     }
 
     @Override
-    public Page<OperationLog> listAll(Pageable pageable, String userId) {
+    public Page<OperationLog> listAll(Pageable pageable, String userId, String searchParam) {
         Specification querySpecification = new Specification() {
             @Override
             public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                return cb.equal(root.get("userId"), userId);
+                List<Predicate> predicates = new ArrayList<>();
+                if (StringUtils.isNotBlank(userId)) {
+                    predicates.add(cb.equal(root.get("userId"), userId));
+                }
+                if (StringUtils.isNotBlank(searchParam)) {
+                    predicates.add(cb.like(root.get("msg"), "%"+searchParam+"%"));
+                }
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         };
         return operationLogRepositoty.findAll(querySpecification, pageable);

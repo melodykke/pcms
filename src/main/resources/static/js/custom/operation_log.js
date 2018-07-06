@@ -21,10 +21,6 @@ $(function () {
             "sLast": "末页",
             "sJump": "跳转"
         },
-        "oAria": {
-            "sSortAscending": ": 以升序排列此列",
-            "sSortDescending": ": 以降序排列此列"
-        }
     };
     // 按钮
     var table = $('.dataTables-example').DataTable({
@@ -32,15 +28,12 @@ $(function () {
         stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
         processing: true,  //隐藏加载提示,自行处理
         serverSide: true,  //启用服务器端分页
-        searching: false,  //禁用原生搜索
+        searching: true,  //禁用原生搜索
         orderMulti: false,  //启用多列排序
         order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
         renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
         pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
-        columnDefs: [{
-            "targets": 'nosort',  //列的样式名
-            "orderable": false    //包含上样式名‘nosort’的禁止排序
-        }],
+
 
         pageLength: 15,
         responsive: true,
@@ -70,7 +63,7 @@ $(function () {
             param.pageSize= data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
             param.startIndex = data.start;//开始的记录序号
             param.pageIndex = (data.start / data.length);//当前页码
-
+            param.searchParam = data.search.value;
             //ajax请求数据方法
             $.ajax({
                 type: "get",

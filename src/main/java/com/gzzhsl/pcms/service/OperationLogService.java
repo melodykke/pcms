@@ -9,5 +9,5 @@ import java.util.List;
 public interface OperationLogService {
     OperationLog save(OperationLog operationLog);
     List<OperationLog> getOperationLogsByUserId(String userId);
-    Page<OperationLog> listAll(Pageable pageable, String userId);
+    Page<OperationLog> listAll(Pageable pageable, String userId, String searchParam);
 }

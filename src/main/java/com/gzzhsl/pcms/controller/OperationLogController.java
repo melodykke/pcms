@@ -34,13 +34,16 @@ public class OperationLogController {
     @ResponseBody
     public Page<OperationLog> queryLog(@RequestParam(required = false, name = "pageSize", defaultValue = "15") Integer pageSize,
                                        @RequestParam(required = false, name = "startIndex") Integer startIndex,
-                                       @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageIndex){
+                                       @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                       @RequestParam(required = false, name = "searchParam", defaultValue = "") String searchParam){
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         Integer page = pageIndex;
         Integer size = pageSize;
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        Page<OperationLog> operationLogs = operationLogService.listAll(pageRequest, thisUser.getUserId());
+        Page<OperationLog> operationLogs = operationLogService.listAll(pageRequest, thisUser.getUserId(), searchParam);
         return operationLogs;
     }
+
+
 }
