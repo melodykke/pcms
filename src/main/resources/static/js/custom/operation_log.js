@@ -48,8 +48,8 @@ $(function () {
         buttons: [
             {extend: 'copy'},
             {extend: 'csv'},
-            {extend: 'excel', title: 'ExampleFile'},
-            {extend: 'pdf', title: 'ExampleFile'},
+            {extend: 'excel', title: '水库项目基本信息'},
+            {extend: 'pdf', title: '水库项目基本信息'},
 
             {extend: 'print',
                 customize: function (win){

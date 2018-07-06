@@ -62,7 +62,7 @@ $(function () {
         if ("toapprove" == target.dataset.url) {
             contentDiv.load(target.dataset.href);
             $.getJSON(url, function (data) {
-                
+
             })
         }
         
