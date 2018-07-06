@@ -4,7 +4,10 @@ import com.gzzhsl.pcms.entity.OperationLog;
 import com.gzzhsl.pcms.repository.OperationLogRepositoty;
 import com.gzzhsl.pcms.service.OperationLogService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -41,5 +44,16 @@ public class OperationLogServiceImpl implements OperationLogService {
         };
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         return operationLogRepositoty.findAll(querySpecification, sort);
+    }
+
+    @Override
+    public Page<OperationLog> listAll(Pageable pageable, String userId) {
+        Specification querySpecification = new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                return cb.equal(root.get("userId"), userId);
+            }
+        };
+        return operationLogRepositoty.findAll(querySpecification, pageable);
     }
 }

@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface OperationLogRepositoty extends JpaRepository<OperationLog, String>, JpaSpecificationExecutor<OperationLog> {
+
 }
