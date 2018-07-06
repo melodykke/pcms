@@ -12,9 +12,7 @@ import com.gzzhsl.pcms.service.FeedbackService;
 import com.gzzhsl.pcms.service.OperationLogService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
-import com.gzzhsl.pcms.util.FeedbackUtil;
-import com.gzzhsl.pcms.util.OperationUtil;
-import com.gzzhsl.pcms.util.PathUtil;
+import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +49,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     private OperationLogService operationLogService;
     @Autowired
     private FeedbackService feedbackService;
-
+    @Autowired
+    private WebSocket webSocket;
     @Override
     @Transactional
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
@@ -62,7 +61,10 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             log.error("【月报错误】 用户对应Project为空，需首先绑定对应的水库工程");
             throw new SysException(SysEnum.MONTHLY_REPORT_ERROR);
         }
-
+        if (!thisProject.getState().equals((byte) 1)) {
+            log.error("【月报错误】 用户对应Project审批状态不为审批通过");
+            throw new SysException(SysEnum.MONTHLY_REPORT_BASE_INFO_STATE_ERROR);
+        }
         // 在审批状态为“已审批”的状态下，若月报提交月份重复，则不允许提交
         Date monthReportDate = projectMonthlyReportVO.getSubmitDate();
         List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportRepository.findAll();
@@ -148,6 +150,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                     projectMonthlyReportRt.getCreateTime(),
                     "提交了带附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
                             getProjectMonthlyReportId()));
+            // 创建webSocket消息
+            WebSocketUtil.sendWSMsg(thisUser, webSocket, "月报", "新的月报消息");
             return projectMonthlyReportRtWithImg;
         }
     }

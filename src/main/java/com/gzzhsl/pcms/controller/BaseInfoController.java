@@ -58,6 +58,11 @@ public class BaseInfoController {
         }
     }
 
+    @GetMapping("/getinbaseinfo")
+    public String getInBaseInfo() {
+        return "base_info_show";
+    }
+
     @GetMapping("/getbaseinfo")
     @ResponseBody
     public ResultVO getBaseInfo() {
@@ -66,7 +71,6 @@ public class BaseInfoController {
             log.error("【基本信息】没有配置该用户的项目基本信息");
             throw new SysException(SysEnum.BASE_INFO_NO_RECORD_ERROR);
         }
-        System.out.println("!!!!!!!!!!"+thisUser.getBaseInfo().getBaseInfoId());
         BaseInfoVO baseInfoVO = baseInfoService.getBaseInfoById(thisUser.getBaseInfo().getBaseInfoId());
         return ResultUtil.success(baseInfoVO);
 

@@ -17,9 +17,7 @@ import com.gzzhsl.pcms.service.OperationLogService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
-import com.gzzhsl.pcms.util.FeedbackUtil;
-import com.gzzhsl.pcms.util.OperationUtil;
-import com.gzzhsl.pcms.util.PathUtil;
+import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.BaseInfoImgVO;
 import com.gzzhsl.pcms.vo.BaseInfoVO;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
@@ -140,40 +138,57 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         notification.setCreateTime(new Date());
         notification.setSubmitter(thisUser.getUsername());
         notification.setType(NotificationTypeEnum.PROJECT_BASIC_INFO.getMsg());
-        notification.setTypeId(baseInfoRt.getBaseInfoId()); // 这里是月报ID
+        notification.setTypeId(baseInfoRt.getBaseInfoId()); // 这里是项目基础信息ID
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
         notification.setYearmonth(formatter.format(baseInfoRt.getUpdateTime()));
         notification.setChecked(false);
-        notification.setTypeId(baseInfoRt.getBaseInfoId());
-        notification.setUrl("/baseinfo/getbaseinfo");
+        notification.setUrl("/baseinfo/getinbaseinfo");
         notificationRepository.save(notification);
         operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
                 baseInfoRt.getUpdateTime(),
                 "提交了ID:"+ baseInfoRt.getBaseInfoId() +"的水库项目基本信息"));
-        thisUser.setBaseInfo(baseInfoRt);
-        userService.save(thisUser);
+       /* thisUser.setBaseInfo(baseInfoRt);
+        userService.save(thisUser);*/
+        userService.updateUserBaseInfo(baseInfoRt, thisUser.getUserId());
         // 判断本账号是否是ckecker 如果是并且其有子账号，则将该水库信息保存一份至子账号
         List<SysRole> roles = thisUser.getSysRoleList();
         for (SysRole role : roles) {
             if ("checker".equals(role.getRole())) {
                 if (thisUser.getChildren() != null && thisUser.getChildren().size() > 0) {
                     for (UserInfo child : thisUser.getChildren()) {
-                        child.setBaseInfo(baseInfoRt);
-                        userService.save(child);
+                        /*child.setBaseInfo(baseInfoRt);
+                        userService.save(child);*/
+                        userService.updateUserBaseInfo(baseInfoRt, child.getUserId());
                     }
                 }
             }
         }
+        // 创建通知
+
         // 创建webSocket消息
-        webSocket.sendMessage("有新的项目消息！");
+        WebSocketUtil.sendWSMsg(thisUser, webSocket, "项目基础信息", "新的项目基础信息消息");
+       /* if (UserUtil.isChecker(thisUser)) {
+            webSocket.sendMsg("项目基础信息", "有新的项目基础信息待审批", "/tonotification/notification", thisUser);
+        } else if (UserUtil.isReporter(thisUser)){
+            if (thisUser.getParent() == null) {
+                log.error("【基本信息错误】 项目基础信息提交错误，提交人员无上级审批单位");
+                throw new SysException(SysEnum.BASE_INFO_SUBMIT_NO_PARENT_ERROR);
+            }
+            webSocket.sendMsg("项目基础信息", "有新的项目基础信息待审批", "/tonotification/notification", thisUser.getParent());
+        }*/
         return baseInfoRt;
     }
 
     @Override
     public Feedback approveBaseInfo(UserInfo thisUser, Boolean switchState, String checkinfo, String baseInfoId) {
         Feedback feedbackRt = null;
+        BaseInfo baseInfoRt = baseInfoRepository.findByBaseInfoId(baseInfoId);
+        if (baseInfoRt.getState().equals((byte) 1)) {
+            log.error("【基本信息审批错误】 不能审批已通过项目");
+            throw new SysException(SysEnum.BASE_INFO_APPROVAL_PASSED_ERROR);
+        }
         if (switchState == false) {
-            BaseInfo baseInfoRt = baseInfoRepository.findByBaseInfoId(baseInfoId);
+
             baseInfoRt.setState((byte) 1); // 审批通过
             BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
             Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(),"项目基本信息", baseInfoId, new Date(),
@@ -181,7 +196,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的项目基本信息"));
         } else {
-            BaseInfo baseInfoRt = baseInfoRepository.findByBaseInfoId(baseInfoId);
             baseInfoRt.setState((byte) -1); // 审批未通过
             BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
             Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(), "项目基本信息",baseInfoId, new Date(),

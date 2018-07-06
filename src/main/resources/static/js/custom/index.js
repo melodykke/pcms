@@ -25,9 +25,10 @@ $(function () {
     })
     $('#notification_entrance').on('click', 'a', function (e) {
         var target = e.currentTarget;
-        if ('monthly_report_notification' == target.dataset.id){
+       /* if ('monthly_report_notification' == target.dataset.id){
             contentDiv.load('notification/tonotification');
-        }
+        }*/
+        contentDiv.load('notification/tonotification');
     })
     $('#operation_log').click(function () {
         contentDiv.load('operationlog/tooperationlog');
@@ -56,6 +57,7 @@ $(function () {
                 var userInfo = data.data;
                 $('#username .font-bold').html(userInfo.name);
                 $('#name').html(userInfo.username + ' <b class="caret"></b>');
+                dows(userInfo.username);
             }
         });
     }
@@ -78,16 +80,19 @@ $(function () {
                 var htmlTemp = "";
                 $('#notification_entrance').html('')
                 notificationVOs.notificationVOs.map(function (item, index) {
-                    htmlTemp += ' <li>\n' +
-                        '                                <a href="#" data-id="'+ item.url +'">\n' +
-                        '                                    <div>\n' +
-                        '                                        <i class="fa fa-envelope fa-fw"></i> 新的'+ item.type +'信息待审批\n' +
-                        '                                        <span class="pull-right text-muted small">'+ item.timeDiff +'</span>\n' +
-                        '                                    </div>\n' +
-                        '                                </a>\n' +
-                        '                            </li>\n' +
-                        '                            <li class="divider"></li>'
-                    
+                    if (item.object.length <1) {
+                        htmlTemp += '';
+                    } else {
+                        htmlTemp += ' <li>\n' +
+                            '                                <a href="#" data-id="'+ item.url +'">\n' +
+                            '                                    <div>\n' +
+                            '                                        <i class="fa fa-envelope fa-fw"></i> '+ item.type +'待审批\n' +
+                            '                                        <span class="pull-right text-muted small">'+ item.timeDiff +'</span>\n' +
+                            '                                    </div>\n' +
+                            '                                </a>\n' +
+                            '                            </li>\n' +
+                            '                            <li class="divider"></li>'
+                    }
                 })
                 $('#notification_entrance').append(htmlTemp)
             }
@@ -280,7 +285,7 @@ $(function () {
                                 }, function () {
                                     $("#base_info_modal").modal('hide');
                                     $('#small-chat').hide();
-
+                                    top.location.reload();
                                 })
                             } else {
                                 console.log(data)
@@ -521,6 +526,77 @@ $(function () {
     })
 
 
+    /*websocket*/
+    function reconnect(username){
+        websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
+    }
+    function dows(username){
+        var websocket = null;
+        //ws心跳检查
+        var heartCheck = {
+            timeout: 20000,//20ms
+            timeoutObj: null,
+            reset: function () {
+                clearTimeout(this.timeoutObj);
+                this.start();
+            },
+            start: function () {
+                this.timeoutObj = setTimeout(function () {
+                    websocket.send("HeartBeat:"+username, "beat");
+                }, this.timeout)
+            }
+        }
+        if('WebSocket' in window) {
+            websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
+        }else {
+            alert('该浏览器不支持ws！');
+        }
+        websocket.onopen = function (event) {
+            console.log('建立连接');
+            heartCheck.start();
+        }
+        websocket.onclose = function (event) {
+            console.log('连接关闭')
+        }
+        websocket.onmessage = function (event) {
+            console.log('收到消息：'+event.data);
+            if(event.data.startsWith('echo')){
+                heartCheck.reset();
+            }else{
+                var wsMessage = eval("(" + event.data + ")");
+                showNotification(wsMessage.title,wsMessage.msg, wsMessage.url);
+            }
+
+        }
+        websocket.onerror = function (event) {
+            reconnect(username);
+        }
+        websocket.onbeforeunload = function () {
+            websocket.close();
+        }
+    }
+    function showNotification(title, msg, url) {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": true,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "7000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr.options.onclick = function () {
+            contentDiv.load(url);
+        };
+        var $toast = toastr['info'](msg,title); // Wire up an event handler to a button in the toast, if it exists
+    }
 
 
 });

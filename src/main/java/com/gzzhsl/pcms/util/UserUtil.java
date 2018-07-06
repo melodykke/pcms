@@ -1,7 +1,11 @@
 package com.gzzhsl.pcms.util;
 
+import com.gzzhsl.pcms.shiro.bean.SysRole;
+import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.BeanUtils;
+
+import java.util.List;
 
 
 public class UserUtil {
@@ -27,6 +31,26 @@ public class UserUtil {
         return new Md5Hash(password, salt, 2).toString();
     }
 
+    // 判断用户角色是否是checker
+    public static boolean isChecker(UserInfo thisUser) {
+        List<SysRole> roles = thisUser.getSysRoleList();
+        for (SysRole sysRole : roles) {
+            if ("checker".equals(sysRole.getRole())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    // 判断用户角色是否是reporter
+    public static boolean isReporter(UserInfo thisUser) {
+        List<SysRole> roles = thisUser.getSysRoleList();
+        for (SysRole sysRole : roles) {
+            if ("reporter".equals(sysRole.getRole())) {
+                return true;
+            }
+        }
+        return false;
+    }
     public static void main(String[] args) {
         System.out.println(getEncriPwd("888888"));
     }

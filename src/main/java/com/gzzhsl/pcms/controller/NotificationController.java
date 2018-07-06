@@ -64,20 +64,33 @@ public class NotificationController {
                 countUnread ++;
             }
         }
+        Date nowDate = new Date();
+
         NotificationVO monthlyReportNotificationVO = new NotificationVO();
         monthlyReportNotificationVO.setUrl("monthly_report_notification");
-        Date nowDate = new Date();
-        if (notifications.size()>0) {
-            nowDate = notifications.get(0).getCreateTime();
+        if (monthlyReportNotifications.size()>0) {
+            nowDate = monthlyReportNotifications.get(0).getCreateTime();
         }
-        String timeDiff = TimeUtil.getDatePoor(new Date(), nowDate);
-        monthlyReportNotificationVO.setTimeDiff(timeDiff);
+        String monthlyReportTimeDiff = TimeUtil.getDatePoor(new Date(), nowDate);
+        monthlyReportNotificationVO.setTimeDiff(monthlyReportTimeDiff);
         monthlyReportNotificationVO.setType(NotificationTypeEnum.MONTHLY_REPORT.getMsg());
         monthlyReportNotificationVO.setObject(monthlyReportNotifications);
-
+        /*↑装载了月报部分↑*/
+        NotificationVO baseInfoNotificationVO = new NotificationVO();
+        baseInfoNotificationVO.setUrl("base_info_notification");
+        if (projectBasicInfoNotifications.size()>0) {
+            nowDate = projectBasicInfoNotifications.get(0).getCreateTime();
+        }
+        String baseInfoTimeDiff = TimeUtil.getDatePoor(new Date(), nowDate);
+        baseInfoNotificationVO.setTimeDiff(baseInfoTimeDiff);
+        baseInfoNotificationVO.setType(NotificationTypeEnum.PROJECT_BASIC_INFO.getMsg());
+        baseInfoNotificationVO.setObject(projectBasicInfoNotifications);
+        /*↑装载了基础信息部分↑*/
         List<NotificationVO> notificationVOs = new ArrayList<>();
         notificationVOs.add(monthlyReportNotificationVO);
-        /*↑只装载了月报部分↑*/
+        notificationVOs.add(baseInfoNotificationVO);
+
+
         NotificationListVO notificationListVO = new NotificationListVO();
         notificationListVO.setCountAllUnread(countUnread);
         notificationListVO.setNotificationVOs(notificationVOs);
