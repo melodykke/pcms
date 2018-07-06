@@ -4,7 +4,10 @@ import com.gzzhsl.pcms.entity.Notification;
 import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -57,5 +60,41 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Notification getById(String notificationId) {
         return notificationRepository.findOne(notificationId);
+    }
+
+    @Override
+    public List<Notification> getAllUnchecked(String baseInfoId) {
+        Boolean checked = false;
+        Specification querySpecification = new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<>();
+                if (StringUtils.isNotBlank(baseInfoId)) {
+                    predicates.add(cb.equal(root.get("baseInfoId"), baseInfoId));
+                }
+                predicates.add(cb.equal(root.get("checked"), checked));
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        return notificationRepository.findAll(querySpecification, sort);
+    }
+
+    @Override
+    public Page<Notification> findAllByType(Pageable pageable, String baseInfoId, String type) {
+        Specification querySpecification = new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<>();
+                if (StringUtils.isNotBlank(baseInfoId)) {
+                    predicates.add(cb.equal(root.get("baseInfoId"), baseInfoId));
+                }
+                if (StringUtils.isNotBlank(type)) {
+                    predicates.add(cb.equal(root.get("type"), type));
+                }
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+        return notificationRepository.findAll(querySpecification, pageable);
     }
 }

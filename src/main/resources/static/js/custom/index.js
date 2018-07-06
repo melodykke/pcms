@@ -2,7 +2,7 @@ $(function () {
 
     var getThisUserUrl = "/user/getthisuser"; //拿到当前用户信息的url
     var getThisProjectUrl = "/user/getthisproject";
-    var getAllUnreadUrl = "/notification/getallunchecked";
+    var getoverallnotificationUrl = "/notification/getoverallnotification";
     var saveFilesUrl = '/baseinfo/addfiles';
     var saveBaseInfoUrl = '/baseinfo/savebaseinfo';
     // 提交个人信息
@@ -37,9 +37,9 @@ $(function () {
 
     getThisUser(getThisUserUrl);
     getThisProject(getThisProjectUrl);
-    getAllUnread(getAllUnreadUrl);
+    getOverallNotification(getoverallnotificationUrl);
     setInterval(function () {
-        getAllUnread(getAllUnreadUrl)
+        getOverallNotification(getoverallnotificationUrl);
     }, 30000);
 
     function getpn() {
@@ -72,28 +72,23 @@ $(function () {
     }
 
     // 拿到所有未审批的项目
-    function getAllUnread(url) {
+    function getOverallNotification(url) {
         $.getJSON(url, function(data) {
             if (data.code==1002) {
-                var notificationVOs = data.data;
-                $('#countUnread').text(notificationVOs.countAllUnread);
+                $('#countUnread').text(data.data.allUncheckedNum);
                 var htmlTemp = "";
-                $('#notification_entrance').html('')
-                notificationVOs.notificationVOs.map(function (item, index) {
-                    if (item.object.length <1) {
-                        htmlTemp += '';
-                    } else {
-                        htmlTemp += ' <li>\n' +
-                            '                                <a href="#" data-id="'+ item.url +'">\n' +
-                            '                                    <div>\n' +
-                            '                                        <i class="fa fa-envelope fa-fw"></i> '+ item.type +'待审批\n' +
-                            '                                        <span class="pull-right text-muted small">'+ item.timeDiff +'</span>\n' +
-                            '                                    </div>\n' +
-                            '                                </a>\n' +
-                            '                            </li>\n' +
-                            '                            <li class="divider"></li>'
-                    }
-                })
+                $('#notification_entrance').html('');
+                for (var key in data.data.article) {
+                    htmlTemp += ' <li>\n' +
+                        '                                <a href="#" data-id="/notification/tonotification">\n' +
+                        '                                    <div>\n' +
+                        '                                        <i class="fa fa-envelope fa-fw"></i> '+ key+'\n' +
+                        '                                        <span class="pull-right text-muted small">'+ data.data.article[key] +'</span>\n' +
+                        '                                    </div>\n' +
+                        '                                </a>\n' +
+                        '                            </li>\n' +
+                        '                            <li class="divider"></li>'
+                }
                 $('#notification_entrance').append(htmlTemp)
             }
         });
