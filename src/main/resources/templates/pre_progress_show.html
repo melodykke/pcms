@@ -21,7 +21,7 @@
                 <a href="index.html">首页</a>
             </li>
             <li class="active">
-                <strong>当前页面</strong>
+                <strong>项目前期</strong>
             </li>
         </ol>
     </div>
@@ -42,33 +42,6 @@
                                 <a id="" class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#pre_progress_approve">
                                     审批
                                 </a>
-
-                            <!--审批modal-->
-                                <div class="modal inmodal" id="pre_progress_approve" tabindex="-1" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content animated bounceInRight">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">
-                                                    <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
-                                                </button>
-                                                <h1 class="modal-title">项 目 前 期 审 批</h1>
-                                                <br>
-                                                <input type="checkbox" name="my-checkbox" id="my-checkbox">
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group animated fadeIn" id="progress_approve_input" style="display:none;">
-                                                    <label style="font-size: 15px;">若不通过，请说明原因:</label>
-                                                    <textarea id="progress_approve_area" rows="5" placeholder="填写内容请控制在250字以内。" class="form-control" maxlength="250">
-                                                                </textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                                                <button type="button" class="btn btn-primary" id="submit">提交</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="ibox-content">
@@ -209,64 +182,37 @@
     </div>
 </div>
 
+<!--审批modal-->
+<div class="modal inmodal" id="pre_progress_approve" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                </button>
+                <h1 class="modal-title">项 目 前 期 审 批</h1>
+                <br>
+                <input type="checkbox" name="my-checkbox" id="my-checkbox">
+            </div>
+            <div class="modal-body">
+                <div class="form-group animated fadeIn" id="progress_approve_input" style="display:none;">
+                    <label style="font-size: 15px;">若不通过，请说明原因:</label>
+                    <textarea id="progress_approve_area" rows="5" placeholder="填写内容请控制在250字以内。" class="form-control" maxlength="250">
+                                                                </textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="submit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script th:src="@{/js/plugins/dataTables/datatables.min.js}"></script>
 <script th:src="@{/js/custom/bootstrap-switch.min.js}"></script>
+<script th:src="@{/js/custom/pre_proprogress.js}"></script>
 
-<script>
-    $(document).ready(function(){
-        $('.dataTables-example').DataTable({
-            ajax:"pre_progress_show.json",
-            // bFilter: false,    //去掉搜索框
-            bInfo:true,       //去掉显示信息
-            retrieve: true,    //多次加载不会显示缓存数据
-            pageLength: 10,
-            responsive: true,
-            paging: true,
-            dom: '<"html5buttons"B>lTfgitp',
-            buttons: [
-                {extend: 'copy'},
-                {extend: 'excel', title: '项目前期表格'},
-                {extend: 'print',
-                 customize: function (win){
-                     $(win.document.body).addClass('white-bg');
-                     $(win.document.body).css('font-size', '10px');
-                     $(win.document.body).find('table')
-                     .addClass('compact')
-                     .css('font-size', 'inherit');
-                 }}
-             ]
-        });
-
-
-        $("[name='my-checkbox']").bootstrapSwitch({
-            onText : "拒绝",
-            offText : "通过",
-            onColor : "danger",
-            offColor : "success",
-            size : "large",
-            onSwitchChange : function() {
-                var checkedOfAll=$("#my-checkbox").prop("checked");
-                if (checkedOfAll==false){
-                    $('#progress_approve_input').hide()
-                }
-                else {
-                    $('#progress_approve_input').show();
-                    $('#progress_approve_area').text('');
-                }
-            }
-        });
-        $('#submit').click(function () {
-            var checkedOfAll=$("#my-checkbox").prop("checked");
-            var checkinfo=$('#progress_approve_area').val();
-            alert(checkedOfAll+checkinfo)
-        })
-        $('#pre_progress_repeat').click(function () {
-            $('#pre_progress_modal',parent.document).modal();
-        })
-
-    });
-</script>
 </body>
 </html>
 

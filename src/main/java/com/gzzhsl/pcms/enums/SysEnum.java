@@ -38,6 +38,8 @@ public enum SysEnum {
     BASE_INFO_SUBMIT_NO_PARENT_ERROR(1405, "项目基础信息提交错误，无审批单位"),
     BASE_INFO_APPROVAL_PASSED_ERROR(1406, "不能审批已通过项目"),
 
+
+
     ACCOUNT_PASSWORD_INCONSISTENCY(2201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(2202, "已存在相同账号名的用户"),
     ACCOUNT_NO_PROJECT(2203, "没有水库工程，请优先配置水库工程"),

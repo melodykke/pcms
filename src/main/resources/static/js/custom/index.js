@@ -44,12 +44,9 @@ $(function () {
     }
 
 
-
-
-
     function getThisUser(url) {
-        $.getJSON(url, function(data) {
-            if (data.code==1002) {
+        $.getJSON(url, function (data) {
+            if (data.code == 1002) {
                 // 从返回的JSON当中获取product对象的信息，并赋值给表单
                 var userInfo = data.data;
                 $('#username .font-bold').html(userInfo.name);
@@ -61,17 +58,17 @@ $(function () {
 
     // 若果有 存入域 否则提示完善资料
     function getThisProject(url) {
-        $.getJSON(url, function(data) {
-            if (data.code==1002) {
-              // 若果有 存入域 否则提示完善资料
+        $.getJSON(url, function (data) {
+            if (data.code == 1002) {
+                // 若果有 存入域 否则提示完善资料
             }
         });
     }
 
     // 拿到所有未审批的项目
     function getOverallNotification(url) {
-        $.getJSON(url, function(data) {
-            if (data.code==1002) {
+        $.getJSON(url, function (data) {
+            if (data.code == 1002) {
                 $('#countUnread').text(data.data.allUncheckedNum);
                 var htmlTemp = "";
                 $('#notification_entrance').html('');
@@ -79,8 +76,8 @@ $(function () {
                     htmlTemp += ' <li>\n' +
                         '                                <a href="#" data-id="/notification/tonotification">\n' +
                         '                                    <div>\n' +
-                        '                                        <i class="fa fa-envelope fa-fw"></i> '+ key+'\n' +
-                        '                                        <span class="pull-right text-muted small">'+ data.data.article[key] +'</span>\n' +
+                        '                                        <i class="fa fa-envelope fa-fw"></i> ' + key + '\n' +
+                        '                                        <span class="pull-right text-muted small">' + data.data.article[key] + '</span>\n' +
                         '                                    </div>\n' +
                         '                                </a>\n' +
                         '                            </li>\n' +
@@ -194,8 +191,7 @@ $(function () {
             // Start validation; Prevent form submission if false
             return form.valid();
         },
-        onFinished: function (event, currentIndex)
-        {
+        onFinished: function (event, currentIndex) {
             getpn();
             var baseInfoVO = {};
             var form = $(this);
@@ -299,44 +295,44 @@ $(function () {
             }
         }
     }).validate({
-         errorPlacement: function (error, element) {
-             element.before(error);
-         },
-         rules: {
-             confirm: {
-                 equalTo: "#password"
-             }
-         }
+        errorPlacement: function (error, element) {
+            element.before(error);
+        },
+        rules: {
+            confirm: {
+                equalTo: "#password"
+            }
+        }
     });
 
 
     // 文件上传
     $("#uploadfile").fileinput({
-        language:'zh',
+        language: 'zh',
         theme: 'fa',
         uploadUrl: saveFilesUrl, // you must set a valid URL here else you will get an error
-        uploadAsync:false,
-        allowedFileExtensions: ['jpg', 'png', 'gif', 'docx', 'doc', 'xlsx','xls', 'pdf', 'pjeg', 'mp4','3gp','avi'],
+        uploadAsync: false,
+        allowedFileExtensions: ['jpg', 'png', 'gif', 'docx', 'doc', 'xlsx', 'xls', 'pdf', 'pjeg', 'mp4', '3gp', 'avi'],
         overwriteInitial: false,
         maxFileSize: 1000000,
         maxFilesNum: 10,
-        layoutTemplates:{
-            actionUpload:'',
-            actionDelete:''
+        layoutTemplates: {
+            actionUpload: '',
+            actionDelete: ''
         }
     });
     /* 清空文件后响应事件*/
-    $("#uploadfile").on("filecleared",function(event, data, msg){
+    $("#uploadfile").on("filecleared", function (event, data, msg) {
         uploadFileFlag = true;
         rtFileTempPath = null;
     });
     /*选择文件后处理事件*/
-    $("#uploadfile").on("filebatchselected", function(event, files) {
+    $("#uploadfile").on("filebatchselected", function (event, files) {
         uploadFileFlag = false;
 
     });
     //同步上传错误处理
-    $('#uploadfile').on('filebatchuploaderror', function(event, data, msg) {
+    $('#uploadfile').on('filebatchuploaderror', function (event, data, msg) {
         uploadFileFlag = false;
     });
     //同步上传返回结果处理
@@ -355,11 +351,12 @@ $(function () {
     function hasPersonInfo() {
         var flag = false;
         $.getJSON('user/haspersoninfo', function (data) {
-           flag = true;
+            flag = true;
         })
 
         return flag;
     }
+
     // 显示用户个人信息
     $('#person_info').click(function () {
         $.getJSON('/user/haspersoninfo', function (data) {
@@ -372,42 +369,42 @@ $(function () {
     });
 
     $("#person_info_form").validate({
-        rules : {
-            name : {
-                required:true,
-                minlength:2,
-                maxlength:64
+        rules: {
+            name: {
+                required: true,
+                minlength: 2,
+                maxlength: 64
             },
-            tel : {
-                required:true,
-                minlength:2,
-                maxlength:64
+            tel: {
+                required: true,
+                minlength: 2,
+                maxlength: 64
             },
-            qq : {
-                required:true,
-                digits:true
+            qq: {
+                required: true,
+                digits: true
             },
-            email : {
-                required:true,
+            email: {
+                required: true,
                 email: true
             },
-            id_num : {
-                required:true,
-                minlength:18,
-                maxlength:18
+            id_num: {
+                required: true,
+                minlength: 18,
+                maxlength: 18
             },
-            title : {
-                required:true,
-                minlength:2,
-                maxlength:64
+            title: {
+                required: true,
+                minlength: 2,
+                maxlength: 64
             },
-            address : {
-                required:true,
-                minlength:10,
-                maxlength:64
+            address: {
+                required: true,
+                minlength: 10,
+                maxlength: 64
             }
         },
-        submitHandler:function(form) {
+        submitHandler: function (form) {
             if (confirm("若以上信息确认无误，请确认提交!")) {
                 var formData = new FormData();
                 var personInfo = {};  // 空对象
@@ -423,15 +420,15 @@ $(function () {
                     url: savePersonInfoUrl,
                     type: 'POST',
                     data: formData,
-                    contentType : false,
-                    processData : false,
-                    cache : false,
+                    contentType: false,
+                    processData: false,
+                    cache: false,
                     success: function (data) {
                         if (data.code == 1002) {
                             $('#person_info_modal').modal('hide');
                             $('#person_info').click();
                         } else {
-                            $('#person_info_rt_msg').text("错误("+data.code+")："+data.msg);
+                            $('#person_info_rt_msg').text("错误(" + data.code + ")：" + data.msg);
                         }
                     }
                 });
@@ -440,89 +437,87 @@ $(function () {
     });
 
 
-
     /*配置向导*/
-    var enjoyhint_script_data =[
+    var enjoyhint_script_data = [
         {
-            selector:'#person_menu',
-            event:'click',
-            description:'请点击用户',
-            "skipButton" : {text: "退出"},
+            selector: '#person_menu',
+            event: 'click',
+            description: '请点击用户',
+            "skipButton": {text: "退出"},
         },
         {
-            selector:'#person_info',
-            event:'custom',
-            event_type:'next',
-            "nextButton": {text:"下一步"},
-            description:'请点击个人设置',
-            "skipButton" : {text: "退出"},
+            selector: '#person_info',
+            event: 'custom',
+            event_type: 'next',
+            "nextButton": {text: "下一步"},
+            description: '请点击个人设置',
+            "skipButton": {text: "退出"},
         },
         {
-            selector:'#menu_1',
-            event:'click',
-            "skipButton" : {text: "退出"},
-            description:'请点击项目储备!',
+            selector: '#menu_1',
+            event: 'click',
+            "skipButton": {text: "退出"},
+            description: '请点击项目储备!',
         },
         {
-            selector:'#menu_2',
-            event:'click',
-            "skipButton" : {text: "退出"},
-            description:'请点击基本信息维护!',
+            selector: '#menu_2',
+            event: 'click',
+            "skipButton": {text: "退出"},
+            description: '请点击基本信息维护!',
         },
         {
-            selector:'#base_info',
-            event:'custom',
-            event_type:'next',
-            "nextButton": {text:"下一步"},
-            "skipButton" : {text: "退出"},
-            description:'请点击项目概况!',
+            selector: '#base_info',
+            event: 'custom',
+            event_type: 'next',
+            "nextButton": {text: "下一步"},
+            "skipButton": {text: "退出"},
+            description: '请点击项目概况!',
         },
         {
-            selector:'#basic_info',
-            event:'custom',
-            event_type:'next',
-            "nextButton": {text:"下一步"},
-            "skipButton" : {text: "退出"},
-            description:'这是项目基本情况!',
+            selector: '#basic_info',
+            event: 'custom',
+            event_type: 'next',
+            "nextButton": {text: "下一步"},
+            "skipButton": {text: "退出"},
+            description: '这是项目基本情况!',
         },
         {
-            selector:'#basic_jd',
-            event:'custom',
-            event_type:'next',
-            "nextButton": {text:"下一步"},
-            "skipButton" : {text: "退出"},
-            description:'这是项目审批情况!',
+            selector: '#basic_jd',
+            event: 'custom',
+            event_type: 'next',
+            "nextButton": {text: "下一步"},
+            "skipButton": {text: "退出"},
+            description: '这是项目审批情况!',
         }]
-
-
 
 
     $('#help_page').click(function () {
         enjoyhint_instance = new EnjoyHint({
-            onEnd:function(){
+            onEnd: function () {
                 swal({
-                    title:"完成!",
-                    text:"恭喜你，完成基本配置!",
-                    type:"success"
+                    title: "完成!",
+                    text: "恭喜你，完成基本配置!",
+                    type: "success"
                 })
             }
         });
         enjoyhint_instance.setScript(enjoyhint_script_data);
         enjoyhint_instance.runScript();
     })
-/*    $('body').on('hidden.bs.modal', '.modal', function () {
-        $('#basic_info_form')[0].reset()
-    });*/
+    /*    $('body').on('hidden.bs.modal', '.modal', function () {
+            $('#basic_info_form')[0].reset()
+        });*/
     $('#basic_info_repeat1').click(function () {
         $('#base_info_modal').modal();
     })
 
 
     /*websocket*/
-    function reconnect(username){
+    function reconnect(username) {
         websocket = new WebSocket('ws://localhost:8080/websocket/' + username)
     }
-    function dows(username){
+
+    function dows(username) {
         var websocket = null;
         //ws心跳检查
         var heartCheck = {
@@ -534,13 +529,13 @@ $(function () {
             },
             start: function () {
                 this.timeoutObj = setTimeout(function () {
-                    websocket.send("HeartBeat:"+username, "beat");
+                    websocket.send("HeartBeat:" + username, "beat");
                 }, this.timeout)
             }
         }
-        if('WebSocket' in window) {
+        if ('WebSocket' in window) {
             websocket = new WebSocket('ws://localhost:8080/websocket/' + username)
-        }else {
+        } else {
             alert('该浏览器不支持ws！');
         }
         websocket.onopen = function (event) {
@@ -551,12 +546,12 @@ $(function () {
             console.log('连接关闭')
         }
         websocket.onmessage = function (event) {
-            console.log('收到消息：'+event.data);
-            if(event.data.startsWith('echo')){
+            console.log('收到消息：' + event.data);
+            if (event.data.startsWith('echo')) {
                 heartCheck.reset();
-            }else{
+            } else {
                 var wsMessage = eval("(" + event.data + ")");
-                showNotification(wsMessage.title,wsMessage.msg, wsMessage.url);
+                showNotification(wsMessage.title, wsMessage.msg, wsMessage.url);
             }
 
         }
@@ -567,6 +562,7 @@ $(function () {
             websocket.close();
         }
     }
+
     function showNotification(title, msg, url) {
         toastr.options = {
             "closeButton": true,
@@ -587,57 +583,94 @@ $(function () {
         toastr.options.onclick = function () {
             contentDiv.load(url);
         };
-        var $toast = toastr['info'](msg,title); // Wire up an event handler to a button in the toast, if it exists
+        var $toast = toastr['info'](msg, title); // Wire up an event handler to a button in the toast, if it exists
     }
 
 
     // 项目前期
-    $("#pre_progress_new").click(function(){
-        // $.ajax({
-        //     url: 'http://www.baidu.com',
-        //     type: 'POST',
-        //     data: {month:123},
-        //     contentType: 'application/json',
-        //     success: function (data) {
-        //                 if (data.success){
-        //                     // ...
-        //                 }
-        //             }
-        //      });
 
-        // 若有数据则
-        // $('#main-page').load('pre_progress_show.html');
-        // $('#small-chat').hide();
+    var countEntries = 0;
+    $('#preProgressEntry_body').on('click', '.date-input', function (e) {
+        var target = $(e.currentTarget);
+        target.datepicker({
+            language: "zh-CN",
+            format: 'yyyy-mm-dd',
+            minViewMode: 1,
+            keyboardNavigation: false,
+            forceParse: false,
+            forceParse: false,
+            autoclose: true,
+            todayHighlight: true
+        });
+        target.datepicker('show');
+    });
+    $('#preProgressEntry_body').on('changeDate', '.date-input', function (e) {
+        var target = $(e.currentTarget);
+        target.datepicker('hide');
+    });
+    $("#pre_progress_new").click(function () {
+        $.ajax({
+            url: 'preprogress/haspreprogress',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.code == 1003) {
+                    swal({
+                            title: "未查到前期进度",
+                            text: "请先填写项目前期进度信息!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "好的，去填写!",
+                            cancelButtonText: "取消"
+                        }, function (isConfirm) {
+                            $.ajax({
+                                url: 'preprogress/initthispage',
+                                type: 'GET',
+                                contentType: 'application/json',
+                                success: function (data) {
+                                    var preProgressEntryHtml = '';
+                                    data.data.map(function (item, index) {
+                                        preProgressEntryHtml += '      <tr id="entry_' + item.serialNumber + '">\n' +
+                                            '                                                <th id="serialNumber_' + item.serialNumber + '">' + item.serialNumber + '</th>\n' +
+                                            '                                                <th id="planProject_' + item.serialNumber + '">' + item.planProject + '</th>\n' +
+                                            '                                                <th><select id="approvalStatus_' + item.serialNumber + '"><option selected="selected" disabled="disabled"  style="display: none"></option><option data-value="编制">编制</option><option data-value="内部评审">内部评审</option><option data-value="政府评审">政府评审</option><option data-value="完成">完成</option></select></th>\n' +
+                                            '                                                <th><input id="compileUnit_' + item.serialNumber + '" class="form-control" type="text"/></th>\n' +
+                                            '                                                <th><input id="approvalUnit_' + item.serialNumber + '" class="form-control" type="text"/></th>\n' +
+                                            '                                                <th><div class="input-group date"><span class="input-group-addon"><i class="fa fa-calendar"></i></span><input  id="approvalDate_' + item.serialNumber + '" type="text"  class="form-control date-input" readonly></div></th>\n' +
+                                            '                                                <th><input id="referenceNumber_' + item.serialNumber + '" class="form-control" type="text"/></th>\n' +
+                                            '                                            </tr>';
+                                        countEntries += 1;
+                                        $('#preProgressEntry_body').html(preProgressEntryHtml);
 
-        // 若无数据
-        swal({
-                title: "未查到前期进度",
-                text: "请先填写项目前期进度信息!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "好的，去填写!",
-                cancelButtonText:"取消"
-            }, function (isConfirm){
-                if (isConfirm) {
-                    $('#pre_progress_modal').modal();
-                } else {
-                    $(location).attr("href","index.html")
-                };
+                                    })
+                                }
+                            });
+                            if (isConfirm) {
+                                $('#pre_progress_modal').modal();
+
+                            } else {
+                                $(location).attr("href", "index.html")
+                            }
+                            ;
+                        }
+                    );
+                } else if (data.code == 1002) {
+                    contentDiv.load('preprogress/topreprogress');
+                }
             }
-        );
-    })
+        })
+    });
     $('#pre_progress_table').DataTable({
         bFilter: false,    //去掉搜索框
-        bInfo:false,       //去掉显示信息
+        bInfo: false,       //去掉显示信息
         retrieve: true,    //多次加载不会显示缓存数据
         pageLength: 10,
         responsive: true,
-        ordering:false,
+        ordering: false,
         paging: false,
         dom: '<"html5buttons"B>lTfgitp',
-        buttons: [
-        ]
+        buttons: []
     });
     $('#pre_progress_close').click(function () {
         $('#pre_progress_modal').modal('hide');
@@ -650,14 +683,48 @@ $(function () {
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "已确认,提交!",
-            cancelButtonText:"取消",
+            cancelButtonText: "取消",
             closeOnConfirm: false
-        }, function (){
+        }, function () {
+            var preProgressEntries = [];
+            var serialNumberEntries = $('[id^="serialNumber_"]');
+            var planProjectEntries = $('[id^="planProject_"]');
+            var approvalStatusEntries = $('[id^="approvalStatus_"]');
+            var compileUnitEntries = $('[id^="compileUnit_"]');
+            var approvalUnitEntries = $('[id^="approvalUnit_"]');
+            var approvalDateEntries = $('[id^="approvalDate_"]');
+            var referenceNumberEntries = $('[id^="referenceNumber_"]');
+            for (var i = 0; i < countEntries; i++) {
+                var preProgressEntry = {};
+                preProgressEntry.serialNumber = serialNumberEntries.eq(i).text();
+                preProgressEntry.planProject = planProjectEntries.eq(i).text();
+                preProgressEntry.approvalStatus = approvalStatusEntries.eq(i).find('option').not(
+                    function () {
+                        return !this.selected;
+                    }).data('value');
+                preProgressEntry.compileUnit = compileUnitEntries.eq(i).val();
+                preProgressEntry.approvalUnit = approvalUnitEntries.eq(i).val();
+                preProgressEntry.approvalDate = approvalDateEntries.eq(i).val();
+                preProgressEntry.referenceNumber = referenceNumberEntries.eq(i).val();
+                preProgressEntries.push(preProgressEntry);
+            }
+            console.log(preProgressEntries)
+            $.ajax({
+                url: 'preprogress/save',
+                type: 'POST',
+                data: JSON.stringify(preProgressEntries),
+                contentType: 'application/json',
+                success: function (data) {
+
+                }
+            });
+
+
             swal({
-                    title:"成功!",
-                    text:"已经成功提交!",
-                    type:"success"
-                },function () {
+                    title: "成功!",
+                    text: "已经成功提交!",
+                    type: "success"
+                }, function () {
                     $("#pre_progress_modal").modal('hide');
                     $('#main-page').load('pre_progress_show.html');
                     $('#small-chat').hide();
@@ -666,18 +733,18 @@ $(function () {
         });
     })
     $("#pre_progress_file").fileinput({
-        language:'zh',
-        theme:'fa',
+        language: 'zh',
+        theme: 'fa',
         uploadUrl: 'http://www.baidu.com', // you must set a valid URL here else you will get an error
-        uploadExtraData:{"month1":123},
-        allowedFileExtensions: ['jpg', 'png', 'gif','pdf'],
+        uploadExtraData: {"month1": 123},
+        allowedFileExtensions: ['jpg', 'png', 'gif', 'pdf'],
         overwriteInitial: false,
-        layoutTemplates :{
+        layoutTemplates: {
             // actionDelete:'', //去除上传预览的缩略图中的删除图标
-            actionUpload:'',//去除上传预览缩略图中的上传图片；
+            actionUpload: '',//去除上传预览缩略图中的上传图片；
             // actionZoom:''   //去除上传预览缩略图中的查看详情预览的缩略图标。
         },
-        autoReplace:true,
+        autoReplace: true,
         maxFileSize: 1000,
         maxFilesNum: 10,
 
@@ -687,17 +754,6 @@ $(function () {
             return filename.replace('(', '_').replace(']', '_');
         }
     });
-
-    $('.input-group.date').datepicker({
-        language: 'cn',
-        minViewMode: 0,
-        keyboardNavigation: false,
-        forceParse: false,
-        forceParse: false,
-        autoclose: true,
-        todayHighlight: true
-    });
-
 
 
 });
