@@ -11,29 +11,26 @@ $(function () {
     var uploadFileFlag = true;
 
     var contentDiv = $('#main_content');
+
     $('#project_monthly_report').click(function () {
         contentDiv.load('reporter/projectmonthlyreport');
     })
     $('#project_months').click(function () {
         contentDiv.load('reporter/projectmonths');
     })
-/*    $('#person_info').click(function () {
-        contentDiv.load('user/personinfo');
-    })*/
     $('#account_config').click(function () {
         contentDiv.load('account/accountconfig');
     })
     $('#notification_entrance').on('click', 'a', function (e) {
         var target = e.currentTarget;
-       /* if ('monthly_report_notification' == target.dataset.id){
-            contentDiv.load('notification/tonotification');
-        }*/
         contentDiv.load('notification/tonotification');
     })
     $('#operation_log').click(function () {
         contentDiv.load('operationlog/tooperationlog');
     })
-
+    $('#pre_progress2').click(function () {
+        contentDiv.load('preprogress/topreprogress');
+    })
 
     getThisUser(getThisUserUrl);
     getThisProject(getThisProjectUrl);
@@ -592,6 +589,115 @@ $(function () {
         };
         var $toast = toastr['info'](msg,title); // Wire up an event handler to a button in the toast, if it exists
     }
+
+
+    // 项目前期
+    $("#pre_progress_new").click(function(){
+        // $.ajax({
+        //     url: 'http://www.baidu.com',
+        //     type: 'POST',
+        //     data: {month:123},
+        //     contentType: 'application/json',
+        //     success: function (data) {
+        //                 if (data.success){
+        //                     // ...
+        //                 }
+        //             }
+        //      });
+
+        // 若有数据则
+        // $('#main-page').load('pre_progress_show.html');
+        // $('#small-chat').hide();
+
+        // 若无数据
+        swal({
+                title: "未查到前期进度",
+                text: "请先填写项目前期进度信息!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "好的，去填写!",
+                cancelButtonText:"取消"
+            }, function (isConfirm){
+                if (isConfirm) {
+                    $('#pre_progress_modal').modal();
+                } else {
+                    $(location).attr("href","index.html")
+                };
+            }
+        );
+    })
+    $('#pre_progress_table').DataTable({
+        bFilter: false,    //去掉搜索框
+        bInfo:false,       //去掉显示信息
+        retrieve: true,    //多次加载不会显示缓存数据
+        pageLength: 10,
+        responsive: true,
+        ordering:false,
+        paging: false,
+        dom: '<"html5buttons"B>lTfgitp',
+        buttons: [
+        ]
+    });
+    $('#pre_progress_close').click(function () {
+        $('#pre_progress_modal').modal('hide');
+    })
+    $('#pre_progress_submit').click(function () {
+        swal({
+            title: "确认提交吗?",
+            text: "请检查数据是否填写正确后再提交!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "已确认,提交!",
+            cancelButtonText:"取消",
+            closeOnConfirm: false
+        }, function (){
+            swal({
+                    title:"成功!",
+                    text:"已经成功提交!",
+                    type:"success"
+                },function () {
+                    $("#pre_progress_modal").modal('hide');
+                    $('#main-page').load('pre_progress_show.html');
+                    $('#small-chat').hide();
+                }
+            )
+        });
+    })
+    $("#pre_progress_file").fileinput({
+        language:'zh',
+        theme:'fa',
+        uploadUrl: 'http://www.baidu.com', // you must set a valid URL here else you will get an error
+        uploadExtraData:{"month1":123},
+        allowedFileExtensions: ['jpg', 'png', 'gif','pdf'],
+        overwriteInitial: false,
+        layoutTemplates :{
+            // actionDelete:'', //去除上传预览的缩略图中的删除图标
+            actionUpload:'',//去除上传预览缩略图中的上传图片；
+            // actionZoom:''   //去除上传预览缩略图中的查看详情预览的缩略图标。
+        },
+        autoReplace:true,
+        maxFileSize: 1000,
+        maxFilesNum: 10,
+
+
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function (filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+    });
+
+    $('.input-group.date').datepicker({
+        language: 'cn',
+        minViewMode: 0,
+        keyboardNavigation: false,
+        forceParse: false,
+        forceParse: false,
+        autoclose: true,
+        todayHighlight: true
+    });
+
 
 
 });
