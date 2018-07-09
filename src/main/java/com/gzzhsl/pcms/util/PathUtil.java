@@ -34,6 +34,12 @@ public class PathUtil {
         String imagePath = "upload/baseinfo/"+ projectName + "/";
         return imagePath.replace("/", separator);
     }
+
+    // relative path  项目前期
+    public static String getPreProgressImagePath(String projectName){
+        String imagePath = "upload/preprogress/"+ projectName + "/";
+        return imagePath.replace("/", separator);
+    }
     public static void main(String[] args) {
         System.out.println(PathUtil.getFileBasePath(false));
     }

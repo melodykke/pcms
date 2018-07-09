@@ -1,8 +1,10 @@
 package com.gzzhsl.pcms.controller;
 
 import com.gzzhsl.pcms.entity.BaseInfoImg;
+import com.gzzhsl.pcms.entity.PreProgressImg;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
 import com.gzzhsl.pcms.service.BaseInfoImgService;
+import com.gzzhsl.pcms.service.PreProgressImgService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportImgService;
 import com.gzzhsl.pcms.util.PathUtil;
 import org.apache.commons.io.IOUtils;
@@ -28,7 +30,8 @@ public class DownLoadController {
     private ProjectMonthlyReportImgService projectMonthlyReportImgService;
     @Autowired
     private BaseInfoImgService baseInfoImgService;
-
+    @Autowired
+    private PreProgressImgService preProgressImgService;
 
     //fileId 就是 img_id
     @GetMapping("/monthlyreportfile")
@@ -44,7 +47,12 @@ public class DownLoadController {
         String downloadPath = PathUtil.getFileBasePath(false)+baseInfoImg.getImgAddr();
         this.downloadFileAction(downloadPath, request, response);
     }
-
+    @GetMapping("/preprogressfile")
+    public void preProgressFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
+        PreProgressImg preProgressImg = preProgressImgService.getByPreProgressImgId(fileId);
+        String downloadPath = PathUtil.getFileBasePath(false)+preProgressImg.getImgAddr();
+        this.downloadFileAction(downloadPath, request, response);
+    }
 
     private void downloadFileAction(String downloadPath, HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding(request.getCharacterEncoding());

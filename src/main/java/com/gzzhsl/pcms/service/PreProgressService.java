@@ -8,7 +8,7 @@ import com.gzzhsl.pcms.entity.PreProgressEntry;
 import java.util.List;
 
 public interface PreProgressService {
-    PreProgress save(List<PreProgressEntry> preProgressEntries);
+    PreProgress save(List<PreProgressEntry> preProgressEntries, String rtFileTempPath);
     List<PreProgressDefault> getAllPreProgressDefault();
     PreProgress findByBaseInfo(BaseInfo baseInfo);
 }

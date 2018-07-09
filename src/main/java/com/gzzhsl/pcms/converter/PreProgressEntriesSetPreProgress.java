@@ -11,6 +11,7 @@ import java.util.List;
 public class PreProgressEntriesSetPreProgress {
     public static PreProgressEntry set(PreProgress preProgress, PreProgressEntry preProgressEntry) {
         preProgressEntry.setPreProgress(preProgress);
+        preProgressEntry.setCreateTime(new Date());
         return preProgressEntry;
     }
 }

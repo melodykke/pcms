@@ -4,7 +4,6 @@ $(function () {
     getPreProgress(getpreprogressurl)
 
     function getPreProgress(url) {
-
         $.ajax({
             url: url,
             type: 'GET',
@@ -25,6 +24,26 @@ $(function () {
                     entry.push(item.referenceNumber);
                     entries.push(entry);
                 });
+
+                var preProgressImgVOs = data.data.preProgressImgVOs;
+                var file_display_html = '';
+                preProgressImgVOs.map(function (item, index) {
+                    file_display_html += '<div class="file-box">\n' +
+                        '                                                                                    <div class="file">\n' +
+                        '                                                                                        <span class="corner"></span>\n' +
+                        '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
+                        '                                                                                        </div>\n' +
+                        '                                                                                        <div class="file-name">\n' +
+                        '                                                                                            文件\n' +
+                        '                                                                                            <br/>\n' +
+                        '                                                                                            <small>'+ item.createTime +'</small>\n' +
+                        '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/preprogressfile?fileId='+item.imgAddr+'">下载</a>\n' +
+                        '                                                                                        </div>\n' +
+                        '                                                                                    </div>\n' +
+                        '                                                                                </div>'
+                });
+                $('#files_display_div').html("");
+                $('#files_display_div').html(file_display_html);
 
                 $('.dataTables-example').DataTable({
                     data: entries ,
@@ -59,8 +78,8 @@ $(function () {
     }
 
 
-
-    /* $("[name='my-checkbox']").bootstrapSwitch({
+    <!--审批modal-->
+   $("[name='my-checkbox']").bootstrapSwitch({
          onText : "拒绝",
          offText : "通过",
          onColor : "danger",
@@ -88,7 +107,7 @@ $(function () {
 
 
      <!--审批modal-->
-     $("[name='baseinfo-checkbox']").bootstrapSwitch({
+    /* $("[name='baseinfo-checkbox']").bootstrapSwitch({
          onText : "拒绝",
          offText : "通过",
          onColor : "danger",

@@ -304,8 +304,6 @@ $(function () {
             }
         }
     });
-
-
     // 文件上传
     $("#uploadfile").fileinput({
         language: 'zh',
@@ -676,85 +674,115 @@ $(function () {
         $('#pre_progress_modal').modal('hide');
     })
     $('#pre_progress_submit').click(function () {
-        swal({
-            title: "确认提交吗?",
-            text: "请检查数据是否填写正确后再提交!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "已确认,提交!",
-            cancelButtonText: "取消",
-            closeOnConfirm: false
-        }, function () {
-            var preProgressEntries = [];
-            var serialNumberEntries = $('[id^="serialNumber_"]');
-            var planProjectEntries = $('[id^="planProject_"]');
-            var approvalStatusEntries = $('[id^="approvalStatus_"]');
-            var compileUnitEntries = $('[id^="compileUnit_"]');
-            var approvalUnitEntries = $('[id^="approvalUnit_"]');
-            var approvalDateEntries = $('[id^="approvalDate_"]');
-            var referenceNumberEntries = $('[id^="referenceNumber_"]');
-            for (var i = 0; i < countEntries; i++) {
-                var preProgressEntry = {};
-                preProgressEntry.serialNumber = serialNumberEntries.eq(i).text();
-                preProgressEntry.planProject = planProjectEntries.eq(i).text();
-                preProgressEntry.approvalStatus = approvalStatusEntries.eq(i).find('option').not(
-                    function () {
-                        return !this.selected;
-                    }).data('value');
-                preProgressEntry.compileUnit = compileUnitEntries.eq(i).val();
-                preProgressEntry.approvalUnit = approvalUnitEntries.eq(i).val();
-                preProgressEntry.approvalDate = approvalDateEntries.eq(i).val();
-                preProgressEntry.referenceNumber = referenceNumberEntries.eq(i).val();
-                preProgressEntries.push(preProgressEntry);
-            }
-            console.log(preProgressEntries)
-            $.ajax({
-                url: 'preprogress/save',
-                type: 'POST',
-                data: JSON.stringify(preProgressEntries),
-                contentType: 'application/json',
-                success: function (data) {
-
-                }
-            });
-
-
+        if (uploadFileFlag==true) {
             swal({
-                    title: "成功!",
-                    text: "已经成功提交!",
-                    type: "success"
-                }, function () {
-                    $("#pre_progress_modal").modal('hide');
-                    $('#main-page').load('pre_progress_show.html');
-                    $('#small-chat').hide();
+                title: "确认提交吗?",
+                text: "请检查数据是否填写正确后再提交!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "已确认,提交!",
+                cancelButtonText: "取消",
+                closeOnConfirm: false
+            }, function () {
+                var preProgressEntries = [];
+                var serialNumberEntries = $('[id^="serialNumber_"]');
+                var planProjectEntries = $('[id^="planProject_"]');
+                var approvalStatusEntries = $('[id^="approvalStatus_"]');
+                var compileUnitEntries = $('[id^="compileUnit_"]');
+                var approvalUnitEntries = $('[id^="approvalUnit_"]');
+                var approvalDateEntries = $('[id^="approvalDate_"]');
+                var referenceNumberEntries = $('[id^="referenceNumber_"]');
+                for (var i = 0; i < countEntries; i++) {
+                    var preProgressEntry = {};
+                    preProgressEntry.serialNumber = parseInt(serialNumberEntries.eq(i).text());
+                    preProgressEntry.planProject = planProjectEntries.eq(i).text();
+                    preProgressEntry.approvalStatus = approvalStatusEntries.eq(i).find('option').not(
+                        function () {
+                            return !this.selected;
+                        }).data('value');
+                    preProgressEntry.compileUnit = compileUnitEntries.eq(i).val();
+                    preProgressEntry.approvalUnit = approvalUnitEntries.eq(i).val();
+                    preProgressEntry.approvalDate = approvalDateEntries.eq(i).val();
+                    preProgressEntry.referenceNumber = referenceNumberEntries.eq(i).val();
+                    preProgressEntries.push(preProgressEntry);
                 }
-            )
-        });
+                console.log(preProgressEntries)
+                $.ajax({
+                    url: 'preprogress/save',
+                    type: 'POST',
+                    data: JSON.stringify({preProgressEntries:JSON.stringify(preProgressEntries), rtFileTempPath:rtFileTempPath}),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data.code == 1002) {
+                            swal({
+                                title: "项目前期信息提交成功",
+                                text: "请至 项目前期 栏目中查看详情",
+                                type: "success",
+                            }, function () {
+                                $("#base_info_modal").modal('hide');
+                                $('#small-chat').hide();
+                                top.location.reload();
+                            })
+                        } else {
+                            console.log(data)
+                            swal("失败!", data.msg, "error");
+                        }
+                    }
+                });
+            });
+        } else {
+            swal({
+                title: "稍等...",
+                text: "存在未上传或正在传输的文件!",
+                type: "warning",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确认!",
+                closeOnConfirm: false
+            });
+        }
     })
     $("#pre_progress_file").fileinput({
         language: 'zh',
         theme: 'fa',
-        uploadUrl: 'http://www.baidu.com', // you must set a valid URL here else you will get an error
-        uploadExtraData: {"month1": 123},
-        allowedFileExtensions: ['jpg', 'png', 'gif', 'pdf'],
+        uploadUrl: 'preprogress/addfiles', // you must set a valid URL here else you will get an error
+        uploadAsync:false,
+      /*  uploadExtraData: {"month1": 123},*/
+        allowedFileExtensions: ['jpg', 'png', 'gif', 'docx', 'doc', 'xlsx', 'xls', 'pdf', 'pjeg', 'mp4', '3gp', 'avi'],
         overwriteInitial: false,
+        maxFileSize: 1000000,
+        maxFilesNum: 10,
         layoutTemplates: {
-            // actionDelete:'', //去除上传预览的缩略图中的删除图标
-            actionUpload: '',//去除上传预览缩略图中的上传图片；
-            // actionZoom:''   //去除上传预览缩略图中的查看详情预览的缩略图标。
+            actionUpload: '',
+            actionDelete: ''
         },
         autoReplace: true,
-        maxFileSize: 1000,
-        maxFilesNum: 10,
+    });
+    /* 清空文件后响应事件*/
+    $("#pre_progress_file").on("filecleared", function (event, data, msg) {
+        uploadFileFlag = true;
+        rtFileTempPath = null;
+    });
+    /*选择文件后处理事件*/
+    $("#pre_progress_file").on("filebatchselected", function (event, files) {
+        uploadFileFlag = false;
 
+    });
+    //同步上传错误处理
+    $('#pre_progress_file').on('filebatchuploaderror', function (event, data, msg) {
+        uploadFileFlag = false;
+    });
+    //同步上传返回结果处理
+    $("#pre_progress_file").on("filebatchuploadsuccess", function (event, data, previewId, index) {
+        if (data.response.code == 1002) {
+            uploadFileFlag = true;
+            rtFileTempPath = data.response.data;
 
-        //allowedFileTypes: ['image', 'video', 'flash'],
-        slugCallback: function (filename) {
-            return filename.replace('(', '_').replace(']', '_');
         }
     });
-
+    $('#pre_progress_file').click(function () {
+        $("#pre_progress_file").fileinput('refresh');
+    });
 
 });
 

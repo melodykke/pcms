@@ -1,5 +1,11 @@
 package com.gzzhsl.pcms.controller;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.gzzhsl.pcms.converter.PreProgress2VO;
+import com.gzzhsl.pcms.converter.PreProgressImg2VO;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.PreProgress;
 import com.gzzhsl.pcms.entity.PreProgressEntry;
@@ -7,7 +13,9 @@ import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.PreProgressService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
-import com.gzzhsl.pcms.util.ResultUtil;
+import com.gzzhsl.pcms.util.*;
+import com.gzzhsl.pcms.vo.PreProgressImgVO;
+import com.gzzhsl.pcms.vo.PreProgressVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -15,9 +23,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/preprogress")
@@ -49,8 +65,18 @@ public class PreProgressController {
     }
     @PostMapping("/save")
     @ResponseBody
-    public ResultVO save(@RequestBody @Valid List<PreProgressEntry> preProgressEntries, BindingResult bindingResult) {
-        preProgressService.save(preProgressEntries);
+    public ResultVO save(@RequestBody Map<String, Object> params) {
+        String preProgressEntriesStr = (String) params.get("preProgressEntries");
+        String rtFileTempPath = (String) params.get("rtFileTempPath");
+        ObjectMapper mapper = new ObjectMapper();
+        JavaType javaType = mapper.getTypeFactory().constructParametricType(ArrayList.class, PreProgressEntry.class);
+        List<PreProgressEntry> preProgressEntries = null;
+        try {
+            preProgressEntries = mapper.readValue(preProgressEntriesStr, javaType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        preProgressService.save(preProgressEntries, rtFileTempPath);
         return ResultUtil.success();
     }
 
@@ -66,6 +92,20 @@ public class PreProgressController {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = thisUser.getBaseInfo();
         PreProgress preProgress = preProgressService.findByBaseInfo(thisProject);
-        return ResultUtil.success(preProgress);
+        List<PreProgressImgVO> preProgressImgVOList = preProgress.getPreProgressImgs().stream().map(e -> PreProgressImg2VO.convert(e)).collect(Collectors.toList());
+        PreProgressVO preProgressVO = PreProgress2VO.convert(preProgress);
+        preProgressVO.setPreProgressImgVOs(preProgressImgVOList);
+        return ResultUtil.success(preProgressVO);
+    }
+
+    @PostMapping("/addfiles")
+    @ResponseBody
+    public ResultVO saveFiles(HttpServletRequest request) {
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("pre_progress_file");
+        if (files == null || files.size() < 1) {
+            return ResultUtil.failed();
+        }
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        return ResultUtil.success(FileUtil.saveFile(thisUser, files));
     }
 }
