@@ -228,14 +228,14 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         if (switchState == false) {
             projectMonthlyReportRt.setState((byte) 1); // 审批通过
             ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
-            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(),"月报", projectMonthlyReportId, new Date(),
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(),"月报", projectMonthlyReportId, new Date(),
                     "审批通过", (byte) 1);
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的月报"));
         } else {
             projectMonthlyReportRt.setState((byte) -1); // 审批未通过
             ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
-            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(), "月报",projectMonthlyReportId, new Date(),
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(), "月报",projectMonthlyReportId, new Date(),
                     "审批未通过：" + checkinfo, (byte) -1);
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的月报"));

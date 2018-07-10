@@ -145,14 +145,14 @@ public class PreProgressServiceImpl implements PreProgressService {
         if (switchState == false) {
             preProgressRt.setState((byte) 1); // 审批通过
             PreProgress preProgressRtRt = preProgressRepository.save(preProgressRt);
-            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(),"项目前期信息", preProgressId, new Date(),
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(),"项目前期信息", preProgressId, new Date(),
                     "审批通过", (byte) 1);
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的项目前期信息"));
         } else {
             preProgressRt.setState((byte) -1); // 审批未通过
             PreProgress preProgressRtRt = preProgressRepository.save(preProgressRt);
-            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getUserId(), "项目前期信息",preProgressId, new Date(),
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(), "项目前期信息",preProgressId, new Date(),
                     "审批未通过：" + checkinfo, (byte) -1);
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的项目前期信息"));

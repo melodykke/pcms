@@ -3,6 +3,7 @@ $(function () {
     var getThisUserUrl = "/user/getthisuser"; //拿到当前用户信息的url
     var getThisProjectUrl = "/user/getthisproject";
     var getoverallnotificationUrl = "/notification/getoverallnotification";
+    var getoverallfeedbackUrl = "/feedback/getoverallfeedback";
     var saveFilesUrl = '/baseinfo/addfiles';
     var saveBaseInfoUrl = '/baseinfo/savebaseinfo';
     // 提交个人信息
@@ -47,18 +48,23 @@ $(function () {
     })
     $('#account_config').click(function () {
         contentDiv.load('account/accountconfig');
-    })
+    });
+    $('#feedback_entrance').on('click', 'a', function (e) {
+        var target = e.currentTarget;
+        contentDiv.load('/feedback/tofeedback');
+    });
     $('#notification_entrance').on('click', 'a', function (e) {
         var target = e.currentTarget;
         contentDiv.load('notification/tonotification');
-    })
+    });
     $('#operation_log').click(function () {
         contentDiv.load('operationlog/tooperationlog');
-    })
+    });
 
     getThisUser(getThisUserUrl);
     getThisProject(getThisProjectUrl);
     getOverallNotification(getoverallnotificationUrl);
+    getOverallFeedback(getoverallfeedbackUrl);
     setInterval(function () {
         getOverallNotification(getoverallnotificationUrl);
     }, 30000);
@@ -108,12 +114,42 @@ $(function () {
                         '                            <li class="divider"></li>'
                 }
                 htmlTemp += ' <li>\n' +
-                                '  <a href="#" data-id="/notification/tonotification">\n' +
-                                    '  <i class="fa fa-envelope fa-fw"></i> 查看所有\n' +
-                                '  </a>\n' +
-                            '  </li>\n' +
-                            '  <li class="divider"></li>'
+                    '  <a href="#" data-id="/notification/tonotification">\n' +
+                    '  <i class="fa fa-envelope fa-fw"></i> 查看所有\n' +
+                    '  </a>\n' +
+                    '  </li>\n' +
+                    '  <li class="divider"></li>'
                 $('#notification_entrance').append(htmlTemp)
+            }
+        });
+    }
+
+    // 拿到所有审批的消息通知
+    function getOverallFeedback(url) {
+        $.getJSON(url, function (data) {
+            console.log(data)
+            if (data.code == 1002) {
+                $('#countFeedback').text(data.data.allUncheckedNum);
+                var htmlTemp = "";
+                $('#feedback_entrance').html('');
+                for (var key in data.data.article) {
+                    htmlTemp += ' <li>\n' +
+                        '                                <a href="#" data-id="/feedback/tofeedback">\n' +
+                        '                                    <div>\n' +
+                        '                                        <i class="fa fa-envelope fa-fw"></i> ' + key + '\n' +
+                        '                                        <span class="pull-right text-muted small">' + data.data.article[key] + '</span>\n' +
+                        '                                    </div>\n' +
+                        '                                </a>\n' +
+                        '                            </li>\n' +
+                        '                            <li class="divider"></li>'
+                }
+                htmlTemp += ' <li>\n' +
+                    '  <a href="#" data-id="/feedback/tofeedback">\n' +
+                    '  <i class="fa fa-envelope fa-fw"></i> 查看所有\n' +
+                    '  </a>\n' +
+                    '  </li>\n' +
+                    '  <li class="divider"></li>'
+                $('#feedback_entrance').append(htmlTemp)
             }
         });
     }
@@ -145,8 +181,9 @@ $(function () {
                     );
                 } else if (data.code == 1002) {
                     $('#main_loading').show();
-                    contentDiv.load('baseinfo/baseinfoshow',function () {
-                        $('#main_loading').hide();});
+                    contentDiv.load('baseinfo/baseinfoshow', function () {
+                        $('#main_loading').hide();
+                    });
                     $('#small-chat').hide();
                 } else if (data.code == 1310) {
 

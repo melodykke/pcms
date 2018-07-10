@@ -1,10 +1,8 @@
 package com.gzzhsl.pcms.service;
 
 import com.gzzhsl.pcms.entity.Feedback;
-import com.gzzhsl.pcms.repository.FeedbackRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,4 +10,10 @@ import java.util.List;
 public interface FeedbackService {
     Feedback save(Feedback feedback);
     List<Feedback> getFeedbackByUserId(String userId);
+/*    List<Feedback> getByTypeId(String typeId);*/
+    List<Feedback> getAll();
+    Feedback getById(String feedbackId);
+    List<Feedback> getByBaseInfoId(String baseInfoId);
+    List<Feedback> getAllUnchecked(String baseInfoId);
+    Page<Feedback> findAllByType(Pageable pageable, String baseInfoId, String type);
 }

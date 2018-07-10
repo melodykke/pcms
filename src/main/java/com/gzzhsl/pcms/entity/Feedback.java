@@ -19,8 +19,10 @@ public class Feedback {
     private String feedbackId;
     private String type;
     private String targetId;
-    private String userId;
     private String msg;
+    private Boolean checked;
     private Date createTime;
+    private String baseInfoId;
+    private String checker;
     private Byte state;
 }
