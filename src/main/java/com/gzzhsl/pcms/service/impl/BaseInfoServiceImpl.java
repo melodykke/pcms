@@ -87,7 +87,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     @Override
     public BaseInfo save(BaseInfoVO baseInfoVO) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         String origId = null;
         if (thisProject != null && thisProject.getState().equals((byte) 1)) {
             log.error("【基本信息错误】 该账户已经存在配置过的项目基本信息，无需重新配置 ");
@@ -138,45 +138,45 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         notification.setCreateTime(new Date());
         notification.setSubmitter(thisUser.getUsername());
         notification.setType(NotificationTypeEnum.PROJECT_BASIC_INFO.getMsg());
+        notification.setBaseInfoId(baseInfoRt.getBaseInfoId());
         notification.setTypeId(baseInfoRt.getBaseInfoId()); // 这里是项目基础信息ID
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
         notification.setYearmonth(formatter.format(baseInfoRt.getUpdateTime()));
         notification.setChecked(false);
-        notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
         notification.setUrl("/baseinfo/getinbaseinfo");
         notificationRepository.save(notification);
         operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
                 baseInfoRt.getUpdateTime(),
                 "提交了ID:"+ baseInfoRt.getBaseInfoId() +"的水库项目基本信息"));
-       /* thisUser.setBaseInfo(baseInfoRt);
-        userService.save(thisUser);*/
-        userService.updateUserBaseInfo(baseInfoRt, thisUser.getUserId());
-        // 判断本账号是否是ckecker 如果是并且其有子账号，则将该水库信息保存一份至子账号
+        // 基础信息存库后，将基础信息添加到userinfo
+        List<UserInfo> userInfoList = new ArrayList<>();
         List<SysRole> roles = thisUser.getSysRoleList();
-        for (SysRole role : roles) {
-            if ("checker".equals(role.getRole())) {
-                if (thisUser.getChildren() != null && thisUser.getChildren().size() > 0) {
-                    for (UserInfo child : thisUser.getChildren()) {
-                        /*child.setBaseInfo(baseInfoRt);
-                        userService.save(child);*/
-                        userService.updateUserBaseInfo(baseInfoRt, child.getUserId());
+        if (thisUser.getChildren() != null && thisUser.getChildren().size()==0 && roles.size() == 1 && "reporter".equals(roles.get(0).getRole())) { // 如果是reporter账号...
+            if (thisUser.getParent() != null && thisUser.getParent().getUserId() != "" && thisUser.getParent().getUserId() != null ) {
+                List<UserInfo> children = thisUser.getParent().getChildren();
+                children.add(thisUser.getParent()); // 儿子们加粑粑
+                for (UserInfo child : children) {
+                    child.setBaseInfo(baseInfoRt);
+                }
+                baseInfoRt.setUserInfoList(children);
+            }
+        } else {
+            for (SysRole role : roles) {
+                if ("checker".equals(role.getRole())) { // 如果是checker账号...
+                    if (thisUser.getChildren() != null && thisUser.getChildren().size() > 0) {
+                        List<UserInfo> children = thisUser.getChildren();
+                        children.add(thisUser); // 儿子们加粑粑
+                        for (UserInfo child : children) {
+                            child.setBaseInfo(baseInfoRt);
+                        }
+                        baseInfoRt.setUserInfoList(children);
                     }
                 }
             }
         }
-        // 创建通知
-
+        BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
         // 创建webSocket消息
         WebSocketUtil.sendWSMsg(thisUser, webSocket, "项目基础信息", "新的项目基础信息消息");
-       /* if (UserUtil.isChecker(thisUser)) {
-            webSocket.sendMsg("项目基础信息", "有新的项目基础信息待审批", "/tonotification/notification", thisUser);
-        } else if (UserUtil.isReporter(thisUser)){
-            if (thisUser.getParent() == null) {
-                log.error("【基本信息错误】 项目基础信息提交错误，提交人员无上级审批单位");
-                throw new SysException(SysEnum.BASE_INFO_SUBMIT_NO_PARENT_ERROR);
-            }
-            webSocket.sendMsg("项目基础信息", "有新的项目基础信息待审批", "/tonotification/notification", thisUser.getParent());
-        }*/
         return baseInfoRt;
     }
 
@@ -204,6 +204,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的项目基本信息"));
         }
+
         return feedbackRt;
     }
 }

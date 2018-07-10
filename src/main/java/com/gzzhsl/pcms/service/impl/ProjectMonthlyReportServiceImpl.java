@@ -11,6 +11,7 @@ import com.gzzhsl.pcms.repository.ProjectMonthlyReportRepository;
 import com.gzzhsl.pcms.service.FeedbackService;
 import com.gzzhsl.pcms.service.OperationLogService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
+import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
@@ -50,12 +51,14 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     @Autowired
     private FeedbackService feedbackService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private WebSocket webSocket;
     @Override
     @Transactional
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         // 如果用户对应的Project不存在，则报错
         if (thisProject == null) {
             log.error("【月报错误】 用户对应Project为空，需首先绑定对应的水库工程");

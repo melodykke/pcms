@@ -13,7 +13,34 @@ $(function () {
     var contentDiv = $('#main_content');
 
     $('#project_monthly_report').click(function () {
-        contentDiv.load('reporter/projectmonthlyreport');
+        $.ajax({
+            url: 'baseinfo/hasbaseinfo',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.code == 1003) {
+                    swal({
+                        title: "出错",
+                        text: "请优先配置水库基本信息!",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确认!",
+                        closeOnConfirm: false
+                    });
+                } else if (data.code == 1310) {
+                    swal({
+                        title: "出错",
+                        text: "水库基本信息审批通过后再重试!",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确认!",
+                        closeOnConfirm: false
+                    });
+                } else if (data.code == 1002) {
+                    contentDiv.load('reporter/projectmonthlyreport');
+                }
+            }
+        });
     })
     $('#project_months').click(function () {
         contentDiv.load('reporter/projectmonths');
@@ -27,9 +54,6 @@ $(function () {
     })
     $('#operation_log').click(function () {
         contentDiv.load('operationlog/tooperationlog');
-    })
-    $('#pre_progress2').click(function () {
-        contentDiv.load('preprogress/topreprogress');
     })
 
     getThisUser(getThisUserUrl);
@@ -83,6 +107,12 @@ $(function () {
                         '                            </li>\n' +
                         '                            <li class="divider"></li>'
                 }
+                htmlTemp += ' <li>\n' +
+                                '  <a href="#" data-id="/notification/tonotification">\n' +
+                                    '  <i class="fa fa-envelope fa-fw"></i> 查看所有\n' +
+                                '  </a>\n' +
+                            '  </li>\n' +
+                            '  <li class="divider"></li>'
                 $('#notification_entrance').append(htmlTemp)
             }
         });
@@ -109,12 +139,14 @@ $(function () {
                             if (isConfirm) {
                                 $('#base_info_modal').modal();
                             } else {
-                                $(location).attr("href", "index.html");
+
                             }
                         }
                     );
                 } else if (data.code == 1002) {
-                    contentDiv.load('baseinfo/baseinfoshow');
+                    $('#main_loading').show();
+                    contentDiv.load('baseinfo/baseinfoshow',function () {
+                        $('#main_loading').hide();});
                     $('#small-chat').hide();
                 } else if (data.code == 1310) {
 
@@ -512,7 +544,7 @@ $(function () {
 
     /*websocket*/
     function reconnect(username) {
-        websocket = new WebSocket('ws://localhost:8080/websocket/' + username)
+        websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
     }
 
     function dows(username) {
@@ -532,7 +564,7 @@ $(function () {
             }
         }
         if ('WebSocket' in window) {
-            websocket = new WebSocket('ws://localhost:8080/websocket/' + username)
+            websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
         } else {
             alert('该浏览器不支持ws！');
         }
@@ -647,13 +679,21 @@ $(function () {
                                 $('#pre_progress_modal').modal();
 
                             } else {
-                                $(location).attr("href", "index.html")
+
                             }
-                            ;
                         }
                     );
                 } else if (data.code == 1002) {
                     contentDiv.load('preprogress/topreprogress');
+                } else if (data.code == 2203) {
+                    swal({
+                        title: "出错",
+                        text: "请优先配置水库基本信息!",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确认!",
+                        closeOnConfirm: false
+                    });
                 }
             }
         })
@@ -673,7 +713,7 @@ $(function () {
         $('#pre_progress_modal').modal('hide');
     })
     $('#pre_progress_submit').click(function () {
-        if (uploadFileFlag==true) {
+        if (uploadFileFlag == true) {
             swal({
                 title: "确认提交吗?",
                 text: "请检查数据是否填写正确后再提交!",
@@ -711,7 +751,10 @@ $(function () {
                 $.ajax({
                     url: 'preprogress/save',
                     type: 'POST',
-                    data: JSON.stringify({preProgressEntries:JSON.stringify(preProgressEntries), rtFileTempPath:rtFileTempPath}),
+                    data: JSON.stringify({
+                        preProgressEntries: JSON.stringify(preProgressEntries),
+                        rtFileTempPath: rtFileTempPath
+                    }),
                     contentType: 'application/json',
                     success: function (data) {
                         if (data.code == 1002) {
@@ -746,8 +789,8 @@ $(function () {
         language: 'zh',
         theme: 'fa',
         uploadUrl: 'preprogress/addfiles', // you must set a valid URL here else you will get an error
-        uploadAsync:false,
-      /*  uploadExtraData: {"month1": 123},*/
+        uploadAsync: false,
+        /*  uploadExtraData: {"month1": 123},*/
         allowedFileExtensions: ['jpg', 'png', 'gif', 'docx', 'doc', 'xlsx', 'xls', 'pdf', 'pjeg', 'mp4', '3gp', 'avi'],
         overwriteInitial: false,
         maxFileSize: 1000000,

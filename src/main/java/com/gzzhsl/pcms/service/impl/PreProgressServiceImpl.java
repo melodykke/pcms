@@ -109,7 +109,7 @@ public class PreProgressServiceImpl implements PreProgressService {
         notification.setYearmonth(formatter.format(preProgressRtRt.getUpdateTime()));
         notification.setChecked(false);
         notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
-        notification.setUrl("/preprogress/getpreprogress");
+        notification.setUrl("/preprogress/topreprogress");
         notificationService.save(notification);
         operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
                 preProgressRtRt.getUpdateTime(),

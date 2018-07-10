@@ -6,6 +6,8 @@ import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.BaseInfoService;
+import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ImageUtil;
 import com.gzzhsl.pcms.util.PathUtil;
@@ -38,17 +40,19 @@ import java.util.Map;
 public class BaseInfoController {
     @Autowired
     private BaseInfoService baseInfoService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/baseinfoshow")
     public String baseInfoShow() {
         return "/base_info_show";
     }
 
-
     @GetMapping("/hasbaseinfo")
     @ResponseBody
     public ResultVO hasBaseInfo() {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+
         if (thisUser.getBaseInfo() == null) {
             return ResultUtil.failed();
         } else if (thisUser.getBaseInfo().getState().equals((byte) -1)) {
@@ -114,6 +118,8 @@ public class BaseInfoController {
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
         BaseInfo baseInfoRt = baseInfoService.save(baseInfoVO);
+   /*     // 基础信息存库后，将基础信息添加到userinfo
+        userService.updateUserBaseInfo(baseInfoRt, thisUser.getUserId());*/
         return ResultUtil.success();
     }
 
