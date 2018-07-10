@@ -544,7 +544,7 @@ $(function () {
 
     /*websocket*/
     function reconnect(username) {
-        websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
+        websocket = new WebSocket('ws://localhost:8080/websocket/' + username)
     }
 
     function dows(username) {
@@ -564,7 +564,7 @@ $(function () {
             }
         }
         if ('WebSocket' in window) {
-            websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
+            websocket = new WebSocket('ws://localhost:8080/websocket/' + username)
         } else {
             alert('该浏览器不支持ws！');
         }

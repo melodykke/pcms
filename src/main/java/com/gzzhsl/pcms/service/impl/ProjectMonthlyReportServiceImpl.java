@@ -106,6 +106,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                     projectMonthlyReportRt.getCreateTime(),
                     "提交了没有附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
                             getProjectMonthlyReportId()));
+            // 创建webSocket消息
+            WebSocketUtil.sendWSMsg(thisUser, webSocket, "月报", "新的月报消息");
             return projectMonthlyReportRt;
         } else {
             // 上传图片的情况，考虑转存
