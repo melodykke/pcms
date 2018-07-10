@@ -142,6 +142,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
         notification.setYearmonth(formatter.format(baseInfoRt.getUpdateTime()));
         notification.setChecked(false);
+        notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
         notification.setUrl("/baseinfo/getinbaseinfo");
         notificationRepository.save(notification);
         operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),

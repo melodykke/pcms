@@ -127,7 +127,7 @@ public class BaseInfoController {
         String baseInfoId = (String) params.get("baseInfoId");
         if (baseInfoId == null || baseInfoId == "") {
             log.error("【基础信息错误】审批基础信息错误 基础信息ID baseInfoId为空");
-            throw new SysException(SysEnum.BASE_INFO_APPROVEAL_ERROR);
+            throw new SysException(SysEnum.BASE_INFO_APPROVAL_ERROR);
         }
         BaseInfoVO baseInfoVORt = baseInfoService.getBaseInfoById(baseInfoId);
         if (baseInfoVORt == null) {

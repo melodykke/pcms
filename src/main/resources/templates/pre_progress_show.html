@@ -38,24 +38,26 @@
                             <div class="col-lg-2">
                                 <i class=" fa fa-calendar fa-lg">&nbsp;&nbsp;<span>前期进度</span></i>
                             </div>
-                            <div class="col-lg-offset-8 col-lg-2">
-                                <a id="" class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#pre_progress_approve">
-                                    审批
-                                </a>
-                            </div>
+                            <shiro:hasRole name="checker">
+                                <div class="col-lg-offset-8 col-lg-2" id="check_btn">
+                                    <a class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#pre_progress_approve">
+                                        审批
+                                    </a>
+                                </div>
+                            </shiro:hasRole>
                         </div>
                         <div class="ibox-content">
                         <div class="row">
                             <div class="col-lg-offset-1 col-lg-6">
                                 <div class="m-b-md">
-                                    <h2>思南县沙坝水库工程前期进度</h2>
+                                    <h2 id="plantName">口口口口口口</h2>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <dl class="dl-horizontal">
                                     <dt>状态:</dt>
-                                    <dd><span class="label label-info">待审核</span>
-                                        &nbsp;&nbsp;<a id="pre_progress_repeat" data-toggle="tooltip" data-placement="bottom" title="点击后重新填报！"><i class="fa fa-repeat fa-lg"></i></a>
+                                    <dd>
+                                        <small><span class="label label-info" id="state">口口口</span> <div id="repost_div"></div></small>
                                     </dd>
                                 </dl>
                             </div>
@@ -63,20 +65,14 @@
                         <div class="row">
                             <div class="col-lg-5">
                                 <dl class="dl-horizontal">
-                                    <dt>项目负责人:</dt> <dd>小刘</dd>
-                                    <dt>上报人:</dt> <dd>  老王</dd>
-                                    <dt>上报人电话:</dt> <dd> 18586878889 </dd>
-                                    <dt>审核人:</dt> <dd><a href="#" class="text-navy">老张</a> </dd>
+                                    <dt>上报人:</dt> <dd id="owner"></dd>
+                                    <dt>上报人电话:</dt> <dd> 口口口 </dd>
                                 </dl>
                             </div>
                             <div class="col-lg-7" id="cluster_info">
                                 <dl class="dl-horizontal" >
-                                    <dt>最近修改时间:</dt> <dd>2018-8-8 12:15:57</dd>
-                                    <dt>填报时间:</dt> <dd> 	2018-7-7 23:36:57 </dd>
-                                    <dt>xxxxxxx:</dt>
-                                    <dd class="project-people">
-                                        <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
-                                    </dd>
+                                    <dt>最近修改时间:</dt> <dd  id="updateTime">口口口/口口口/口口口</dd>
+                                    <dt>填报时间:</dt> <dd id="createTime"> 口口口口/口口/口口</dd>
                                 </dl>
                             </div>
                         </div>
@@ -86,9 +82,9 @@
                                     <dt>提交进度:</dt>
                                     <dd>
                                         <div class="progress progress-striped active m-b-sm">
-                                            <div style="width: 50%;" class="progress-bar"></div>
+                                            <div class="progress-bar" id="state_bar"></div>
                                         </div>
-                                        <small>提交情况： <strong>等待领导审批</strong> </small>
+                                        <small>项目提交情况： <strong id="state_msg"></strong> </small>
                                     </dd>
                                 </dl>
                             </div>
@@ -156,14 +152,14 @@
 <!--审批modal-->
 <div class="modal inmodal" id="pre_progress_approve" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content animated bounceInRight">
+        <div class="modal-content animated bounceInRight" id="pre_progress_check_div">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
                 </button>
                 <h1 class="modal-title">项 目 前 期 审 批</h1>
                 <br>
-                <input type="checkbox" name="my-checkbox" id="my-checkbox">
+                <input type="checkbox" name="preprogress-checkbox" id="preprogress-checkbox">
             </div>
             <div class="modal-body">
                 <div class="form-group animated fadeIn" id="progress_approve_input" style="display:none;">
@@ -174,7 +170,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="submit">提交</button>
+                <button type="button" class="btn btn-primary" id="pre_progress_approve_submit">提交</button>
             </div>
         </div>
     </div>

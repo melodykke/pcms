@@ -14,10 +14,10 @@ import java.util.List;
 public class PreProgressVO {
     private String rtFileTempPath;
     private String PreProgressId;
+    private String plantName;
     private List<PreProgressEntry> preProgressEntries;
     private Byte state;
     private Integer repeatTimes;
-/*    private BaseInfo baseInfo;*/
     private List<PreProgressImgVO> preProgressImgVOs;
     private String owner; // 上报人
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")

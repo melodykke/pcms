@@ -31,14 +31,19 @@ public enum SysEnum {
     BASE_INFO_NO_RECORD_ERROR(1304, "请优先配置项目基本信息"),
     BASE_INFO_VO_PARAMS_ERROR(1305, "项目基本信息VO参数错误"),
     BASE_INFO_DUPLICATED(1306, "该账户已经存在配置过的项目基本信息，无需重新配置"),
-    BASE_INFO_APPROVEAL_ERROR(1401, "审批基础信息错误，ID为空"),
+    BASE_INFO_APPROVAL_ERROR(1401, "审批基础信息错误，ID为空"),
     BASE_INFO_NO_CORRESPOND_RECORD_ERROR(1402, "审批基础信息错误，审批查询的基础信息所对应ID无记录"),
     BASE_INFO_CHECKED_OTHERS_ERROR(1403, "不能审批不属于本用户所属工程的项目基本信息"),
     BASE_INFO_CHECK_CHECKED_ERROR(1404, "当前项目基础信息已经审批过，不能重复审批"),
     BASE_INFO_SUBMIT_NO_PARENT_ERROR(1405, "项目基础信息提交错误，无审批单位"),
     BASE_INFO_APPROVAL_PASSED_ERROR(1406, "不能审批已通过项目"),
 
-
+    PRE_PROGRESS_APPROVAL_ERROR(1500, "审批项目前期错误，ID为空"),
+    PRE_PROGRESS_CHECKED_OTHERS_ERROR(1502, "不能审批不属于本用户所属工程的项目前期信息"),
+    PRE_PROGRESS_CHECK_CHECKED_ERROR(1503, "当前项目前期信息已经审批过，不能重复审批"),
+    PRE_PROGRESS_NO_CORRESPOND_RECORD_ERROR(1504, "审批基础前期错误，审批查询的基础前期所对应ID无记录"),
+    PRE_PROGRESS_APPROVAL_PASSED_ERROR(1505, "不能审批已通过项目"),
+    PRE_PROGRESS_INFO_ERROR(1506, "提交的项目前期信息出错，若一直无法正常提交，请联系系统管理员"),
 
     ACCOUNT_PASSWORD_INCONSISTENCY(2201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(2202, "已存在相同账号名的用户"),

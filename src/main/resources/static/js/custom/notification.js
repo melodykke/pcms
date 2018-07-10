@@ -145,6 +145,10 @@ $(function () {
             href = target.dataset.href;
             contentDiv.load(href)
         }
+        if (target.dataset.name == "项目前期信息") {
+            href = target.dataset.href;
+            contentDiv.load(href)
+        }
         $.getJSON(url, function (data) {});
        /* 如果还有其他的往这里加*/
     })

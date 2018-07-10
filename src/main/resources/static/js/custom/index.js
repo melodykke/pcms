@@ -586,7 +586,6 @@ $(function () {
 
 
     // 项目前期
-
     var countEntries = 0;
     $('#preProgressEntry_body').on('click', '.date-input', function (e) {
         var target = $(e.currentTarget);
@@ -693,10 +692,11 @@ $(function () {
                 var approvalUnitEntries = $('[id^="approvalUnit_"]');
                 var approvalDateEntries = $('[id^="approvalDate_"]');
                 var referenceNumberEntries = $('[id^="referenceNumber_"]');
-                for (var i = 0; i < countEntries; i++) {
+                for (var i = 0; i < serialNumberEntries.length; i++) {
                     var preProgressEntry = {};
                     preProgressEntry.serialNumber = parseInt(serialNumberEntries.eq(i).text());
                     preProgressEntry.planProject = planProjectEntries.eq(i).text();
+                    console.log(planProjectEntries.eq(i))
                     preProgressEntry.approvalStatus = approvalStatusEntries.eq(i).find('option').not(
                         function () {
                             return !this.selected;
@@ -707,7 +707,7 @@ $(function () {
                     preProgressEntry.referenceNumber = referenceNumberEntries.eq(i).val();
                     preProgressEntries.push(preProgressEntry);
                 }
-                console.log(preProgressEntries)
+                console.log(preProgressEntries);
                 $.ajax({
                     url: 'preprogress/save',
                     type: 'POST',

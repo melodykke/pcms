@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface PreProgressRepository extends JpaRepository<PreProgress, String>, JpaSpecificationExecutor<PreProgress> {
     PreProgress findByBaseInfo(BaseInfo baseInfo);
+    PreProgress findByPreProgressId(String preProgressId);
 }

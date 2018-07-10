@@ -20,7 +20,7 @@ public class PreProgress {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String PreProgressId;
+    private String preProgressId;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "preProgress")
     private List<PreProgressEntry> preProgressEntries;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "preProgress")
