@@ -142,60 +142,9 @@ $(function () {
     });
 
 
-    $('#mr_table').click(function () {
-        var  labelItemListDataTable = $('.dataTables-example').dataTable();
-        labelItemListDataTable.fnClearTable();
-        labelItemListDataTable.fnDestroy();
-        $.ajax({
-            url: 'monthlyreport/getmonthlyreportexcelbyprojectid',
-            type: 'GET',
-            data: {projectMonthlyReportId: $('#plantName').attr('projectMonthlyReportId')
-                ,currentDate: $('#year_tag').text()+'-0'+ (parseInt($('#month').text()))},
-            contentType: 'application/json',
-            beforeSend:function () {
-                $('#loading').show();
-            },
-            success: function (data) {
-                console.log(data)
-                if (data.code == 1002){
-                    $('#data_table_modal').modal();
-                    $('.dataTables-example').DataTable({
-                        bFilter: false,    //去掉搜索框
-                        retrieve: true,
-                        destroy:true,
-                        bInfo:false,       //去掉显示信息
-                        data:data.data,
-                        paging: false,
-                        ordering:false,
-                        // autoWidth:auto,
-                        lengthChange: false,
-                        responsive: true,
-                        dom: '<"html5buttons"B>lTfgitp',
-                        buttons: [
-                            { extend: 'copy'},
-                            {extend: 'excel', title: 'ExampleFile'},
-                            {extend: 'print',
-                                customize: function (win){
-                                    $(win.document.body).addClass('white-bg');
-                                    $(win.document.body).css('font-size', '10px');
+/*    $('#mr_table').click(function () {
 
-                                    $(win.document.body).find('table')
-                                        .addClass('compact')
-                                        .css('font-size', 'inherit');
-                                }
-                            }
-                        ]
-                    });
-                }
-            },
-            complete: function () {
-                $("#loading").hide();
-            },
-            error: function (data) {
-                console.info("error: " + data.msg);
-            }
-        })
-    })
+    })*/
 
    /* $('#project_monthly_report_content_div').mouseenter(function () {
         window.onmousewheel=function(){
@@ -230,6 +179,10 @@ $(function () {
             $('#check_btn').html('<span class="label label-primary"><i class="fa fa-check"></i> 已审批通过</span>');
         } else if (data.data.state == -1) {
             $('#check_btn').html('<span class="label label-primary"><i class="fa fa-check"></i> 已拒绝</span>');
+        } else {
+            $('#check_btn').html('<a id="" class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#approve_modal">\n' +
+                '                审批\n' +
+                '                </a>');
         }
         $('#submitter').text(data.data.submitter);
         $('#submitTime').text(data.data.createTime);
@@ -241,6 +194,67 @@ $(function () {
         } else if (data.data.state == -1) {
             $('#state_msg').text("未通过")
         }
+        if (data.data.state == -1) {
+            $('#tabbtn').append('');
+        } else {
+            $('#tabbtn').append('<li class=""><a data-toggle="modal" id="mr_table"> <i class="fa fa-pie-chart"></i>月报表</a></li>')
+            $('#tabbtn').on('click', '#mr_table', function (e) {
+                var  labelItemListDataTable = $('.dataTables-example').dataTable();
+                labelItemListDataTable.fnClearTable();
+                labelItemListDataTable.fnDestroy();
+                $.ajax({
+                    url: 'monthlyreport/getmonthlyreportexcelbyprojectid',
+                    type: 'GET',
+                    data: {projectMonthlyReportId: $('#plantName').attr('projectMonthlyReportId')
+                        ,currentDate: $('#year_tag').text()+'-0'+ (parseInt($('#month').text()))},
+                    contentType: 'application/json',
+                    beforeSend:function () {
+                        $('#loading').show();
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        if (data.code == 1002){
+                            $('#data_table_modal').modal();
+                            $('.dataTables-example').DataTable({
+                                bFilter: false,    //去掉搜索框
+                                retrieve: true,
+                                destroy:true,
+                                bInfo:false,       //去掉显示信息
+                                data:data.data,
+                                paging: false,
+                                ordering:false,
+                                // autoWidth:auto,
+                                lengthChange: false,
+                                responsive: true,
+                                dom: '<"html5buttons"B>lTfgitp',
+                                buttons: [
+                                    { extend: 'copy'},
+                                    {extend: 'excel', title: 'ExampleFile'},
+                                    {extend: 'print',
+                                        customize: function (win){
+                                            $(win.document.body).addClass('white-bg');
+                                            $(win.document.body).css('font-size', '10px');
+
+                                            $(win.document.body).find('table')
+                                                .addClass('compact')
+                                                .css('font-size', 'inherit');
+                                        }
+                                    }
+                                ]
+                            });
+                        }
+                    },
+                    complete: function () {
+                        $("#loading").hide();
+                    },
+                    error: function (data) {
+                        console.info("error: " + data.msg);
+                    }
+                })
+                $('#data_table_modal').modal('show');
+            })
+        }
+
         $('#civilEngineering').text(data.data.civilEngineering);
         $('#electromechanicalEquipment').text(data.data.electromechanicalEquipment);
         $('#metalMechanism').text(data.data.metalMechanism);
