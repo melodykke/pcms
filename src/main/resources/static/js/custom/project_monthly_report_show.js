@@ -178,7 +178,7 @@ $(function () {
         if (data.data.state == 1) {
             $('#check_btn').html('<span class="label label-primary"><i class="fa fa-check"></i> 已审批通过</span>');
         } else if (data.data.state == -1) {
-            $('#check_btn').html('<span class="label label-primary"><i class="fa fa-check"></i> 已拒绝</span>');
+            $('#check_btn').html('<span class="label label-danger"><i class="fa fa-times"></i> 已拒绝</span>');
         } else {
             $('#check_btn').html('<a id="" class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#approve_modal">\n' +
                 '                审批\n' +
@@ -212,7 +212,6 @@ $(function () {
                         $('#loading').show();
                     },
                     success: function (data) {
-                        console.log(data)
                         if (data.code == 1002){
                             $('#data_table_modal').modal();
                             $('.dataTables-example').DataTable({
@@ -250,8 +249,11 @@ $(function () {
                     error: function (data) {
                         console.info("error: " + data.msg);
                     }
-                })
+                });
                 $('#data_table_modal').modal('show');
+                $('#dismiss_modal').click(function () {
+                    $('#data_table_modal').modal('hide');
+                })
             })
         }
 

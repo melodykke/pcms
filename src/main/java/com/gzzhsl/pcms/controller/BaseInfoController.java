@@ -71,7 +71,7 @@ public class BaseInfoController {
     @ResponseBody
     public ResultVO getBaseInfo() {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        if (thisUser.getBaseInfo() == null){
+        if (userService.getUserByUsername(thisUser.getUsername()).getBaseInfo() == null){
             log.error("【基本信息】没有配置该用户的项目基本信息");
             throw new SysException(SysEnum.BASE_INFO_NO_RECORD_ERROR);
         }

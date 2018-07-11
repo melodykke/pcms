@@ -175,9 +175,7 @@ $(function () {
                             cancelButtonText: "取消"
                         }, function (isConfirm) {
                             if (isConfirm) {
-                                $('#base_info_modal').modal();
-                            } else {
-
+                                $('#base_info_modal').modal('show');
                             }
                         }
                     );
@@ -210,7 +208,10 @@ $(function () {
             }
         });
     });
-
+    $('.base_info_modal_close').click(function () {
+        $('#base_info_modal').modal('hide');
+    })
+    
 
     $("#basic_info_form").steps({
         bodyTag: "fieldset",
@@ -748,7 +749,7 @@ $(function () {
         dom: '<"html5buttons"B>lTfgitp',
         buttons: []
     });
-    $('#pre_progress_close').click(function () {
+    $('.pre_progress_modal_close').click(function () {
         $('#pre_progress_modal').modal('hide');
     })
     $('#pre_progress_submit').click(function () {
