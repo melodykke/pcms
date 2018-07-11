@@ -5,7 +5,7 @@ import com.gzzhsl.pcms.entity.Feedback;
 import java.util.Date;
 
 public class FeedbackUtil {
-    public static Feedback buildFeedback(String baseInfoId, String checker,String type, String targetReportId, Date time, String msg, byte state) {
+    public static Feedback buildFeedback(String baseInfoId, String checker,String type, String targetReportId, Date time, String msg, byte state, String url) {
         Feedback feedback = new Feedback();
         feedback.setType(type);
         feedback.setTargetId(targetReportId);
@@ -15,6 +15,7 @@ public class FeedbackUtil {
         feedback.setChecked(false);
         feedback.setBaseInfoId(baseInfoId);
         feedback.setChecker(checker);
+        feedback.setUrl(url);
         return feedback;
     }
 }

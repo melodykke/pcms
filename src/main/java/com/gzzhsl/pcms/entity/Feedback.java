@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -21,8 +22,10 @@ public class Feedback {
     private String targetId;
     private String msg;
     private Boolean checked;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")
     private Date createTime;
     private String baseInfoId;
     private String checker;
+    private String url;
     private Byte state;
 }

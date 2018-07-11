@@ -1,6 +1,6 @@
 $(function () {
     var contentDiv = $('#main_content');
-    var queryNotificationUrl = "/feedback/queryfeedback"
+    var queryFeedbackUrl = "/feedback/queryfeedback"
     createTable();
     var lang = {
         "sProcessing": "处理中...",
@@ -69,7 +69,7 @@ $(function () {
                 //ajax请求数据方法
                 $.ajax({
                     type: "get",
-                    url: queryNotificationUrl,//url请求的地址
+                    url: queryFeedbackUrl,//url请求的地址
                     cache: false,  //禁用缓存
                     data: param,  //传入组装的参数
                     dataType: "json",
@@ -87,13 +87,16 @@ $(function () {
                         var content = [];
                         result.content.map(function (item, index) {
                             var contentItem = {};
-                            contentItem.notificationId = item.notificationId;
+                            contentItem.feedbackId = item.feedbackId;
                             contentItem.submitter = item.submitter;
                             contentItem.type = item.type;
-                            contentItem.createTime = item.createTime;
-                            contentItem.checked = item.checked;
+                            contentItem.targetId = item.targetId;
                             contentItem.url = item.url;
-                            contentItem.typeId = item.typeId;
+                            contentItem.msg = item.msg;
+                            contentItem.state = item.state == 1? "通过" : "拒绝";
+                            contentItem.createTime = item.createTime;
+                            contentItem.checker = item.checker;
+                            contentItem.checked = item.checked;
                             content.push(contentItem);
                         })
                         returnData.data = content;
@@ -107,16 +110,17 @@ $(function () {
             //列表表头字段
             columns: [
                 { "data": "feedbackId" },
-                { "data": "checker" },
                 { "data": "type" },
+                { "data": "msg" },
+                { "data": "state" },
                 { "data": "createTime" },
+                { "data": "checker" },
                 //新建列的 定义
                 {
                     className : "td-operation text-center",
                     data: null,
                     defaultContent:"",
                     orderable : false,
-
                 }
             ],
             //新建列的 数据内容
@@ -124,11 +128,11 @@ $(function () {
                 var faIcon = data.checked ? '<i class="fa fa-envelope-open-o" aria-hidden="true"></i>' : '<i class="fa fa-envelope"></i>';
                 //行渲染回调,在这里可以对该行dom元素进行任何操作
                 var $btn = $('<div class="btn-group text-cen">'+
-                    '<button type="button" data-nid="'+ data.notificationId +'" data-name="'+ data.type +'" data-id="' +  data.typeId + '" data-href="'+ data.url +'" class="btn btn-sm btn-primary btn-view">查看</button>'+
+                    '<button type="button" data-fid="'+ data.feedbackId +'" data-name="'+ data.type +'" data-id="' +  data.targetId + '" data-href="'+ data.url +'" class="btn btn-sm btn-primary btn-view">查看</button>'+
                     '&nbsp '+ faIcon +' ' +
                     '</div>'+
                     '</div>');
-                $('td', row).eq(4).append($btn);
+                $('td', row).eq(6).append($btn);
             }
         });
     }
@@ -136,7 +140,7 @@ $(function () {
     $('.table').on('click', '.btn-view', function (e) {
         var href;
         var target = e.currentTarget;
-        var url = "notification/changetochecked?notificationId=" + target.dataset.nid;
+        var url = "feedback/changetochecked?feedbackId=" + target.dataset.fid;
         if (target.dataset.name == "月报") {
             href = target.dataset.href+'?projectMonthlyReportId='+target.dataset.id;
             contentDiv.load(href)
@@ -148,9 +152,9 @@ $(function () {
         if (target.dataset.name == "项目前期信息") {
             href = target.dataset.href;
             contentDiv.load(href)
-        }
+        } /* 如果还有其他的往这里加*/
         $.getJSON(url, function (data) {});
-       /* 如果还有其他的往这里加*/
+
     })
 
     $('#categoryUl').on('click', 'a', function (e) {

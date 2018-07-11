@@ -107,7 +107,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                     "提交了没有附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
                             getProjectMonthlyReportId()));
             // 创建webSocket消息
-            WebSocketUtil.sendWSMsg(thisUser, webSocket, "月报", "新的月报消息");
+            WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "月报", "新的月报消息");
             return projectMonthlyReportRt;
         } else {
             // 上传图片的情况，考虑转存
@@ -156,7 +156,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                     "提交了带附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
                             getProjectMonthlyReportId()));
             // 创建webSocket消息
-            WebSocketUtil.sendWSMsg(thisUser, webSocket, "月报", "新的月报消息");
+            WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "月报", "新的月报消息");
             return projectMonthlyReportRtWithImg;
         }
     }
@@ -229,17 +229,19 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             projectMonthlyReportRt.setState((byte) 1); // 审批通过
             ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
             Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(),"月报", projectMonthlyReportId, new Date(),
-                    "审批通过", (byte) 1);
+                    "审批通过", (byte) 1, "/monthlyreport/projectmonthlyreportshow");
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的月报"));
         } else {
             projectMonthlyReportRt.setState((byte) -1); // 审批未通过
             ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
             Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(), "月报",projectMonthlyReportId, new Date(),
-                    "审批未通过：" + checkinfo, (byte) -1);
+                    "审批未通过：" + checkinfo, (byte) -1, "/monthlyreport/projectmonthlyreportshow");
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的月报"));
         }
+        // 创建webSocket消息
+        WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "月报", "新的审批消息");
         return feedbackRt;
     }
 

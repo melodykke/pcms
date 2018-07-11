@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class WebSocketUtil {
-    public static void sendWSMsg(UserInfo thisUser, WebSocket webSocket, String title, String msg) {
+    public static void sendWSNotificationMsg(UserInfo thisUser, WebSocket webSocket, String title, String msg) {
         if (UserUtil.isChecker(thisUser)) {
             webSocket.sendMsg(title, msg, "/notification/tonotification", thisUser);
         } else if (UserUtil.isReporter(thisUser)){
@@ -17,6 +17,13 @@ public class WebSocketUtil {
                 throw new SysException(SysEnum.BASE_INFO_SUBMIT_NO_PARENT_ERROR);
             }
             webSocket.sendMsg(title, msg, "/notification/tonotification", thisUser.getParent());
+        }
+    }
+    public static void sendWSFeedbackMsg(UserInfo thisUser, WebSocket webSocket, String title, String msg) {
+        if (UserUtil.isChecker(thisUser)) {
+            for (UserInfo child : thisUser.getChildren()) {
+                webSocket.sendMsg(title, msg, "feedback/tofeedback", child);
+            }
         }
     }
 }

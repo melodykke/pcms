@@ -197,7 +197,7 @@ $(function () {
         })
     })
 
-    $('#project_monthly_report_content_div').mouseenter(function () {
+   /* $('#project_monthly_report_content_div').mouseenter(function () {
         window.onmousewheel=function(){
             return false
         };
@@ -208,27 +208,39 @@ $(function () {
         };
     });
     $('#project_monthly_report_content_div').mousewheel(function (e, delta) {
-
         if (delta > 0) {
             $('#last_month').trigger("click");
         }else {
             $('#next_month').trigger("click");
         }
-
-    });
+    });*/
 
     function refreshContents(data){
         $('#plantName').text(data.data.plantName);
         $('#year_tag').text(data.data.year);
         $('#month').text(data.data.month+' 月');
-        data.data.state == 0 ? $('#state').text("待审核") :  $('#state').text("已审核");
+        if (data.data.state == 0) {
+            $('#state').text("待审核")
+        } else if (data.data.state == 1) {
+            $('#state').text("已审核");
+        } else if (data.data.state == -1) {
+            $('#state').text("审核未通过")
+        }
         if (data.data.state == 1) {
             $('#check_btn').html('<span class="label label-primary"><i class="fa fa-check"></i> 已审批通过</span>');
+        } else if (data.data.state == -1) {
+            $('#check_btn').html('<span class="label label-primary"><i class="fa fa-check"></i> 已拒绝</span>');
         }
         $('#submitter').text(data.data.submitter);
         $('#submitTime').text(data.data.createTime);
         data.data.state == 0 ? $('#state_bar').css("width", "50%") : $('#state_bar').css("width", "100%");
-        data.data.state == 0 ? $('#state_msg').text("等待上级审批") : $('#state_msg').text("审核通过");
+        if (data.data.state == 0) {
+            $('#state_msg').text("等待上级审批")
+        } else if (data.data.state == 1) {
+            $('#state_msg').text("已通过")
+        } else if (data.data.state == -1) {
+            $('#state_msg').text("未通过")
+        }
         $('#civilEngineering').text(data.data.civilEngineering);
         $('#electromechanicalEquipment').text(data.data.electromechanicalEquipment);
         $('#metalMechanism').text(data.data.metalMechanism);

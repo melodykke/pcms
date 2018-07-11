@@ -176,7 +176,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         }
         BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
         // 创建webSocket消息
-        WebSocketUtil.sendWSMsg(thisUser, webSocket, "项目基础信息", "新的项目基础信息消息");
+        WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "项目基础信息", "新的项目基础信息消息");
         return baseInfoRt;
     }
 
@@ -193,18 +193,19 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             baseInfoRt.setState((byte) 1); // 审批通过
             BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
             Feedback feedback = FeedbackUtil.buildFeedback(baseInfoRt.getBaseInfoId(), thisUser.getUsername(),"项目基本信息", baseInfoId, new Date(),
-                    "审批通过", (byte) 1);
+                    "审批通过", (byte) 1, "baseinfo/baseinfoshow");
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的项目基本信息"));
         } else {
             baseInfoRt.setState((byte) -1); // 审批未通过
             BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
             Feedback feedback = FeedbackUtil.buildFeedback(baseInfoRt.getBaseInfoId(), thisUser.getUsername(), "项目基本信息",baseInfoId, new Date(),
-                    "审批未通过：" + checkinfo, (byte) -1);
+                    "审批未通过：" + checkinfo, (byte) -1, "baseinfo/baseinfoshow");
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的项目基本信息"));
         }
-
+        // 创建webSocket消息
+        WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "基础信息", "新的基础信息审批消息");
         return feedbackRt;
     }
 }

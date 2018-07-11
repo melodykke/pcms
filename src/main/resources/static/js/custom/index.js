@@ -68,6 +68,9 @@ $(function () {
     setInterval(function () {
         getOverallNotification(getoverallnotificationUrl);
     }, 30000);
+    setInterval(function () {
+        getOverallFeedback(getoverallfeedbackUrl);
+    }, 30000);
 
     function getpn() {
         console.log($('#plantName'));
@@ -127,7 +130,6 @@ $(function () {
     // 拿到所有审批的消息通知
     function getOverallFeedback(url) {
         $.getJSON(url, function (data) {
-            console.log(data)
             if (data.code == 1002) {
                 $('#countFeedback').text(data.data.allUncheckedNum);
                 var htmlTemp = "";

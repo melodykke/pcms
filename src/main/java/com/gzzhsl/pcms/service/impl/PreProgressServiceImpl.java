@@ -115,7 +115,7 @@ public class PreProgressServiceImpl implements PreProgressService {
                 preProgressRtRt.getUpdateTime(),
                 "提交了ID:"+ preProgressRtRt.getPreProgressId() +"的水库项目前期信息"));
         // 创建webSocket消息
-        WebSocketUtil.sendWSMsg(thisUser, webSocket, "项目前期信息", "新的项目前期消息待查收");
+        WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "项目前期信息", "新的项目前期消息待查收");
         return preProgressRtRt;
     }
 
@@ -146,17 +146,19 @@ public class PreProgressServiceImpl implements PreProgressService {
             preProgressRt.setState((byte) 1); // 审批通过
             PreProgress preProgressRtRt = preProgressRepository.save(preProgressRt);
             Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(),"项目前期信息", preProgressId, new Date(),
-                    "审批通过", (byte) 1);
+                    "审批通过", (byte) 1, "preprogress/topreprogress");
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的项目前期信息"));
         } else {
             preProgressRt.setState((byte) -1); // 审批未通过
             PreProgress preProgressRtRt = preProgressRepository.save(preProgressRt);
             Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(), "项目前期信息",preProgressId, new Date(),
-                    "审批未通过：" + checkinfo, (byte) -1);
+                    "审批未通过：" + checkinfo, (byte) -1, "preprogress/topreprogress");
             feedbackRt = feedbackService.save(feedback);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的项目前期信息"));
         }
+        // 创建webSocket消息
+        WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "项目前期", "新的项目前期审批消息");
         return feedbackRt;
     }
 }
