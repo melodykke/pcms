@@ -27,7 +27,7 @@ public class OperationLogController {
 
     @GetMapping("/tooperationlog")
     public String toOperationLog(){
-        return "/operation_log";
+        return "operation_log";
     }
 
     @GetMapping("/querylog")

@@ -41,7 +41,7 @@ public class NotificationController {
 
     @GetMapping("/tonotification")
     public String tonotification() {
-        return "/notification";
+        return "notification";
     }
 
     @GetMapping("/getoverallnotification")

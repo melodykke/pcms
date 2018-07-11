@@ -39,7 +39,7 @@ public class UserController {
 
     @GetMapping("/personinfo")
     public String personInfo() {
-        return "/person_info";
+        return "person_info";
     }
 
 

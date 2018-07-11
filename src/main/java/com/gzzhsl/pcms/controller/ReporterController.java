@@ -14,12 +14,12 @@ public class ReporterController {
     @GetMapping("/projectmonthlyreport")
     @RequiresRoles(value = {"reporter", "checker"}, logical = Logical.OR)
     public String projectMonthlyReport() {
-        return "/project_monthly_report";
+        return "project_monthly_report";
     }
 
     @GetMapping("/projectmonths")
     @RequiresRoles(value = {"reporter", "checker"}, logical = Logical.OR)
     public String projectMonths() {
-        return "/project_months";
+        return "project_months";
     }
 }

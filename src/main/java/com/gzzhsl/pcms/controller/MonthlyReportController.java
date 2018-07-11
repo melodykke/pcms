@@ -20,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import sun.plugin.util.UIUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -134,7 +133,7 @@ public class MonthlyReportController {
     @GetMapping("/projectmonthlyreportshow")
     public String projectMonthlyReportShow(String projectMonthlyReportId){
         this.projectMonthlyReportId = projectMonthlyReportId;
-        return "/project_monthly_report_show";
+        return "project_monthly_report_show";
     }
 
     @PostMapping("/getprojectmonthlyreportbyprojectmonthlyreportid")

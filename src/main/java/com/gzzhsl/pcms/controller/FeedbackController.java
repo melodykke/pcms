@@ -39,7 +39,7 @@ public class FeedbackController {
 
     @GetMapping("/tofeedback")
     public String toFeedback() {
-        return "/feedback";
+        return "feedback";
     }
 
     @GetMapping("/getoverallfeedback")

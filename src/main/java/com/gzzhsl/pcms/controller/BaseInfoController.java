@@ -45,7 +45,7 @@ public class BaseInfoController {
 
     @GetMapping("/baseinfoshow")
     public String baseInfoShow() {
-        return "/base_info_show";
+        return "base_info_show";
     }
 
     @GetMapping("/hasbaseinfo")

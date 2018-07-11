@@ -33,7 +33,7 @@ public class CommonController {
 
     @GetMapping("/login")
     private String login(){
-        return "/login";
+        return "login";
     }
 
     /**
@@ -72,21 +72,21 @@ public class CommonController {
                 msg = "未知错误，请稍后重试 ";
             }
         }else {
-            return "/index";
+            return "index";
         }
         map.put("msg", msg);
         // 此方法不处理登录成功,由shiro进行处理
-        return "/login";
+        return "login";
     }
 
 
     @GetMapping("/index")
     private String index(){
-        return "/index";
+        return "index";
     }
 
     @GetMapping("/page403")
     private String page403(){
-        return "/page403";
+        return "page403";
     }
 }
