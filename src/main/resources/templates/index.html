@@ -89,7 +89,7 @@
                                     <a href="#">招标备案</a>
                                 </li>
                                 <li>
-                                    <a href="#">合同备案</a>
+                                    <a href="#" id="contract">合同备案</a>
                                 </li>
                                 <li>
                                     <a href="#">参建单位</a>
@@ -1545,6 +1545,117 @@
         </div>
     </div>
 </div>
+
+<!--项目合同备案modal-->
+<div class="modal fade" id="contract_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="max-height:95%;">
+    <div class="modal-dialog modal-lg" role="document" style="width:50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close contract_modal_close"  aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4>项目合同备案 <small> <i>（下列每项指标需逐项谨慎填写，部分项一经审核不可更改。）</i> </small></h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#contract_new_tab_1"><i class="fa fa-line-chart"></i>合同信息</a></li>
+                        <li class=""><a data-toggle="tab" href="#contract_new_tab_2"> <i class="fa fa-book"></i>附件</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="contract_new_tab_1"  class="tab-pane animated fadeInUp active">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>合同名称</label><span style="color:red;"> *</span>
+                                            <input id="new_contract_name" name="new_contract_name" type="text" class="form-control number required" maxlength="20">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>合同类型</label><span style="color:red;"> *</span>
+                                            <select class="form-control" id="new_contract_type" name="new_contract_type">
+                                                <option selected="selected" disabled="disabled"  style="display: none"></option>
+                                                <option data-value="设计采购施工总承包(EPC)类">设计采购施工总承包(EPC)类</option>
+                                                <option data-value="项目管理承包（PMC)类">项目管理承包（PMC)类</option>
+                                                <option data-value="设计类">设计类</option>
+                                                <option data-value="施工类">施工类</option>
+                                                <option data-value="监理类">监理类</option>
+                                                <option data-value="设备采购类">设备采购类</option>
+                                                <option data-value="招标代理类">招标代理类</option>
+                                                <option data-value="技术服务类">技术服务类</option>
+                                                <option data-value="移民类">移民类</option>
+                                                <option data-value="其他类">其他类</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>甲方</label><span style="color:red;"> *</span>
+                                            <input id="new_contract_party_a" name="new_contract_party_a" type="text" class="form-control" maxlength="20">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>合同金额(元）</label><span style="color:red;"> *</span>
+                                            <input id="new_contract_amount" name="new_contract_amount" type="text" class="form-control" maxlength="15" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>合同编号</label><span style="color:red;"> *</span>
+                                            <input id="new_contract_num" name="new_contract_num" type="text" class="form-control" maxlength="20">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>签订时间</label><span style="color:red;"> *</span>
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="new_contract_time" name="new_contract_time" type="text"  class="form-control " readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>乙方</label><span style="color:red;"> *</span>
+                                            <input id="new_contract_party_b" name="new_contract_party_b" type="text" class="form-control" maxlength="20">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label>合同主要内容</label>
+                                            <textarea id="new_contract_main_content" name="new_contract_main_content" class="form-control " rows="5" maxlength="250" placeholder="填写内容在250字内"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>备注</label>
+                                            <textarea id="new_contract_remark" name="new_contract_remark" class="form-control " rows="3" maxlength="250" placeholder="填写内容在250字内"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="contract_new_tab_2"  class="tab-pane animated fadeInUp">
+                            <div class="panel-body">
+                                <h2>图片、附件上传</h2>
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <form enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <div class="file-loading">
+                                                <input id="contract_file" name="contract_file" type="file" multiple  data-overwrite-initial="false" data-min-file-count="1">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="hr-line-dashed"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="contract_modal_close" type="button" class="btn btn-info">关 闭</button>
+                    <button type="button" id="contract_submit" class="btn btn-info">提 交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <script type="application/javascript">

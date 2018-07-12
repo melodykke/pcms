@@ -1,9 +1,11 @@
 package com.gzzhsl.pcms.controller;
 
 import com.gzzhsl.pcms.entity.BaseInfoImg;
+import com.gzzhsl.pcms.entity.ContractImg;
 import com.gzzhsl.pcms.entity.PreProgressImg;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
 import com.gzzhsl.pcms.service.BaseInfoImgService;
+import com.gzzhsl.pcms.service.ContractImgService;
 import com.gzzhsl.pcms.service.PreProgressImgService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportImgService;
 import com.gzzhsl.pcms.util.PathUtil;
@@ -32,6 +34,8 @@ public class DownLoadController {
     private BaseInfoImgService baseInfoImgService;
     @Autowired
     private PreProgressImgService preProgressImgService;
+    @Autowired
+    private ContractImgService contractImgService;
 
     //fileId 就是 img_id
     @GetMapping("/monthlyreportfile")
@@ -51,6 +55,12 @@ public class DownLoadController {
     public void preProgressFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
         PreProgressImg preProgressImg = preProgressImgService.getByPreProgressImgId(fileId);
         String downloadPath = PathUtil.getFileBasePath(false)+preProgressImg.getImgAddr();
+        this.downloadFileAction(downloadPath, request, response);
+    }
+    @GetMapping("/contractfile")
+    public void contractFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
+        ContractImg contractImg = contractImgService.getByContractImgId(fileId);
+        String downloadPath = PathUtil.getFileBasePath(false)+contractImg.getImgAddr();
         this.downloadFileAction(downloadPath, request, response);
     }
 

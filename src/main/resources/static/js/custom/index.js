@@ -211,7 +211,7 @@ $(function () {
     $('.base_info_modal_close').click(function () {
         $('#base_info_modal').modal('hide');
     })
-    
+
 
     $("#basic_info_form").steps({
         bodyTag: "fieldset",
@@ -662,9 +662,8 @@ $(function () {
     $('#preProgressEntry_body').on('click', '.date-input', function (e) {
         var target = $(e.currentTarget);
         target.datepicker({
-            language: "zh-CN",
-            format: 'yyyy-mm-dd',
-            minViewMode: 1,
+            language: 'zh-CN',
+            minViewMode: 0,
             keyboardNavigation: false,
             forceParse: false,
             forceParse: false,
@@ -824,7 +823,7 @@ $(function () {
                 closeOnConfirm: false
             });
         }
-    })
+    });
     $("#pre_progress_file").fileinput({
         language: 'zh',
         theme: 'fa',
@@ -866,6 +865,153 @@ $(function () {
     $('#pre_progress_file').click(function () {
         $("#pre_progress_file").fileinput('refresh');
     });
+
+
+    /*合同管理 contract*/
+    $('#new_contract_time').click(function () {
+        $('#new_contract_time').datepicker({
+            language: 'zh-CN',
+            minViewMode: 0,
+            keyboardNavigation: false,
+            forceParse: false,
+            forceParse: false,
+            autoclose: true,
+            todayHighlight: true
+        });
+        $('#new_contract_time').datepicker('show');
+    });
+    $("#contract").click(function () {
+        $.ajax({
+            url: 'contract/hascontract',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.code == 1003) {
+                    // 若无数据
+                    swal({
+                            title: "未查到合同备案",
+                            text: "请先填写合同备案!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "好的，去填写!",
+                            cancelButtonText: "取消"
+                        }, function (isConfirm) {
+                            if (isConfirm) {
+                                $('#contract_modal').modal();
+                            }
+                        }
+                    );
+                } else if (data.code == 1002) {
+                    contentDiv.load('contract/tocontract');
+                    $('#small-chat').hide();
+                } else if (data.code == 2203) {
+                    swal({
+                        title: "出错",
+                        text: "请优先配置水库基本信息!",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确认!",
+                        closeOnConfirm: false
+                    });
+                }
+            }
+        });
+    });
+    $('#contract_submit').click(function () {
+        swal({
+            title: "确认提交吗?",
+            text: "请检查数据是否填写正确后再提交!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "已确认,提交!",
+            cancelButtonText: "取消",
+            closeOnConfirm: false
+        }, function () {
+            var contract = {};
+            contract.name = $('#new_contract_name').val();
+            contract.type = $('#new_contract_type').find('option').not(
+                function () {
+                    return !this.selected;
+                }).data('value');
+            contract.partyA = $('#new_contract_party_a').val();
+            contract.price = $('#new_contract_amount').val();
+            contract.number = $('#new_contract_num').val();
+            contract.signDate = $('#new_contract_time').val();
+            contract.partyB = $('#new_contract_party_b').val();
+            contract.content = $('#new_contract_main_content').val();
+            contract.remark = $('#new_contract_remark').val();
+            contract.rtFileTempPath = rtFileTempPath;
+            $.ajax({
+                url: 'contract/save',
+                type: 'POST',
+                data: JSON.stringify(contract),
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.code == 1002) {
+                        swal({
+                            title: "合同信息提交成功",
+                            text: "请至 合同备案 栏目中查看详情",
+                            type: "success",
+                        }, function () {
+                            $("#base_info_modal").modal('hide');
+                            $('#small-chat').hide();
+                            top.location.reload();
+                        })
+                    } else {
+                        console.log(data)
+                        swal("失败!", data.msg, "error");
+                    }
+                }
+            });
+        });
+    });
+    $("#contract_file").fileinput({
+        language: 'zh',
+        theme: 'fa',
+        uploadUrl: 'contract/addfiles', // you must set a valid URL here else you will get an error
+        uploadAsync: false,
+        /*  uploadExtraData: {"month1": 123},*/
+        allowedFileExtensions: ['jpg', 'png', 'gif', 'docx', 'doc', 'xlsx', 'xls', 'pdf', 'pjeg', 'mp4', '3gp', 'avi'],
+        overwriteInitial: false,
+        maxFileSize: 1000000,
+        maxFilesNum: 10,
+        layoutTemplates: {
+            actionUpload: '',
+            actionDelete: ''
+        },
+        autoReplace: true,
+    });
+    /* 清空文件后响应事件*/
+    $("#contract_file").on("filecleared", function (event, data, msg) {
+        uploadFileFlag = true;
+        rtFileTempPath = null;
+    });
+    /*选择文件后处理事件*/
+    $("#contract_file").on("filebatchselected", function (event, files) {
+        uploadFileFlag = false;
+
+    });
+    //同步上传错误处理
+    $('#contract_file').on('filebatchuploaderror', function (event, data, msg) {
+        uploadFileFlag = false;
+    });
+    //同步上传返回结果处理
+    $("#contract_file").on("filebatchuploadsuccess", function (event, data, previewId, index) {
+        if (data.response.code == 1002) {
+            uploadFileFlag = true;
+            rtFileTempPath = data.response.data;
+
+        }
+    });
+    $('#contract_file').click(function () {
+        $("#contract_file").fileinput('refresh');
+    });
+    $('.contract_modal_close').click(function () {
+        $('#contract_modal').modal('hide');
+    })
+
 
 });
 

@@ -40,6 +40,12 @@ public class PathUtil {
         String imagePath = "upload/preprogress/"+ projectName + "/";
         return imagePath.replace("/", separator);
     }
+
+    // relative path  合同备案
+    public static String getContractImagePath(String projectName){
+        String imagePath = "upload/contract/"+ projectName + "/";
+        return imagePath.replace("/", separator);
+    }
     public static void main(String[] args) {
         System.out.println(PathUtil.getFileBasePath(false));
     }

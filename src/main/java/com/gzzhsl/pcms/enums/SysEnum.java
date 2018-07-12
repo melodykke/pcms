@@ -45,6 +45,9 @@ public enum SysEnum {
     PRE_PROGRESS_APPROVAL_PASSED_ERROR(1505, "不能审批已通过项目"),
     PRE_PROGRESS_INFO_ERROR(1506, "提交的项目前期信息出错，若一直无法正常提交，请联系系统管理员"),
 
+    CONTRACT_VO_PARAMS_ERROR(1600, "合同信息VO参数错误"),
+    CONTRACT_NO_PROJECT_ERROR(1601, "请优先配置水库基础信息"),
+
     ACCOUNT_PASSWORD_INCONSISTENCY(2201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(2202, "已存在相同账号名的用户"),
     ACCOUNT_NO_PROJECT(2203, "没有水库工程，请优先配置水库工程"),

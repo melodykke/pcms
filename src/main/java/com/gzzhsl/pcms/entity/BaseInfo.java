@@ -93,6 +93,8 @@ public class BaseInfo {
     @OneToOne(mappedBy = "baseInfo")
     private PreProgress preProgress;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "baseInfo")
+    private List<Contract> contracts;
 
     private Date createTime;
     private Date updateTime;

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="css/custom/bootstrap-switch.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+<div class="row wrapper border-bottom white-bg page-heading" id="main-breadcrumb">
+    <div class="col-sm-4">
+        <h2>这是首页</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">首页</a>
+            </li>
+            <li class="active">
+                <strong>当前页面</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!--动画内容-->
+    <div id="animation_box" class="animated">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <i class=" fa fa-folder fa-lg">&nbsp;&nbsp;<span>合同备案</span></i>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="m-b-md">
+                                        <h2>思南县沙坝水库工程</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="tabs-container">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a data-toggle="tab" id="show_tab_1" href="#contract_show_tab_1"><i class="fa fa-check-square-o"></i> 已审批</a></li>
+                                            <li class=""><a data-toggle="tab" id="show_tab_2" href="#contract_show_tab_2"> <i class="fa fa-clock-o"></i>未审批</a></li>
+                                            <li class=""><a data-toggle="tab" id="show_tab_3" href="#contract_show_tab_3"> <i class="fa fa-times-rectangle-o"></i>审批未通过</a></li>
+                                            <li class=""><a id="contract_show_tab_4"> <i class="fa fa-arrow-right"></i>新增</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div id="contract_show_tab_1" class="tab-pane active animated fadeInUp" >
+                                                <div class="panel-body">
+                                                    <fieldset class="form-horizontal">
+                                                        <div class="table-responsive">
+                                                            <table id="contract_table1" class="table table-striped table-bordered table-hover" >
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>合同名称</th>
+                                                                    <th>合同编号</th>
+                                                                    <th>合同类型</th>
+                                                                    <th>签订时间</th>
+                                                                    <th>甲方</th>
+                                                                    <th>乙方</th>
+                                                                    <th>金额</th>
+                                                                    <th>归类</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <div id="contract_show_tab_2" class="tab-pane animated fadeInUp">
+                                                <div class="panel-body">
+                                                    <fieldset class="form-horizontal">
+                                                        <div class="table-responsive">
+                                                            <table id="contract_table2" class="table table-striped table-bordered table-hover" >
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>合同名称</th>
+                                                                    <th>合同编号</th>
+                                                                    <th>合同类型</th>
+                                                                    <th>签订时间</th>
+                                                                    <th>甲方</th>
+                                                                    <th>乙方</th>
+                                                                    <th>金额</th>
+                                                                    <th>属性</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <div id="contract_show_tab_3" class="tab-pane animated fadeInUp">
+                                                <div class="panel-body">
+                                                    <fieldset class="form-horizontal">
+                                                        <div class="table-responsive">
+                                                            <table id="contract_table3" class="table table-striped table-bordered table-hover" >
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>合同名称</th>
+                                                                    <th>合同编号</th>
+                                                                    <th>合同类型</th>
+                                                                    <th>签订时间</th>
+                                                                    <th>甲方</th>
+                                                                    <th>乙方</th>
+                                                                    <th>金额</th>
+                                                                </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>
+</div>
+
+<!--审批modal-->
+<div class="modal inmodal" id="contract_approve_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                </button>
+                <h1 class="modal-title">合 同 备 案 审 批</h1>
+                <br>
+                <input type="checkbox" name="my-checkbox" id="my-checkbox">
+            </div>
+            <div class="modal-body">
+                <div class="form-group animated fadeIn" id="contract_approve_input" style="display:none;">
+                    <label style="font-size: 15px;">若不通过，请说明原因:</label>
+                    <textarea id="contract_approve_area" rows="5" placeholder="填写内容请控制在250字以内。" class="form-control" maxlength="250">
+                                                                </textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="contract_approve_submit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--合同具体信息显示modal-->
+<div class="modal fade" id="contract_show_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="max-height:95%;">
+    <div class="modal-dialog modal-lg" role="document" style="width:50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a id="contract_modal_show_close"><button type="button" class="close"  aria-label="Close"><span aria-hidden="true">&times;</span></button></a>
+                <h4>项目合同备案 <small> <i>（下列每项指标需逐项谨慎填写，部分项一经审核不可更改。）</i> </small></h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#contract_show_modal_tab_1"><i class="fa fa-line-chart"></i>合同信息</a></li>
+                        <li class=""><a data-toggle="tab" href="#contract_show_modal_tab_2"> <i class="fa fa-book"></i>附件</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="contract_show_modal_tab_1"  class="tab-pane animated fadeInUp active">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>合同名称</label><span style="color:red;"> *</span>
+                                            <input id="show_contract_name" name="show_contract_name" type="text" class="form-control number required" maxlength="20" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>合同类型</label><span style="color:red;"> *</span>
+                                            <input id="show_contract_type" name="show_contract_type" type="text" class="form-control number required" maxlength="15" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>甲方</label><span style="color:red;"> *</span>
+                                            <input id="show_contract_party_a" name="show_contract_party_a" type="text" class="form-control" maxlength="15" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>合同金额(元）</label><span style="color:red;"> *</span>
+                                            <input id="show_contract_amount" name="show_contract_amount" type="text" class="form-control" maxlength="15" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>合同编号</label><span style="color:red;"> *</span>
+                                            <input id="show_contract_num" name="show_contract_num" type="text" class="form-control" maxlength="15" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>签订时间</label><span style="color:red;"> *</span>
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="show_contract_time" name="show_contract_time" type="text"  class="form-control " readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>乙方</label><span style="color:red;"> *</span>
+                                            <input id="show_contract_party_b" name="show_contract_party_b" type="text" class="form-control" maxlength="15" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label>合同主要内容</label>
+                                            <textarea id="show_contract_main_content" name="show_contract_main_content" class="form-control " rows="5" maxlength="250" placeholder="填写内容在250字内" readonly></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>备注</label>
+                                            <textarea id="show_contract_remark" name="show_contract_remark" class="form-control " rows="3" maxlength="250" placeholder="填写内容在250字内" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="contract_show_modal_tab_2"  class="tab-pane animated fadeInUp">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12" id="contract_file_display_div">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button  id="contract_modal_show_close1" type="button" class="btn btn-info">关 闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/plugins/dataTables/datatables.min.js}"></script>
+<script th:src="@{/js/custom/bootstrap-switch.min.js}"></script>
+<script th:src="@{/js/custom/contract_show.js}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
