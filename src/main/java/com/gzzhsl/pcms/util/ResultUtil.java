@@ -32,6 +32,13 @@ public class ResultUtil {
         resultVO.setData(object);
         return resultVO;
     }
+    public static ResultVO success(Integer code, String msg, Object object){
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(code);
+        resultVO.setMsg(msg);
+        resultVO.setData(object);
+        return resultVO;
+    }
 
     public static ResultVO failed(){
         ResultVO resultVO = new ResultVO();

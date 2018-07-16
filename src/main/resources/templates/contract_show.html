@@ -43,12 +43,10 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="m-b-md">
-                                        <h2>思南县沙坝水库工程</h2>
+                                        <h2></h2>
                                     </div>
                                 </div>
                             </div>
-                            <br>
-                            <br>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="tabs-container">
@@ -119,6 +117,8 @@
                                                                     <th>甲方</th>
                                                                     <th>乙方</th>
                                                                     <th>金额</th>
+                                                                    <th>归类</th>
+                                                                    <th>操作</th>
                                                                 </tr>
                                                                 </thead>
                                                             </table>
@@ -141,14 +141,14 @@
 <!--审批modal-->
 <div class="modal inmodal" id="contract_approve_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content animated bounceInRight">
+        <div class="modal-content animated bounceInRight" id="contract_check_div">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
                 </button>
                 <h1 class="modal-title">合 同 备 案 审 批</h1>
                 <br>
-                <input type="checkbox" name="my-checkbox" id="my-checkbox">
+                <input type="checkbox" name="my-checkbox"  id="contract-checkbox">
             </div>
             <div class="modal-body">
                 <div class="form-group animated fadeIn" id="contract_approve_input" style="display:none;">
@@ -161,6 +161,14 @@
                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" id="contract_approve_submit">提交</button>
             </div>
+        </div>
+    </div>
+</div>
+<!--审批modal-->
+<div class="modal inmodal" id="contract_new_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight" id="contract_new_msg_div">
+
         </div>
     </div>
 </div>

@@ -61,6 +61,7 @@ public class NotificationController {
         List<Notification> monthlyReportNotifications = new ArrayList<>(); // 月报的提醒
         List<Notification> projectBasicInfoNotifications = new ArrayList<>(); // 项目基础信息的提醒
         List<Notification> projectPreProgressNotifications = new ArrayList<>(); // 项目基础信息的提醒
+        List<Notification> contractsNotifications = new ArrayList<>(); // 合同备案的提醒
         /*如果有其他，继续往这儿加*/
         for (Notification notification : notifications) {
             if ("月报".equals(notification.getType())) {
@@ -69,6 +70,8 @@ public class NotificationController {
                 projectBasicInfoNotifications.add(notification);
             } else if ("项目前期信息".equals(notification.getType())) {
                 projectPreProgressNotifications.add(notification);
+            } else if ("合同备案信息".equals(notification.getType())) {
+                contractsNotifications.add(notification);
             }/*如果有其他，继续往这儿加*/
         }
 
@@ -83,6 +86,9 @@ public class NotificationController {
         }
         if (projectPreProgressNotifications.size() > 0) {
             article.put("项目前期信息新消息", TimeUtil.getDatePoor(new Date(), projectPreProgressNotifications.get(0).getCreateTime()));
+        }
+        if (contractsNotifications.size() > 0) {
+            article.put("合同备案信息新消息", TimeUtil.getDatePoor(new Date(), contractsNotifications.get(0).getCreateTime()));
         }/*如果有其他，继续往这儿加*/
         overallNotificationVO.setArticle(article);
         return ResultUtil.success(overallNotificationVO);

@@ -59,6 +59,7 @@ public class FeedbackController {
         List<Feedback> monthlyReportFeedbacks = new ArrayList<>(); // 月报的消息
         List<Feedback> projectBasicInfoFeedbacks = new ArrayList<>(); // 项目基础信息的消息
         List<Feedback> projectPreProgressFeedbacks = new ArrayList<>(); // 项目基础信息的消息
+        List<Feedback> contractFeedbacks = new ArrayList<>(); // 项目基础信息的消息
         /*如果有其他，继续往这儿加*/
         for (Feedback feedback : feedbacks) {
             if ("月报".equals(feedback.getType())) {
@@ -67,6 +68,8 @@ public class FeedbackController {
                 projectBasicInfoFeedbacks.add(feedback);
             } else if ("项目前期信息".equals(feedback.getType())) {
                 projectPreProgressFeedbacks.add(feedback);
+            } else if ("合同备案信息".equals(feedback.getType())) {
+                contractFeedbacks.add(feedback);
             }/*如果有其他，继续往这儿加*/
         }
         OverallFeedbackVO overallFeedbackVO = new OverallFeedbackVO();
@@ -80,6 +83,9 @@ public class FeedbackController {
         }
         if (projectPreProgressFeedbacks.size() > 0) {
             article.put("前期信息消息", TimeUtil.getDatePoor(new Date(), projectPreProgressFeedbacks.get(0).getCreateTime()));
+        }
+        if (contractFeedbacks.size() > 0) {
+            article.put("合同备案信息", TimeUtil.getDatePoor(new Date(), contractFeedbacks.get(0).getCreateTime()));
         }/*如果有其他，继续往这儿加*/
         overallFeedbackVO.setArticle(article);
         return ResultUtil.success(overallFeedbackVO);

@@ -47,6 +47,10 @@ public enum SysEnum {
 
     CONTRACT_VO_PARAMS_ERROR(1600, "合同信息VO参数错误"),
     CONTRACT_NO_PROJECT_ERROR(1601, "请优先配置水库基础信息"),
+    CONTRACT_APPROVAL_ERROR(1602, "审批合同备案错误，ID为空"),
+    CONTRACT_NO_CORRESPOND_RECORD_ERROR(1603, "审批合同备案错误，审批查询的合同备案所对应ID无记录"),
+    CONTRACT_CHECKED_OTHERS_ERROR(1604, "不能审批不属于本用户所属工程的合同备案信息"),
+    CONTRACT_CHECK_CHECKED_ERROR(1605, "当前合同备案信息已经审批过，不能重复审批"),
 
     ACCOUNT_PASSWORD_INCONSISTENCY(2201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(2202, "已存在相同账号名的用户"),

@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,6 +35,5 @@ public class ContractVO {
     private String content;
     private Byte state; // 0 未审核 1 通过 -1 未通过
     private String remark;
-
     private List<ContractImgVO> contractImgVOs;
 }

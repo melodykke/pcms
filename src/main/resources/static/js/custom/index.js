@@ -955,9 +955,9 @@ $(function () {
                             text: "请至 合同备案 栏目中查看详情",
                             type: "success",
                         }, function () {
-                            $("#base_info_modal").modal('hide');
                             $('#small-chat').hide();
-                            top.location.reload();
+                            $('#contract_modal').modal('hide');
+                            $('#main_content').load('contract/tocontract');
                         })
                     } else {
                         console.log(data)
@@ -1002,7 +1002,6 @@ $(function () {
         if (data.response.code == 1002) {
             uploadFileFlag = true;
             rtFileTempPath = data.response.data;
-
         }
     });
     $('#contract_file').click(function () {
