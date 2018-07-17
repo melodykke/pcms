@@ -18,8 +18,8 @@ public class MonthlyReportExcelServiceImpl implements MonthlyReportExcelService 
 
     @Override
     public MonthlyReportExcelModel getMonthExcelModelWithMonthParams(MonthlyReportExcelModel monthlyReportExcelModel, ProjectMonthlyReport projectMonthlyReport) {
-        BeanUtils.copyProperties(projectMonthlyReport, monthlyReportExcelModel);
-        return monthlyReportExcelModel;
+        MonthlyReportExcelModel monthlyReportExcelModelWithMonthParams = MonthlyReportExcelCalcUtil.getModelWithMonthParams(monthlyReportExcelModel, projectMonthlyReport);
+        return monthlyReportExcelModelWithMonthParams;
     }
 
     @Override

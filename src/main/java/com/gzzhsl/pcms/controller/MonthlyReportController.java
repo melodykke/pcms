@@ -44,6 +44,8 @@ public class MonthlyReportController {
     @Autowired
     private MonthlyReportExcelService monthlyReportExcelService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private NotificationService notificationService;
     @Autowired
     private FeedbackService feedbackService;
@@ -185,7 +187,6 @@ public class MonthlyReportController {
         String projectId = ((BaseInfo) request.getSession().getAttribute("thisProject")).getBaseInfoId();
         Date yearEndDate = new Date(); // 当前时间
         String historyPointTime = "2000-01-01 00:00:00";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String yearEndTime = currentDate+"-28 23:59:59"; // 查询时间范围的截止日期应为当前
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(yearEndDate);
@@ -199,14 +200,13 @@ public class MonthlyReportController {
         MonthlyReportExcelModel monthlyReportExcelModelWithMonthYearParams = monthlyReportExcelService.getMonthExcelModelWithYearParams(monthlyReportExcelModelWithMonthParams, yearProjectMonthlyReports);
         // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
         MonthlyReportExcelModel monthlyReportExcelModelWithSofarParams = null;
         if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {  // 是否存在历史数据
             monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, thisProject.getHistoryMonthlyReportExcelStatistics());
         } else {
             monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, null);
         }
-        ;
         return ResultUtil.success(MonthlyReportExcelCalcUtil.buildMonthlyReportExcel(monthlyReportExcelModelWithSofarParams));
     }
 

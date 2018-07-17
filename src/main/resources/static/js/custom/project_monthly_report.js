@@ -75,6 +75,12 @@ $(document).ready(function(){
             projectMonthlyReportVO.environmentalProtection = $('#environmental_protection').val();
             projectMonthlyReportVO.waterConservation = $('#water_conservation').val();
             projectMonthlyReportVO.otherCost = $('#other_cost').val();
+            projectMonthlyReportVO.sourceCentralInvestment = $('#source_central_investment').val();
+            projectMonthlyReportVO.sourceProvincialInvestment = $('#source_provincial_investment').val();
+            projectMonthlyReportVO.sourceLocalInvestment = $('#source_local_investment').val();
+            projectMonthlyReportVO.availableCentralInvestment = $('#available_central_investment').val();
+            projectMonthlyReportVO.availableProvincialInvestment = $('#available_provincial_investment').val();
+            projectMonthlyReportVO.availableLocalInvestment = $('#available_local_investment').val();
             projectMonthlyReportVO.openDug = $('#open_dug').val();
             projectMonthlyReportVO.backfill = $('#backfill').val();
             projectMonthlyReportVO.concrete = $('#concrete').val();

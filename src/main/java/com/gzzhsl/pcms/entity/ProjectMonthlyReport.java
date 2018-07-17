@@ -35,6 +35,14 @@ public class ProjectMonthlyReport {
     private BigDecimal environmentalProtection; // 水土保持工程投资(万元) *
     private BigDecimal waterConservation; // 水土保持工程投资(万元) *
     private BigDecimal otherCost; // 其他(万元)
+    /*资金来源*/
+    private BigDecimal sourceCentralInvestment;
+    private BigDecimal sourceProvincialInvestment;
+    private BigDecimal sourceLocalInvestment;
+    /*资金到位*/
+    private BigDecimal availableCentralInvestment;
+    private BigDecimal availableProvincialInvestment;
+    private BigDecimal availableLocalInvestment;
     /*本月完成工程量*/
     private BigDecimal openDug; // 土石方明挖（万/m³） *
     private BigDecimal backfill; // 土石方回填（万/m³） *

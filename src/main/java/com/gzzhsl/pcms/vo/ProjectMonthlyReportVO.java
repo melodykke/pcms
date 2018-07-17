@@ -45,6 +45,24 @@ public class ProjectMonthlyReportVO {
     @NotNull(message = "必填项空缺")
     @DecimalMax(value = "999999999999", message = "数据太长！")
     private BigDecimal otherCost; // 其他(万元)
+    @NotNull(message = "必填项空缺")
+    @DecimalMax(value = "999999999999", message = "数据太长！")
+    private BigDecimal sourceCentralInvestment;
+    @NotNull(message = "必填项空缺")
+    @DecimalMax(value = "999999999999", message = "数据太长！")
+    private BigDecimal sourceProvincialInvestment;
+    @NotNull(message = "必填项空缺")
+    @DecimalMax(value = "999999999999", message = "数据太长！")
+    private BigDecimal sourceLocalInvestment;
+    @NotNull(message = "必填项空缺")
+    @DecimalMax(value = "999999999999", message = "数据太长！")
+    private BigDecimal availableCentralInvestment;
+    @NotNull(message = "必填项空缺")
+    @DecimalMax(value = "999999999999", message = "数据太长！")
+    private BigDecimal availableProvincialInvestment;
+    @NotNull(message = "必填项空缺")
+    @DecimalMax(value = "999999999999", message = "数据太长！")
+    private BigDecimal availableLocalInvestment;
     /*本月完成工程量*/
     @NotNull(message = "必填项空缺")
     @DecimalMax(value = "999999999999", message = "数据太长！")

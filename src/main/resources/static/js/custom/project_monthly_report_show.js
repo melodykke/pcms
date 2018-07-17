@@ -6,40 +6,6 @@ $(function () {
 
     //  增加一个可以藏起来PID的页面元素 TODO
 
-    var datatable = [
-        ["1","计划总投资","万元","","","对应此处"],
-        ["2","本年计划投资","万元","","对应此处",""],
-        ["3","完成投资","","本月完成投资","本年完成投资","开工累计完成投资"],
-        ["3.1","  按概算构成分","","","",""],
-        ["3.1.1","   建筑工程","万元","","","",],
-        ["3.1.2","   金属机构设备及安装工程","万元","","",""],
-        ["3.1.3","   机电设备及安装工程","万元","","",""],
-        ["3.1.4","   施工临时工程","万元","","",""],
-        ["3.1.5","   独立费用","万元","","",""],
-        ["3.1.6","   征地及移民投资","万元","","",""],
-        ["3.1.7","   水土保持工程","万元","","",""],
-        ["3.1.8","   环境保护工程","万元","","",""],
-        ["3.1.9","   其他","万元","","","",],
-        ["3.2","  按资金来源分","","本月完成投资","本年完成投资","开工累计完成投资"],
-        ["3.2.1","    中央投资","万元","","",""],
-        ["3.2.2","    省级投资","万元","","",""],
-        ["3.2.3","    市县投资","万元","","",""],
-        ["4","到位资金","","本月到位资金","本年到位资金","开工累计到位资金"],
-        ["4.1","    中央投资","万元","","",""],
-        ["4.2","    省级投资","万元","","",""],
-        ["4.3","    市县投资","万元","","",""],
-        ["5","已完成工程量","","本月完成工程量","本年完成工程量","开工累计完成工程量"],
-        ["5.1","    土石方明挖","万立方米","","",""],
-        ["5.2","    土石方洞挖","万立方米","","",""],
-        ["5.3","    土石方回填","万立方米","","",""],
-        ["5.4","    砌石","万立方米","","",""],
-        ["5.5","    混凝土","万立方米","","",""],
-        ["5.6","    钢筋","吨","","",""],
-        ["5.7","    灌浆","米","","",""],
-        ["6","  劳动力投入","","本月投入","本年投入","开工累计投入"],
-        ["6.1","   投入劳动力","万工日","","",""]
-    ];
-
     function getProjectMonthlyReport() {
         $.ajax({
             url: getprojectmonthlyreportbyprojectmonthlyreportidurl,
@@ -174,29 +140,6 @@ $(function () {
         return false;
     });
 
-
-/*    $('#mr_table').click(function () {
-
-    })*/
-
-   /* $('#project_monthly_report_content_div').mouseenter(function () {
-        window.onmousewheel=function(){
-            return false
-        };
-    });
-    $('#project_monthly_report_content_div').mouseleave(function () {
-        window.onmousewheel=function(){
-            return true
-        };
-    });
-    $('#project_monthly_report_content_div').mousewheel(function (e, delta) {
-        if (delta > 0) {
-            $('#last_month').trigger("click");
-        }else {
-            $('#next_month').trigger("click");
-        }
-    });*/
-
     function refreshContents(data){
         $('#plantName').text(data.data.plantName);
         $('#year_tag').text(data.data.year);
@@ -230,6 +173,9 @@ $(function () {
         if (data.data.state == -1) {
             $('#tabbtn').append('');
         } else {
+            if ($('#mr_table')) {
+                $('#mr_table').remove();
+            }
             $('#tabbtn').append('<li class=""><a data-toggle="modal" id="mr_table"> <i class="fa fa-pie-chart"></i>月报表</a></li>')
             $('#tabbtn').on('click', '#mr_table', function (e) {
                 var  labelItemListDataTable = $('.dataTables-example').dataTable();
@@ -252,7 +198,7 @@ $(function () {
                                 retrieve: true,
                                 destroy:true,
                                 bInfo:false,       //去掉显示信息
-                                data:datatable,
+                                data:data.data,
                                 paging: false,
                                 ordering:false,
                                 bAutoWidth:true,
@@ -289,7 +235,6 @@ $(function () {
                 })
             })
         }
-
         $('#civilEngineering').text(data.data.civilEngineering);
         $('#electromechanicalEquipment').text(data.data.electromechanicalEquipment);
         $('#metalMechanism').text(data.data.metalMechanism);
@@ -300,6 +245,12 @@ $(function () {
         $('#waterConservation').text(data.data.waterConservation);
         $('#environmentalProtection').text(data.data.environmentalProtection);
         $('#otherCost').text(data.data.otherCost);
+        $('#sourceCentralInvestment').text(data.data.sourceCentralInvestment);
+        $('#sourceProvincialInvestment').text(data.data.sourceProvincialInvestment);
+        $('#sourceLocalInvestment').text(data.data.sourceLocalInvestment);
+        $('#availableCentralInvestment').text(data.data.availableCentralInvestment);
+        $('#availableProvincialInvestment').text(data.data.availableProvincialInvestment);
+        $('#availableLocalInvestment').text(data.data.availableLocalInvestment);
         $('#openDug').text(data.data.openDug);
         $('#holeDug').text(data.data.holeDug);
         $('#backfill').text(data.data.backfill);
