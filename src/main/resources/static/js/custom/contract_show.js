@@ -340,40 +340,39 @@ $(function () {
             var switchState = $("#contract-checkbox").prop("checked");  // true: 按钮为通过 false：按钮通过
             var checkinfo = $('#contract_approve_area').val();
             var contractId = target.dataset.cid;
-                $.ajax({
-                    url: "contract/approvecontract",
-                    type: 'POST',
-                    data: JSON.stringify({"switchState": switchState, "checkinfo": checkinfo, "contractId": contractId}),
-                    contentType: 'application/json',
-                    beforeSend: function () {
-                        $('#loading').show();
-                    },
-                    success: function (data) {
-                        if (data.code == 1002 || data.code == 1003) {
-                            $('#contract_check_div').html('');
-                            $('#contract_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 成 功</h1></div> <div class="modal-footer">\n' +
-                                '                <button type="button" id="check_result_confirm_btn" class="btn btn-white" data-dismiss="modal">确定</button>\n' +
-                                '            </div>');
-                        } else {
-                            $('#contract_check_div').html('');
-                            $('#contract_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 出 错</h1></div>   <div class="modal-body">\n' +
-                                '                <div class="form-group animated fadeIn" ><label style="font-size: 15px;">' + data.msg + '</label></div>\n' +
-                                '            </div><div class="modal-footer">\n' +
-                                '                <button type="button" id="check_result_confirm_btn" class="btn btn-white" data-dismiss="modal">确定</button>\n' +
-                                '            </div>');
-                        }
-                        $('#contract_approve_modal').modal('hide');
-                        $('#main_content', parent.document).load('contract/tocontract');
-                    },
-                    complete: function () {
-                        $("#loading").hide();
-                    },
-                    error: function (data) {
-                        console.info("error: " + data.msg);
+            $.ajax({
+                url: "contract/approvecontract",
+                type: 'POST',
+                data: JSON.stringify({"switchState": switchState, "checkinfo": checkinfo, "contractId": contractId}),
+                contentType: 'application/json',
+                beforeSend: function () {
+                    $('#loading').show();
+                },
+                success: function (data) {
+                    if (data.code == 1002 || data.code == 1003) {
+                        $('#contract_check_div').html('');
+                        $('#contract_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 成 功</h1></div> <div class="modal-footer">\n' +
+                            '                <button type="button" id="check_result_confirm_btn" class="btn btn-white" data-dismiss="modal">确定</button>\n' +
+                            '            </div>');
+                    } else {
+                        $('#contract_check_div').html('');
+                        $('#contract_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 出 错</h1></div>   <div class="modal-body">\n' +
+                            '                <div class="form-group animated fadeIn" ><label style="font-size: 15px;">' + data.msg + '</label></div>\n' +
+                            '            </div><div class="modal-footer">\n' +
+                            '                <button type="button" id="check_result_confirm_btn" class="btn btn-white" data-dismiss="modal">确定</button>\n' +
+                            '            </div>');
                     }
-                });
+                    $('#contract_approve_modal').modal('hide');
+                    $('#main_content', parent.document).load('contract/tocontract');
+                },
+                complete: function () {
+                    $("#loading").hide();
+                },
+                error: function (data) {
+                    console.info("error: " + data.msg);
+                }
+            });
         });
-
     });
     $("[name='my-checkbox']").bootstrapSwitch({
         onText : "拒绝",
