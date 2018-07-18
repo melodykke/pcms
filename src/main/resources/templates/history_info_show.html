@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link th:href="@{/css/custom/bootstrap-switch.min.css}" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>历史统计数据</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">首页</a>
+                </li>
+                <li class="active">
+                    <strong>历史统计数据</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <!--动画内容-->
+        <div id="animation_box" class="animated">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="wrapper wrapper-content animated fadeInUp">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <h2>历史统计数据</h2>
+                                </div>
+                                <div class="col-lg-offset-6 col-lg-2">
+                                    <a id="" class="btn btn-danger btn-facebook animation_select" data-toggle="modal" data-target="#history_info_modal">
+                                        审批
+                                    </a>
+                                    <a id="history_info_repeat" data-toggle="tooltip" data-placement="bottom" title="点击后重新填报！"><i class="fa fa-repeat fa-lg"></i></a>
+                                </div>
+                            </div>
+                            <br><br><br><br><br>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <dl>
+                                        <dt>提交进度:</dt>
+                                        <br>
+                                        <dd>
+                                            <div class="progress progress-striped active m-b-sm">
+                                                <div style="width: 50%;" class="progress-bar"></div>
+                                            </div>
+                                            <small>历史统计数据提交情况： <strong>等待领导审批</strong> </small>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="row m-t-sm">
+                                <div class="col-lg-12">
+                                    <div class="panel blank-panel">
+                                        <div class="panel-heading">
+                                            <div class="panel-options">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active"><a href="#history_info_tab-1" data-toggle="tab"><i class="fa fa-line-chart"></i>数据填报</a></li>
+                                                    <li class=""><a href="#history_info_tab-2" data-toggle="tab"><i class="fa fa-book"></i>附件</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane active animated fadeInUp" id="history_info_tab-1">
+                                                    <fieldset>
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>建筑工程(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyCivilEngineering" type="text" name="historyCivilEngineering" class="form-control required number" maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>金属机构设备及安装工程(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyMetalMechanism" type="text" name="historyMetalMechanism" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>施工临时工程(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyTemporaryWork" type="text" name="historyTemporaryWork" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>建设征地移民安置补偿费(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyResettlementArrangement" type="text" name="historyResettlementArrangement" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                <label>水土保持工程投资(万元)</label><span style="color:red;"> *</span>
+                                                                <input id="historyWaterConservation" type="text" name="historyWaterConservation" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>独立费用(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyIndependentCost" type="text" name="historyIndependentCost" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>机电设备及安装工程(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyElectromechanicalEquipment" type="text" name="historyElectromechanicalEquipment" class="form-control number" maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>环境保护工程(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyEnvironmentalProtection" type="text" name="historyEnvironmentalProtection" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>其他(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyOtherCost" type="text" name="historyOtherCost" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="hr-line-dashed"></div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>按资金来源分中央投资(万元)
+                                                                    </label><span style="color:red;"> *</span>
+                                                                    <input id="historySourceCentralInvestment" type="text" name="historySourceCentralInvestment" class="form-control required " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>到位资金中央投资 (万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyAvailableCentralInvestment" type="text" name="historyAvailableCentralInvestment" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>按资金来源分省级投资(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historySourceProvincialInvestment" type="text" name="historySourceProvincialInvestment" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>到位资金省级投资 (万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyAvailableProvincialInvestment" type="text" name="historyAvailableProvincialInvestment" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>按资金来源分市县投资(万元)
+                                                                    </label><span style="color:red;"> *</span>
+                                                                    <input id="historySourceLocalInvestment" type="text" name="historySourceLocalInvestment" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>到位资金市县投资(万元)</label><span style="color:red;"> *</span>
+                                                                    <input id="historyAvailableLocalInvestment" type="text" name="historyAvailableLocalInvestment" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="hr-line-dashed"></div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>土石方明挖（万/m³）
+                                                                    </label><span style="color:red;"> *</span>
+                                                                    <input id="historyOpenDug" type="text" name="historyOpenDug" class="form-control required " maxlength="15" readonly>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label>混泥土（万/m³）
+                                                                    </label><span style="color:red;"> *</span>
+                                                                    <input id="historyConcrete" type="text" name="historyConcrete" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>钢筋（t）</label><span style="color:red;"> *</span>
+                                                                    <input id="historyRebar" type="text" name="historyRebar" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>土石方洞挖（万/m³）</label><span style="color:red;"> *</span>
+                                                                    <input id="historyHoleDug" type="text" name="historyHoleDug" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                <label>灌浆（m或m³）</label><span style="color:red;"> *</span>
+                                                                <input id="historyGrout" type="text" name="historyGrout" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>劳动力投入（万工日）</label><span style="color:red;"> *</span>
+                                                                    <input id="historyLabourForce" type="text" name="historyLabourForce" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>土石方回填（万/m³）</label><span style="color:red;"> *</span>
+                                                                    <input id="historyBackfill" type="text" name="historyBackfill" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>砌石（万/m³）</label><span style="color:red;"> *</span>
+                                                                    <input id="historyMasonry" type="text" name="historyMasonry" class="form-control  " maxlength="15" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="tab-pane animated fadeInUp" id="history_info_tab-2">
+                                                    <div class="panel-body">
+                                                        <div class="col-lg-12">
+                                                            <div class="ibox">
+                                                                <div class="ibox-title">
+                                                                    <h4><i class="fa fa-file-text"></i> 附件查看</h4>
+                                                                </div>
+                                                                <div class="ibox-content">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12">
+                                                                            <div class="file-box">
+                                                                                <div class="file">
+                                                                                    <span class="corner"></span>
+                                                                                    <div class="icon">
+                                                                                    </div>
+                                                                                    <div class="file-name">
+                                                                                        Document_2014.doc
+                                                                                        <br/>
+                                                                                        <small>Added: Jan 11, 2014</small>
+                                                                                        <button class="btn-primary pull-right">下载</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="wrapper wrapper-content project-manager">
+                    <h4>备注</h4>
+                    <img src="img/zender_logo.png" class="img-responsive">
+                    <p>
+                        填报数据为2018年前，项目统计数据，请认真填写
+                    </p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!--审批modal-->
+    <div class="modal inmodal" id="history_info_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                    </button>
+                    <h1 class="modal-title">历史统计数据审批</h1>
+
+                    <br>
+                    <input type="checkbox" name="my-checkbox" id="my-checkbox">
+                </div>
+                <div class="modal-body">
+                    <div class="form-group animated fadeIn" id="approve_input" style="display:none;">
+                        <label style="font-size: 15px;">若不通过，请说明原因:</label>
+                        <textarea id="approve_area" rows="5" placeholder="填写内容请控制在250字以内。" class="form-control" maxlength="250">
+                                                            </textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="history_info_approve_submit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom and plugin javascript -->
+
+    <script th:src="@{/js/custom/bootstrap-switch.min.js}"></script>
+    <script th:src="@{/js/custom/history_info_show.js}"></script>
+
+</body>
+
+</html>

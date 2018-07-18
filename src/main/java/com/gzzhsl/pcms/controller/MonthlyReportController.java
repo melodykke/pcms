@@ -240,4 +240,20 @@ public class MonthlyReportController {
         }
         return ResultUtil.success(projectMonthlyReportService.approveMonthlyReport(thisUser, switchState, checkinfo, projectMonthlyReportId, projectMonthlyReportRt));
     }
+
+    @GetMapping("/tomonthshistory")
+    public String toMonthsHistory() {
+        return "history_info_new";
+    }
+    @GetMapping("/hashistorystatistic")
+    @ResponseBody
+    public ResultVO hasHistoryStatistic() {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {
+            return ResultUtil.success();
+        } else {
+            return ResultUtil.failed();
+        }
+    }
 }

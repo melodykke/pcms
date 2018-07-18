@@ -45,7 +45,7 @@ $(function () {
     })
     $('#project_months').click(function () {
         contentDiv.load('reporter/projectmonths');
-    })
+    });
     $('#account_config').click(function () {
         contentDiv.load('account/accountconfig');
     });
@@ -1003,7 +1003,34 @@ $(function () {
     });
     $('.contract_modal_close').click(function () {
         $('#contract_modal').modal('hide');
-    })
+    });
+
+
+    // 历史数据填写
+    $("#month_history_statistic").click(function(){
+        $.ajax({
+            url: 'monthlyreport/hashistorystatistic',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.code == 1002){
+                    swal({
+                            title: "敬告",
+                            text: "已设置过该水库的历史统计数据，无法重复设置!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "好的，去填写!",
+                            cancelButtonText:"取消"
+                        }
+                    );
+                } else {
+                    contentDiv.load('monthlyreport/tomonthshistory');
+                }
+            }
+        });
+
+    });
 
 
 });

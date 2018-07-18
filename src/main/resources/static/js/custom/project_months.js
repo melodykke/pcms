@@ -51,8 +51,10 @@ $(function () {
     }
 
     $('#projectMonthsDiv').on('click', 'a', function (e) {
+        completeLoading();
         var target = $(e.currentTarget);
         var projectMonthlyReportId = e.currentTarget.dataset.id;
-        $('#main_content', parent.document).load('monthlyreport/projectmonthlyreportshow?projectMonthlyReportId='+projectMonthlyReportId)
-    })
+        $('#main_content', parent.document).load('monthlyreport/projectmonthlyreportshow?projectMonthlyReportId='+projectMonthlyReportId);
+
+    });
 })
