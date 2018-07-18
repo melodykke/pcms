@@ -72,21 +72,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var defaultClientFonts = {
 		Roboto: {
-			normal: 'FZYTK.TTF',
-                    bold: 'FZYTK.TTF',
-                    italics: 'FZYTK.TTF',
-                    bolditalics: 'FZYTK.TTF',
+			normal: 'msyh.ttf',
+                    bold: 'msyh.ttf',
+                    italics: 'msyh.ttfF',
+                    bolditalics: 'msyh.ttf',
 			// normal: 'Roboto-Regular.ttf',
 			// bold: 'Roboto-Medium.ttf',
 			// italics: 'Roboto-Italic.ttf',
 			// bolditalics: 'Roboto-MediumItalic.ttf'
-		},
-		FZYTK: {
-                normal: 'FZYTK.TTF',
-                bold: 'FZYTK.TTF',
-                italics: 'FZYTK.TTF',
-                bolditalics: 'FZYTK.TTF',
-            }
+		}
 	};
 
 	function Document(docDefinition, tableLayouts, fonts, vfs) {

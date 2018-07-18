@@ -142,6 +142,8 @@ $(function () {
 
     function refreshContents(data){
         var projectName = data.data.plantName;
+        var year = data.data.year;
+        var month = data.data.month;
         $('#plantName').text(data.data.plantName);
         $('#year_tag').text(data.data.year);
         $('#month').text(data.data.month+' 月');
@@ -231,21 +233,30 @@ $(function () {
                                 responsive: true,
                                 dom: '<"html5buttons"B>lTfgitp',
                                 buttons: [
-                                    {
-                                        "extend": 'pdfHtml5',
-                                        'title': '工程项目月报', //导出文件名字
-                                        'text': '导出PDF', //定义导出excel按钮的文字
-                                        "aButtons": "true",
-                                        "sCharSet": "utf8",
-                                        // 'download': 'open',//直接在窗口打开
-                                        // 'orientation': 'landscape',
-                                        // 'pageSize': 'LEGAL',
-                                        'messageTop': projectName
-
-                                    },
                                     {extend: 'copy'},
                                     {extend: 'csv'},
-                                    {extend: 'excel', title: '项目月报'},
+                                    {extend: 'excel', title: '水库项目基本信息'},
+                                    {
+                                        "extend": 'pdf',
+                                        'title': projectName+'月报('+year+'-'+month+')', //导出文件名字
+                                        "filename": "*",
+                                        'text': 'PDF', //定义导出excel按钮的文字
+                                        "aButtons": "true",
+                                        "sCharSet": "utf8",
+                                        "download": "open",
+                                        'header': true,
+                                    },
+
+                                    {extend: 'print',
+                                        customize: function (win){
+                                            $(win.document.body).addClass('white-bg');
+                                            $(win.document.body).css('font-size', '10px');
+
+                                            $(win.document.body).find('table')
+                                                .addClass('compact')
+                                                .css('font-size', 'inherit');
+                                        }
+                                    }
                                 ]
                             });
                         }

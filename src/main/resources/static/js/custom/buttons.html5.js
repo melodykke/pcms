@@ -1329,7 +1329,7 @@ DataTable.ext.buttons.pdfHtml5 = {
 			},
 			defaultStyle: {
 				fontSize: 10,
-				font: '简体'
+				font: '微软雅黑'
 			}
 		};
 
@@ -1369,11 +1369,11 @@ DataTable.ext.buttons.pdfHtml5 = {
                 italics: 'STXINGKA.TTF',
                 bolditalics: 'STXINGKA.TTF',
             },
-            简体: {
-	            normal: 'simfang.ttf',
-	            bold: 'simfang.ttf',
-	            italics: 'simfang.ttf',
-	            bolditalics: 'simfang.ttf',
+            微软雅黑: {
+	            normal: 'msyh.ttf',
+	            bold: 'msyh.ttf',
+	            italics: 'msyh.ttf',
+	            bolditalics: 'msyh.ttf',
 	        }
         };
 
