@@ -183,6 +183,9 @@ public class MonthlyReportController {
     @GetMapping("/getmonthlyreportexcelbyprojectid")
     @ResponseBody
     public ResultVO getMonthlyReportExcelByProjectMonthlyReportId(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
+        // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
         ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
         String projectId = ((BaseInfo) request.getSession().getAttribute("thisProject")).getBaseInfoId();
         Date yearEndDate = new Date(); // 当前时间
@@ -196,11 +199,11 @@ public class MonthlyReportController {
         List<ProjectMonthlyReport> sofarProjectMonthlyReports = projectMonthlyReportService.
                 getMonthlyReportsByProjectIdAndYear(projectId, historyPointTime, yearEndTime); // 查询截止目前 历史的统计情况;;
         MonthlyReportExcelModel monthlyReportExcelModel = new MonthlyReportExcelModel();
+        monthlyReportExcelModel.setTotalInvestment(thisProject.getTotalInvestment());
+        /*monthlyReportExcelModel.setThisYearPlanInvestment(); TODO 设置年度投融资计划*/
         MonthlyReportExcelModel monthlyReportExcelModelWithMonthParams = monthlyReportExcelService.getMonthExcelModelWithMonthParams(monthlyReportExcelModel, projectMonthlyReport);
         MonthlyReportExcelModel monthlyReportExcelModelWithMonthYearParams = monthlyReportExcelService.getMonthExcelModelWithYearParams(monthlyReportExcelModelWithMonthParams, yearProjectMonthlyReports);
-        // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
+
         MonthlyReportExcelModel monthlyReportExcelModelWithSofarParams = null;
         if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {  // 是否存在历史数据
             monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, thisProject.getHistoryMonthlyReportExcelStatistics());

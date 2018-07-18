@@ -51,8 +51,8 @@ public class BaseInfoController {
     @GetMapping("/hasbaseinfo")
     @ResponseBody
     public ResultVO hasBaseInfo() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         if (thisUser.getBaseInfo() == null) {
             return ResultUtil.failed();
         } else if (thisUser.getBaseInfo().getState().equals((byte) -1)) {
@@ -70,7 +70,8 @@ public class BaseInfoController {
     @GetMapping("/getbaseinfo")
     @ResponseBody
     public ResultVO getBaseInfo() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         if (userService.getUserByUsername(thisUser.getUsername()).getBaseInfo() == null){
             log.error("【基本信息】没有配置该用户的项目基本信息");
             throw new SysException(SysEnum.BASE_INFO_NO_RECORD_ERROR);
@@ -107,7 +108,7 @@ public class BaseInfoController {
     @PostMapping("/savebaseinfo")
     @ResponseBody
     public ResultVO saveReport(@Valid @RequestBody BaseInfoVO baseInfoVO, BindingResult bindingResult) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+
         if (baseInfoVO == null) {
             log.error("【基本信息错误】 没有收到有效的baseInfoVO , " +
                     "实际baseInfoVO = {}", baseInfoVO);
@@ -118,8 +119,6 @@ public class BaseInfoController {
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
         BaseInfo baseInfoRt = baseInfoService.save(baseInfoVO);
-   /*     // 基础信息存库后，将基础信息添加到userinfo
-        userService.updateUserBaseInfo(baseInfoRt, thisUser.getUserId());*/
         return ResultUtil.success();
     }
 
@@ -127,7 +126,8 @@ public class BaseInfoController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveBaseInfo(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");
         String baseInfoId = (String) params.get("baseInfoId");

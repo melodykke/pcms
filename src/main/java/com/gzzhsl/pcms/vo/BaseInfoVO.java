@@ -25,13 +25,9 @@ public class BaseInfoVO {
     private String legalPersonName;
     private String longitude;
     private String latitude;
-
     private BigDecimal storage; // 库容
     private String scale; // 规模
     private BigDecimal timeLimit; // 工期
-    private BigDecimal centralInvestment; // 中央投资
-    private BigDecimal provincialInvestment; // 省级投资
-    private BigDecimal localInvestment; // 市县投资
     private BigDecimal totalInvestment; // 总投资
     private String overview; // 概况
     private String level; // 工程等别
@@ -63,11 +59,6 @@ public class BaseInfoVO {
     private BigDecimal ruralHumanWater; // 农村人饮（万人）
     private BigDecimal livestock; // 大牲畜（万头）
     private BigDecimal waterSupplyPopulation; // 城镇供水人口（万人)
-    private BigDecimal centralAccumulativePayment ; // 中央累计拨付（万元）
-    private BigDecimal provincialAccumulativePayment; // 省级累计拨付（万元）
-    private BigDecimal localAccumulativePayment; // 市县累计拨付（万元）
-    private BigDecimal totalAccumulativePayment; // 总的累计拨付
-    private BigDecimal provincialLoan; // 省级配套融资贷款（万元）
 
     private List<BaseInfoImgVO> baseInfoImgVOs;
 

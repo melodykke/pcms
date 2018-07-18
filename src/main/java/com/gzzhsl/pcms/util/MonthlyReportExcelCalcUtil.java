@@ -468,9 +468,9 @@ public class MonthlyReportExcelCalcUtil {
         MonthlyReportExcelCalcUtil thisUtil = new MonthlyReportExcelCalcUtil();
         List<List<String>> excelModel = new MonthlyReportExcelCalcUtil().initExcelModel();
         List<String> row1 = excelModel.get(0);
-        row1.set(5, String.valueOf(9999));  // 计划总投资
+        row1.set(5, String.valueOf(monthlyReportExcelModel.getTotalInvestment()));  // 计划总投资
         List<String> row2 = excelModel.get(1);
-        row2.set(4, String.valueOf(8888));  // 本年计划投资
+        row2.set(4, String.valueOf(monthlyReportExcelModel.getThisYearPlanInvestment()));  // 本年计划投资
 
         List<String> row4 = excelModel.get(3); // 3.1
         row4.set(3, String.valueOf(thisUtil.calcInvestCompleteMonthTotal(monthlyReportExcelModel)));

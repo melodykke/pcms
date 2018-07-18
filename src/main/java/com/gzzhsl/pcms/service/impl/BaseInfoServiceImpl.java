@@ -78,15 +78,16 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             List<BaseInfoImgVO> baseInfoImgVOs = new ArrayList<>();
             baseInfoVO.setBaseInfoImgVOs(baseInfoImgVOs);
         }
-        baseInfoVO.setTotalInvestment(baseInfo.getCentralInvestment().add(baseInfo.getProvincialInvestment().add(baseInfo.getLocalInvestment())));
+        /*baseInfoVO.setTotalInvestment(baseInfo.getCentralInvestment().add(baseInfo.getProvincialInvestment().add(baseInfo.getLocalInvestment())));
         baseInfoVO.setTotalAccumulativePayment(baseInfo.getCentralAccumulativePayment().add(baseInfo.getProvincialAccumulativePayment().add(baseInfo.getLocalAccumulativePayment())));
-
+*/
         return baseInfoVO;
     }
 
     @Override
     public BaseInfo save(BaseInfoVO baseInfoVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         String origId = null;
         if (thisProject != null && thisProject.getState().equals((byte) 1)) {
@@ -149,7 +150,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
                 baseInfoRt.getUpdateTime(),
                 "提交了ID:"+ baseInfoRt.getBaseInfoId() +"的水库项目基本信息"));
         // 基础信息存库后，将基础信息添加到userinfo
-        List<UserInfo> userInfoList = new ArrayList<>();
         List<SysRole> roles = thisUser.getSysRoleList();
         if (thisUser.getChildren() != null && thisUser.getChildren().size()==0 && roles.size() == 1 && "reporter".equals(roles.get(0).getRole())) { // 如果是reporter账号...
             if (thisUser.getParent() != null && thisUser.getParent().getUserId() != "" && thisUser.getParent().getUserId() != null ) {
@@ -165,16 +165,20 @@ public class BaseInfoServiceImpl implements BaseInfoService {
                 if ("checker".equals(role.getRole())) { // 如果是checker账号...
                     if (thisUser.getChildren() != null && thisUser.getChildren().size() > 0) {
                         List<UserInfo> children = thisUser.getChildren();
-                        children.add(thisUser); // 儿子们加粑粑
+                        List<UserInfo> childrenAndI = new ArrayList<>();
                         for (UserInfo child : children) {
-                            child.setBaseInfo(baseInfoRt);
+                            childrenAndI.add(child);
                         }
-                        baseInfoRt.setUserInfoList(children);
+                        childrenAndI.add(thisUser); // 儿子们加粑粑
+                        for (UserInfo person : childrenAndI) {
+                            person.setBaseInfo(baseInfoRt);
+                        }
+                        baseInfoRt.setUserInfoList(childrenAndI);
                     }
                 }
             }
         }
-        BaseInfo baseInfoRtRt = baseInfoRepository.save(baseInfoRt);
+        baseInfoRt = baseInfoRepository.save(baseInfoRt);
         // 创建webSocket消息
         WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "项目基础信息", "新的项目基础信息消息");
         return baseInfoRt;

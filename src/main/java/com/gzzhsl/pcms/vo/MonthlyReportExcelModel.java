@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.util.List;
 @Data
 public class MonthlyReportExcelModel {
+    private BigDecimal totalInvestment; // 计划总投资
+    private BigDecimal thisYearPlanInvestment; // 本年计划投资
     private BigDecimal civilEngineering; // 建筑工程(万元) *
     private BigDecimal electromechanicalEquipment; // 机电设备及安装工程(万元) *
     private BigDecimal metalMechanism; // 金属机构设备及安装工程(万元) *

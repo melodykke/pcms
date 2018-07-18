@@ -270,6 +270,7 @@ $(function () {
             console.log($('#plantName'))
             console.log($('#plantName').val())
             baseInfoVO.plantName = $('#plantName').val();
+            baseInfoVO.totalInvestment = $('#totalInvestment').val();
             baseInfoVO.projectType = $('#projectType').val();
             baseInfoVO.level = $('#level').val();
             baseInfoVO.longitude = $('#longitude').val();
@@ -291,19 +292,12 @@ $(function () {
             baseInfoVO.watersupply = $('#watersupply').val();
             baseInfoVO.areaCoverage = $('#areaCoverage').val();
             baseInfoVO.ruralHumanWater = $('#ruralHumanWater').val();
-            baseInfoVO.centralInvestment = $('#centralInvestment').val();
-            baseInfoVO.localInvestment = $('#localInvestment').val();
-            baseInfoVO.centralAccumulativePayment = $('#centralAccumulativePayment').val();
-            baseInfoVO.localAccumulativePayment = $('#localAccumulativePayment').val();
-            baseInfoVO.provincialLoan = $('#provincialLoan').val();
             baseInfoVO.catchmentArea = $('#catchmentArea').val();
             baseInfoVO.spillway = $('#spillway').val();
             baseInfoVO.irrigatedArea = $('#irrigatedArea').val();
             baseInfoVO.installedCapacity = $('#installedCapacity').val();
             baseInfoVO.livestock = $('#livestock').val();
             baseInfoVO.waterSupplyPopulation = $('#waterSupplyPopulation').val();
-            baseInfoVO.provincialInvestment = $('#provincialInvestment').val();
-            baseInfoVO.provincialAccumulativePayment = $('#provincialAccumulativePayment').val();
             baseInfoVO.unitProjectAmount = $('#unitProjectAmount').val();
             baseInfoVO.unitProjectOverview = $('#unitProjectOverview').val();
             baseInfoVO.cellProjectAmount = $('#cellProjectAmount').val();
