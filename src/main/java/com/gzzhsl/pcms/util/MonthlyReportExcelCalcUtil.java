@@ -229,7 +229,7 @@ public class MonthlyReportExcelCalcUtil {
         List<String> row3 = new ArrayList<>();
         row3.add("3");
         row3.add("完成投资");
-        row3.add("万元");
+        row3.add("/");
         row3.add("本月");
         row3.add("本年累计");
         row3.add("开工累计");
@@ -362,7 +362,7 @@ public class MonthlyReportExcelCalcUtil {
         List<String> row22 = new ArrayList<>();
         row22.add("5");
         row22.add("已完成工程量");
-        row22.add(" ");
+        row22.add("/");
         row22.add("本月");
         row22.add("本年累计");
         row22.add("开工累计");
@@ -418,7 +418,7 @@ public class MonthlyReportExcelCalcUtil {
         List<String> row30 = new ArrayList<>();
         row30.add("6");
         row30.add("劳动力投入");
-        row30.add(" ");
+        row30.add("/");
         row30.add("本月");
         row30.add("本年累计");
         row30.add("开工累计");

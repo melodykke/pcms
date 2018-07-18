@@ -15,21 +15,21 @@ public class HistoryMonthlyReportExcelStatistics {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String hId;
-    private BigDecimal historyCivilEngineering;
-    private BigDecimal historyElectromechanicalEquipment;
-    private BigDecimal historyMetalMechanism;
-    private BigDecimal historyIndependentCost;
-    private BigDecimal historyTemporaryWork;
-    private BigDecimal historyResettlementArrangement;
-    private BigDecimal historyEnvironmentalProtection;
-    private BigDecimal historyWaterConservation;
-    private BigDecimal historyOtherCost;
-    private BigDecimal historySourceCentralInvestment;
-    private BigDecimal historySourceProvincialInvestment;
-    private BigDecimal historySourceLocalInvestment;
-    private BigDecimal historyAvailableCentralInvestment;
-    private BigDecimal historyAvailableProvincialInvestment;
-    private BigDecimal historyAvailableLocalInvestment;
+    private BigDecimal historyCivilEngineering; // 建筑工程(万元)
+    private BigDecimal historyElectromechanicalEquipment; // 机电设备及安装工程(万元) *
+    private BigDecimal historyMetalMechanism; // 金属机构设备及安装工程(万元) *
+    private BigDecimal historyIndependentCost; // 独立费用(万元) *
+    private BigDecimal historyTemporaryWork; // 施工临时工程(万元) *
+    private BigDecimal historyResettlementArrangement; // 建设征地移民安置补偿费(万元) *
+    private BigDecimal historyEnvironmentalProtection;// 环境保护工程(万元) *
+    private BigDecimal historyWaterConservation; // 水土保持工程投资(万元) *
+    private BigDecimal historyOtherCost; // 其他(万元)
+    private BigDecimal historySourceCentralInvestment; // 按资金来源分中央投资
+    private BigDecimal historySourceProvincialInvestment; // 按资金来源分省级投资
+    private BigDecimal historySourceLocalInvestment; // 按资金来源分市县投资
+    private BigDecimal historyAvailableCentralInvestment; // 到位资金中央投资
+    private BigDecimal historyAvailableProvincialInvestment; // 到位资金省级投资
+    private BigDecimal historyAvailableLocalInvestment; // 到位资金市县投资
     private BigDecimal historyOpenDug; // 土石方明挖（万/m³） *
     private BigDecimal historyBackfill; // 土石方回填（万/m³） *
     private BigDecimal historyConcrete; // 混泥土（万/m³） *

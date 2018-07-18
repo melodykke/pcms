@@ -240,14 +240,23 @@ $(function () {
                                         "extend": 'pdf',
                                         'title': projectName+'月报('+year+'-'+month+')', //导出文件名字
                                         "filename": "*",
-                                        'text': 'PDF', //定义导出excel按钮的文字
+                                        'text': 'PDF预览', //定义导出excel按钮的文字
                                         "aButtons": "true",
                                         "sCharSet": "utf8",
                                         "download": "open",
                                         'header': true,
                                     },
-
+                                    {
+                                        "extend": 'pdf',
+                                        'title': projectName+'月报('+year+'-'+month+')', //导出文件名字
+                                        "filename": "*",
+                                        'text': 'PDF导出', //定义导出excel按钮的文字
+                                        "aButtons": "true",
+                                        "sCharSet": "utf8",
+                                        'header': true,
+                                    },
                                     {extend: 'print',
+                                        "title": projectName+'月报('+year+'-'+month+')',
                                         customize: function (win){
                                             $(win.document.body).addClass('white-bg');
                                             $(win.document.body).css('font-size', '10px');

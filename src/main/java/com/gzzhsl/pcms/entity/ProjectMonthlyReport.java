@@ -32,7 +32,7 @@ public class ProjectMonthlyReport {
     private BigDecimal reserveFunds; // 基本预备费(万元) *
     /*移民环境投资*/
     private BigDecimal resettlementArrangement; // 建设征地移民安置补偿费(万元) *
-    private BigDecimal environmentalProtection; // 水土保持工程投资(万元) *
+    private BigDecimal environmentalProtection; // 环境保护投资(万元) *
     private BigDecimal waterConservation; // 水土保持工程投资(万元) *
     private BigDecimal otherCost; // 其他(万元)
     /*资金来源*/
