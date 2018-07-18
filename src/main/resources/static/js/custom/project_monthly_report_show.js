@@ -141,6 +141,7 @@ $(function () {
     });
 
     function refreshContents(data){
+        var projectName = data.data.plantName;
         $('#plantName').text(data.data.plantName);
         $('#year_tag').text(data.data.year);
         $('#month').text(data.data.month+' 月');
@@ -194,6 +195,30 @@ $(function () {
                         if (data.code == 1002){
                             $('#data_table_modal').modal();
                             $('.dataTables-example').DataTable({
+                                language: {
+                                    "sProcessing": "处理中...",
+                                    "sLengthMenu": "显示 _MENU_ 项结果",
+                                    "sZeroRecords": "没有匹配结果",
+                                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                    "sInfoPostFix": "",
+                                    "sSearch": "搜索:",
+                                    "sUrl": "",
+                                    "sEmptyTable": "表中数据为空",
+                                    "sLoadingRecords": "载入中...",
+                                    "sInfoThousands": ",",
+                                    "oPaginate": {
+                                        "sFirst": "首页",
+                                        "sPrevious": "上页",
+                                        "sNext": "下页",
+                                        "sLast": "末页"
+                                    },
+                                    "oAria": {
+                                        "sSortAscending": ": 以升序排列此列",
+                                        "sSortDescending": ": 以降序排列此列"
+                                    }
+                                },
                                 bFilter: false,    //去掉搜索框
                                 retrieve: true,
                                 destroy:true,
@@ -206,18 +231,21 @@ $(function () {
                                 responsive: true,
                                 dom: '<"html5buttons"B>lTfgitp',
                                 buttons: [
-                                    {extend: 'copy'},
-                                    {extend: 'excel', title: 'ExampleFile'},
-                                    {extend: 'print',
-                                        customize: function (win){
-                                            $(win.document.body).addClass('white-bg');
-                                            $(win.document.body).css('font-size', '10px');
+                                    {
+                                        "extend": 'pdfHtml5',
+                                        'title': '工程项目月报', //导出文件名字
+                                        'text': '导出PDF', //定义导出excel按钮的文字
+                                        "aButtons": "true",
+                                        "sCharSet": "utf8",
+                                        // 'download': 'open',//直接在窗口打开
+                                        // 'orientation': 'landscape',
+                                        // 'pageSize': 'LEGAL',
+                                        'messageTop': projectName
 
-                                            $(win.document.body).find('table')
-                                                .addClass('compact')
-                                                .css('font-size', 'inherit');
-                                        }
-                                    }
+                                    },
+                                    {extend: 'copy'},
+                                    {extend: 'csv'},
+                                    {extend: 'excel', title: '项目月报'},
                                 ]
                             });
                         }
