@@ -4,7 +4,6 @@ import com.gzzhsl.pcms.converter.MonthReport2MonthReportShowVO;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReport2ProjectMonthVO;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReportImg2VO;
 import com.gzzhsl.pcms.entity.*;
-import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.*;
@@ -14,22 +13,18 @@ import com.gzzhsl.pcms.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,10 +40,6 @@ public class MonthlyReportController {
     private MonthlyReportExcelService monthlyReportExcelService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private NotificationService notificationService;
-    @Autowired
-    private FeedbackService feedbackService;
 
     String projectMonthlyReportId = "";
 
@@ -245,15 +236,75 @@ public class MonthlyReportController {
     public String toMonthsHistory() {
         return "history_info_new";
     }
+
     @GetMapping("/hashistorystatistic")
     @ResponseBody
     public ResultVO hasHistoryStatistic() {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
-        if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {
+        if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) 1)) {
             return ResultUtil.success();
+        } else if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) 0)) {
+            return ResultUtil.failed(1004, "历史数据已设置，正在审批中...");
+        } else if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) -1)) {
+            return ResultUtil.failed(1005, "历史数据审批未通过！");
         } else {
             return ResultUtil.failed();
         }
+    }
+
+    @PostMapping("/savehistorystatistic")
+    @ResponseBody
+    public ResultVO saveHistoryStatistic(@Valid @RequestBody HistoryMonthlyReportStatisticVO historyMonthlyReportStatisticVO, BindingResult bindingResult) {
+        if (historyMonthlyReportStatisticVO == null) {
+            log.error("【月报错误】 存储月报历史数据错误，没有收到有效的historyMonthlyReportStatisticVO , " +
+                    "实际historyMonthlyReportStatisticVO = {}", historyMonthlyReportStatisticVO);
+            throw new SysException(SysEnum.HISTORY_MONTHLY_REPORT_ERROR);
+        }
+        if(bindingResult.hasErrors()){
+            log.error("【月报错误】参数验证错误， 参数不正确 historyMonthlyReportStatisticVO = {}， 错误：{}", historyMonthlyReportStatisticVO, bindingResult.getFieldError().getDefaultMessage());
+            throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
+        }
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.saveHistoryStatistic(historyMonthlyReportStatisticVO);
+        if (historyMonthlyReportExcelStatistics != null) {
+            return ResultUtil.success();
+        }
+        return ResultUtil.failed();
+    }
+
+    @GetMapping("/tomonthshistoryshow")
+    public String toMonthsHistoryShow() {
+        return "history_info_show";
+    }
+
+    @GetMapping("/gethistorystatistic")
+    @ResponseBody
+    public ResultVO getHistoryStatistic() {
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.getHistoryStatistic();
+        HistoryMonthlyReportStatisticVO historyMonthlyReportStatisticVO = new HistoryMonthlyReportStatisticVO();
+        if (historyMonthlyReportExcelStatistics != null) {
+            BeanUtils.copyProperties(historyMonthlyReportExcelStatistics, historyMonthlyReportStatisticVO);
+            return ResultUtil.success(historyMonthlyReportStatisticVO);
+        } else {
+            return ResultUtil.failed();
+        }
+    }
+
+    @PostMapping("/approvehistorymonthlystatistic")
+    @ResponseBody
+    @RequiresRoles(value = {"checker"})
+    public ResultVO approveHistoryMonthlyStatistic(@RequestBody Map<String, Object> params) {
+        Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
+        String checkinfo = (String) params.get("checkinfo");
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.getHistoryStatistic();
+        if (historyMonthlyReportExcelStatistics == null) {
+            log.error("【月报错误】审批月报历史数据错误，无对应月报历史数据");
+            throw new SysException(SysEnum.HISTORY_MONTHLY_STATISTIC_NO_CORRESPOND_DATA_ERROR);
+        }
+        if (historyMonthlyReportExcelStatistics.getState() != (byte) 0) {
+            log.error("【月报错误】当前审批月报历史数据已经审批过，不能重复审批");
+            throw new SysException(SysEnum.HISTORY_MONTHLY_STATISTIC_CHECK_CHECKED_ERROR);
+        }
+        return ResultUtil.success(projectMonthlyReportService.approveHistoryMonthlyStatistic(switchState, checkinfo, historyMonthlyReportExcelStatistics));
     }
 }

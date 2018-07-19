@@ -5,6 +5,7 @@ import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.repository.HistoryMonthlyReportExcelStatisticsRepository;
 import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportImgRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportRepository;
@@ -14,10 +15,12 @@ import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
+import com.gzzhsl.pcms.vo.HistoryMonthlyReportStatisticVO;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,13 +40,14 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 @Slf4j
 public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportService{
 
     @Autowired
     private ProjectMonthlyReportRepository projectMonthlyReportRepository;
     @Autowired
-    private ProjectMonthlyReportImgRepository projectMonthlyReportImgRepository;
+    private HistoryMonthlyReportExcelStatisticsRepository historyMonthlyReportExcelStatisticsRepository;
     @Autowired
     private NotificationRepository notificationRepository;
     @Autowired
@@ -54,8 +58,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     private UserService userService;
     @Autowired
     private WebSocket webSocket;
+
     @Override
-    @Transactional
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
@@ -242,6 +246,81 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         }
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "月报", "新的审批消息");
+        return feedbackRt;
+    }
+
+    @Override
+    public HistoryMonthlyReportExcelStatistics saveHistoryStatistic(HistoryMonthlyReportStatisticVO historyMonthlyReportStatisticVO) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = thisProject.getHistoryMonthlyReportExcelStatistics();
+        if (historyMonthlyReportExcelStatistics != null) { // 之前就报过历史数据或未审批或审批未通过
+            if (historyMonthlyReportExcelStatistics.getState().equals((byte) 1)) {
+                log.error("【月报错误】 历史数据已设置并且已经被审批通过，无法更改！");
+                throw new SysException(SysEnum.HISTORY_UNABLE_MODIFY_ERROR);
+            }
+            historyMonthlyReportStatisticVO.setHId(historyMonthlyReportExcelStatistics.getHId());
+            historyMonthlyReportStatisticVO.setCreateTime(historyMonthlyReportExcelStatistics.getCreateTime());
+        } else {
+            historyMonthlyReportExcelStatistics = new HistoryMonthlyReportExcelStatistics();
+            historyMonthlyReportStatisticVO.setCreateTime(new Date());
+            historyMonthlyReportStatisticVO.setUpdateTime(new Date());
+        }
+        BeanUtils.copyProperties(historyMonthlyReportStatisticVO, historyMonthlyReportExcelStatistics);
+        historyMonthlyReportExcelStatistics.setBaseInfo(thisProject);
+        historyMonthlyReportExcelStatistics.setState((byte) 0);
+        historyMonthlyReportExcelStatistics.setUpdateTime(new Date());
+        // 把通知提醒也一并存入数据库
+        Notification notification = new Notification();
+        notification.setCreateTime(new Date());
+        notification.setSubmitter(thisUser.getUsername());
+        notification.setType(NotificationTypeEnum.HISTORY_MONTHLY_STATISTIC.getMsg());
+        notification.setTypeId(historyMonthlyReportExcelStatistics.getHId()); // 这里是历史数据ID
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        notification.setYearmonth(formatter.format(historyMonthlyReportExcelStatistics.getUpdateTime()));
+        notification.setChecked(false);
+        notification.setBaseInfoId(thisProject.getBaseInfoId());
+        notification.setUrl("/monthlyreport/tomonthshistoryshow");
+        notificationRepository.save(notification);
+        operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
+                historyMonthlyReportExcelStatistics.getUpdateTime(),
+                "提交了带附件的"+historyMonthlyReportExcelStatistics.getUpdateTime()+"月报历史数据. ID:"+historyMonthlyReportExcelStatistics.
+                        getHId()));
+        // 创建webSocket消息
+        WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "月报", "历史数据消息");
+        return historyMonthlyReportExcelStatisticsRepository.save(historyMonthlyReportExcelStatistics);
+    }
+
+    @Override
+    public HistoryMonthlyReportExcelStatistics getHistoryStatistic() {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = historyMonthlyReportExcelStatisticsRepository.findByBaseInfo(thisProject);
+        return historyMonthlyReportExcelStatistics;
+    }
+
+    @Override
+    public Feedback approveHistoryMonthlyStatistic(Boolean switchState, String checkinfo, HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        Feedback feedbackRt = null;
+        if (switchState == false) {
+            historyMonthlyReportExcelStatistics.setState((byte) 1); // 审批通过
+            HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatisticsRt = historyMonthlyReportExcelStatisticsRepository.save(historyMonthlyReportExcelStatistics);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(),"月报历史数据", historyMonthlyReportExcelStatisticsRt.getHId(), new Date(),
+                    "审批通过", (byte) 1, "/monthlyreport/tomonthshistoryshow");
+            feedbackRt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的月报月报历史数据"));
+        } else {
+            historyMonthlyReportExcelStatistics.setState((byte) -1); // 审批未通过
+            HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatisticsRt = historyMonthlyReportExcelStatisticsRepository.save(historyMonthlyReportExcelStatistics);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(), "月报历史数据",historyMonthlyReportExcelStatisticsRt.getHId(), new Date(),
+                    "审批未通过：" + checkinfo, (byte) -1, "/monthlyreport/tomonthshistoryshow");
+            feedbackRt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的月报月报历史数据"));
+        }
+        // 创建webSocket消息
+        WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "月报历史数据", "新的审批消息");
         return feedbackRt;
     }
 

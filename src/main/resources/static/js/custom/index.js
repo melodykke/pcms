@@ -1015,13 +1015,43 @@ $(function () {
             success: function (data) {
                 if (data.code == 1002){
                     swal({
-                            title: "敬告",
+                            title: "已配置！",
                             text: "已设置过该水库的历史统计数据，无法重复设置!",
-                            type: "warning",
+                            type: "success",
                             showCancelButton: true,
                             confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "好的，去填写!",
+                            confirmButtonText: "查看",
                             cancelButtonText:"取消"
+                        }, function () {
+                            contentDiv.load('monthlyreport/tomonthshistoryshow');
+                        }
+                    );
+                } else if (data.code == 1004) {
+                    swal({
+                            title:"正在审核!",
+                            text:"历史数据正在审核中，您可以选择查看目前状态或重新提交!",
+                            type:"warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "查看",
+                            cancelButtonText:"取消"
+                        },function () {
+                            $("#pre_progress_modal").modal('hide');
+                            contentDiv.load('monthlyreport/tomonthshistoryshow');
+                        }
+                    );
+                }else if (data.code == 1005) {
+                    swal({
+                            title: "审核未通过!",
+                            text: "历史数据审核未通过，您可以选择查看详情或重新提交!",
+                            type: "error",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "查看",
+                            cancelButtonText: "取消"
+                        }, function () {
+                            $("#pre_progress_modal").modal('hide');
+                            contentDiv.load('monthlyreport/tomonthshistoryshow');
                         }
                     );
                 } else {

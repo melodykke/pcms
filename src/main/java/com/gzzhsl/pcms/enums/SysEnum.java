@@ -27,6 +27,10 @@ public enum SysEnum {
     MONTHLY_REPORTS_NO_CORRESPOND_REPORT_ERROR(1202, "审批月报错误，无月报实体对应月报ID"),
     MONTHLY_REPORTS_CHECKED_OTHERS_ERROR(1203, "不能审批不属于本用户所属工程的月报"),
     MONTHLY_REPORTS_CHECK_CHECKED_ERROR(1204, "当前审批月报已经审批过，不能重复审批"),
+    HISTORY_MONTHLY_REPORT_ERROR(1150, "月报历史数据错误"),
+    HISTORY_UNABLE_MODIFY_ERROR(1151, "月报历史数据已经设置，并且被审批通过，无法更改！"),
+    HISTORY_MONTHLY_STATISTIC_NO_CORRESPOND_DATA_ERROR(1152, "审批月报历史数据错误，无对应月报历史数据"),
+    HISTORY_MONTHLY_STATISTIC_CHECK_CHECKED_ERROR(1153, "当前审批月报历史数据已经审批过，不能重复审批"),
 
     BASE_INFO_NO_RECORD_ERROR(1304, "请优先配置项目基本信息"),
     BASE_INFO_VO_PARAMS_ERROR(1305, "项目基本信息VO参数错误"),

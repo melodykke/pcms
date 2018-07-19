@@ -155,7 +155,6 @@ $(function () {
                 $('#loading').show();
             },
             success: function (data) {
-                console.log(data)
                 if (data.code == 1002 || data.code == 1003) {
                     $('#base_info_check_div').html('');
                     $('#base_info_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 成 功</h1></div> <div class="modal-footer">\n' +

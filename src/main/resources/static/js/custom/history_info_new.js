@@ -13,7 +13,7 @@ $(function () {
     validator.resetForm();
 
     $("#history_info_file").fileinput({
-        // language:'zh',
+        language:'zh',
         theme:'fa',
         uploadUrl: 'http://www.baidu.com', // you must set a valid URL here else you will get an error
         uploadExtraData:{"month1":123},
@@ -52,15 +52,49 @@ $(function () {
                 cancelButtonText:"取消",
                 closeOnConfirm: false
             }, function (){
-                swal({
-                        title:"成功!",
-                        text:"已经成功提交!",
-                        type:"success"
-                    },function () {
-                        $("#pre_progress_modal").modal('hide');
-                        $('#main-page').load('history_info_show.html');
+                var historyMonthlyReportStatisticVO = {};
+                historyMonthlyReportStatisticVO.historyCivilEngineering = $('#historyCivilEngineering').val();
+                historyMonthlyReportStatisticVO.historyMetalMechanism = $('#historyMetalMechanism').val();
+                historyMonthlyReportStatisticVO.historyTemporaryWork = $('#historyTemporaryWork').val();
+                historyMonthlyReportStatisticVO.historyResettlementArrangement = $('#historyResettlementArrangement').val();
+                historyMonthlyReportStatisticVO.historyWaterConservation = $('#historyWaterConservation').val();
+                historyMonthlyReportStatisticVO.historyIndependentCost = $('#historyIndependentCost').val();
+                historyMonthlyReportStatisticVO.historyElectromechanicalEquipment = $('#historyElectromechanicalEquipment').val();
+                historyMonthlyReportStatisticVO.historyEnvironmentalProtection = $('#historyEnvironmentalProtection').val();
+                historyMonthlyReportStatisticVO.historyOtherCost = $('#historyOtherCost').val();
+                historyMonthlyReportStatisticVO.historySourceCentralInvestment = $('#historySourceCentralInvestment').val();
+                historyMonthlyReportStatisticVO.historyAvailableCentralInvestment = $('#historyAvailableCentralInvestment').val();
+                historyMonthlyReportStatisticVO.historySourceProvincialInvestment = $('#historySourceProvincialInvestment').val();
+                historyMonthlyReportStatisticVO.historyAvailableProvincialInvestment = $('#historyAvailableProvincialInvestment').val();
+                historyMonthlyReportStatisticVO.historySourceLocalInvestment = $('#historySourceLocalInvestment').val();
+                historyMonthlyReportStatisticVO.historyAvailableLocalInvestment = $('#historyAvailableLocalInvestment').val();
+                historyMonthlyReportStatisticVO.historyOpenDug = $('#historyOpenDug').val();
+                historyMonthlyReportStatisticVO.historyConcrete = $('#historyConcrete').val();
+                historyMonthlyReportStatisticVO.historyRebar = $('#historyRebar').val();
+                historyMonthlyReportStatisticVO.historyHoleDug = $('#historyHoleDug').val();
+                historyMonthlyReportStatisticVO.historyGrout = $('#historyGrout').val();
+                historyMonthlyReportStatisticVO.historyLabourForce = $('#historyLabourForce').val();
+                historyMonthlyReportStatisticVO.historyBackfill = $('#historyBackfill').val();
+                historyMonthlyReportStatisticVO.historyMasonry = $('#historyMasonry').val();
+                $.ajax({
+                    url: 'monthlyreport/savehistorystatistic',
+                    type: 'POST',
+                    data: JSON.stringify(historyMonthlyReportStatisticVO),
+                   contentType: 'application/json',
+                    success: function (data) {
+                       if (data.code == 1002) {
+                           swal({
+                                   title:"成功!",
+                                   text:"已经成功提交!",
+                                   type:"success"
+                               },function () {
+                                   $("#pre_progress_modal").modal('hide');
+                                   $('#main_content', parent.document).load('monthlyreport/tomonthshistoryshow');
+                               }
+                           )
+                       }
                     }
-                )
+                });
             });
         }
         else {

@@ -7,7 +7,8 @@ public enum NotificationTypeEnum {
     MONTHLY_REPORT("月报"),
     PROJECT_BASIC_INFO("项目基本信息"),
     PROJECT_PRE_PROGRESS("项目前期信息"),
-    PROJECT_CONTRACT("合同备案信息")
+    PROJECT_CONTRACT("合同备案信息"),
+    HISTORY_MONTHLY_STATISTIC("月报历史数据")
     ;
 
 

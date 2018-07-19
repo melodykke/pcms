@@ -1,20 +1,15 @@
-package com.gzzhsl.pcms.entity;
+package com.gzzhsl.pcms.vo;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.gzzhsl.pcms.entity.BaseInfo;
+import lombok.Data;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Entity
-@Getter
-@Setter
-public class HistoryMonthlyReportExcelStatistics {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+@Data
+public class HistoryMonthlyReportStatisticVO {
     private String hId;
     private BigDecimal historyCivilEngineering; // 建筑工程(万元)
     private BigDecimal historyElectromechanicalEquipment; // 机电设备及安装工程(万元) *
@@ -39,12 +34,12 @@ public class HistoryMonthlyReportExcelStatistics {
     private BigDecimal historyMasonry; // 砌石（万/m³） *
     private BigDecimal historyRebar; // 钢筋（t） *
     private BigDecimal historyLabourForce; // 劳动力投入（万工日） *
-    @OneToOne
-    @JoinColumn(name = "base_info_id")
+    @JsonBackReference
     private BaseInfo baseInfo;
-
     private Byte state;
 
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date createTime;
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date updateTime;
 }
