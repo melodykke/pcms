@@ -46,6 +46,12 @@ public class PathUtil {
         String imagePath = "upload/contract/"+ projectName + "/";
         return imagePath.replace("/", separator);
     }
+
+    // relative path  年度投融资计划
+    public static String getAnnualInvestmentImagePath(String projectName, String year){
+        String imagePath = "upload/annualinvestment/"+ projectName + "/" + year + "/";;
+        return imagePath.replace("/", separator);
+    }
     public static void main(String[] args) {
         System.out.println(PathUtil.getFileBasePath(false));
     }

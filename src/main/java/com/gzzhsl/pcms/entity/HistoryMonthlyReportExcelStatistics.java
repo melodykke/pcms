@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -41,6 +42,7 @@ public class HistoryMonthlyReportExcelStatistics {
     private BigDecimal historyLabourForce; // 劳动力投入（万工日） *
     @OneToOne
     @JoinColumn(name = "base_info_id")
+    @JsonBackReference
     private BaseInfo baseInfo;
 
     private Byte state;

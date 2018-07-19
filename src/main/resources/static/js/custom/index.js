@@ -60,6 +60,12 @@ $(function () {
     $('#operation_log').click(function () {
         contentDiv.load('operationlog/tooperationlog');
     });
+    $('#annual_investment_plan_new_entry').click(function () {
+        contentDiv.load('annualinvestment/tonewannualinvestment');
+    });
+    $('#annual_investment_plan_manage_entry').click(function () {
+        contentDiv.load('annualinvestment/toannualinvestmentshow');
+    });
 
     getThisUser(getThisUserUrl);
     getThisProject(getThisProjectUrl);

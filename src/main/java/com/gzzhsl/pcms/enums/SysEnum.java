@@ -59,7 +59,12 @@ public enum SysEnum {
     ACCOUNT_PASSWORD_INCONSISTENCY(2201, "新输入密码与确认密码不一致或新密码与原密码相同"),
     ACCOUNT_DUPLICATED(2202, "已存在相同账号名的用户"),
     ACCOUNT_NO_PROJECT(2203, "没有水库工程，请优先配置水库工程"),
-    ACCOUNT_SUBACCOUNT_ALREDY_EXIST(2204, "本账号已存在子账号，目前只允许一个主账号添加一个子账号")
+    ACCOUNT_SUBACCOUNT_ALREDY_EXIST(2204, "本账号已存在子账号，目前只允许一个主账号添加一个子账号"),
+
+    ANNUAL_INVESTMENT_APPLY_ERROR(3000, "年度投融资计划申报出错"),
+    ANNUAL_INVESTMENT_APPLY_YEAR_DUPLICATED_ERROR(3001, "年度投融资计划申报出错, 本次申报计划投资年份已存在！"),
+    ANNUAL_INVESTMENT_APPLY_YEAR_HAS_DUPLICATED_ERROR(3002, "年度投融资计划申报出错, 申报计划投资年份已存在多个副本！请联系系统管理员！"),
+    ANNUAL_INVESTMENT_NO_PROJECT_ERROR(3003, "请优先配置水库基础信息"),
     ;
 
     private Integer code;
