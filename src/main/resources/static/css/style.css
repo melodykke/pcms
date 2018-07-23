@@ -8559,3 +8559,14 @@ body.md-skin {
     margin: 0;
   }
 }
+.nav-fourth-level li {
+  border-bottom: none !important;
+}
+
+.nav-fourth-level li a {
+  padding-left: 72px;
+}
+
+.md-skin .nav-fourth-level li a {
+  padding-left: 72px;
+}

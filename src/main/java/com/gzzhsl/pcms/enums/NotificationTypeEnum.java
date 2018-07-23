@@ -9,7 +9,8 @@ public enum NotificationTypeEnum {
     PROJECT_PRE_PROGRESS("项目前期信息"),
     PROJECT_CONTRACT("合同备案信息"),
     HISTORY_MONTHLY_STATISTIC("月报历史数据"),
-    ANNUAL_INVESTMENT("年度投资计划")
+    ANNUAL_INVESTMENT("年度投资计划"),
+    TENDER("招标项目备案")
     ;
 
 

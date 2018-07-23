@@ -66,7 +66,12 @@ $(function () {
     $('#annual_investment_plan_manage_entry').click(function () {
         contentDiv.load('annualinvestment/toannualinvestmentshow');
     });
-
+    $('#tender_new_entry').click(function () {
+        contentDiv.load('tender/tonewtender');
+    });
+    $('#tender_manage_entry').click(function () {
+        contentDiv.load('tender/totendershow');
+    });
     getThisUser(getThisUserUrl);
     getThisProject(getThisProjectUrl);
     getOverallNotification(getoverallnotificationUrl);

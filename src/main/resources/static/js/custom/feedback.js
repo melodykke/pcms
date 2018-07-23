@@ -156,7 +156,12 @@ $(function () {
         if (target.dataset.name == "合同备案信息") {
             href = target.dataset.href;
             contentDiv.load(href)
-        }if (target.dataset.name == "月报历史数据") {
+        }
+        if (target.dataset.name == "月报历史数据") {
+            href = target.dataset.href;
+            contentDiv.load(href)
+        }
+        if (target.dataset.name == "招标备案信息") {
             href = target.dataset.href;
             contentDiv.load(href)
         }/* 如果还有其他的往这里加*/

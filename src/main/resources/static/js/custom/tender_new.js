@@ -1,19 +1,37 @@
 $(function () {
+    var tenderId = '';
+    $.ajax({
+        url: "tender/isedit",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+            var tender = data.data;
+            $('#tenderFilingUnit').val(tender.tenderFilingUnit);
+            $('#nameOfLots').val(tender.nameOfLots);
+            $('#bidPlanDate').val(tender.bidPlanDate);
+            $('#bidCompleteDate').val(tender.bidCompleteDate);
+            $('#bidAgent').val(tender.bidAgent);
+            $('#tenderAgent').val(tender.tenderAgent);
+            tenderId = tender.tenderId;
+        }
+
+    });
+
+
     var rtFileTempPath = '';
     $('.input-group.date').datepicker({
         language: "zh-CN",
-        format: 'yyyy',
-        minViewMode: 2,
+        format: 'yyyy-mm-dd',
+        minViewMode: 0,
         keyboardNavigation: false,
-        forceParse: false,
         forceParse: false,
         autoclose: true,
         todayHighlight: true
     });
-    $("#annual_investment_file").fileinput({
+    $("#tender_new_new_file").fileinput({
         language:'zh',
         theme:'fa',
-        uploadUrl: 'annualinvestment/addfiles',
+        uploadUrl: 'tender/addfiles',
         uploadAsync: false,
         allowedFileExtensions: ['jpg', 'png', 'gif', 'docx', 'doc', 'xlsx', 'xls', 'pdf', 'pjeg', 'mp4', '3gp', 'avi'],
         overwriteInitial: false,
@@ -26,29 +44,29 @@ $(function () {
         maxFilesNum: 10,
     });
     /* 清空文件后响应事件*/
-    $("#annual_investment_file").on("filecleared", function (event, data, msg) {
+    $("#tender_new_new_file").on("filecleared", function (event, data, msg) {
         uploadFileFlag = true;
         rtFileTempPath = null;
     });
     /*选择文件后处理事件*/
-    $("#annual_investment_file").on("filebatchselected", function (event, files) {
+    $("#tender_new_new_file").on("filebatchselected", function (event, files) {
         uploadFileFlag = false;
 
     });
     //同步上传错误处理
-    $('#annual_investment_file').on('filebatchuploaderror', function (event, data, msg) {
+    $('#tender_new_new_file').on('filebatchuploaderror', function (event, data, msg) {
         uploadFileFlag = false;
     });
     //同步上传返回结果处理
-    $("#annual_investment_file").on("filebatchuploadsuccess", function (event, data, previewId, index) {
+    $("#tender_new_new_file").on("filebatchuploadsuccess", function (event, data, previewId, index) {
         if (data.response.code == 1002) {
             uploadFileFlag = true;
             rtFileTempPath = data.response.data;
 
         }
     });
-    $('#annual_investment_file').click(function () {
-        $("#annual_investment_file").fileinput('refresh');
+    $('#tender_new_new_file').click(function () {
+        $("#tender_new_new_file").fileinput('refresh');
     });
 
     var validator=$('#form').validate({
@@ -63,7 +81,7 @@ $(function () {
         },
     });
     validator.resetForm();
-    $('#annual_investment_plan_new_submit').click(function () {
+    $('#annual_tender_new_new_submit').click(function () {
         if (validator.form()){
             swal({
                 title: "确认提交吗?",
@@ -75,15 +93,21 @@ $(function () {
                 cancelButtonText:"取消",
                 closeOnConfirm: false
             }, function (){
-                var annualInvestmentVO = {};
-                annualInvestmentVO.year = $('#year').val();
-                annualInvestmentVO.applyFigure = $('#applyFigure').val();
-                annualInvestmentVO.approvedFigure = $('#approvedFigure').val();
-                annualInvestmentVO.rtFileTempPath = rtFileTempPath;
+                var tenderVO = {};
+                if (tenderId != '') {
+                    tenderVO.tenderId = tenderId;
+                }
+                tenderVO.tenderFilingUnit = $('#tenderFilingUnit').val();
+                tenderVO.nameOfLots = $('#nameOfLots').val();
+                tenderVO.bidPlanDate = $('#bidPlanDate').val();
+                tenderVO.bidCompleteDate = $('#bidCompleteDate').val();
+                tenderVO.bidAgent = $('#bidAgent').val();
+                tenderVO.tenderAgent = $('#tenderAgent').val();
+                tenderVO.rtFileTempPath = rtFileTempPath;
                 $.ajax({
-                    url: "annualinvestment/save",
+                    url: "tender/save",
                     type: "POST",
-                    data: JSON.stringify(annualInvestmentVO),
+                    data: JSON.stringify(tenderVO),
                     contentType: "application/json",
                     dataType: "json",
                     success: function (data) {
@@ -94,7 +118,7 @@ $(function () {
                                 type: "success",
                                 confirmButtonText: "确定",
                             }, function () {
-                                $('#main_content', parent.document).load('annualinvestment/toannualinvestmentshow');
+                                $('#main_content', parent.document).load('tender/totendershow');
                             });
                         } else {
                             swal({

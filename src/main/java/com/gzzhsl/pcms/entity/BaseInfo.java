@@ -99,6 +99,9 @@ public class BaseInfo {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "baseInfo")
     private List<AnnualInvestment> annualInvestments;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "baseInfo")
+    private List<Tender> tenders;
+
     private Date createTime;
     private Date updateTime;
 }

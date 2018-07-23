@@ -54,13 +54,13 @@
                                                             <div class="col-lg-4 col-lg-offset-1">
                                                                 <div class="form-group">
                                                                     <label>招标备案单位</label><span style="color:red;"> *</span>
-                                                                    <input id="123" type="text" name="123" class="form-control required" maxlength="15"><span style="font-size: 15px;">建筑工程：</span>
+                                                                    <input id="tenderFilingUnit" type="text" name="tenderFilingUnit" class="form-control required" maxlength="15">
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-offset-1 col-lg-4">
                                                                 <div class="form-group">
                                                                     <label>标段名称</label><span style="color:red;"> *</span>
-                                                                    <input id="1231" type="text" name="1231" class="form-control required" maxlength="15">
+                                                                    <input id="nameOfLots" type="text" name="nameOfLots" class="form-control required" maxlength="15">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -70,7 +70,7 @@
                                                                 <div class="form-group">
                                                                     <label class="font-normal">招标计划时间</label>
                                                                     <div class="input-group date btn-outline btn-info">
-                                                                        <span class="input-group-addon btn-outline btn-info"><i class="fa fa-calendar"></i></span><input id="1233" type="text" class="form-control required" readonly>
+                                                                        <span class="input-group-addon btn-outline btn-info"><i class="fa fa-calendar"></i></span><input id="bidPlanDate" type="text" class="form-control required" readonly>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -78,7 +78,7 @@
                                                                 <div class="form-group">
                                                                     <label class="font-normal">已招标完成时间</label>
                                                                     <div class="input-group date btn-outline btn-info">
-                                                                        <span class="input-group-addon btn-outline btn-info"><i class="fa fa-calendar"></i></span><input id="1234" type="text" class="form-control required" readonly>
+                                                                        <span class="input-group-addon btn-outline btn-info"><i class="fa fa-calendar"></i></span><input id="bidCompleteDate" type="text" class="form-control required" readonly>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -88,26 +88,16 @@
                                                             <div class="col-lg-4 col-lg-offset-1">
                                                                 <div class="form-group">
                                                                     <label>招标代理机构</label><span style="color:red;"> *</span>
-                                                                    <input id="333" type="text" name="333" class="form-control required" maxlength="20">
+                                                                    <input id="bidAgent" type="text" name="bidAgent" class="form-control required" maxlength="20">
                                                                 </div>
                                                             </div>
                                                             <div class="col-lg-offset-1 col-lg-4">
                                                                 <div class="form-group">
                                                                     <label>中标单位</label><span style="color:red;"> *</span>
-                                                                    <input id="1235" type="text" name="1235" class="form-control required" maxlength="20">
+                                                                    <input id="tenderAgent" type="text" name="tenderAgent" class="form-control required" maxlength="20">
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="hr-line-dashed"></div>
-                                                        <div class="row">
-                                                            <div class="col-lg-4 col-lg-offset-1">
-                                                                <div class="form-group">
-                                                                    <label>填报人</label><span style="color:red;"> *</span>
-                                                                    <input id="666" type="text" name="666" class="form-control required" maxlength="20">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
                                                     </form>
                                                     <br>
                                                     <div class="col-lg-offset-10 col-lg-2">
@@ -126,7 +116,7 @@
                                                         <form enctype="multipart/form-data">
                                                             <div class="form-group">
                                                                 <div class="file-loading">
-                                                                    <input id="tender_new_new_file" type="file" multiple  data-overwrite-initial="false" data-min-file-count="1">
+                                                                    <input id="tender_new_new_file" name="tender_new_new_file" type="file" multiple  data-overwrite-initial="false" data-min-file-count="1">
                                                                 </div>
                                                             </div>
                                                         </form>

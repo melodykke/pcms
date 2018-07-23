@@ -32,6 +32,8 @@ public class DownLoadController {
     private ContractImgService contractImgService;
     @Autowired
     private AnnualInvestmentImgService annualInvestmentImgService;
+    @Autowired
+    private TenderImgService tenderImgService;
 
     //fileId 就是 img_id
     @GetMapping("/monthlyreportfile")
@@ -65,7 +67,12 @@ public class DownLoadController {
         String downloadPath = PathUtil.getFileBasePath(false)+annualInvestmentImg.getImgAddr();
         this.downloadFileAction(downloadPath, request, response);
     }
-
+    @GetMapping("/tenderfile")
+    public void tenderFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
+        TenderImg tenderImg = tenderImgService.getByTenderImgId(fileId);
+        String downloadPath = PathUtil.getFileBasePath(false)+tenderImg.getImgAddr();
+        this.downloadFileAction(downloadPath, request, response);
+    }
     private void downloadFileAction(String downloadPath, HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding(request.getCharacterEncoding());
         response.setContentType("application/octet-stream");

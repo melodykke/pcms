@@ -49,7 +49,12 @@ public class PathUtil {
 
     // relative path  年度投融资计划
     public static String getAnnualInvestmentImagePath(String projectName, String year){
-        String imagePath = "upload/annualinvestment/"+ projectName + "/" + year + "/";;
+        String imagePath = "upload/annualinvestment/"+ projectName + "/" + year + "/";
+        return imagePath.replace("/", separator);
+    }
+    // relative path  招标备案
+    public static String getTenderImagePath(String projectName){
+        String imagePath = "upload/tender/"+ projectName + "/";
         return imagePath.replace("/", separator);
     }
     public static void main(String[] args) {

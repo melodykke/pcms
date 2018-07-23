@@ -1,7 +1,7 @@
 $(function () {
 
-    var queryAnnualInvestmentsUrl = "annualinvestment/getannualinvestment"
-    createTable(queryAnnualInvestmentsUrl, 1);
+    var queryTenderUrl = "tender/gettender"
+    createTable(queryTenderUrl, 1);
 
     var lang = {
         "sProcessing": "处理中...",
@@ -27,7 +27,7 @@ $(function () {
 
     function createTable(url, state) { // param 0未审核 1已审核 -1未审核
         if (state == 1) {
-            $('#investment_plan_table1').DataTable({
+            $('#tender_table1').DataTable({
                 language: lang,  //提示信息
                 stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
                 processing: true,  //隐藏加载提示,自行处理
@@ -68,10 +68,13 @@ $(function () {
                             var content = [];
                             result.data.content.map(function (item, index) {
                                 var contentItem = {};
-                                contentItem.annualInvestmentId = item.annualInvestmentId;
-                                contentItem.year = item.year;
-                                contentItem.applyFigure = item.applyFigure;
-                                contentItem.approvedFigure = item.approvedFigure;
+                                contentItem.tenderId = item.tenderId;
+                                contentItem.tenderFilingUnit = item.tenderFilingUnit;
+                                contentItem.nameOfLots = item.nameOfLots;
+                                contentItem.bidPlanDate = item.bidPlanDate;
+                                contentItem.bidCompleteDate = item.bidCompleteDate;
+                                contentItem.bidAgent = item.bidAgent;
+                                contentItem.tenderAgent = item.tenderAgent;
                                 contentItem.state = item.state;
                                 contentItem.annualInvestmentImgs = item.annualInvestmentImgs;
                                 contentItem.submitter = item.submitter;
@@ -89,10 +92,12 @@ $(function () {
                 },
                 //列表表头字段
                 columns: [
-                    {"data": "year"},
-                    {"data": "applyFigure"},
-                    {"data": "approvedFigure"},
-                    {"data": "submitter"},
+                    {"data": "tenderFilingUnit"},
+                    {"data": "nameOfLots"},
+                    {"data": "bidPlanDate"},
+                    {"data": "bidCompleteDate"},
+                    {"data": "bidAgent"},
+                    {"data": "tenderAgent"},
                     //新建列的 定义
                     {
                         className: "td-operation text-center",
@@ -105,14 +110,14 @@ $(function () {
                 "createdRow": function (row, data, index) {  // data 实际就是 callback(returnData)的内容
                     //行渲染回调,在这里可以对该行dom元素进行任何操作
                     var $btn = $('<div class="btn-group text-cen">' +
-                        '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">附件</button>' +
+                        '<button type="button" data-cid="' + data.tenderId + '" class="btn btn-sm btn-primary btn-view">附件</button>' +
                         '</div>' +
                         '</div>');
-                    $('td', row).eq(4).append($btn);
+                    $('td', row).eq(6).append($btn);
                 }
             });
         } else if (state == 0) {
-            $('#investment_plan_table2').DataTable({
+            $('#tender_table2').DataTable({
                 language: lang,  //提示信息
                 stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
                 processing: true,  //隐藏加载提示,自行处理
@@ -153,10 +158,13 @@ $(function () {
                             var content = [];
                             result.data.content.map(function (item, index) {
                                 var contentItem = {};
-                                contentItem.annualInvestmentId = item.annualInvestmentId;
-                                contentItem.year = item.year;
-                                contentItem.applyFigure = item.applyFigure;
-                                contentItem.approvedFigure = item.approvedFigure;
+                                contentItem.tenderId = item.tenderId;
+                                contentItem.tenderFilingUnit = item.tenderFilingUnit;
+                                contentItem.nameOfLots = item.nameOfLots;
+                                contentItem.bidPlanDate = item.bidPlanDate;
+                                contentItem.bidCompleteDate = item.bidCompleteDate;
+                                contentItem.bidAgent = item.bidAgent;
+                                contentItem.tenderAgent = item.tenderAgent;
                                 contentItem.state = item.state;
                                 contentItem.annualInvestmentImgs = item.annualInvestmentImgs;
                                 contentItem.submitter = item.submitter;
@@ -174,10 +182,12 @@ $(function () {
                 },
                 //列表表头字段
                 columns: [
-                    {"data": "year"},
-                    {"data": "applyFigure"},
-                    {"data": "approvedFigure"},
-                    {"data": "submitter"},
+                    {"data": "tenderFilingUnit"},
+                    {"data": "nameOfLots"},
+                    {"data": "bidPlanDate"},
+                    {"data": "bidCompleteDate"},
+                    {"data": "bidAgent"},
+                    {"data": "tenderAgent"},
                     //新建列的 定义
                     {
                         className: "td-operation text-center",
@@ -192,22 +202,22 @@ $(function () {
                     var $btn = '';
                     if (data.role == "checker") {
                         $btn = $('<div class="btn-group text-cen">' +
-                            '<button type="button" id="contractApprovalBtn" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary">审批</button> ' +
-                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
+                            '<button type="button" id="tenderApprovalBtn" data-cid="' + data.tenderId + '" class="btn btn-sm btn-primary">审批</button> ' +
+                            '<button type="button" data-cid="' + data.tenderId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
                             '</div>' +
                             '</div>');
                     } else {
                         $btn = $('<div class="btn-group text-cen">' +
-                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
+                            '<button type="button" data-cid="' + data.tenderId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
                             '</div>' +
                             '</div>');
                     }
 
-                    $('td', row).eq(4).append($btn);
+                    $('td', row).eq(6).append($btn);
                 }
             });
         } else if (state == -1) {
-            $('#investment_plan_table3').DataTable({
+            $('#tender_table3').DataTable({
                 language: lang,  //提示信息
                 stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
                 processing: true,  //隐藏加载提示,自行处理
@@ -248,10 +258,13 @@ $(function () {
                             var content = [];
                             result.data.content.map(function (item, index) {
                                 var contentItem = {};
-                                contentItem.annualInvestmentId = item.annualInvestmentId;
-                                contentItem.year = item.year;
-                                contentItem.applyFigure = item.applyFigure;
-                                contentItem.approvedFigure = item.approvedFigure;
+                                contentItem.tenderId = item.tenderId;
+                                contentItem.tenderFilingUnit = item.tenderFilingUnit;
+                                contentItem.nameOfLots = item.nameOfLots;
+                                contentItem.bidPlanDate = item.bidPlanDate;
+                                contentItem.bidCompleteDate = item.bidCompleteDate;
+                                contentItem.bidAgent = item.bidAgent;
+                                contentItem.tenderAgent = item.tenderAgent;
                                 contentItem.state = item.state;
                                 contentItem.annualInvestmentImgs = item.annualInvestmentImgs;
                                 contentItem.submitter = item.submitter;
@@ -269,10 +282,12 @@ $(function () {
                 },
                 //列表表头字段
                 columns: [
-                    {"data": "year"},
-                    {"data": "applyFigure"},
-                    {"data": "approvedFigure"},
-                    {"data": "submitter"},
+                    {"data": "tenderFilingUnit"},
+                    {"data": "nameOfLots"},
+                    {"data": "bidPlanDate"},
+                    {"data": "bidCompleteDate"},
+                    {"data": "bidAgent"},
+                    {"data": "tenderAgent"},
                     //新建列的 定义
                     {
                         className: "td-operation text-center",
@@ -287,60 +302,59 @@ $(function () {
                     var $btn = '';
                     if (data.label == '合同外' && data.state == -1) {
                         $btn = $('<div class="btn-group text-cen">' +
-                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
+                            '<button type="button" data-cid="' + data.tenderId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
                             '</div>' +
                             '</div>');
                     } else {
                         $btn = $('<div class="btn-group text-cen">' +
-                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-repost">重新提交</button>' +
-                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
+                            '<button type="button" data-cid="' + data.tenderId + '" class="btn btn-sm btn-primary btn-repost">重新提交</button>' +
+                            '<button type="button" data-cid="' + data.tenderId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
                             '</div>' +
                             '</div>');
                     }
-                    $('td', row).eq(4).append($btn);
+                    $('td', row).eq(6).append($btn);
                 }
             });
         }
     }
 
 
-    $('#investment_plan_show_btn_1').click(function () {
-        createTable(queryAnnualInvestmentsUrl, 1)
+    $('#tender_show_tab_btn1').click(function () {
+        createTable(queryTenderUrl, 1)
     });
-    $('#investment_plan_show_btn_2').click(function () {
-        createTable(queryAnnualInvestmentsUrl, 0);
+    $('#tender_show_tab_btn2').click(function () {
+        createTable(queryTenderUrl, 0);
     });
-    $('.table').on("click", '#contractApprovalBtn', function (e) {
+    $('.table').on("click", '#tenderApprovalBtn', function (e) {
         var target = e.currentTarget;
-        $('#contract_approve_modal').modal('show');
-        $('#contract_approve_submit').click(function () {
-            var switchState = $("#contract-checkbox").prop("checked");  // true: 按钮为通过 false：按钮通过
-            var checkinfo = $('#contract_approve_area').val();
-            var contractId = target.dataset.cid;
+        $('#tender_approve_modal').modal('show');
+        $('#tender_approve_submit').click(function () {
+            var switchState = $("#tender_checkbox").prop("checked");  // true: 按钮为通过 false：按钮通过
+            var checkinfo = $('#tender_approve_area').val();
+            var tenderId = target.dataset.cid;
             $.ajax({
-                url: "contract/approvecontract",
+                url: "tender/approvetender",
                 type: 'POST',
-                data: JSON.stringify({"switchState": switchState, "checkinfo": checkinfo, "contractId": contractId}),
+                data: JSON.stringify({"switchState": switchState, "checkinfo": checkinfo, "tenderId": tenderId}),
                 contentType: 'application/json',
                 beforeSend: function () {
                     $('#loading').show();
                 },
                 success: function (data) {
                     if (data.code == 1002 || data.code == 1003) {
-                        $('#contract_check_div').html('');
-                        $('#contract_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 成 功</h1></div> <div class="modal-footer">\n' +
+                        $('#tender_check_div').html('');
+                        $('#tender_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 成 功</h1></div> <div class="modal-footer">\n' +
                             '                <button type="button" id="check_result_confirm_btn" class="btn btn-white" data-dismiss="modal">确定</button>\n' +
                             '            </div>');
                     } else {
-                        $('#contract_check_div').html('');
-                        $('#contract_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 出 错</h1></div>   <div class="modal-body">\n' +
+                        $('#tender_check_div').html('');
+                        $('#tender_check_div').html('<div class="modal-header"><h1 class="modal-title">操 作 出 错</h1></div>   <div class="modal-body">\n' +
                             '                <div class="form-group animated fadeIn" ><label style="font-size: 15px;">' + data.msg + '</label></div>\n' +
                             '            </div><div class="modal-footer">\n' +
                             '                <button type="button" id="check_result_confirm_btn" class="btn btn-white" data-dismiss="modal">确定</button>\n' +
                             '            </div>');
                     }
-                    $('#contract_approve_modal').modal('hide');
-                    $('#main_content', parent.document).load('contract/tocontract');
+
                 },
                 complete: function () {
                     $("#loading").hide();
@@ -351,27 +365,27 @@ $(function () {
             });
         });
     });
-    $("[name='my-checkbox']").bootstrapSwitch({
+    $("[name='tender_checkbox']").bootstrapSwitch({
         onText: "拒绝",
         offText: "通过",
         onColor: "danger",
         offColor: "success",
         size: "large",
         onSwitchChange: function () {
-            var checkedOfAll = $("#my-checkbox").prop("checked");
+            var checkedOfAll = $("#tender_checkbox").prop("checked");
             if (checkedOfAll == false) {
-                $('#contract_approve_input').hide()
+                $('#tender_approve_input').hide()
             }
             else {
-                $('#contract_approve_input').show();
-                $('#contract_approve_area').text('');
+                $('#tender_approve_input').show();
+                $('#tender_approve_area').text('');
             }
         }
     });
 
 
-    $('#investment_plan_show_btn_3').click(function () {
-        createTable(queryAnnualInvestmentsUrl, -1);
+    $('#tender_show_tab_btn3').click(function () {
+        createTable(queryTenderUrl, -1);
     });
 
     /*  $('#contract_show_tab_4').click(function () {
@@ -391,129 +405,133 @@ $(function () {
       });*/
 
 
-      $('#investment_plan_table1').on('click', '.btn-view', function (e) {
-          var target = e.currentTarget;
-          var cid = target.dataset.cid;
-          $.ajax({
-              type: "get",
-              url: "annualinvestment/getannualinvestmentbyid",//url请求的地址
-              cache: false,  //禁用缓存
-              data: {"id": cid},  //传入组装的参数
-              dataType: "json",
-              success: function (data) {
-                  var imgs = data.data.annualInvestmentImgVOs;
-                  $('#show_contract_name').val(data.data.name);
+    $('#tender_show_tab_1').on('click', '.btn-view', function (e) {
+        var target = e.currentTarget;
+        var cid = target.dataset.cid;
+        $.ajax({
+            type: "get",
+            url: "tender/gettenderbyid",//url请求的地址
+            cache: false,  //禁用缓存
+            data: {"id": cid},  //传入组装的参数
+            dataType: "json",
+            success: function (data) {
+                var imgs = data.data.tenderImgVOs;
+                var tender_file_html = '';
+                imgs.map(function (item, index) {
+                    tender_file_html += '<div class="file-box">\n' +
+                        '                                                                                    <div class="file">\n' +
+                        '                                                                                        <span class="corner"></span>\n' +
+                        '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
+                        '                                                                                        </div>\n' +
+                        '                                                                                        <div class="file-name">\n' +
+                        '                                                                                            文件\n' +
+                        '                                                                                            <br/>\n' +
+                        '                                                                                            <small>' + item.createTime + '</small>\n' +
+                        '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/tenderfile?fileId=' + item.imgAddr + '">下载</a>\n' +
+                        '                                                                                        </div>\n' +
+                        '                                                                                    </div>\n' +
+                        '                                                                                </div>'
 
-                  var annual_investment_file_html = '';
-                  imgs.map(function (item, index) {
-                      annual_investment_file_html += '<div class="file-box">\n' +
-                          '                                                                                    <div class="file">\n' +
-                          '                                                                                        <span class="corner"></span>\n' +
-                          '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                        <div class="file-name">\n' +
-                          '                                                                                            文件\n' +
-                          '                                                                                            <br/>\n' +
-                          '                                                                                            <small>'+ item.createTime +'</small>\n' +
-                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/annualinvestmentfile?fileId='+item.imgAddr+'">下载</a>\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                    </div>\n' +
-                          '                                                                                </div>'
+                });
+                $('#tender_file_display_div').html("");
+                $('#tender_file_display_div').html(tender_file_html);
+                $('#tender_show_modal').modal();
+            }
+        });
+    });
+    $('#tender_show_tab_2').on('click', '.btn-view', function (e) {
+        var target = e.currentTarget;
+        var cid = target.dataset.cid;
+        $.ajax({
+            type: "get",
+            url: "tender/gettenderbyid",//url请求的地址
+            cache: false,  //禁用缓存
+            data: {"id": cid},  //传入组装的参数
+            dataType: "json",
+            success: function (data) {
+                var imgs = data.data.tenderImgVOs;
+                var tender_file_html = '';
+                imgs.map(function (item, index) {
+                    tender_file_html += '<div class="file-box">\n' +
+                        '                                                                                    <div class="file">\n' +
+                        '                                                                                        <span class="corner"></span>\n' +
+                        '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
+                        '                                                                                        </div>\n' +
+                        '                                                                                        <div class="file-name">\n' +
+                        '                                                                                            文件\n' +
+                        '                                                                                            <br/>\n' +
+                        '                                                                                            <small>' + item.createTime + '</small>\n' +
+                        '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/tenderfile?fileId=' + item.imgAddr + '">下载</a>\n' +
+                        '                                                                                        </div>\n' +
+                        '                                                                                    </div>\n' +
+                        '                                                                                </div>'
 
-                  });
-                  $('#annual_investment_file_display_div').html("");
-                  $('#annual_investment_file_display_div').html(annual_investment_file_html);
-                  $('#investment_plan_show_modal').modal();
-              }
-          });
-      });
-      $('#investment_plan_table2').on('click', '.btn-view', function (e) {
-          var target = e.currentTarget;
-          var cid = target.dataset.cid;
-          $.ajax({
-              type: "get",
-              url: "annualinvestment/getannualinvestmentbyid",//url请求的地址
-              cache: false,  //禁用缓存
-              data: {"id": cid},  //传入组装的参数
-              dataType: "json",
-              success: function (data) {
-                  var imgs = data.data.annualInvestmentImgVOs;
-                  $('#show_contract_name').val(data.data.name);
+                });
+                $('#tender_file_display_div').html("");
+                $('#tender_file_display_div').html(tender_file_html);
+                $('#tender_show_modal').modal();
+            }
+        });
+    });
+    $('#tender_show_tab_3').on('click', '.btn-view', function (e) {
+        var target = e.currentTarget;
+        var cid = target.dataset.cid;
+        $.ajax({
+            type: "get",
+            url: "tender/gettenderbyid",//url请求的地址
+            cache: false,  //禁用缓存
+            data: {"id": cid},  //传入组装的参数
+            dataType: "json",
+            success: function (data) {
+                $('#show_contract_name').val(data.data.name);
+                $('#show_contract_type').val(data.data.type);
+                $('#show_contract_party_a').val(data.data.partyA);
+                $('#show_contract_amount').val(data.data.price);
+                $('#show_contract_num').val(data.data.number);
+                $('#show_contract_time').val(data.data.signDate);
+                $('#show_contract_party_b').val(data.data.partyB);
+                $('#show_contract_main_content').val(data.data.content);
+                $('#show_contract_remark').val(data.data.remark);
+                var tender_file_html = '';
+                data.data.tenderImgVOs.map(function (item, index) {
+                    tender_file_html += '<div class="file-box">\n' +
+                        '                                                                                    <div class="file">\n' +
+                        '                                                                                        <span class="corner"></span>\n' +
+                        '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
+                        '                                                                                        </div>\n' +
+                        '                                                                                        <div class="file-name">\n' +
+                        '                                                                                            文件\n' +
+                        '                                                                                            <br/>\n' +
+                        '                                                                                            <small>' + item.createTime + '</small>\n' +
+                        '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/tenderfile?fileId=' + item.imgAddr + '">下载</a>\n' +
+                        '                                                                                        </div>\n' +
+                        '                                                                                    </div>\n' +
+                        '                                                                                </div>'
 
-                  var annual_investment_file_html = '';
-                  imgs.map(function (item, index) {
-                      annual_investment_file_html += '<div class="file-box">\n' +
-                          '                                                                                    <div class="file">\n' +
-                          '                                                                                        <span class="corner"></span>\n' +
-                          '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                        <div class="file-name">\n' +
-                          '                                                                                            文件\n' +
-                          '                                                                                            <br/>\n' +
-                          '                                                                                            <small>'+ item.createTime +'</small>\n' +
-                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/annualinvestmentfile?fileId='+item.imgAddr+'">下载</a>\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                    </div>\n' +
-                          '                                                                                </div>'
+                });
+                $('#tender_file_display_div').html("");
+                $('#tender_file_display_div').html(tender_file_html);
+                $('#tender_show_modal').modal();
+            }
+        });
+    });
 
-                  });
-                  $('#annual_investment_file_display_div').html("");
-                  $('#annual_investment_file_display_div').html(annual_investment_file_html);
-                  $('#investment_plan_show_modal').modal();
-              }
-          });
-      });
-      $('#investment_plan_table3').on('click', '.btn-view', function (e) {
-          var target = e.currentTarget;
-          var cid = target.dataset.cid;
-          $.ajax({
-              type: "get",
-              url: "contract/getcontractbyid",//url请求的地址
-              cache: false,  //禁用缓存
-              data: {"id": cid},  //传入组装的参数
-              dataType: "json",
-              success: function (data) {
-                  $('#show_contract_name').val(data.data.name);
-                  $('#show_contract_type').val(data.data.type);
-                  $('#show_contract_party_a').val(data.data.partyA);
-                  $('#show_contract_amount').val(data.data.price);
-                  $('#show_contract_num').val(data.data.number);
-                  $('#show_contract_time').val(data.data.signDate);
-                  $('#show_contract_party_b').val(data.data.partyB);
-                  $('#show_contract_main_content').val(data.data.content);
-                  $('#show_contract_remark').val(data.data.remark);
-                  var contract_file_html = '';
-                  data.data.contractImgVOs.map(function (item, index) {
-                      contract_file_html += '<div class="file-box">\n' +
-                          '                                                                                    <div class="file">\n' +
-                          '                                                                                        <span class="corner"></span>\n' +
-                          '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                        <div class="file-name">\n' +
-                          '                                                                                            文件\n' +
-                          '                                                                                            <br/>\n' +
-                          '                                                                                            <small>'+ item.createTime +'</small>\n' +
-                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/annualinvestmentfile?fileId='+item.imgAddr+'">下载</a>\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                    </div>\n' +
-                          '                                                                                </div>'
+    $('#tender_show_tab_4').on('click', function (e) {
+        $('#main_content', parent.document).load("tender/tonewtender");
+    });
 
-                  });
-                  $('#contract_file_display_div').html("");
-                  $('#contract_file_display_div').html(contract_file_html);
+    $('#tender_show_tab_3').on('click', '.btn-repost', function (e) {
+        var target = e.currentTarget;
+        var tenderId = target.dataset.cid;
+        $('#main_content', parent.document).load("tender/tonewtender?tenderId="+tenderId);
+    });
 
+    $('.tender_modal_close_btn').click(function () {
+        $("#tender_show_modal").modal('hide');
+    });
 
-
-                  $('#contract_show_modal').modal();
-              }
-          });
-      });
-      $('#investment_plan_table3').on('click', '.btn-repost', function (e) {
-          $('#contract_modal', parent.document).modal('show');
-      });
-
-      $('.annual_investment_modal_close').click(function () {
-          $("#investment_plan_show_modal").modal('hide');
-      });
-
+    $('#tender_check_div').on('click', '#check_result_confirm_btn', function (e) {
+        $('#tender_approve_modal').modal('hide');
+        $('#main_content', parent.document).load('tender/totendershow');
+    });
 })
