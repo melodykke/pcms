@@ -13,6 +13,7 @@ import com.gzzhsl.pcms.entity.PreProgressEntry;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.PreProgressService;
+import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.PreProgressImgVO;
@@ -43,7 +44,8 @@ import java.util.stream.Collectors;
 public class PreProgressController {
     @Autowired
     private PreProgressService preProgressService;
-
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/topreprogress")
     public String toPreprogress() {
@@ -54,7 +56,7 @@ public class PreProgressController {
     @ResponseBody
     public ResultVO hasPreProgress() {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【项目前期错误】 获取用户所在工程基本信息出错 , thisProject = {}", thisProject);
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);

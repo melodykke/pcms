@@ -96,4 +96,11 @@ public class AnnualInvestmentController {
             return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "数据返回成功", annualInvestments);
         }
     }
+
+    @GetMapping("getannualinvestmentbyid")
+    @ResponseBody
+    public ResultVO getAnnualInvestmentbyId(String id) {
+        AnnualInvestmentVO annualInvestmentVO = annualInvestmentService.getById(id);
+        return ResultUtil.success(annualInvestmentVO);
+    }
 }

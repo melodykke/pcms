@@ -65,6 +65,7 @@ public enum SysEnum {
     ANNUAL_INVESTMENT_APPLY_YEAR_DUPLICATED_ERROR(3001, "年度投融资计划申报出错, 本次申报计划投资年份已存在！"),
     ANNUAL_INVESTMENT_APPLY_YEAR_HAS_DUPLICATED_ERROR(3002, "年度投融资计划申报出错, 申报计划投资年份已存在多个副本！请联系系统管理员！"),
     ANNUAL_INVESTMENT_NO_PROJECT_ERROR(3003, "请优先配置水库基础信息"),
+    ANNUAL_INVESTMENT_QUERY_OTHERS_ERROR(3004, "不能查询不属于自己的年度投融资计划"),
     ;
 
     private Integer code;

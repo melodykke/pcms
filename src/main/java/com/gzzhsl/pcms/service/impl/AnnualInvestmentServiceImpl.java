@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.gzzhsl.pcms.converter.AnnualInvestmentImg2VO;
 import com.gzzhsl.pcms.entity.AnnualInvestment;
 import com.gzzhsl.pcms.entity.AnnualInvestmentImg;
 import com.gzzhsl.pcms.entity.BaseInfo;
@@ -17,6 +18,7 @@ import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.OperationUtil;
 import com.gzzhsl.pcms.util.PathUtil;
 import com.gzzhsl.pcms.util.WebSocketUtil;
+import com.gzzhsl.pcms.vo.AnnualInvestmentImgVO;
 import com.gzzhsl.pcms.vo.AnnualInvestmentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -163,6 +165,53 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
         return annualInvestmentRepository.findAll(querySpecification, pageable);
     }
 
+    @Override
+    public AnnualInvestmentVO getById(String id) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        //获取该用户所有年度投融资计划
+        List<AnnualInvestment> annualInvestments = annualInvestmentRepository.findAllByBaseInfo(thisProject);
+        List<String> annualInvestmentIds = annualInvestments.stream().map(e -> e.getAnnualInvestmentId()).collect(Collectors.toList());
+        //判断查询ID是否在其中   //如果不在抛异常（不能查询别人的） 如果在返回结果
+        if (!annualInvestmentIds.contains(id)) {
+            log.error("【年度投融资计划】 不能查询不属于自己的年度投融资计划");
+            throw new SysException(SysEnum.ANNUAL_INVESTMENT_QUERY_OTHERS_ERROR);
+        }
+        AnnualInvestment annualInvestment = annualInvestmentRepository.findOne(id); //下面转化为VO
+        AnnualInvestmentVO annualInvestmentVO = new AnnualInvestmentVO();
+        BeanUtils.copyProperties(annualInvestment, annualInvestmentVO);
+        List<AnnualInvestmentImg> annualInvestmentImgs = annualInvestment.getAnnualInvestmentImgs();
+        List<AnnualInvestmentImgVO> annualInvestmentImgVOs = annualInvestmentImgs.stream().map(e -> AnnualInvestmentImg2VO.convert(e)).collect(Collectors.toList());
+        annualInvestmentVO.setAnnualInvestmentImgVOs(annualInvestmentImgVOs);
+        return annualInvestmentVO;
+    }
+
+    @Override
+    public List<AnnualInvestment> getByYearAndProject(String year, BaseInfo baseInfo) {
+        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        if (thisProject == null) {
+            log.error("【年度投资计划】 获取年度投资计划列表错误， 账号无对应的水库项目");
+            throw new SysException(SysEnum.ANNUAL_INVESTMENT_NO_PROJECT_ERROR);
+        }
+        Specification querySpecification = new Specification() {
+            List<Predicate> predicates = new ArrayList<>();
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                if (StringUtils.isNotBlank(thisProject.getBaseInfoId())) {
+                    predicates.add(cb.equal(root.join("baseInfo").get("baseInfoId").as(String.class), thisProject.getBaseInfoId()));
+                }
+                predicates.add(cb.equal(root.get("year"), year));
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+        return annualInvestmentRepository.findAll(querySpecification);
+    }
+
+    @Override
+    public List<AnnualInvestment> getByProject(BaseInfo baseInfo) {
+        return annualInvestmentRepository.findAllByBaseInfo(baseInfo);
+    }
 
 
     private List<AnnualInvestment> getMyPassedAnnualInvestments() {  // 获得本用户水库下的所有审批通过的年计划投资

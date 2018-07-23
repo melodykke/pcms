@@ -1,13 +1,7 @@
 package com.gzzhsl.pcms.controller;
 
-import com.gzzhsl.pcms.entity.BaseInfoImg;
-import com.gzzhsl.pcms.entity.ContractImg;
-import com.gzzhsl.pcms.entity.PreProgressImg;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
-import com.gzzhsl.pcms.service.BaseInfoImgService;
-import com.gzzhsl.pcms.service.ContractImgService;
-import com.gzzhsl.pcms.service.PreProgressImgService;
-import com.gzzhsl.pcms.service.ProjectMonthlyReportImgService;
+import com.gzzhsl.pcms.entity.*;
+import com.gzzhsl.pcms.service.*;
 import com.gzzhsl.pcms.util.PathUtil;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +30,8 @@ public class DownLoadController {
     private PreProgressImgService preProgressImgService;
     @Autowired
     private ContractImgService contractImgService;
+    @Autowired
+    private AnnualInvestmentImgService annualInvestmentImgService;
 
     //fileId 就是 img_id
     @GetMapping("/monthlyreportfile")
@@ -61,6 +57,12 @@ public class DownLoadController {
     public void contractFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
         ContractImg contractImg = contractImgService.getByContractImgId(fileId);
         String downloadPath = PathUtil.getFileBasePath(false)+contractImg.getImgAddr();
+        this.downloadFileAction(downloadPath, request, response);
+    }
+    @GetMapping("/annualinvestmentfile")
+    public void annualInvestmentFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
+        AnnualInvestmentImg annualInvestmentImg = annualInvestmentImgService.getByAnnualInvestmentImgId(fileId);
+        String downloadPath = PathUtil.getFileBasePath(false)+annualInvestmentImg.getImgAddr();
         this.downloadFileAction(downloadPath, request, response);
     }
 

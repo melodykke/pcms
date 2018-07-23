@@ -1,188 +1,4 @@
 $(function () {
-    /* var datatable= [
-         [
-             "2017",
-             "2080.00",
-             "1080.00",
-             "张斌",
-         ],
-         [
-             "2018",
-             "2048.00",
-             "1090.00",
-             "王三",
-         ]
-     ];
-     $('#investment_plan_table1').DataTable({
-         data:datatable,
-         // bFilter: false,  //去掉搜索框
-         bInfo:true,        //去掉显示信息
-         retrieve: true,    //多次加载不会显示缓存数据
-         pageLength: 10,
-         ordering:true,
-         responsive: true,
-         paging: true,
-         dom: '<"html5buttons"B>lTfgitp',
-         buttons: [
-             {
-                 "extend": 'pdfHtml5',
-                 'title': '年度计划投资表', //导出文件名字
-                 'text': '导出PDF', //定义导出excel按钮的文字
-                 "aButtons": "true",
-                 // "sCharSet": "utf8",
-                 // 'download': 'open',//直接在窗口打开
-                 // 'orientation': 'landscape',
-                 // 'pageSize': 'LEGAL',
-             },
-             {extend: 'copy'},
-             {extend: 'csv'},
-             {extend: 'excel',},
-             {extend:'print',customize: function (win){
-                 $(win.document.body).addClass('white-bg');
-                 $(win.document.body).css('font-size', '10px');
-                 $(win.document.body).find('table')
-                     .addClass('compact')
-                     .css('font-size', 'inherit');
-             }
-             }
-         ],
-         "aoColumnDefs":[
-             {//倒数第一列
-                 "targets":-1,
-                 "bSortable": false,
-                 render: function(data, type, row) {
-                     var html ='<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#investment_plan_show_modal">附件</button>';
-                     return html;
-                 }
-             },
-         ]
-     });
-
-     $('#investment_plan_table2').DataTable({
-         data:datatable,
-         // bFilter: false,    //去掉搜索框
-         bInfo:true,       //去掉显示信息
-         retrieve: true,    //多次加载不会显示缓存数据
-         pageLength: 10,
-         ordering:false,
-         responsive: true,
-         paging: true,
-         dom: '<"html5buttons"B>lTfgitp',
-         buttons: [
-             {
-                 "extend": 'pdfHtml5',
-                 'title': '年度计划投资表', //导出文件名字
-                 'text': '导出PDF', //定义导出excel按钮的文字
-                 "aButtons": "true",
-                 // "sCharSet": "utf8",
-                 // 'download': 'open',//直接在窗口打开
-                 // 'orientation': 'landscape',
-                 // 'pageSize': 'LEGAL',
-             },
-             {extend: 'copy'},
-             {extend: 'csv'},
-             {extend: 'excel',},
-             {extend:'print',customize: function (win){
-                 $(win.document.body).addClass('white-bg');
-                 $(win.document.body).css('font-size', '10px');
-                 $(win.document.body).find('table')
-                     .addClass('compact')
-                     .css('font-size', 'inherit');
-             }
-             }
-         ],
-         "aoColumnDefs":[
-             {//倒数第一列
-                 "targets":-1,
-                 "bSortable": false,
-                 render: function(data, type, row) {
-                     var html ='<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#investment_plan_show_modal">附件</button>&nbsp;&nbsp;&nbsp;'+
-                         '<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#investment_plan_approve_modal">审批</button>';
-                     return html;
-                 }
-             },
-         ]
-     });
-     $('#investment_plan_modal_show_close1,#investment_plan_modal_show_close').click(function () {
-         $("#investment_plan_show_modal").modal('hide');
-     });
-     $('#investment_plan_table3').DataTable({
-         data:datatable,
-         // bFilter: false,  //去掉搜索框
-         bInfo:true,        //去掉显示信息
-         retrieve: true,    //多次加载不会显示缓存数据
-         pageLength: 10,
-         ordering:false,
-         responsive: true,
-         paging: true,
-         dom: '<"html5buttons"B>lTfgitp',
-         buttons: [
-             {
-                 "extend": 'pdfHtml5',
-                 'title': '年度计划投资表', //导出文件名字
-                 'text': '导出PDF', //定义导出excel按钮的文字
-                 "aButtons": "true",
-                 // "sCharSet": "utf8",
-                 // 'download': 'open',//直接在窗口打开
-                 // 'orientation': 'landscape',
-                 // 'pageSize': 'LEGAL',
-             },
-             {extend: 'copy'},
-             {extend: 'csv'},
-             {extend: 'excel',},
-             {extend:'print',customize: function (win){
-                 $(win.document.body).addClass('white-bg');
-                 $(win.document.body).css('font-size', '10px');
-                 $(win.document.body).find('table')
-                     .addClass('compact')
-                     .css('font-size', 'inherit');
-             }
-             }
-         ],
-         "aoColumnDefs":[
-             {//倒数第一列
-                 "targets":-1,
-                 "bSortable": false,
-                 render: function(data, type, row) {
-                     var html ='<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#investment_plan_show_modal" value="'+row.tcId+'">附件</button>';
-                     return html;
-                 }
-             },
-         ]
-     });
-     $('#investment_plan_show_tab_4').click(function () {
-         $('#main-page').load('annual_investment_plan_new.html');
-     });
-
-     $("[name='my-checkbox']").bootstrapSwitch({
-         onText : "拒绝",
-         offText : "通过",
-         onColor : "danger",
-         offColor : "success",
-         size : "large",
-         onSwitchChange : function() {
-             var checkedOfAll=$("#my-checkbox").prop("checked");
-             if (checkedOfAll==false){
-                 $('#investment_plan_approve_input').hide()
-             }
-             else {
-                 $('#investment_plan_approve_input').show();
-                 $('#investment_plan_approve_area').text('');
-             }
-         }
-     });
-     $('#investment_plan_approve_submit').click(function () {
-         var checkedOfAll=$("#my-checkbox").prop("checked");
-         var checkinfo=$('#investment_plan_approve_area').val();
-         alert(checkedOfAll+checkinfo)
-     })
-
-
-
-
-
-
- */
 
     var queryAnnualInvestmentsUrl = "annualinvestment/getannualinvestment"
     createTable(queryAnnualInvestmentsUrl, 1);
@@ -376,13 +192,13 @@ $(function () {
                     var $btn = '';
                     if (data.role == "checker") {
                         $btn = $('<div class="btn-group text-cen">' +
-                            '<button type="button" id="contractApprovalBtn" data-cid="' + data.id + '" class="btn btn-sm btn-primary">审批</button> ' +
-                            '<button type="button" data-cid="' + data.id + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
+                            '<button type="button" id="contractApprovalBtn" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary">审批</button> ' +
+                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
                             '</div>' +
                             '</div>');
                     } else {
                         $btn = $('<div class="btn-group text-cen">' +
-                            '<button type="button" data-cid="' + data.id + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
+                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
                             '</div>' +
                             '</div>');
                     }
@@ -471,13 +287,13 @@ $(function () {
                     var $btn = '';
                     if (data.label == '合同外' && data.state == -1) {
                         $btn = $('<div class="btn-group text-cen">' +
-                            '<button type="button" data-cid="' + data.id + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
+                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
                             '</div>' +
                             '</div>');
                     } else {
                         $btn = $('<div class="btn-group text-cen">' +
-                            '<button type="button" data-cid="' + data.id + '" class="btn btn-sm btn-primary btn-repost">重新提交</button>' +
-                            '<button type="button" data-cid="' + data.id + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
+                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-repost">重新提交</button>' +
+                            '<button type="button" data-cid="' + data.annualInvestmentId + '" class="btn btn-sm btn-primary btn-view">查看</button>' +
                             '</div>' +
                             '</div>');
                     }
@@ -572,10 +388,82 @@ $(function () {
                   $('#contract_modal', parent.document).modal('show');
               }
           })
+      });*/
+
+
+      $('#investment_plan_table1').on('click', '.btn-view', function (e) {
+          var target = e.currentTarget;
+          var cid = target.dataset.cid;
+          $.ajax({
+              type: "get",
+              url: "annualinvestment/getannualinvestmentbyid",//url请求的地址
+              cache: false,  //禁用缓存
+              data: {"id": cid},  //传入组装的参数
+              dataType: "json",
+              success: function (data) {
+                  var imgs = data.data.annualInvestmentImgVOs;
+                  $('#show_contract_name').val(data.data.name);
+
+                  var annual_investment_file_html = '';
+                  imgs.map(function (item, index) {
+                      annual_investment_file_html += '<div class="file-box">\n' +
+                          '                                                                                    <div class="file">\n' +
+                          '                                                                                        <span class="corner"></span>\n' +
+                          '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
+                          '                                                                                        </div>\n' +
+                          '                                                                                        <div class="file-name">\n' +
+                          '                                                                                            文件\n' +
+                          '                                                                                            <br/>\n' +
+                          '                                                                                            <small>'+ item.createTime +'</small>\n' +
+                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/annualinvestmentfile?fileId='+item.imgAddr+'">下载</a>\n' +
+                          '                                                                                        </div>\n' +
+                          '                                                                                    </div>\n' +
+                          '                                                                                </div>'
+
+                  });
+                  $('#annual_investment_file_display_div').html("");
+                  $('#annual_investment_file_display_div').html(annual_investment_file_html);
+                  $('#investment_plan_show_modal').modal();
+              }
+          });
       });
+      $('#investment_plan_table2').on('click', '.btn-view', function (e) {
+          var target = e.currentTarget;
+          var cid = target.dataset.cid;
+          $.ajax({
+              type: "get",
+              url: "annualinvestment/getannualinvestmentbyid",//url请求的地址
+              cache: false,  //禁用缓存
+              data: {"id": cid},  //传入组装的参数
+              dataType: "json",
+              success: function (data) {
+                  var imgs = data.data.annualInvestmentImgVOs;
+                  $('#show_contract_name').val(data.data.name);
 
+                  var annual_investment_file_html = '';
+                  imgs.map(function (item, index) {
+                      annual_investment_file_html += '<div class="file-box">\n' +
+                          '                                                                                    <div class="file">\n' +
+                          '                                                                                        <span class="corner"></span>\n' +
+                          '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
+                          '                                                                                        </div>\n' +
+                          '                                                                                        <div class="file-name">\n' +
+                          '                                                                                            文件\n' +
+                          '                                                                                            <br/>\n' +
+                          '                                                                                            <small>'+ item.createTime +'</small>\n' +
+                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/annualinvestmentfile?fileId='+item.imgAddr+'">下载</a>\n' +
+                          '                                                                                        </div>\n' +
+                          '                                                                                    </div>\n' +
+                          '                                                                                </div>'
 
-      $('#contract_table1').on('click', '.btn-view', function (e) {
+                  });
+                  $('#annual_investment_file_display_div').html("");
+                  $('#annual_investment_file_display_div').html(annual_investment_file_html);
+                  $('#investment_plan_show_modal').modal();
+              }
+          });
+      });
+      $('#investment_plan_table3').on('click', '.btn-view', function (e) {
           var target = e.currentTarget;
           var cid = target.dataset.cid;
           $.ajax({
@@ -605,7 +493,7 @@ $(function () {
                           '                                                                                            文件\n' +
                           '                                                                                            <br/>\n' +
                           '                                                                                            <small>'+ item.createTime +'</small>\n' +
-                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/contractfile?fileId='+item.imgAddr+'">下载</a>\n' +
+                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/annualinvestmentfile?fileId='+item.imgAddr+'">下载</a>\n' +
                           '                                                                                        </div>\n' +
                           '                                                                                    </div>\n' +
                           '                                                                                </div>'
@@ -620,102 +508,12 @@ $(function () {
               }
           });
       });
-      $('#contract_table2').on('click', '.btn-view', function (e) {
-          var target = e.currentTarget;
-          var cid = target.dataset.cid;
-          $.ajax({
-              type: "get",
-              url: "contract/getcontractbyid",//url请求的地址
-              cache: false,  //禁用缓存
-              data: {"id": cid},  //传入组装的参数
-              dataType: "json",
-              success: function (data) {
-                  $('#show_contract_name').val(data.data.name);
-                  $('#show_contract_type').val(data.data.type);
-                  $('#show_contract_party_a').val(data.data.partyA);
-                  $('#show_contract_amount').val(data.data.price);
-                  $('#show_contract_num').val(data.data.number);
-                  $('#show_contract_time').val(data.data.signDate);
-                  $('#show_contract_party_b').val(data.data.partyB);
-                  $('#show_contract_main_content').val(data.data.content);
-                  $('#show_contract_remark').val(data.data.remark);
-                  var contract_file_html = '';
-                  data.data.contractImgVOs.map(function (item, index) {
-                      contract_file_html += '<div class="file-box">\n' +
-                          '                                                                                    <div class="file">\n' +
-                          '                                                                                        <span class="corner"></span>\n' +
-                          '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                        <div class="file-name">\n' +
-                          '                                                                                            文件\n' +
-                          '                                                                                            <br/>\n' +
-                          '                                                                                            <small>'+ item.createTime +'</small>\n' +
-                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/contractfile?fileId='+item.imgAddr+'">下载</a>\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                    </div>\n' +
-                          '                                                                                </div>'
-
-                  });
-                  $('#contract_file_display_div').html("");
-                  $('#contract_file_display_div').html(contract_file_html);
-
-
-
-                  $('#contract_show_modal').modal();
-              }
-          });
-      });
-      $('#contract_table3').on('click', '.btn-view', function (e) {
-          var target = e.currentTarget;
-          var cid = target.dataset.cid;
-          $.ajax({
-              type: "get",
-              url: "contract/getcontractbyid",//url请求的地址
-              cache: false,  //禁用缓存
-              data: {"id": cid},  //传入组装的参数
-              dataType: "json",
-              success: function (data) {
-                  $('#show_contract_name').val(data.data.name);
-                  $('#show_contract_type').val(data.data.type);
-                  $('#show_contract_party_a').val(data.data.partyA);
-                  $('#show_contract_amount').val(data.data.price);
-                  $('#show_contract_num').val(data.data.number);
-                  $('#show_contract_time').val(data.data.signDate);
-                  $('#show_contract_party_b').val(data.data.partyB);
-                  $('#show_contract_main_content').val(data.data.content);
-                  $('#show_contract_remark').val(data.data.remark);
-                  var contract_file_html = '';
-                  data.data.contractImgVOs.map(function (item, index) {
-                      contract_file_html += '<div class="file-box">\n' +
-                          '                                                                                    <div class="file">\n' +
-                          '                                                                                        <span class="corner"></span>\n' +
-                          '                                                                                        <div class="image" style="background:url(' + item.thumbnailAddr + ');background-size:cover;">\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                        <div class="file-name">\n' +
-                          '                                                                                            文件\n' +
-                          '                                                                                            <br/>\n' +
-                          '                                                                                            <small>'+ item.createTime +'</small>\n' +
-                          '                                                                                            <a type="button" class="btn-primary pull-right" href="/download/contractfile?fileId='+item.imgAddr+'">下载</a>\n' +
-                          '                                                                                        </div>\n' +
-                          '                                                                                    </div>\n' +
-                          '                                                                                </div>'
-
-                  });
-                  $('#contract_file_display_div').html("");
-                  $('#contract_file_display_div').html(contract_file_html);
-
-
-
-                  $('#contract_show_modal').modal();
-              }
-          });
-      });
-      $('#contract_table3').on('click', '.btn-repost', function (e) {
+      $('#investment_plan_table3').on('click', '.btn-repost', function (e) {
           $('#contract_modal', parent.document).modal('show');
       });
 
-      $('#contract_modal_show_close1,#contract_modal_show_close').click(function () {
-          $("#contract_show_modal").modal('hide');
-      });*/
+      $('.annual_investment_modal_close').click(function () {
+          $("#investment_plan_show_modal").modal('hide');
+      });
 
 })

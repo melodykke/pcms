@@ -36,6 +36,8 @@ public class PreProgressServiceImpl implements PreProgressService {
     @Autowired
     private PreProgressRepository preProgressRepository;
     @Autowired
+    private UserService userService;
+    @Autowired
     private FeedbackService feedbackService;
     @Autowired
     private OperationLogService operationLogService;
@@ -50,7 +52,7 @@ public class PreProgressServiceImpl implements PreProgressService {
     @Override
     public PreProgress save(List<PreProgressEntry> preProgressEntries, String rtFileTempPath) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         PreProgress preProgress =  preProgressRepository.findByBaseInfo(thisProject);
         if (preProgress != null && preProgress.getPreProgressId() != null && !preProgress.getState().equals((byte) 1)) {
             // 如果是重新提交，即存在之前的preProgress 则沿用ID，并且将该preProgress下的img和entries删除

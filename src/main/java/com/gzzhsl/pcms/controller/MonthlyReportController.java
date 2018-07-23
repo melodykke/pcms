@@ -40,7 +40,8 @@ public class MonthlyReportController {
     private MonthlyReportExcelService monthlyReportExcelService;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private AnnualInvestmentService annualInvestmentService;
     String projectMonthlyReportId = "";
 
 
@@ -191,7 +192,15 @@ public class MonthlyReportController {
                 getMonthlyReportsByProjectIdAndYear(projectId, historyPointTime, yearEndTime); // 查询截止目前 历史的统计情况;;
         MonthlyReportExcelModel monthlyReportExcelModel = new MonthlyReportExcelModel();
         monthlyReportExcelModel.setTotalInvestment(thisProject.getTotalInvestment());
-        /*monthlyReportExcelModel.setThisYearPlanInvestment(); TODO 设置年度投融资计划*/
+        // 取得年份
+        String year = currentDate.substring(0, currentDate.lastIndexOf("-"));
+        // 查询该年份有无已审批通过的年度投资计划 如果有设置上，如果没 null
+        List<AnnualInvestment> annualInvestments = annualInvestmentService.getByYearAndProject(year, thisProject);
+        if (annualInvestments.size()==1) {
+            if (annualInvestments.get(0).getState().equals((byte) 1)) {
+                monthlyReportExcelModel.setThisYearPlanInvestment(annualInvestments.get(0).getApplyFigure()); // 设置年度投融资计划
+            }
+        }
         MonthlyReportExcelModel monthlyReportExcelModelWithMonthParams = monthlyReportExcelService.getMonthExcelModelWithMonthParams(monthlyReportExcelModel, projectMonthlyReport);
         MonthlyReportExcelModel monthlyReportExcelModelWithMonthYearParams = monthlyReportExcelService.getMonthExcelModelWithYearParams(monthlyReportExcelModelWithMonthParams, yearProjectMonthlyReports);
 

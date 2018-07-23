@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface AnnualInvestmentImgRepository extends JpaRepository<AnnualInvestmentImg, String> {
     List<AnnualInvestmentImg> deleteByAnnualInvestment(AnnualInvestment annualInvestment);
-
+    AnnualInvestmentImg findOneByAnnualInvestmentImgId(String annualInvestmentImgId);
 }
