@@ -29,9 +29,6 @@ public class ProjectMonthlyReportVO {
     @NotNull(message = "必填项空缺")
     @DecimalMax(value = "999999999999", message = "数据太长！")
     private BigDecimal temporaryWork; // 施工临时工程(万元) *
-    @NotNull(message = "必填项空缺")
-    @DecimalMax(value = "999999999999", message = "数据太长！")
-    private BigDecimal reserveFunds; // 基本预备费(万元) *
     /*移民环境投资*/
     @NotNull(message = "必填项空缺")
     @DecimalMax(value = "999999999999", message = "数据太长！")

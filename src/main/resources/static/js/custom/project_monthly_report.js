@@ -168,7 +168,66 @@ $(document).ready(function(){
         forceParse: false,
         autoclose: true,
         todayHighlight: true
-    });
+    }).on('changeDate',function(ev){
+        // 对每个所填项增加本年和开工至今的统计数据
+        if($('#submit_date').val()!=''){
+            $.ajax({
+                url: "reporter/getmonthlyreportposthistory",
+                type: 'GET',
+                data: {'currentDate': $('#submit_date').val()},
+                dataType: 'json',
+                success: function (data) {
+                    var content = data.data;
+                    $('#year_civil_engineering').html(content.yearCivilEngineering);
+                    $('#sofar_civil_engineering').html(content.sofarCivilEngineering);
+                    $('#year_metal_mechanism').html(content.yearMetalMechanism);
+                    $('#sofar_metal_mechanism').html(content.sofarMetalMechanism);
+                    $('#year_independent_cost').html(content.yearIndependentCost);
+                    $('#sofar_independent_cost').html(content.sofarIndependentCost);
+                    $('#year_electromechanical_equipment').html(content.yearElectromechanicalEquipment);
+                    $('#sofar_electromechanical_equipment').html(content.sofarElectromechanicalEquipment);
+                    $('#year_temporary_work').html(content.yearTemporaryWork);
+                    $('#sofar_temporary_work').html(content.sofarTemporaryWork);
+                    $('#year_resettlement_arrangement').html(content.yearResettlementArrangement);
+                    $('#sofar_resettlement_arrangement').html(content.sofarResettlementArrangement);
+                    $('#year_environmental_protection').html(content.yearEnvironmentalProtection);
+                    $('#sofar_environmental_protection').html(content.sofarEnvironmentalProtection);
+                    $('#year_water_conservation').html(content.yearWaterConservation);
+                    $('#sofar_water_conservation').html(content.sofarWaterConservation);
+                    $('#year_other_cost').html(content.yearOtherCost);
+                    $('#sofar_other_cost').html(content.sofarOtherCost);
+                    $('#year_source_central_investment').html(content.yearSourceCentralInvestment);
+                    $('#sofar_source_central_investment').html(content.sofarSourceCentralInvestment);
+                    $('#year_source_provincial_investment').html(content.yearSourceProvincialInvestment);
+                    $('#sofar_source_provincial_investment').html(content.sofarSourceProvincialInvestment);
+                    $('#year_source_local_investment').html(content.yearSourceLocalInvestment);
+                    $('#sofar_source_local_investment').html(content.sofarSourceLocalInvestment);
+                    $('#year_available_central_investment').html(content.yearAvailableCentralInvestment);
+                    $('#sofar_available_central_investment').html(content.sofarAvailableCentralInvestment);
+                    $('#year_available_provincial_investment').html(content.yearAvailableProvincialInvestment);
+                    $('#sofar_available_provincial_investment').html(content.sofarAvailableProvincialInvestment);
+                    $('#year_available_local_investment').html(content.yearAvailableLocalInvestment);
+                    $('#sofar_available_local_investment').html(content.sofarAvailableLocalInvestment);
+                    $('#year_open_dug').html(content.yearOpenDug);
+                    $('#sofar_open_dug').html(content.sofarOpenDug);
+                    $('#year_backfill').html(content.yearBackfill);
+                    $('#sofar_backfill').html(content.sofarBackfill);
+                    $('#year_concrete').html(content.yearConcrete);
+                    $('#sofar_concrete').html(content.sofarConcrete);
+                    $('#year_grout').html(content.yearGrout);
+                    $('#sofar_grout').html(content.sofarGrout);
+                    $('#year_hole_dug').html(content.yearHoleDug);
+                    $('#sofar_hole_dug').html(content.sofarHoleDug);
+                    $('#year_masonry').html(content.yearMasonry);
+                    $('#sofar_masonry').html(content.sofarMasonry);
+                    $('#year_rebar').html(content.yearRebar);
+                    $('#sofar_rebar').html(content.sofarRebar);
+                    $('#year_labour_force').html(content.yearLabourForce);
+                    $('#sofar_labour_force').html(content.sofarLabourForce);
+                }
+            })
+        }
+    }); ;
 
     // 文件上传
     $("#uploadfile").fileinput({
@@ -220,7 +279,9 @@ $(document).ready(function(){
 
     $('#uploadfile').click(function () {
         $("#uploadfile").fileinput('refresh');
-    })
+    });
+
+
 });
 
 

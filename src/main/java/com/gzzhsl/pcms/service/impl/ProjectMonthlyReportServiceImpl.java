@@ -74,7 +74,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         }
         // 在审批状态为“已审批”的状态下，若月报提交月份重复，则不允许提交
         Date monthReportDate = projectMonthlyReportVO.getSubmitDate();
-        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportRepository.findAll();
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportRepository.findAllByBaseInfo(thisProject);
         for (ProjectMonthlyReport projectMonthlyReport : projectMonthlyReports) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
             String dateString = simpleDateFormat.format(projectMonthlyReport.getSubmitDate());
@@ -325,4 +325,13 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     }
 
 
+/*    private List<ProjectMonthlyReport> getMyReports(BaseInfo thisProject){
+        List<ProjectMonthlyReport> projectMonthlyReports = null;
+        Specification querySpecification =  new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+
+            }
+        }
+    }*/
 }
