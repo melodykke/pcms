@@ -283,6 +283,7 @@ $(function () {
                 })
             })
         }
+        $('#statisticalLeader').text(data.data.statisticalLeader);
         $('#civilEngineering').text(data.data.civilEngineering);
         $('#electromechanicalEquipment').text(data.data.electromechanicalEquipment);
         $('#metalMechanism').text(data.data.metalMechanism);
@@ -389,9 +390,10 @@ $(function () {
                 console.info("error: " + data.msg);
             }
         });
-    })
+    });
     $('#monthly_report_check_div').on('click', '#check_result_confirm_btn', function (e) {
         $('#main_content', parent.document).load('reporter/projectmonths');
-    })
+    });
+
 
 })

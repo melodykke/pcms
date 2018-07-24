@@ -1,6 +1,8 @@
 package com.gzzhsl.pcms.vo;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -14,6 +16,8 @@ public class ProjectMonthlyReportVO {
 
     private String rtFileTempPath;
 
+    @NotBlank(message = "必填项空缺")
+    private String statisticalLeader; // 统计负责人 *
     @NotNull(message = "必填项空缺")
     @DecimalMax(value = "999999999999", message = "数据太长！")
     private BigDecimal civilEngineering; // 建筑工程(万元) *

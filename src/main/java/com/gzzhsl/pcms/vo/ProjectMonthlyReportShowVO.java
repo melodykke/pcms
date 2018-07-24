@@ -12,6 +12,7 @@ import java.util.List;
 public class ProjectMonthlyReportShowVO {
 
     private String projectMonthlyReportId;
+    private String statisticalLeader;
     private BigDecimal civilEngineering; // 建筑工程(万元) *
     private BigDecimal metalMechanism; // 金属机构设备及安装工程(万元) *
     private BigDecimal independentCost; // 独立费用(万元) *

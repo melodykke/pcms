@@ -40,15 +40,13 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>月报新增</h5><small> <i>（下列月报内容除"备注"和"附件"外，均未必填项，数字取小数点后两位。）</i> </small>
+                    <h5>月报新增</h5><small> <i>（下列月报内容除"备注"和"附件"外，均未必填项，数字取小数点后两位。 另，"统计负责人"为该月报数据统计计算的第一直接负责人，非本表填报人。）</i> </small>
                 </div>
                 <div class="ibox-content">
                     <form id="form" action="#" class="wizard-big">
 
                         <h1>投资情况</h1>
                         <fieldset>
-                            <h2>月份</h2>
-                            <br>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group" id="data_4">
@@ -57,6 +55,12 @@
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                             <input id="submit_date" name="submit_date" type="text" class="form-control required" readonly>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="font-normal">统计负责人(姓名)</label>
+                                        <input id="statistical_leader" name="statistical_leader" type="text" class="form-control required" maxlength="15">
                                     </div>
                                 </div>
                             </div>
@@ -149,22 +153,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--<div class="form-group">
-                                        <div class="row">
-                                            <div class="col-lg-5">
-                                                <label>基本预备费(万元)</label><span style="color:red;"> *</span>
-                                                <input id="reserve_funds" name="reserve_funds" type="text" class="form-control required number" maxlength="15">
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <label>本年度累计</label><span style="color:red;"> </span>
-                                                <div class="bg-primary p-xxs b-r-xl" id="year_reserve_funds"> </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <label>开工累计</label><span style="color:red;"> </span>
-                                                <div class="bg-primary p-xxs b-r-xl" id="sofar_reserve_funds"> </div>
-                                            </div>
-                                        </div>
-                                    </div>-->
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -547,8 +535,6 @@
 <!-- Jquery Validate -->
 <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
 <script th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
-
-
 <!-- Data picker -->
 <script th:src="@{/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
 <script th:src="@{/js/custom/bootstrap-datepicker.zh-CN.js}"></script>
