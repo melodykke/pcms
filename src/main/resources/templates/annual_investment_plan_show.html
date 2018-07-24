@@ -46,7 +46,7 @@
                                             <li class="active"><a data-toggle="tab" id="investment_plan_show_btn_1" href="#investment_plan_show_tab_1"><i class="fa fa-check-square-o"></i> 已审批</a></li>
                                             <li class=""><a data-toggle="tab" id="investment_plan_show_btn_2" href="#investment_plan_show_tab_2"> <i class="fa fa-clock-o"></i>未审批</a></li>
                                             <li class=""><a data-toggle="tab" id="investment_plan_show_btn_3" href="#investment_plan_show_tab_3"> <i class="fa fa-times-rectangle-o"></i>审批未通过</a></li>
-                                            <li class=""><a id="investment_plan_show_tab_4"> <i class="fa fa-arrow-right"></i>新增</a></li>
+                                            <li class=""><a id="investment_plan_show_btn_4"> <i class="fa fa-arrow-right"></i>新增</a></li>
                                         </ul>
                                         <div class="tab-content">
                                             <div id="investment_plan_show_tab_1" class="tab-pane active animated fadeInUp" >
@@ -121,14 +121,14 @@
 <!--审批modal-->
 <div class="modal inmodal" id="investment_plan_approve_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content animated bounceInRight">
+        <div class="modal-content animated bounceInRight" id="annual_investment_check_div">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
                 </button>
                 <h1 class="modal-title">年 度 计 划 投 资 审 批</h1>
                 <br>
-                <input type="checkbox" name="my-checkbox" id="my-checkbox">
+                <input type="checkbox" name="investment_plan_checkbox" id="investment_plan_checkbox">
             </div>
             <div class="modal-body">
                 <div class="form-group animated fadeIn" id="investment_plan_approve_input" style="display:none;">

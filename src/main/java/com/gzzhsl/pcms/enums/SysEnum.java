@@ -66,12 +66,18 @@ public enum SysEnum {
     ANNUAL_INVESTMENT_APPLY_YEAR_HAS_DUPLICATED_ERROR(3002, "年度投融资计划申报出错, 申报计划投资年份已存在多个副本！请联系系统管理员！"),
     ANNUAL_INVESTMENT_NO_PROJECT_ERROR(3003, "请优先配置水库基础信息"),
     ANNUAL_INVESTMENT_QUERY_OTHERS_ERROR(3004, "不能查询不属于自己的年度投融资计划"),
+    ANNUAL_INVESTMENT_APPROVAL_ERROR(3005, "审批年度投融资计划错误，ID为空"),
+    ANNUAL_INVESTMENT_NO_CORRESPOND_RECORD_ERROR(3006, "审批年度投融资计划错误，审批查询的年度投融资计划所对应ID无记录"),
+    ANNUAL_INVESTMENT_CHECK_CHECKED_ERROR(3007, "当前年度投融资计划信息已经审批过，不能重复审批"),
+    ANNUAL_INVESTMENT_CHECKED_OTHERS_ERROR(3008, "不能审批不属于本用户所属工程的年度投融资计划"),
 
     TENDER_NEW_ERROR(4000, "新增招标项目出错"),
     TENDER_NO_PROJECT_ERROR(4001, "请优先配置水库基础信息"),
     TENDER_QUERY_OTHERS_ERROR(4002, "不能查询不属于自己的招标项目"),
     TENDER_APPROVAL_ERROR(4003, "审批招标备案错误，ID为空"),
     TENDER_NO_CORRESPOND_RECORD_ERROR(4004, "审批招标备案错误，审批查询的招标备案所对应ID无记录"),
+    TENDER_CHECKED_OTHERS_ERROR(4005, "不能审批不属于本用户所属工程的招标备案信息"),
+    TENDER_CHECK_CHECKED_ERROR(4006, "当前招标备案信息已经审批过，不能重复审批"),
     ;
 
     private Integer code;

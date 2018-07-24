@@ -150,12 +150,12 @@ public class TenderController {
             }
             if (noAffiliatedTender) {
                 log.error("【合同备案错误】不能审批不属于本用户所属工程的合同备案信息");
-                throw new SysException(SysEnum.CONTRACT_CHECKED_OTHERS_ERROR);
+                throw new SysException(SysEnum.TENDER_NO_CORRESPOND_RECORD_ERROR);
             }
         }
         if (thisTender.getState() != (byte) 0) {
             log.error("【合同备案错误】当前合同备案信息已经审批过，不能重复审批");
-            throw new SysException(SysEnum.CONTRACT_CHECK_CHECKED_ERROR);
+            throw new SysException(SysEnum.TENDER_CHECKED_OTHERS_ERROR);
         }
         Feedback feedback = tenderService.approveTender(thisUser, switchState, checkinfo, thisTender);
         if (feedback.getState().equals((byte) 1)) {

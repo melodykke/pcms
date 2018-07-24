@@ -161,6 +161,10 @@ $(function () {
             href = target.dataset.href;
             contentDiv.load(href)
         }
+        if (target.dataset.name == "年度投融资计划") {
+            href = target.dataset.href;
+            contentDiv.load(href)
+        }
         if (target.dataset.name == "招标备案信息") {
             href = target.dataset.href;
             contentDiv.load(href)

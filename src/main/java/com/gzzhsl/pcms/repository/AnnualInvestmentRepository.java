@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface AnnualInvestmentRepository extends JpaRepository<AnnualInvestment, String>, JpaSpecificationExecutor<AnnualInvestment>{
     List<AnnualInvestment> findAllByBaseInfo(BaseInfo baseInfo);
+    AnnualInvestment findByAnnualInvestmentId(String annualInvestmentId);
 }

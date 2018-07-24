@@ -1,20 +1,15 @@
 package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.converter.AnnualInvestmentImg2VO;
-import com.gzzhsl.pcms.entity.AnnualInvestment;
-import com.gzzhsl.pcms.entity.AnnualInvestmentImg;
-import com.gzzhsl.pcms.entity.BaseInfo;
-import com.gzzhsl.pcms.entity.Notification;
+import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.AnnualInvestmentImgRepository;
 import com.gzzhsl.pcms.repository.AnnualInvestmentRepository;
-import com.gzzhsl.pcms.service.AnnualInvestmentService;
-import com.gzzhsl.pcms.service.NotificationService;
-import com.gzzhsl.pcms.service.OperationLogService;
-import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.service.*;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.util.FeedbackUtil;
 import com.gzzhsl.pcms.util.OperationUtil;
 import com.gzzhsl.pcms.util.PathUtil;
 import com.gzzhsl.pcms.util.WebSocketUtil;
@@ -59,6 +54,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
     @Autowired
     private OperationLogService operationLogService;
     @Autowired
+    private FeedbackService feedbackService;
+    @Autowired
     private WebSocket webSocket;
 
 
@@ -98,6 +95,12 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
         annualInvestmentVO.setSubmitter(thisUser.getUsername());
         BeanUtils.copyProperties(annualInvestmentVO, annualInvestment);
         AnnualInvestment annualInvestmentRt = annualInvestmentRepository.save(annualInvestment);
+        if (annualInvestmentVO.getAnnualInvestmentId() != null) {
+            AnnualInvestment annualInvestmentItem = annualInvestmentRepository.findOne(annualInvestmentVO.getAnnualInvestmentId());
+            annualInvestmentVO.setCreateTime(annualInvestmentItem.getCreateTime());
+            // 如果存在记录 就把该记录下的所有文档全部删除
+            annualInvestmentImgRepository.deleteByAnnualInvestment(annualInvestmentRt);
+        }
         // 考虑图片的情况
         if (annualInvestmentVO.getRtFileTempPath() != null && annualInvestmentVO.getRtFileTempPath() != "") { // 如果存在图片
             File sourceDestFolder = new File(PathUtil.getFileBasePath(true) + annualInvestmentVO.getRtFileTempPath());
@@ -206,6 +209,34 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
             }
         };
         return annualInvestmentRepository.findAll(querySpecification);
+    }
+
+    @Override
+    public AnnualInvestment findById(String id) {
+        return annualInvestmentRepository.findByAnnualInvestmentId(id);
+    }
+
+    @Override
+    public Feedback approveAnnualInvestment(UserInfo thisUser, Boolean switchState, String checkinfo, AnnualInvestment thisAnnualInvestment) {
+        Feedback feedbackRt = null;
+        if (switchState == false) {
+            thisAnnualInvestment.setState((byte) 1); // 审批通过
+            AnnualInvestment thisAnnualInvestmentRt = annualInvestmentRepository.save(thisAnnualInvestment);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(),"年度投融资计划", thisAnnualInvestmentRt.getAnnualInvestmentId(), new Date(),
+                    "审批通过", (byte) 1, "annualinvestment/toannualinvestmentshow");
+            feedbackRt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的年度投融资计划信息"));
+        } else {
+            thisAnnualInvestment.setState((byte) -1); // 审批未通过
+            AnnualInvestment thisAnnualInvestmentRt = annualInvestmentRepository.save(thisAnnualInvestment);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(), "年度投融资计划",thisAnnualInvestmentRt.getAnnualInvestmentId(), new Date(),
+                    "审批未通过：", (byte) -1, "annualinvestment/toannualinvestmentshow");
+            feedbackRt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的年度投融资计划信息"));
+        }
+        // 创建webSocket消息
+        WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "年度投融资计划", "新的年度投融资计划审批消息");
+        return feedbackRt;
     }
 
     @Override
