@@ -19,6 +19,7 @@ $(function () {
 
 
     var rtFileTempPath = '';
+    var uploadFileFlag = true;
     $('.input-group.date').datepicker({
         language: "zh-CN",
         format: 'yyyy-mm-dd',
@@ -83,77 +84,66 @@ $(function () {
     validator.resetForm();
     $('#annual_tender_new_new_submit').click(function () {
         if (validator.form()){
-            swal({
-                title: "确认提交吗?",
-                text: "请检查数据是否填写正确后再提交!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "已确认,提交!",
-                cancelButtonText:"取消",
-                closeOnConfirm: false
-            }, function (){
-                var tenderVO = {};
-                if (tenderId != '') {
-                    tenderVO.tenderId = tenderId;
-                }
-                tenderVO.tenderFilingUnit = $('#tenderFilingUnit').val();
-                tenderVO.nameOfLots = $('#nameOfLots').val();
-                tenderVO.bidPlanDate = $('#bidPlanDate').val();
-                tenderVO.bidCompleteDate = $('#bidCompleteDate').val();
-                tenderVO.bidAgent = $('#bidAgent').val();
-                tenderVO.tenderAgent = $('#tenderAgent').val();
-                tenderVO.rtFileTempPath = rtFileTempPath;
-                $.ajax({
-                    url: "tender/save",
-                    type: "POST",
-                    data: JSON.stringify(tenderVO),
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.code == 1002) {
-                            swal({
-                                title: "提交成功",
-                                text: "年度投资计划提交成功，请耐心等待审批!",
-                                type: "success",
-                                confirmButtonText: "确定",
-                            }, function () {
-                                $('#main_content', parent.document).load('tender/totendershow');
-                            });
-                        } else {
-                            swal({
-                                title: "出错",
-                                text: data.msg,
-                                type: "warning",
-                                confirmButtonText: "确定",
-                            });
-                        }
-                    }
-                });
-            });
-
-            /*swal({
-                title: "确认提交吗?",
-                text: "请检查数据是否填写正确后再提交!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "已确认,提交!",
-                cancelButtonText:"取消",
-                closeOnConfirm: false
-            }, function (){
+            if (uploadFileFlag == true) {
                 swal({
-                        title:"成功!",
-                        text:"已经成功提交!",
-                        type:"success"
-                    },function () {
-                        $("#pre_progress_modal").modal('hide');
-                        $('#main-page').load('annual_investment_plan_show.html');
+                    title: "确认提交吗?",
+                    text: "请检查数据是否填写正确后再提交!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "已确认,提交!",
+                    cancelButtonText: "取消",
+                    closeOnConfirm: false
+                }, function () {
+                    var tenderVO = {};
+                    if (tenderId != '') {
+                        tenderVO.tenderId = tenderId;
                     }
-                )
-            });*/
-        }
-        else {
+                    tenderVO.tenderFilingUnit = $('#tenderFilingUnit').val();
+                    tenderVO.nameOfLots = $('#nameOfLots').val();
+                    tenderVO.bidPlanDate = $('#bidPlanDate').val();
+                    tenderVO.bidCompleteDate = $('#bidCompleteDate').val();
+                    tenderVO.bidAgent = $('#bidAgent').val();
+                    tenderVO.tenderAgent = $('#tenderAgent').val();
+                    tenderVO.rtFileTempPath = rtFileTempPath;
+                    $.ajax({
+                        url: "tender/save",
+                        type: "POST",
+                        data: JSON.stringify(tenderVO),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.code == 1002) {
+                                swal({
+                                    title: "提交成功",
+                                    text: "年度投资计划提交成功，请耐心等待审批!",
+                                    type: "success",
+                                    confirmButtonText: "确定",
+                                }, function () {
+                                    $('#main_content', parent.document).load('tender/totendershow');
+                                });
+                            } else {
+                                swal({
+                                    title: "出错",
+                                    text: data.msg,
+                                    type: "warning",
+                                    confirmButtonText: "确定",
+                                });
+                            }
+                        }
+                    });
+                });
+            } else {
+                swal({
+                    title: "敬告",
+                    text: "存在未上传的附件，请清空附件或上传后重试！",
+                    type: "warning",
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确定",
+                    closeOnConfirm: false
+                });
+            }
+        } else {
             swal({
                 title:"错误!",
                 text:"有数据未填写，或者格式错误!",
