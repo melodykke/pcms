@@ -27,6 +27,17 @@
 
     <link th:href="@{/css/animate.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/custom/index.css}" rel="stylesheet">
+    <link th:href="@{/css/custom/self-theme.css}" rel="stylesheet">
+
+    <!-- 百度地图 -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=kZmpkejBXwfYBNQp4Rzz38DRNMhUqsHj"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/AreaRestriction/1.2/src/AreaRestriction_min.js"></script>
 </head>
 
 <body class="md-skin fixed-nav no-skin-config">
@@ -54,9 +65,7 @@
                             <li id="person_info"><a>个人设置</a></li>
                             <li><a href="#" id="account_config">账号设置</a></li>
                             <li class="divider"></li>
-
                             <li><a th:href="@{/logout}">安全退出</a></li>
-
                         </ul>
                     </div>
                     <div class="logo-element">
@@ -141,14 +150,13 @@
                     </ul>
                 </li>
                 <li class="landing_link">
-                    <a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">Landing Page</span>
+                    <a id="bind_wechat_btn"><i class="fa fa-star"></i> <span class="nav-label">绑定微信</span>
                         <span class="label label-warning pull-right">NEW</span></a>
                 </li>
                 <li class="special_link">
                     <a href="package.html"><i class="fa fa-database"></i> <span class="nav-label">Package</span></a>
                 </li>
             </ul>
-
         </div>
     </nav>
 
@@ -172,7 +180,8 @@
                     <shiro:hasRole name="reporter">
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                                <i class="fa fa-envelope"></i> <span class="label label-warning" id="countFeedback"></span>
+                                <i class="fa fa-envelope"></i> <span class="label label-warning"
+                                                                     id="countFeedback"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-messages" id="feedback_entrance">
 
@@ -201,439 +210,456 @@
                         </a>
                     </li>
                 </ul>
-
             </nav>
         </div>
-        <div class="wrapper wrapper-content animated fadeInUp" id="main_content">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <span class="label label-success pull-right">Monthly</span>
-                            <h5>Income</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">40 886,200</h1>
-                            <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-                            <small>Total income</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <span class="label label-info pull-right">Annual</span>
-                            <h5>Orders</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">275,800</h1>
-                            <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
-                            <small>New orders</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <span class="label label-primary pull-right">Today</span>
-                            <h5>visits</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">106,120</h1>
-                            <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
-                            <small>New visits</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <span class="label label-danger pull-right">Low value</span>
-                            <h5>User activity</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">80,600</h1>
-                            <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i></div>
-                            <small>In first month</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Orders</h5>
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-xs btn-white active">Today</button>
-                                    <button type="button" class="btn btn-xs btn-white">Monthly</button>
-                                    <button type="button" class="btn btn-xs btn-white">Annual</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <div class="row">
-                                <div class="col-lg-9">
-                                    <div class="flot-chart">
-                                        <div class="flot-chart-content" id="flot-dashboard-chart"></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <ul class="stat-list">
-                                        <li>
-                                            <h2 class="no-margins">2,346</h2>
-                                            <small>Total orders in period</small>
-                                            <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i></div>
-                                            <div class="progress progress-mini">
-                                                <div style="width: 48%;" class="progress-bar"></div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <h2 class="no-margins ">4,422</h2>
-                                            <small>Orders in last month</small>
-                                            <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i>
-                                            </div>
-                                            <div class="progress progress-mini">
-                                                <div style="width: 60%;" class="progress-bar"></div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <h2 class="no-margins ">9,180</h2>
-                                            <small>Monthly income from orders</small>
-                                            <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
-                                            <div class="progress progress-mini">
-                                                <div style="width: 22%;" class="progress-bar"></div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-                </div>
+            <div id="main_content" class="map-content">
+                <div id="allmap"></div>
             </div>
 
-
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Messages</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
+        <div class="right-tool">
+            <div class="overview-tool">
+                <div id="toggle3" class="tip-btn">
+                    <i class="fa fa-angle-double-left"></i>
+                    <span>总概览</span>
+                </div>
+                <div id="toggle2" class="tip-btn">
+                    <i class="fa fa-angle-double-left"></i>
+                    <span>待办信息</span>
+                </div>
+                <div id="toggle1" class="tip-btn">
+                    <i class="fa fa-angle-double-left"></i>
+                    <span>详情数据</span>
+                </div>
+            </div>
+            <div class="right-panel">
+                <!-- 第一个悬浮框 -->
+                <div class="tabs-container" id="container1">
+                    <ul class="nav nav-tabs">
+                        <li class="col-lg-6 active">
+                            <a data-toggle="tab" href="#tab-3" aria-expanded="true">
+                                <i class="fa fa-laptop"></i>
+                                <span class="control-tips">概述</span>
+                            </a>
+                        </li>
+                        <li class="col-lg-6">
+                            <a data-toggle="tab" href="#tab-4" aria-expanded="false">
+                                <i class="fa fa-desktop"></i>
+                                <span class="control-tips">资金</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-3" class="tab-pane active">
+                            <div class="panel-body" id="item_detail">
+                                <div class="col-lg-12 item-detail">
+                                    <div class="panel-detail-title">思南水库</div>
+                                    <div>
+                                        <label>所在位置：</label>
+                                        <span id="location_t">50000000</span>
+                                    </div>
+                                    <div>
+                                        <label>水库规模：</label>
+                                        <span id="scale_t">50000000</span>
+                                    </div>
+                                    <div>
+                                        <label>水库等级：</label>
+                                        <span id="level_t">50000000</span>
+                                    </div>
+                                    <div>
+                                        <label>所属单位：</label>
+                                        <span id="legal_representative_name">50000000</span>
+                                    </div>
+                                    <div>
+                                        <label>主要功能：</label>
+                                        <span id="project_task">50000000</span>
+                                    </div>
+                                    <div>
+                                        <label>水库概述：</label>
+                                        <span id="overview_t">50000000</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="ibox-content ibox-heading">
-                            <h3><i class="fa fa-envelope-o"></i> New messages</h3>
-                            <small><i class="fa fa-tim"></i> You have 22 new messages and 16 waiting in draft folder.
-                            </small>
-                        </div>
-                        <div class="ibox-content">
-                            <div class="feed-activity-list">
-
-                                <div class="feed-element">
-                                    <div>
-                                        <small class="pull-right text-navy">1m ago</small>
-                                        <strong>Monica Smith</strong>
-                                        <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                            Lorem Ipsum
+                        <div id="tab-4" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="col-lg-12 item-payment">
+                                    <div class="col-lg-6 cell-payment">
+                                        <div class="col-lg-12 detail-payment">
+                                            <div class="panel-font">中央累计拨付</div>
+                                            <div>
+                                                <span>￥</span>
+                                                <span class="font-num">2100000</span>
+                                            </div>
                                         </div>
-                                        <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
+                                        <div class="col-lg-12 detail-payment">
+                                            <div class="panel-font">当前累计拨付</div>
+                                            <div>
+                                                <span>￥</span>
+                                                <span class="font-num">2100000</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 map-payment">
+                                        <div id="payment_chart" style='width: 200px;height:250px;'></div>
                                     </div>
                                 </div>
-
-                                <div class="feed-element">
-                                    <div>
-                                        <small class="pull-right">2m ago</small>
-                                        <strong>Jogn Angel</strong>
-                                        <div>There are many variations of passages of Lorem Ipsum available</div>
-                                        <small class="text-muted">Today 2:23 pm - 11.06.2014</small>
+                                <div class="col-lg-12 item-investment">
+                                    <div class="col-lg-6  cell-investment">
+                                        <div class="col-lg-12 detail-investment">
+                                            <div class="panel-font">省政府投资</div>
+                                            <div>
+                                                <span>￥</span>
+                                                <span class="font-num">2100000</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 detail-investment">
+                                            <div class="panel-font">中央投资</div>
+                                            <div>
+                                                <span>￥</span>
+                                                <span class="font-num">2100000</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="col-lg-6 detail-investment">
+                                                <div class="panel-font">当前投资</div>
+                                                <div class="total-investment">
+                                                    <span>￥</span>
+                                                    <span class="font-num">2100000</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 detail-investment under-pie">
+                                                <div class="panel-font">总投资</div>
+                                                <div class="total-investment">
+                                                    <span>￥</span>
+                                                    <span class="font-num">2100000</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 map-investment">
+                                        <div id="investment_chart" style='width: 200px;height:250px;'></div>
                                     </div>
                                 </div>
-
-                                <div class="feed-element">
-                                    <div>
-                                        <small class="pull-right">5m ago</small>
-                                        <strong>Jesica Ocean</strong>
-                                        <div>Contrary to popular belief, Lorem Ipsum</div>
-                                        <small class="text-muted">Today 1:00 pm - 08.06.2014</small>
-                                    </div>
-                                </div>
-
-                                <div class="feed-element">
-                                    <div>
-                                        <small class="pull-right">5m ago</small>
-                                        <strong>Monica Jackson</strong>
-                                        <div>The generated Lorem Ipsum is therefore</div>
-                                        <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                    </div>
-                                </div>
-
-
-                                <div class="feed-element">
-                                    <div>
-                                        <small class="pull-right">5m ago</small>
-                                        <strong>Anna Legend</strong>
-                                        <div>All the Lorem Ipsum generators on the Internet tend to repeat</div>
-                                        <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                    </div>
-                                </div>
-                                <div class="feed-element">
-                                    <div>
-                                        <small class="pull-right">5m ago</small>
-                                        <strong>Damian Nowak</strong>
-                                        <div>The standard chunk of Lorem Ipsum used</div>
-                                        <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                    </div>
-                                </div>
-                                <div class="feed-element">
-                                    <div>
-                                        <small class="pull-right">5m ago</small>
-                                        <strong>Gary Smith</strong>
-                                        <div>200 Latin words, combined with a handful</div>
-                                        <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-8">
-
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h5>User project list</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                        <a class="close-link">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="ibox-content">
-                                    <table class="table table-hover no-margins">
-                                        <thead>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th>Date</th>
-                                            <th>User</th>
-                                            <th>Value</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>
-                                                <small>Pending...</small>
-                                            </td>
-                                            <td><i class="fa fa-clock-o"></i> 11:20pm</td>
-                                            <td>Samantha</td>
-                                            <td class="text-navy"><i class="fa fa-level-up"></i> 24%</td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="label label-warning">Canceled</span></td>
-                                            <td><i class="fa fa-clock-o"></i> 10:40am</td>
-                                            <td>Monica</td>
-                                            <td class="text-navy"><i class="fa fa-level-up"></i> 66%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <small>Pending...</small>
-                                            </td>
-                                            <td><i class="fa fa-clock-o"></i> 01:30pm</td>
-                                            <td>John</td>
-                                            <td class="text-navy"><i class="fa fa-level-up"></i> 54%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <small>Pending...</small>
-                                            </td>
-                                            <td><i class="fa fa-clock-o"></i> 02:20pm</td>
-                                            <td>Agnes</td>
-                                            <td class="text-navy"><i class="fa fa-level-up"></i> 12%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <small>Pending...</small>
-                                            </td>
-                                            <td><i class="fa fa-clock-o"></i> 09:40pm</td>
-                                            <td>Janet</td>
-                                            <td class="text-navy"><i class="fa fa-level-up"></i> 22%</td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="label label-primary">Completed</span></td>
-                                            <td><i class="fa fa-clock-o"></i> 04:10am</td>
-                                            <td>Amelia</td>
-                                            <td class="text-navy"><i class="fa fa-level-up"></i> 66%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <small>Pending...</small>
-                                            </td>
-                                            <td><i class="fa fa-clock-o"></i> 12:08am</td>
-                                            <td>Damian</td>
-                                            <td class="text-navy"><i class="fa fa-level-up"></i> 23%</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                <!-- 第二个悬浮框 -->
+                <div class="tabs-container" id="container2">
+                    <ul class="nav nav-tabs">
+                        <li class="col-lg-6 active">
+                            <a data-toggle="tab" href="#tab-1" aria-expanded="true">
+                                <i class="fa fa-laptop"></i>
+                                <span class="control-tips">待办</span>
+                            </a>
+                        </li>
+                        <li class="col-lg-6">
+                            <a data-toggle="tab" href="#tab-2" aria-expanded="false">
+                                <i class="fa fa-desktop"></i>
+                                <span class="control-tips">申请</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <table class="table table-hover no-margins">
+                                    <thead>
+                                    <tr>
+                                        <th title="水库">
+                                            <i class="fa fa-adjust table-icon"></i>水库
+                                        </th>
+                                        <th title="上报时间">
+                                            <i class="fa fa-clock-o table-icon"></i>上报时间
+                                        </th>
+                                        <th title="水库法人">
+                                            <i class="fa fa-user-o table-icon" aria-hidden="true"></i>水库法人
+                                        </th>
+                                        <th title="拨付金额">
+                                            <i class="fa fa-cny table-icon"></i>拨付金额(万元)
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="commission_detail">
+                                    <tr>
+                                        <td title="小河水库">
+                                            <a>小河水库</a>
+                                        </td>
+                                        <td>
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2017-03-18
+                                        </td>
+                                        <td title="张三">张三</td>
+                                        <td class="text-navy" title="1000000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥1000000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="铜仁水库">
+                                            <!-- <span class="label label-warning">铜仁水库</span> -->
+                                            <a>铜仁水库</a>
+                                        </td>
+                                        <td title="2017-01-06">
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2017-01-06
+                                        </td>
+                                        <td title="李四">李四</td>
+                                        <td class="text-navy" title="500000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥500000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="思南水库">
+                                            <a>思南水库</a>
+                                        </td>
+                                        <td title="2017-11-12">
+                                            <!-- <i class="fa fa-clock-o"></i>  -->
+                                            2017-11-12
+                                        </td>
+                                        <td title="王二">王二</td>
+                                        <td class="text-navy" title="2155000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥2155000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="黔东南水库">
+                                            <a>黔东南水库</a>
+                                        </td>
+                                        <td title="2017-10-12">
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2017-10-12
+                                        </td>
+                                        <td title="赵四">赵四</td>
+                                        <td class="text-navy" title="983000">
+                                            <!-- <i class="fa fa-level-up"></i>  -->
+                                            ￥983000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a title="遵义水库">遵义水库</a>
+                                        </td>
+                                        <td>
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2016-09-20
+                                        </td>
+                                        <td title="孙五">孙五</td>
+                                        <td class="text-navy" title="764000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥764000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="毕节水库">
+                                            <!-- <span class="label label-primary">Completed</span> -->
+                                            <a>毕节水库</a>
+                                        </td>
+                                        <td title="2017-05-23">
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2017-05-23
+                                        </td>
+                                        <td title="李六一">李六一</td>
+                                        <td class="text-navy" title="870000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥870000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="织金水库">
+                                            <!-- <small>Pending...</small> -->
+                                            <a>织金水库</a>
+                                        </td>
+                                        <td title="2015-11-23">
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2015-11-23
+                                        </td>
+                                        <td title="张三">钱九</td>
+                                        <td class="text-navy" title="760000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥760000
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h5>Small todo list</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                        <a class="close-link">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="ibox-content">
-                                    <ul class="todo-list m-t small-list">
-                                        <li>
-                                            <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                            <span class="m-l-xs todo-completed">Buy a milk</span>
-
-                                        </li>
-                                        <li>
-                                            <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                            <span class="m-l-xs">Go to shop and find some products.</span>
-
-                                        </li>
-                                        <li>
-                                            <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                            <span class="m-l-xs">Send documents to Mike</span>
-                                            <small class="label label-primary"><i class="fa fa-clock-o"></i> 1 mins
-                                            </small>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                            <span class="m-l-xs">Go to the doctor dr Smith</span>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                            <span class="m-l-xs todo-completed">Plan vacation</span>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                            <span class="m-l-xs">Create new stuff</span>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                            <span class="m-l-xs">Call to Anna for dinner</span>
-                                        </li>
-                                    </ul>
-                                </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <table class="table table-hover no-margins">
+                                    <thead>
+                                    <tr>
+                                        <th title="水库">
+                                            <i class="fa fa-adjust table-icon"></i>水库
+                                        </th>
+                                        <th title="上报时间">
+                                            <i class="fa fa-clock-o table-icon"></i>上报时间
+                                        </th>
+                                        <th title="水库法人">
+                                            <i class="fa fa-user-o table-icon" aria-hidden="true"></i>水库法人
+                                        </th>
+                                        <th title="拨付金额">
+                                            <i class="fa fa-cny table-icon"></i>预算(万元)
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="application_detail">
+                                    <tr>
+                                        <td title="小河水库">
+                                            <a>小河水库</a>
+                                        </td>
+                                        <td>
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2017-03-18
+                                        </td>
+                                        <td title="张三">张三</td>
+                                        <td class="text-navy" title="1000000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥1000000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="铜仁水库">
+                                            <!-- <span class="label label-warning">铜仁水库</span> -->
+                                            <a>铜仁水库</a>
+                                        </td>
+                                        <td title="2017-01-06">
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2017-01-06
+                                        </td>
+                                        <td title="李四">李四</td>
+                                        <td class="text-navy" title="500000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥500000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="思南水库">
+                                            <a>思南水库</a>
+                                        </td>
+                                        <td title="2017-11-12">
+                                            <!-- <i class="fa fa-clock-o"></i>  -->
+                                            2017-11-12
+                                        </td>
+                                        <td title="王二">王二</td>
+                                        <td class="text-navy" title="2155000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥2155000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="黔东南水库">
+                                            <a>黔东南水库</a>
+                                        </td>
+                                        <td title="2017-10-12">
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2017-10-12
+                                        </td>
+                                        <td title="赵四">赵四</td>
+                                        <td class="text-navy" title="983000">
+                                            <!-- <i class="fa fa-level-up"></i>  -->
+                                            ￥983000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a title="遵义水库">遵义水库</a>
+                                        </td>
+                                        <td>
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2016-09-20
+                                        </td>
+                                        <td title="孙五">孙五</td>
+                                        <td class="text-navy" title="764000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥764000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="毕节水库">
+                                            <!-- <span class="label label-primary">Completed</span> -->
+                                            <a>毕节水库</a>
+                                        </td>
+                                        <td title="2017-05-23">
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2017-05-23
+                                        </td>
+                                        <td title="李六一">李六一</td>
+                                        <td class="text-navy" title="870000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥870000
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td title="织金水库">
+                                            <!-- <small>Pending...</small> -->
+                                            <a>织金水库</a>
+                                        </td>
+                                        <td title="2015-11-23">
+                                            <!-- <i class="fa fa-clock-o"></i> -->
+                                            2015-11-23
+                                        </td>
+                                        <td title="张三">钱九</td>
+                                        <td class="text-navy" title="760000">
+                                            <!-- <i class="fa fa-level-up"></i> -->
+                                            ￥760000
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h5>Transactions worldwide</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                        <a class="close-link">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="ibox-content">
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <table class="table table-hover margin bottom">
-                                                <thead>
-                                                <tr>
-                                                    <th style="width: 1%" class="text-center">No.</th>
-                                                    <th>Transaction</th>
-                                                    <th class="text-center">Date</th>
-                                                    <th class="text-center">Amount</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td class="text-center">1</td>
-                                                    <td> Security doors
-                                                    </td>
-                                                    <td class="text-center small">16 Jun 2014</td>
-                                                    <td class="text-center"><span
-                                                            class="label label-primary">$483.00</span></td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">2</td>
-                                                    <td> Wardrobes
-                                                    </td>
-                                                    <td class="text-center small">10 Jun 2014</td>
-                                                    <td class="text-center"><span
-                                                            class="label label-primary">$327.00</span></td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">3</td>
-                                                    <td> Set of tools
-                                                    </td>
-                                                    <td class="text-center small">12 Jun 2014</td>
-                                                    <td class="text-center"><span
-                                                            class="label label-warning">$125.00</span></td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">4</td>
-                                                    <td> Panoramic pictures</td>
-                                                    <td class="text-center small">22 Jun 2013</td>
-                                                    <td class="text-center"><span
-                                                            class="label label-primary">$344.00</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">5</td>
-                                                    <td>Phones</td>
-                                                    <td class="text-center small">24 Jun 2013</td>
-                                                    <td class="text-center"><span
-                                                            class="label label-primary">$235.00</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">6</td>
-                                                    <td>Monitors</td>
-                                                    <td class="text-center small">26 Jun 2013</td>
-                                                    <td class="text-center"><span
-                                                            class="label label-primary">$100.00</span></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div id="world-map" style="height: 300px;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-
-
+                <!-- 第三个悬浮框 -->
+                <div class="tabs-container" id="container3">
+                    <div class="overview-panel">
+                        <div class="overview-data">
+                            <div class="col-lg-6 overview-block">
+                                <div>
+                                    <div>总概算</div>
+                                    <div class="cost-detail">
+                                        <span class="font-num">5000</span>
+                                        <span>(万元)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 overview-block">
+                                <div>
+                                    <div>总项目投资</div>
+                                    <div class="cost-detail">
+                                        <span class="font-num">7000</span>
+                                        <span>(万元)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 overview-block">
+                                <div>
+                                    <div>实际投资完成量</div>
+                                    <div class="cost-detail">
+                                        <span class="font-num">1000</span>
+                                        <span>(万元)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 overview-block">
+                                <div>
+                                    <div>实际投资拨付</div>
+                                    <div class="cost-detail">
+                                        <span class="font-num">800</span>
+                                        <span>(万元)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overview-map">
+                            <div id="overview_map" style="height: 400px;width: 350px;margin: 0 auto;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="footer">
@@ -645,398 +671,18 @@
             </div>
         </div>
     </div>
-    <div id="right-sidebar">
-        <div class="sidebar-container">
-
-            <ul class="nav nav-tabs navs-3">
-
-                <li class="active"><a data-toggle="tab" href="#tab-1">
-                    Notes
-                </a></li>
-                <li><a data-toggle="tab" href="#tab-2">
-                    Projects
-                </a></li>
-                <li class=""><a data-toggle="tab" href="#tab-3">
-                    <i class="fa fa-gear"></i>
-                </a></li>
-            </ul>
-
-            <div class="tab-content">
-
-
-                <div id="tab-1" class="tab-pane active">
-
-                    <div class="sidebar-title">
-                        <h3><i class="fa fa-comments-o"></i> Latest Notes</h3>
-                        <small><i class="fa fa-tim"></i> You have 10 new message.</small>
-                    </div>
-
-                    <div>
-
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="img/a1.jpg">
-
-                                    <div class="m-t-xs">
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                    </div>
-                                </div>
-                                <div class="media-body">
-
-                                    There are many variations of passages of Lorem Ipsum available.
-                                    <br>
-                                    <small class="text-muted">Today 4:21 pm</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="img/a2.jpg">
-                                </div>
-                                <div class="media-body">
-                                    The point of using Lorem Ipsum is that it has a more-or-less normal.
-                                    <br>
-                                    <small class="text-muted">Yesterday 2:45 pm</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="img/a3.jpg">
-
-                                    <div class="m-t-xs">
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                    </div>
-                                </div>
-                                <div class="media-body">
-                                    Mevolved over the years, sometimes by accident, sometimes on purpose (injected
-                                    humour and the like).
-                                    <br>
-                                    <small class="text-muted">Yesterday 1:10 pm</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="img/a4.jpg">
-                                </div>
-
-                                <div class="media-body">
-                                    Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the
-                                    <br>
-                                    <small class="text-muted">Monday 8:37 pm</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="img/a8.jpg">
-                                </div>
-                                <div class="media-body">
-
-                                    All the Lorem Ipsum generators on the Internet tend to repeat.
-                                    <br>
-                                    <small class="text-muted">Today 4:21 pm</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="img/a7.jpg">
-                                </div>
-                                <div class="media-body">
-                                    Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes
-                                    from a line in section 1.10.32.
-                                    <br>
-                                    <small class="text-muted">Yesterday 2:45 pm</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="img/a3.jpg">
-
-                                    <div class="m-t-xs">
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                    </div>
-                                </div>
-                                <div class="media-body">
-                                    The standard chunk of Lorem Ipsum used since the 1500s is reproduced below.
-                                    <br>
-                                    <small class="text-muted">Yesterday 1:10 pm</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-                                    <img alt="image" class="img-circle message-avatar" src="img/a4.jpg">
-                                </div>
-                                <div class="media-body">
-                                    Uncover many web sites still in their infancy. Various versions have.
-                                    <br>
-                                    <small class="text-muted">Monday 8:37 pm</small>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div id="tab-2" class="tab-pane">
-
-                    <div class="sidebar-title">
-                        <h3><i class="fa fa-cube"></i> Latest projects</h3>
-                        <small><i class="fa fa-tim"></i> You have 14 projects. 10 not completed.</small>
-                    </div>
-
-                    <ul class="sidebar-list">
-                        <li>
-                            <a href="#">
-                                <div class="small pull-right m-t-xs">9 hours ago</div>
-                                <h4>Business valuation</h4>
-                                It is a long established fact that a reader will be distracted.
-
-                                <div class="small">Completion with: 22%</div>
-                                <div class="progress progress-mini">
-                                    <div style="width: 22%;" class="progress-bar progress-bar-warning"></div>
-                                </div>
-                                <div class="small text-muted m-t-xs">Project end: 4:00 pm - 12.06.2014</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="small pull-right m-t-xs">9 hours ago</div>
-                                <h4>Contract with Company </h4>
-                                Many desktop publishing packages and web page editors.
-
-                                <div class="small">Completion with: 48%</div>
-                                <div class="progress progress-mini">
-                                    <div style="width: 48%;" class="progress-bar"></div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="small pull-right m-t-xs">9 hours ago</div>
-                                <h4>Meeting</h4>
-                                By the readable content of a page when looking at its layout.
-
-                                <div class="small">Completion with: 14%</div>
-                                <div class="progress progress-mini">
-                                    <div style="width: 14%;" class="progress-bar progress-bar-info"></div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="label label-primary pull-right">NEW</span>
-                                <h4>The generated</h4>
-                                <!--<div class="small pull-right m-t-xs">9 hours ago</div>-->
-                                There are many variations of passages of Lorem Ipsum available.
-                                <div class="small">Completion with: 22%</div>
-                                <div class="small text-muted m-t-xs">Project end: 4:00 pm - 12.06.2014</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="small pull-right m-t-xs">9 hours ago</div>
-                                <h4>Business valuation</h4>
-                                It is a long established fact that a reader will be distracted.
-
-                                <div class="small">Completion with: 22%</div>
-                                <div class="progress progress-mini">
-                                    <div style="width: 22%;" class="progress-bar progress-bar-warning"></div>
-                                </div>
-                                <div class="small text-muted m-t-xs">Project end: 4:00 pm - 12.06.2014</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="small pull-right m-t-xs">9 hours ago</div>
-                                <h4>Contract with Company </h4>
-                                Many desktop publishing packages and web page editors.
-
-                                <div class="small">Completion with: 48%</div>
-                                <div class="progress progress-mini">
-                                    <div style="width: 48%;" class="progress-bar"></div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="small pull-right m-t-xs">9 hours ago</div>
-                                <h4>Meeting</h4>
-                                By the readable content of a page when looking at its layout.
-
-                                <div class="small">Completion with: 14%</div>
-                                <div class="progress progress-mini">
-                                    <div style="width: 14%;" class="progress-bar progress-bar-info"></div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="label label-primary pull-right">NEW</span>
-                                <h4>The generated</h4>
-                                <!--<div class="small pull-right m-t-xs">9 hours ago</div>-->
-                                There are many variations of passages of Lorem Ipsum available.
-                                <div class="small">Completion with: 22%</div>
-                                <div class="small text-muted m-t-xs">Project end: 4:00 pm - 12.06.2014</div>
-                            </a>
-                        </li>
-
-                    </ul>
-
-                </div>
-
-                <div id="tab-3" class="tab-pane">
-
-                    <div class="sidebar-title">
-                        <h3><i class="fa fa-gears"></i> Settings</h3>
-                        <small><i class="fa fa-tim"></i> You have 14 projects. 10 not completed.</small>
-                    </div>
-
-                    <div class="setings-item">
-                    <span>
-                        Show notifications
-                    </span>
-                        <div class="switch">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example">
-                                <label class="onoffswitch-label" for="example">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="setings-item">
-                    <span>
-                        Disable Chat
-                    </span>
-                        <div class="switch">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="collapsemenu" checked class="onoffswitch-checkbox"
-                                       id="example2">
-                                <label class="onoffswitch-label" for="example2">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="setings-item">
-                    <span>
-                        Enable history
-                    </span>
-                        <div class="switch">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example3">
-                                <label class="onoffswitch-label" for="example3">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="setings-item">
-                    <span>
-                        Show charts
-                    </span>
-                        <div class="switch">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example4">
-                                <label class="onoffswitch-label" for="example4">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="setings-item">
-                    <span>
-                        Offline users
-                    </span>
-                        <div class="switch">
-                            <div class="onoffswitch">
-                                <input type="checkbox" checked name="collapsemenu" class="onoffswitch-checkbox"
-                                       id="example5">
-                                <label class="onoffswitch-label" for="example5">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="setings-item">
-                    <span>
-                        Global search
-                    </span>
-                        <div class="switch">
-                            <div class="onoffswitch">
-                                <input type="checkbox" checked name="collapsemenu" class="onoffswitch-checkbox"
-                                       id="example6">
-                                <label class="onoffswitch-label" for="example6">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="setings-item">
-                    <span>
-                        Update everyday
-                    </span>
-                        <div class="switch">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example7">
-                                <label class="onoffswitch-label" for="example7">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sidebar-content">
-                        <h4>Settings</h4>
-                        <div class="small">
-                            I belive that. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            And typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                            the 1500s.
-                            Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-
-    </div>
 </div>
 
 
+
 <!--水库基本信息填报modal-->
-<div class="modal fade" id="base_info_modal" data-backdrop="static" tabindex="-1" role="dialog" ria-labelledby="myModalLabel" style="max-height:95%;">
+<div class="modal fade" id="base_info_modal" data-backdrop="static" tabindex="-1" role="dialog"
+     ria-labelledby="myModalLabel" style="max-height:95%;">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close base_info_modal_close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close base_info_modal_close" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="myModalLabel">基本信息填报</h4>
             </div>
             <div class="modal-body">
@@ -1371,7 +1017,8 @@
 
 
 <!--loading-->
-<div id="main_loading"  style="display:block;position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f8f8;opacity:0.6;z-index:1000;">
+<div id="main_loading"
+     style="display:block;position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f8f8;opacity:0.6;z-index:1000;">
     <div id="loading_gif" style="text-align:center;position:fixed;z-index: 9999;top:50%;left: 50%;">
         <div class="sk-spinner sk-spinner-cube-grid">
             <div class="sk-cube"></div>
@@ -1441,7 +1088,7 @@
                             </div>
                             <div id="person_info_ops_btns" class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
-                                    <button id="reset" class="btn btn-white" >清空</button>
+                                    <button id="reset" class="btn btn-white">清空</button>
                                     <button id="person_info_submit" class="btn btn-primary">保存</button>
                                 </div>
                             </div>
@@ -1463,25 +1110,32 @@
     </div>
 </div>
 <!--项目前期新增modal-->
-<div class="modal fade" id="pre_progress_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="max-height:95%;">
+<div class="modal fade" id="pre_progress_modal" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" style="max-height:95%;">
     <div class="modal-dialog modal-lg" role="document" style="width:80%">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close pre_progress_modal_close"  aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4>项目前期进度 <small> <i>（下列每项指标需逐项谨慎填写，部分项一经审核不可更改。）</i> </small></h4>
+                <button type="button" class="close pre_progress_modal_close" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4>项目前期进度
+                    <small><i>（下列每项指标需逐项谨慎填写，部分项一经审核不可更改。）</i></small>
+                </h4>
             </div>
             <div class="modal-body">
                 <div class="tabs-container">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#pre_progress_new_tab_1"><i class="fa fa-line-chart"></i>前期进度信息</a></li>
-                        <li class=""><a data-toggle="tab" href="#pre_progress_new_tab_2"> <i class="fa fa-book"></i>附件</a></li>
+                        <li class="active"><a data-toggle="tab" href="#pre_progress_new_tab_1"><i
+                                class="fa fa-line-chart"></i>前期进度信息</a></li>
+                        <li class=""><a data-toggle="tab" href="#pre_progress_new_tab_2"> <i
+                                class="fa fa-book"></i>附件</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div id="pre_progress_new_tab_1"  class="tab-pane animated fadeInUp active">
+                        <div id="pre_progress_new_tab_1" class="tab-pane animated fadeInUp active">
                             <div class="panel-body">
                                 <fieldset class="form-horizontal">
                                     <div class="table-responsive">
-                                        <table id="pre_progress_table" class="table table-striped table-bordered table-hover" >
+                                        <table id="pre_progress_table"
+                                               class="table table-striped table-bordered table-hover">
                                             <thead>
                                             <tr>
                                                 <th>编号</th>
@@ -1501,7 +1155,7 @@
                                 </fieldset>
                             </div>
                         </div>
-                        <div id="pre_progress_new_tab_2"  class="tab-pane animated fadeInUp">
+                        <div id="pre_progress_new_tab_2" class="tab-pane animated fadeInUp">
                             <div class="panel-body">
                                 <fieldset class="form-horizontal">
                                     <h2>图片、附件上传</h2>
@@ -1511,7 +1165,9 @@
                                         <form enctype="multipart/form-data">
                                             <div class="form-group">
                                                 <div class="file-loading">
-                                                    <input id="pre_progress_file" name="pre_progress_file" type="file" multiple  data-overwrite-initial="false" data-min-file-count="1">
+                                                    <input id="pre_progress_file" name="pre_progress_file" type="file"
+                                                           multiple data-overwrite-initial="false"
+                                                           data-min-file-count="1">
                                                 </div>
                                             </div>
                                         </form>
@@ -1535,32 +1191,41 @@
 </div>
 
 <!--项目合同备案modal-->
-<div class="modal fade" id="contract_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="max-height:95%;">
+<div class="modal fade" id="contract_modal" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" style="max-height:95%;">
     <div class="modal-dialog modal-lg" role="document" style="width:50%">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close contract_modal_close"  aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4>项目合同备案 <small> <i>（下列每项指标需逐项谨慎填写，部分项一经审核不可更改。）</i> </small></h4>
+                <button type="button" class="close contract_modal_close" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4>项目合同备案
+                    <small><i>（下列每项指标需逐项谨慎填写，部分项一经审核不可更改。）</i></small>
+                </h4>
             </div>
             <div class="modal-body">
                 <div class="tabs-container">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#contract_new_tab_1"><i class="fa fa-line-chart"></i>合同信息</a></li>
-                        <li class=""><a data-toggle="tab" href="#contract_new_tab_2"> <i class="fa fa-book"></i>附件</a></li>
+                        <li class="active"><a data-toggle="tab" href="#contract_new_tab_1"><i
+                                class="fa fa-line-chart"></i>合同信息</a></li>
+                        <li class=""><a data-toggle="tab" href="#contract_new_tab_2"> <i class="fa fa-book"></i>附件</a>
+                        </li>
                     </ul>
                     <div class="tab-content">
-                        <div id="contract_new_tab_1"  class="tab-pane animated fadeInUp active">
+                        <div id="contract_new_tab_1" class="tab-pane animated fadeInUp active">
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label>合同名称</label><span style="color:red;"> *</span>
-                                            <input id="new_contract_name" name="new_contract_name" type="text" class="form-control number required" maxlength="20">
+                                            <input id="new_contract_name" name="new_contract_name" type="text"
+                                                   class="form-control number required" maxlength="20">
                                         </div>
                                         <div class="form-group">
                                             <label>合同类型</label><span style="color:red;"> *</span>
-                                            <select class="form-control" id="new_contract_type" name="new_contract_type">
-                                                <option selected="selected" disabled="disabled"  style="display: none"></option>
+                                            <select class="form-control" id="new_contract_type"
+                                                    name="new_contract_type">
+                                                <option selected="selected" disabled="disabled"
+                                                        style="display: none"></option>
                                                 <option data-value="设计采购施工总承包(EPC)类">设计采购施工总承包(EPC)类</option>
                                                 <option data-value="项目管理承包（PMC)类">项目管理承包（PMC)类</option>
                                                 <option data-value="设计类">设计类</option>
@@ -1575,27 +1240,38 @@
                                         </div>
                                         <div class="form-group">
                                             <label>甲方</label><span style="color:red;"> *</span>
-                                            <input id="new_contract_party_a" name="new_contract_party_a" type="text" class="form-control" maxlength="20">
+                                            <input id="new_contract_party_a" name="new_contract_party_a" type="text"
+                                                   class="form-control" maxlength="20">
                                         </div>
                                         <div class="form-group">
                                             <label>合同金额(元）</label><span style="color:red;"> *</span>
-                                            <input id="new_contract_amount" name="new_contract_amount" type="text" class="form-control" maxlength="15" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')">
+                                            <input id="new_contract_amount" name="new_contract_amount" type="text"
+                                                   class="form-control" maxlength="15"
+                                                   onkeyup="if(isNaN(value))execCommand('undo')"
+                                                   onafterpaste="if(isNaN(value))execCommand('undo')">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label>合同编号</label><span style="color:red;"> *</span>
-                                            <input id="new_contract_num" name="new_contract_num" type="text" class="form-control" maxlength="20">
+                                            <input id="new_contract_num" name="new_contract_num" type="text"
+                                                   class="form-control" maxlength="20">
                                         </div>
                                         <div class="form-group">
                                             <label>签订时间</label><span style="color:red;"> *</span>
                                             <div class="input-group date">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="new_contract_time" name="new_contract_time" type="text"  class="form-control " readonly>
+                                                <span class="input-group-addon"><i
+                                                        class="fa fa-calendar"></i></span><input id="new_contract_time"
+                                                                                                 name="new_contract_time"
+                                                                                                 type="text"
+                                                                                                 class="form-control "
+                                                                                                 readonly>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label>乙方</label><span style="color:red;"> *</span>
-                                            <input id="new_contract_party_b" name="new_contract_party_b" type="text" class="form-control" maxlength="20">
+                                            <input id="new_contract_party_b" name="new_contract_party_b" type="text"
+                                                   class="form-control" maxlength="20">
                                         </div>
                                     </div>
                                 </div>
@@ -1603,17 +1279,21 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label>合同主要内容</label>
-                                            <textarea id="new_contract_main_content" name="new_contract_main_content" class="form-control " rows="5" maxlength="250" placeholder="填写内容在250字内"></textarea>
+                                            <textarea id="new_contract_main_content" name="new_contract_main_content"
+                                                      class="form-control " rows="5" maxlength="250"
+                                                      placeholder="填写内容在250字内"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>备注</label>
-                                            <textarea id="new_contract_remark" name="new_contract_remark" class="form-control " rows="3" maxlength="250" placeholder="填写内容在250字内"></textarea>
+                                            <textarea id="new_contract_remark" name="new_contract_remark"
+                                                      class="form-control " rows="3" maxlength="250"
+                                                      placeholder="填写内容在250字内"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="contract_new_tab_2"  class="tab-pane animated fadeInUp">
+                        <div id="contract_new_tab_2" class="tab-pane animated fadeInUp">
                             <div class="panel-body">
                                 <h2>图片、附件上传</h2>
                                 <br>
@@ -1622,7 +1302,8 @@
                                     <form enctype="multipart/form-data">
                                         <div class="form-group">
                                             <div class="file-loading">
-                                                <input id="contract_file" name="contract_file" type="file" multiple  data-overwrite-initial="false" data-min-file-count="1">
+                                                <input id="contract_file" name="contract_file" type="file" multiple
+                                                       data-overwrite-initial="false" data-min-file-count="1">
                                             </div>
                                         </div>
                                     </form>
@@ -1636,7 +1317,7 @@
                     <br>
                 </div>
                 <div class="modal-footer">
-                    <button class="contract_modal_close" type="button" class="btn btn-info">关 闭</button>
+                    <button type="button" class="btn btn-info contract_modal_close">关 闭</button>
                     <button type="button" id="contract_submit" class="btn btn-info">提 交</button>
                 </div>
             </div>
@@ -1644,17 +1325,50 @@
     </div>
 </div>
 
+<!--wechat modal-->
+<div class="modal fade" id="wechat_binding_modal" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" style="max-height:95%;">
+    <div class="modal-dialog modal-lg" role="document" style="width: 20%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="index.html">
+                    <button type="button" class="close wechat-register-modal-close" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </a>
+                <h4>扫描一下二维码，绑定微信账号。
+                    <small><i> </i></small>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <img id="auth_img">
+            </div>
+            <div class="modal-footer">
+                <a href="#">
+                    <button type="button" class="btn btn-info wechat-register-modal-close">关闭</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- 弹出层 -->
+<div id="dialog" class="dialog-hide" style="height: 400px; width: 600px;"></div>
+<!-- 遮罩层 -->
+<div id="mask" class="mask-position" onclick="closeDialog()"></div>
+<!-- 全屏层 -->
+<div id="fullscreen_map" style="display: none;">test</div>
 
 <script type="application/javascript">
     document.onreadystatechange = completeLoading;
+
     // 加载状态为complete时移除loading效果
     function completeLoading() {
-        if (document.readyState =="complete") {
-            document.getElementById('main_loading').style.display="none";
+        if (document.readyState == "complete") {
+            document.getElementById('main_loading').style.display = "none";
         }
-        else{
-            document.getElementById('main_loading').style.display="block";
+        else {
+            document.getElementById('main_loading').style.display = "block";
         }
     }
 
@@ -1718,5 +1432,12 @@
 <!-- Data picker -->
 <script th:src="@{/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
 <script th:src="@{/js/custom/bootstrap-datepicker.zh-CN.js}"></script>
+
+
+
+<!-- echarts -->
+<script th:src="@{/js/custom/echarts.min.js}"></script>
+<script th:src="@{/js/custom/bmap.min.js}"></script>
+<script src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
 </body>
 </html>

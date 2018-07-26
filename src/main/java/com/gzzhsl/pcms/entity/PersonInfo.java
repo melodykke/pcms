@@ -22,6 +22,10 @@ public class PersonInfo {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String personId;
     private String name;
+    private String nickName;
+    private String gender;
+    private String profileImg;
+    private Integer enableStatus;
     private String tel;
     private String qq;
     private String email;
@@ -32,6 +36,9 @@ public class PersonInfo {
     @OneToOne
     @JoinColumn(name = "user_id")
     private UserInfo userInfo;
+    @OneToOne
+    @JoinColumn(name = "wechat_auth_id")
+    private WechatAuth wechatAuth;
     private Date createTime;
     private Date updateTime;
 

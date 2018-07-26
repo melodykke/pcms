@@ -58,4 +58,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.updateUserBaseInfo(baseInfo, userId);
     }
 
+    @Override
+    public Integer updateUserOpenId(String openId, String userId) {
+        return userRepository.updateUserOpenId(openId, userId);
+    }
+
+    @Override
+    public UserInfo findByOpenId(String openId) {
+        return userRepository.findByOpenId(openId);
+    }
+
 }

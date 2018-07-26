@@ -57,4 +57,12 @@ $(function () {
         $('#main_content', parent.document).load('monthlyreport/projectmonthlyreportshow?projectMonthlyReportId='+projectMonthlyReportId);
 
     });
+    // 加载状态为complete时移除loading效果
+    if (document.readyState == "complete") {
+        document.getElementById('main_loading').style.display = "none";
+    }
+    else {
+        document.getElementById('main_loading').style.display = "block";
+    }
+
 })

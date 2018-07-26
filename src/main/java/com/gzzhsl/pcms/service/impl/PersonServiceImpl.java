@@ -16,6 +16,11 @@ public class PersonServiceImpl implements PersonService {
     private PersonRepository personRepository;
 
     @Override
+    public PersonInfo getById(String personId) {
+        return personRepository.findByPersonId(personId);
+    }
+
+    @Override
     public PersonInfo save(PersonInfo personInfo) {
         return personRepository.save(personInfo);
     }

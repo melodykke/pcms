@@ -57,7 +57,7 @@
             <img th:src="@{/img/logo.png}" alt="logo" width="300" height="56">
             <p id="msg" th:text="${msg}" class="p-t-35"></p>
             <!-- START Login Form -->
-            <form id="form-login" class="p-t-15" role="form" method="post">
+            <form id="form-login" class="p-t-15" role="form" method="POST" action="login">
                 <!-- START Form Control-->
                 <div class="form-group form-group-default">
                     <label>用户名</label>
@@ -96,7 +96,7 @@
             <div class="pull-bottom sm-pull-bottom">
                 <div class="m-b-30 p-r-80 sm-m-t-20 sm-p-r-15 sm-p-b-20 clearfix">
                     <div class="col-sm-3 col-md-2 no-padding">
-                        <img alt="" class="m-t-5" height="60" th:src="@{/img/2dcode.png}" width="60">
+                        <img alt="" class="m-t-5" height="60" src="wechatlogin/generateqrcode4login" width="60">
                     </div>
                     <div class="col-sm-8 p-l-30 m-t-10">
                         <p>

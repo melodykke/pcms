@@ -1,0 +1,27 @@
+
+#allmap {
+  width: 100%;
+  height: calc(100vh - 65px);
+  overflow: hidden;
+  margin: 0;
+  font-family: "微软雅黑";
+}
+.slick_demo_2 .ibox-content {
+    margin: 0 10px;
+}
+
+/* 百度地图api解决label宽度无效 */
+
+#allmap label {
+    max-width: none;
+}
+
+/* 去掉百度地图api里左下角logo */
+
+.BMap_cpyCtrl {
+    display: none;
+}
+
+.anchorBL {
+    display: none;
+}

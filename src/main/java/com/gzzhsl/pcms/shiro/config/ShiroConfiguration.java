@@ -3,6 +3,7 @@ package com.gzzhsl.pcms.shiro.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.gzzhsl.pcms.cors.MyFormAuthenticationFilter;
+import com.gzzhsl.pcms.cors.MyHashedCredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
@@ -60,7 +61,8 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/img/**","anon");
 		filterChainDefinitionMap.put("/favicon.ico", "anon");
         filterChainDefinitionMap.put("/register", "anon");
-
+		filterChainDefinitionMap.put("/wechat", "anon"); // 配置wechat的token验证路径
+		filterChainDefinitionMap.put("/wechatlogin/**", "anon"); // 配置wechat的验证验证路径
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
 		//<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
@@ -109,16 +111,16 @@ public class ShiroConfiguration {
 	public MyShiroRealm myShiroRealm(){
 		System.out.println("ShiroConfiguration.myShiroRealm() initiating...");
 		MyShiroRealm myShiroRealm = new MyShiroRealm();
-		myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+		myShiroRealm.setCredentialsMatcher(myHashedCredentialsMatcher());
 		return myShiroRealm;
 	}
 
 	@Bean //注入加密算法
-	public HashedCredentialsMatcher hashedCredentialsMatcher(){
-		HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-		hashedCredentialsMatcher.setHashAlgorithmName("md5");//加密算法
-		hashedCredentialsMatcher.setHashIterations(2);//散列次数
-		return hashedCredentialsMatcher;
+	public MyHashedCredentialsMatcher myHashedCredentialsMatcher(){
+        MyHashedCredentialsMatcher myHashedCredentialsMatcher = new MyHashedCredentialsMatcher();
+        myHashedCredentialsMatcher.setHashAlgorithmName("md5");//加密算法
+        myHashedCredentialsMatcher.setHashIterations(2);//散列次数
+		return myHashedCredentialsMatcher;
 	}
 
 /****************************************Shiro生命周期处理器***********************************************************/

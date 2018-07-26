@@ -1,4 +1,12 @@
 $(function () {
+    // 加载状态为complete时移除loading效果
+    if (document.readyState == "complete") {
+        document.getElementById('main_loading').style.display = "none";
+    }
+    else {
+        document.getElementById('main_loading').style.display = "block";
+    }
+
     var getprojectmonthlyreportbyprojectmonthlyreportidurl = "monthlyreport/getprojectmonthlyreportbyprojectmonthlyreportid"; // 依靠内部pId获取月报
     var getprojectmonthlyreportshowbytimeUrl = '/monthlyreport/getprojectmonthlyreportshowbytime'; // 根据时间区间获取月报
 

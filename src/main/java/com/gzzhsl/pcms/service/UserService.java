@@ -11,4 +11,6 @@ public interface UserService {
     UserInfo save(UserInfo userInfo);
     UserInfo findParentByUsername(String username);
     Integer updateUserBaseInfo(BaseInfo baseInfo, String userId);
+    Integer updateUserOpenId(String openId, String userId);
+    UserInfo findByOpenId(String openId);
 }

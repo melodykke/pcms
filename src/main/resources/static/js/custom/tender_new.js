@@ -116,7 +116,7 @@ $(function () {
                             if (data.code == 1002) {
                                 swal({
                                     title: "提交成功",
-                                    text: "年度投资计划提交成功，请耐心等待审批!",
+                                    text: "新的招标备案提交成功，请耐心等待审批!",
                                     type: "success",
                                     confirmButtonText: "确定",
                                 }, function () {

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 public interface PersonService {
-
+    PersonInfo getById(String personId);
     PersonInfo save(PersonInfo personInfo);
     PersonInfo getByUserInfo(UserInfo userInfo);
 

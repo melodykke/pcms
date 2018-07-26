@@ -589,7 +589,7 @@ $(function () {
 
     /*websocket*/
     function reconnect(username) {
-        websocket = new WebSocket('ws://localhost:8080/websocket/' + username)
+        websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
     }
 
     function dows(username) {
@@ -609,7 +609,7 @@ $(function () {
             }
         }
         if ('WebSocket' in window) {
-            websocket = new WebSocket('ws://localhost:8080/websocket/' + username)
+            websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
         } else {
             alert('该浏览器不支持ws！');
         }
@@ -1012,7 +1012,7 @@ $(function () {
     $('#contract_file').click(function () {
         $("#contract_file").fileinput('refresh');
     });
-    $('.contract_modal_close').click(function () {
+    $('.contract_modal_close').on('click', function (e) {
         $('#contract_modal').modal('hide');
     });
 
@@ -1073,6 +1073,497 @@ $(function () {
 
     });
 
+    $('#bind_wechat_btn').click(function () {
+        $('#auth_img').attr("src", "/wechatlogin/generateqrcode4login?time="+new Date())
+        $('#wechat_binding_modal_body')
+        $('#wechat_binding_modal').modal('show');
 
+    })
+
+
+    //微信modal
+    $('.wechat-register-modal-close').on('click', function (e) {
+        $('#wechat_binding_modal').modal('hide');
+    })
+
+
+
+
+
+    /*var map = new BMap.Map("allmap");
+           var point = new BMap.Point(116.331398,39.897445);
+           map.centerAndZoom(point,12); */
+    /*
+    var marker = new BMap.Marker(point);        // 创建标注
+    map.addOverlay(marker); */                    // 将标注添加到地图中
+
+    // 百度地图API功能
+    var map = new BMap.Map("allmap", { mapType: BMAP_HYBRID_MAP });
+    var point = new BMap.Point(106.630905, 26.674511);
+    map.centerAndZoom(point, 8); // 初始化地图，设置中心店坐标和地图级别
+
+
+    map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+
+    //向地图中添加缩放控件
+    var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+    map.addControl(ctrl_nav);
+
+
+    map.setCurrentCity("贵阳");
+    map.enableScrollWheelZoom(true);
+
+    //控制地图的最大和最小缩放级别
+    map.setMinZoom(8);
+    //map.setMaxZoom(18);
+
+    var b = new BMap.Bounds(new BMap.Point(102.795069, 24.879701), new BMap.Point(111.69936, 29.04118)); // 范围 左下角，右上角的点位置
+    try {    // js中尽然还有try catch方法，可以避免bug引起的错误
+        BMapLib.AreaRestriction.setBounds(map, b); // 已map为中心，已b为范围的地图
+    } catch (e) {
+        // 捕获错误异常
+        alert(e);
+    }
+
+    // 地图打点
+    function createMarker(data) {
+        var myIcon = new BMap.Icon("markers1.png", new BMap.Size(23, 25), {
+            // 指定定位位置。
+            // 当标注显示在地图上时，其所指向的地理位置距离图标左上
+            // 角各偏移10像素和25像素。您可以看到在本例中该位置即是
+            // 图标中央下端的尖角位置。
+            anchor: new BMap.Size(10, 25),
+            // 设置图片偏移。
+            // 当您需要从一幅较大的图片中截取某部分作为标注图标时，您
+            // 需要指定大图的偏移位置，此做法与css sprites技术类似。
+            imageOffset: new BMap.Size(0, 0 - 25)   // 设置图片偏移
+        });
+        // 创建标注对象并添加到地图
+        // var marker = new BMap.Marker(point, {icon: myIcon});
+        var point_item = new BMap.Point(data.longitude, data.latitude);
+        var marker = new BMap.Marker(point_item);
+        map.addOverlay(marker);
+
+        // 定义展示数据
+        var str = [
+            "<div class='map-tips'><label>水库：</label><span class='plant-name'>" + data.plant_name + "</span></div>",
+            "<div class='map-tips'><label>位置：</label><span>" + data.location + "</span></div>",
+            // "<label>类型:</label><span>" + data.dam_type + "</span><br/>",
+            "<div class='map-tips'><label>规模：</label><span>" + data.scale + "</span></div>",
+            "<div class='map-tips'><label>等级：</label><span>" + data.level + "</span></div>"
+            // "<label>用途:</label><span>" + data.project_task + "</span>"
+        ]
+        var detail = str.join("");
+
+        // 设置点击事件
+        marker.addEventListener("click", function () {
+            addProjectDetail(data);
+            // 默认选择概述项标签
+            $("#container1").find("li:first").addClass("active").siblings().removeClass("active");
+            // 默认选择概述项内容
+            $("#tab-3").addClass("active").siblings().removeClass("active");
+            if(!$("#container1").hasClass("active")) {
+                $("#toggle1").click();
+            }
+
+        });
+
+        // 设置鼠标hover事件
+        marker.addEventListener("mouseover", function (e) {
+            var label = new BMap.Label(detail, { offset: new BMap.Size(20, 20) });//为标注设置一个标签
+            label.setStyle({
+                width: "auto",
+                color: '#000',
+                background: '#fff',
+                border: '1px solid "#fff"',
+                borderRadius: "3px",
+                // textAlign: "center",
+                height: "auto",
+                textAlign: "left",
+                padding: "5px"
+                //lineHeight: "26px"
+            });
+            marker.setLabel(label);
+            /* var opts = { width: 120, height: 150, title: "详细信息" };
+            var infoWindow = new BMap.InfoWindow(detail, opts);
+            map.openInfoWindow(infoWindow, point); */
+        });
+
+        // 设置鼠标离开事件
+        marker.addEventListener("mouseout", function (e) {
+            var label = this.getLabel();
+            label.setContent("");//设置标签内容为空
+            label.setStyle({ border: "none", width: "0px", padding: "0px" });//设置标签边框宽度为0
+        });
+
+        /*  marker.addEventListener("mouseout", function (e) {
+             map.closeInfoWindow();//设置标签内容为空
+         }); */
+    }
+
+    // var allData = [[106.630905, 26.674511, "小石", "28y", "170cm", "70kg"], [108.259864, 27.944777, "小王", "28y", "160cm", "50kg"]];
+    var allData = [{ "latitude": 26.9852206, "longitude": 107.7936172, "plant_name": "黄平县印地坝水库", "location": "黄平县旧州镇境内", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "scale": "中型", "level": "Ⅲ", "overview": "黄平县印地坝水库工程位于黄平县旧州镇境内，坝址位于舞阳河支流冷水河段，水库正常蓄水位720m，死水位693m，设计洪水位722.24m（P=2%），校核洪水位723.27m（P=0.2%）；水库总库容为1462万m3，正常蓄水位相应库容为1154万m3，死库容为50万m3，兴利库容为1104万m3。印地坝水库是以城镇供水、农田灌溉和农村人畜饮水为建设任务的中型水库工程。", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "主要任务：城镇供水；农田灌溉和农村人畜饮水。\n主要建筑物：水库枢纽工程由碾压混凝土重力坝、坝顶溢流表孔、坝 身取水兼放空建筑物及右岸山体处理等组成。" },
+        { "latitude": 27.270933, "longitude": 108.383663, "plant_name": "镇远县天印水库", "location": "镇远县都坪镇天印村", "scale": "中型", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "level": "Ⅲ", "overview": "天印水库拟建于龙江河中游右岸一级支流龙洞河上，坝址在镇远县都坪镇天印村，距龙洞河汇口约4km。天印水库坝址以上集雨面积85.3km2，多年平均年径流量4644万m3，多年平均流量1.47 m3/s，水库具有年调节性能。水库正常蓄水位592.5m，相应库容941万m3，死水位568.5m，死库容67万m3，兴利库容874万m3，总库容1074万m3。水库工程等别为III等，工程规模为中型。 天印水库工程任务为供水、灌溉。水库供水范围为镇远县的都坪、江古和岑巩县的龙田、平庄4个乡镇，设计水平年（2030年）总", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "" }]
+    for (var i = 0; i < allData.length; i++) {
+        createMarker(allData[i]);
+    }
+    /* $(function () {
+
+        var allData = [[106.630905, 26.674511, "小石", "28y", "170cm", "70kg"], [108.259864, 27.944777, "小王", "28y", "160cm", "50kg"]];
+        for (var i = 0; i < allData.length; i++) {
+            createMarker(allData[i]);
+        }
+
+    }); */
+    /**
+     *  关闭地图数据的下拉面板
+     */
+    function closeItemPanel() {
+        $("#itemDetails").slideUp();
+    }
+    /**
+     *  概览数据添加
+     */
+    function addSurveyData(data) {
+        $("#total_budget").text(data[0]);
+        $("#total_investment").text(data[1]);
+        $("#finish_investment").text(data[2]);
+        $("#actual_investment").text(data[3]);
+    }
+
+    /**
+     *  代办信息
+     */
+    function addCommission(data) {
+        var strHtml = [];
+        $.each(data, function (i, n) {
+            var str = [
+                '<tr><td title="' + n.plant_name + '">',
+                '<a>' + n.plant_name + '</a></td>',
+                '<td title="' + n.update_time + '">' + n.update_time + '</td>',
+                '<td title="' + n.legal_representative_name + '">' + n.legal_representative_name + '</td>',
+                '<td class="text-navy" title="' + n.local_accumulative_payment + '">' + n.local_accumulative_payment + '</td></tr>'
+            ];
+            strHtml.push(str.join(""));
+        })
+        $("#commission_detail").html(strHtml.join(""));
+    }
+
+    /**
+     *  申请信息
+     */
+    function addApplication(data) {
+        var strHtml = [];
+        $.each(data, function (i, n) {
+            var str = [
+                '<tr><td title="' + n.plant_name + '">',
+                '<a>' + n.plant_name + '</a></td>',
+                '<td title="' + n.update_time + '">' + n.update_time + '</td>',
+                '<td title="' + n.legal_representative_name + '">' + n.legal_representative_name + '</td>',
+                '<td class="text-navy" title="' + n.total_investment + '">' + n.total_investment + '</td></tr>'
+            ];
+            strHtml.push(str.join(""));
+        });
+        $("#application_detail").html(strHtml.join(""));
+    }
+
+    /**
+     *  项目概述
+     */
+    function addProjectDetail(data) {
+        var strHtml = [
+            '<div class="panel-detail-title">' + data.plant_name + '</div>',
+            '<div class="col-lg-12 panel-item"><div><label>水库规模：</label>',
+            '<span id="scale">' + data.scale + '</span></div>',
+            ' <div><label>水库等级：</label>',
+            '<span id="level">' + data.level + '</span></div>',
+            '<div><label>所属单位：</label>',
+            '<span id="legal_representative_name">' + data.legal_representative_name + '</span></div>',
+            '<div><label>所在位置：</label>',
+            '<span id="location">' + data.location + '</span></div>',
+            '<div><label>主要功能：</label>',
+            '<span id="project_task">' + data.project_task + '</span></div>',
+
+            '<div><label>水库概述：</label>',
+            '<span id="overview">' + data.overview + '</span></div>'
+        ]
+        $("#plant_name").text(data.plant_name);
+        $("#item_detail").html(strHtml.join(""));
+    }
+
+    /**
+     *     弹出框初步JS
+     */
+    function openDialog() {
+        // 弹出层
+        $("#dialog").html('<div>twafsdgewwadsgfsaegjioajsfdosjafoaslfnsalkgnmsdoizajgpoiewjapokdsaglkjfdspogjewpkfdsp</div><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal5" onclick="openDialog()">test Modal</button>');
+        var dialogHtml = [
+            // 头部标题栏
+            '<div class="modal-header">dialog_header',
+            '<button type="button" class="close" data-dismiss="modal" onclick="closeDialog()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>',
+            '</div>',
+            // 弹出框内容区
+            '<div class="modal-body">dialog_body</div>',
+            // 弹出框操作区
+            '<div class="modal-footer"><button type="button" class="btn btn-white" data-dismiss="modal">Close</button><button type="button" class="btn btn-primary">Save changes</button></div>'
+        ]
+        $("#dialog").html(dialogHtml.join(""));
+        var height = $("#dialog").height(),
+            width = $("#dialog").width();
+        $("#dialog").addClass("dialog-position");
+        $("#dialog").css({ "margin-top": -height / 2, "margin-left": -width / 2 });
+        $("#dialog").removeClass("dialog-hide");
+        // $("#dialog").slideDown();
+        // 遮罩层
+        $("#mask").show();
+    }
+    // 关闭弹出框
+    function closeDialog() {
+        $("#dialog").addClass("dialog-hide");
+        $("#mask").hide();
+    }
+
+    // 全屏JS
+    function fullScreen() {
+        $("#fullscreen_map").toggleClass("full-screen");
+        $("#fullscreen_map").show();
+        $("body").toggleClass("hide-body");
+    }
+
+    // 动画
+    function toggleMove(id) {
+        $('.right-panel').stop().animate({ marginRight: "-400px" }, 300);
+        setTimeout(function () {
+            if (!$("[id=" + id + "]").hasClass("active")) {
+                $("[id=" + id + "]").siblings().removeClass('active');
+                $('.right-panel').stop().animate({ marginRight: "0" }, 500);
+            }
+            $("[id=" + id + "]").toggleClass('active');
+        }, 500);
+    }
+
+    // 标签动画
+    function moveInTip(id) {
+        $("[id='" + id + "']").animate({ width: "90px" }, 150);
+    }
+    function moveOutTip(id) {
+        $("[id='" + id + "']").animate({ width: "20px" }, 150);
+    }
+    // 饼图
+    function initPieChart(id, chartData) {
+        var myChart = echarts.init(document.getElementById(id));
+
+        var legnedData = [];
+        $.each(chartData, function (i, n) {
+            legnedData.push(n.name);
+        });
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "<div style='text-align:left'>{b} <br/>￥{c}({d}%)</div>"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: legnedData,
+                show: false
+            },
+            series: [
+                {
+                    name: '资金',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '14',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: chartData
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        console.log('success, done');
+    }
+    // 柱状图
+    function initBarChart(id) {
+        var myChart = echarts.init(document.getElementById(id));
+        var option = {
+            color: ['#fff'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter: "<div style='text-align:left'>{b}<br/>￥{c}(万元)</div>"
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['总概算', '总项目投资', '实际投资完成量', '实际投资拨付'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    axisTick: {
+                        show: false
+                    },
+                    // y 轴线
+                    axisLine: {
+                        show: false,
+                    },
+                    splitLine: {
+                        show: true,  //显示分割线
+                        lineStyle: {
+                            // 使用深浅的间隔色
+                            color: '#3a3939',
+                            type: 'dotted'
+                        }
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '资金',
+                    type: 'bar',
+                    barWidth: '50%',
+                    data: [5000, 7000, 1000, 800],
+                    itemStyle: {
+                        normal: {
+                            color: function (params) {
+                                var colorList = [
+                                    '#ee4065', '#41daea', '#39eac6', '#ffde3a'
+
+                                ];
+                                return colorList[params.dataIndex]
+                            },
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: function (params) {
+                                    return params.value + '(万元)';
+                                }
+                            }
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: 12
+                                }
+
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        console.log('success, done');
+    }
+    function createEchartData(data) {
+        var paymentData = [],
+            investmentData = [];
+        var paymentData = [{ value: 1500000, name: '中央累计拨付' }, { value: 2100000, name: '当前累计拨付' }]
+        initPieChart("payment_chart", paymentData);
+        var investmentData = [{ value: 1500000, name: '省政府投资' }, { value: 2100000, name: '中央投资' }, { value: 3100000, name: '当前投资' }]
+        $.each(data, function(i, n) {
+
+        });
+    }
+    $(function () {
+        /*
+         * 右侧工具栏动画
+         */
+        $(document).ready(function () {
+            // 标签点击事件
+            $('#toggle1').click(function () {
+                toggleMove("container1");
+            });
+            $('#toggle2').click(function () {
+                toggleMove("container2");
+            });
+            $('#toggle3').click(function () {
+                toggleMove("container3");
+            });
+            // 标签hover事件
+            $('#toggle1').mouseover(function () {
+                moveInTip("toggle1");
+            });
+            $('#toggle2').mouseover(function () {
+                moveInTip("toggle2");
+            });
+            $('#toggle3').mouseover(function () {
+                moveInTip("toggle3");
+            });
+            // 标签离开事件
+            $('#toggle1').mouseleave(function () {
+                moveOutTip("toggle1");
+            });
+            $('#toggle2').mouseleave(function () {
+                moveOutTip("toggle2");
+            });
+            $('#toggle3').mouseleave(function () {
+                moveOutTip("toggle3");
+            });
+        });
+
+        /*
+         * 填充页面数据
+         */
+        // 概览数据
+        var surveyData = [1, 2, 3, 4]
+        addSurveyData(surveyData);
+        // 代办信息 & 申请信息
+        var commissionData = [
+            { "plant_name": "a水库", "update_time": "2015-11-23", "legal_representative_name": "A", "local_accumulative_payment": "110000", "total_investment": "2000000" },
+            { "plant_name": "b水库", "update_time": "2016-09-20", "legal_representative_name": "B", "local_accumulative_payment": "120000", "total_investment": "5000000" },
+            { "plant_name": "c水库", "update_time": "2017-01-06", "legal_representative_name": "C", "local_accumulative_payment": "130000", "total_investment": "7000000" },
+            { "plant_name": "d水库", "update_time": "2017-03-18", "legal_representative_name": "D", "local_accumulative_payment": "140000", "total_investment": "4000000" },
+            { "plant_name": "e水库", "update_time": "2017-05-23", "legal_representative_name": "E", "local_accumulative_payment": "150000", "total_investment": "10200000" },
+            { "plant_name": "f水库", "update_time": "2017-10-12", "legal_representative_name": "F", "local_accumulative_payment": "160000", "total_investment": "8900000" },
+            { "plant_name": "f水库", "update_time": "2017-10-12", "legal_representative_name": "F", "local_accumulative_payment": "160000", "total_investment": "8900000" }
+        ];
+        // 代办
+        addCommission(commissionData);
+        // 申请
+        addApplication(commissionData);
+
+        // echart数据处理
+
+        // 饼图
+        var paymentData = [{ value: 1500000, name: '中央累计拨付' }, { value: 2100000, name: '当前累计拨付' }]
+        initPieChart("payment_chart", paymentData);
+        var investmentData = [{ value: 1500000, name: '省政府投资' }, { value: 2100000, name: '中央投资' }, { value: 3100000, name: '当前投资' }]
+        initPieChart("investment_chart", investmentData);
+        // 柱状图
+        initBarChart("overview_map");
+    })
 });
 

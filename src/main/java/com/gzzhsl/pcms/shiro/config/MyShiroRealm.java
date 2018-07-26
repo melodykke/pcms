@@ -1,6 +1,7 @@
 
 package com.gzzhsl.pcms.shiro.config;
 
+import com.gzzhsl.pcms.cors.MyUsernamePasswordToken;
 import com.gzzhsl.pcms.exception.InactivatedException;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.SysPermission;
@@ -37,19 +38,19 @@ public class MyShiroRealm extends AuthorizingRealm{
 		System.out.println("MyShiroRealm.doGetAuthenticationInfo()");
 
 
-/**
+		/**
 		 * 1. 获取用户输入的账号
 		 * 2. 通过username 从数据库中查找，获取userbean对象
 		 * 3. 加密， 使用SimpleAuthenticationInfo 进行身份处理
 		 * 4. 返回身份处理对象
 		 */
 
-
+		MyUsernamePasswordToken myToken = (MyUsernamePasswordToken) token;
 		// 1. 获取用户输入的账号
-		String username = (String)token.getPrincipal();
+		String username = (String)myToken.getPrincipal();
         System.out.println(username);
-        System.out.println("token.getCredentials:"+token.getCredentials());
-        System.out.println(new String((char[])token.getCredentials()));
+        System.out.println("token.getCredentials:"+myToken.getCredentials());
+        System.out.println(new String((char[])myToken.getCredentials()));
         // 2. 通过accountName 从数据库中查找，获取userInfo对象
 		UserInfo userInfo = userService.getUserByUsername(username); //这里取到以后，自动放进principals里，下面认证直接取。
 		// 判断是否有userInfo

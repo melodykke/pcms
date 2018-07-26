@@ -24,7 +24,7 @@ public class UserInfo {
     private String name;
     private String salt;
     private Byte active; //0:创建未认证（比如没有激活，没有输入验证码等等）--等待验证的用户 , 1:正常状态,2：用户被锁定.
-
+    private String openId;
     @OneToOne(mappedBy = "userInfo")
     private PersonInfo personInfo;
 

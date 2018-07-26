@@ -24,6 +24,23 @@
         <div class="row" id="projectMonthsDiv"></div>
     </div>
 
+    <!--loading-->
+    <div id="main_loading"
+         style="display:block;position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f8f8;opacity:0.6;z-index:1000;">
+        <div id="loading_gif" style="text-align:center;position:fixed;z-index: 9999;top:50%;left: 50%;">
+            <div class="sk-spinner sk-spinner-cube-grid">
+                <div class="sk-cube"></div>
+                <div class="sk-cube"></div>
+                <div class="sk-cube"></div>
+                <div class="sk-cube"></div>
+                <div class="sk-cube"></div>
+                <div class="sk-cube"></div>
+                <div class="sk-cube"></div>
+                <div class="sk-cube"></div>
+                <div class="sk-cube"></div>
+            </div>
+        </div>
+    </div>
 <!-- Mainly scripts -->
 <script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
 <script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>

@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.controller;
 
+import com.gzzhsl.pcms.cors.MyUsernamePasswordToken;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.InactivatedException;
 import com.gzzhsl.pcms.exception.SysException;
@@ -13,6 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -49,10 +51,8 @@ public class CommonController {
             log.error("【账号错误】 账号登录错误， 参数不正确 userSigninForm = {}", userSigninForm);
             throw new SysException(SysEnum.SIGNIN_PARAM_ERROR);
         }
-        //String exception = (String)request.getAttribute("shiroLoginFailure");
+
         String exception = (String)request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
-        System.out.println("exception: "+exception);
-        System.out.println(SecurityUtils.getSubject().getSession().getId());
         String msg = "";
         if (exception != null) {
             if (UnknownAccountException.class.getName().equals(exception)) {
