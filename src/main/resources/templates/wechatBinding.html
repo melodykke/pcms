@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>微信账号绑定登陆</title>
+
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet">
+
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+
+    <div class="middle-box text-center animated fadeInDown">
+        <h2>账号绑定</h2>
+        <h3 class="font-bold">微信授权账号绑定</h3>
+
+        <div class="row">
+            <div class="col-sm-6 b-r"><h3 class="m-t-none m-b">系统账号</h3>
+                <p>请输入本系统账号、密码.</p>
+                <form role="form">
+                    <div class="form-group"><label>账号</label> <input id="username" type="username" placeholder="账号名" class="form-control"></div>
+                    <div class="form-group"><label>密码</label> <input id="password" type="password" placeholder="密码" class="form-control"></div>
+                </form>
+            </div>
+            <div class="col-sm-6"><h4>确认请点击下图标...</h4>
+                <p id="msg"></p>
+                <p class="text-center">
+                    <a id="binding_confirm_btn" href="#"><i class="fa fa-sign-in big-icon"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/common/common.js}"></script>
+    <script th:src="@{/js/custom/wechatBinding.js}"></script>
+
+</body>
+
+</html>

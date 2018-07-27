@@ -22,18 +22,18 @@
 
 
     <div class="middle-box text-center animated fadeInDown">
-        <h1>success</h1>
+        <h2>success</h2>
         <h3 class="font-bold">账号已成功在PC端申请登陆</h3>
 
         <div class="error-desc">
-            账号已成功在PC端申请登陆，请查看PC端浏览器！<br/><a href="index.html" class="btn btn-primary m-t">确定</a>
+            账号已成功在PC端申请登陆，请查看PC端浏览器！<br/><a id="mobile_login_note_confirm_btn" href="#" class="btn btn-primary m-t">确定</a>
         </div>
     </div>
 
     <!-- Mainly scripts -->
-    <script th:href="@{/js/jquery-3.1.1.min.js}"></script>
-    <script th:href="@{/js/bootstrap.min.js}"></script>
-
+    <script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/custom/mobileLoginNote.js}"></script>
 </body>
 
 </html>

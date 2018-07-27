@@ -1074,17 +1074,17 @@ $(function () {
     });
 
     $('#bind_wechat_btn').click(function () {
-        $('#auth_img').attr("src", "/wechatlogin/generateqrcode4login?time="+new Date())
-        $('#wechat_binding_modal_body')
+        $('#auth_img').attr("src", "/wechatlogin/generateqrcode4login?time="+new Date());
+        $('#wechat_binding_modal_body');
         $('#wechat_binding_modal').modal('show');
 
-    })
+    });
 
 
     //微信modal
     $('.wechat-register-modal-close').on('click', function (e) {
         $('#wechat_binding_modal').modal('hide');
-    })
+    });
 
 
 

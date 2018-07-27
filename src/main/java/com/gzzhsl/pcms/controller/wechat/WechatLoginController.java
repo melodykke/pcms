@@ -24,6 +24,7 @@ import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.CodeUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.util.ShortNetAddressUtil;
+import com.gzzhsl.pcms.util.UserUtil;
 import com.gzzhsl.pcms.util.wechat.WechatUtil;
 import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +73,7 @@ public class WechatLoginController {
 		WechatUser user = null;
 		String openId = null;
 		WechatAuth auth = null;
+		UserInfo userInfo = null;
 		if (null != code) {  // 扫码后首先获取微信账户信息（获取openId)
 			UserAccessToken token;
 			try {
@@ -87,6 +89,7 @@ public class WechatLoginController {
 				log.info("weixin login user:" + user.toString());
 				request.getSession().setAttribute("openId", openId);
 				auth = wechatAuthService.getWechatAuthByOpenId(openId); // 检查系统中有无wechatAuth信息
+                userInfo = userService.findByOpenId(openId); // 检查系统中有无wechatAuth信息
 			} catch (IOException e) {
 				log.error("error in getUserAccessToken or getUserInfo or findByOpenId: " + e.toString());
 				e.printStackTrace();
@@ -94,49 +97,21 @@ public class WechatLoginController {
 		}
 		// 若微信帐号为空则需要注册微信帐号，同时注册用户信息
 		if (auth == null) {
-		/*	PersonInfo personInfo = WechatUtil.getPersonInfoFromRequest(user);
-			auth = new WechatAuth();
-			auth.setOpenId(openId);
-			auth.setPersonInfo(personInfo);
-			WechatAuth wechatAuthRt = wechatAuthService.register(auth);
-            UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-            userService.updateUserOpenId(openId, thisUser.getUserId());
-            personInfo = personService.getById(auth.getPersonInfo().getPersonId());
-            request.getSession().setAttribute("person", personInfo);*/
-		} else {
-
-                wechatLoginWebSocket.sendMsg(ResultUtil.success(openId));
-                return "mobileLoginNote";
+            PersonInfo personInfo = WechatUtil.getPersonInfoFromRequest(user);
+            auth = new WechatAuth();
+            auth.setOpenId(openId);
+            auth.setPersonInfo(personInfo);
+            WechatAuth wechatAuthRt = wechatAuthService.register(auth);
+            wechatLoginWebSocket.sendMsg(ResultUtil.failed(user));
+            return "mobileBindingNote";
+        } else if (userInfo == null) {
+            wechatLoginWebSocket.sendMsg(ResultUtil.failed(user));
+            return "mobileBindingNote";
+        } else {
+            wechatLoginWebSocket.sendMsg(ResultUtil.success(user));
+            return "mobileLoginNote";
         }
-        return "page403";
 	}
-
-    @GetMapping("/wechatauthlogin")
-    public String toWechatAuthLogin() {
-	    return "wechatauthlogin";
-    }
-
-	@PostMapping("/wechatauthlogin")
-    @ResponseBody
-	public ResultVO wechatAuthLogin(@RequestBody Map<String, Object> map) {
-        System.out.println("wechatauthlogin");
-        String openId = (String) map.get("openId");
-        System.out.println(openId);
-        UserInfo userInfo = userService.findByOpenId(openId);
-        if (userInfo != null) {
-            Subject subject = SecurityUtils.getSubject();
-            MyUsernamePasswordToken token = new MyUsernamePasswordToken(userInfo.getUsername());
-            try {
-                subject.login(token);
-            } catch (AuthenticationException e) {
-                e.printStackTrace();
-            }
-            return ResultUtil.success();
-        }
-        return ResultUtil.failed();
-    }
-
-
 
     /**
      * 生成带有url的二维码， 微信扫一扫就能连接到对应的URL里面区
@@ -156,6 +131,57 @@ public class WechatLoginController {
             e.printStackTrace();
         }
     }
+
+    @GetMapping("/wechatauthlogin")
+    public String toWechatAuthLogin() {
+        return "wechatauthlogin";
+    }
+
+    @PostMapping("/wechatauthlogin")
+    @ResponseBody
+    public ResultVO wechatAuthLogin(@RequestBody Map<String, Object> map) {
+        System.out.println("wechatauthlogin");
+        String openId = (String) map.get("openId");
+        System.out.println(openId);
+        UserInfo userInfo = userService.findByOpenId(openId);
+        if (userInfo != null) {
+            Subject subject = SecurityUtils.getSubject();
+            MyUsernamePasswordToken token = new MyUsernamePasswordToken(userInfo.getUsername());
+            try {
+                subject.login(token);
+            } catch (AuthenticationException e) {
+                e.printStackTrace();
+            }
+            return ResultUtil.success();
+        }
+        return ResultUtil.failed();
+    }
+
+    @GetMapping("/wechatbinding")
+    public String toWechatBingding() {
+        return "wechatBinding";
+    }
+
+    @PostMapping("wechatbinding")
+    @ResponseBody
+    public ResultVO wechatBinding(@RequestBody Map<String, Object> map) {
+        String openId = (String) map.get("openId");
+        String username = (String) map.get("username");
+        String password = (String) map.get("password");
+        UserInfo userInfo = userService.getUserByUsername(username);
+        if (userInfo == null) {
+            return ResultUtil.failed("查无此用户！！");
+        } else {
+            if (!userInfo.getPassword().equals(UserUtil.getEncriPwd(password))){
+                return ResultUtil.failed("账户密码不正确！！");
+            } else {
+                Integer intRt = userService.updateUserOpenId(openId, userInfo.getUserId());
+                System.out.println(intRt);
+                return ResultUtil.success();
+            }
+        }
+    }
+
 
 
 }

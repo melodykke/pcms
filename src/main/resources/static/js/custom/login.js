@@ -30,7 +30,13 @@ $(function () {
     websocket.onmessage = function (event) {
         console.log('收到消息：' + event.data);
         var jsonData = eval("(" + event.data + ")");
-        window.location.href = '/wechatlogin/wechatauthlogin?openId='+jsonData.data;
+        if (jsonData.code == 1002) {
+            window.location.href = '/wechatlogin/wechatauthlogin?openId='+jsonData.data.openId;
+        } else if (jsonData.code == 1003) {
+            window.location.href = '/wechatlogin/wechatbinding?openId='+jsonData.data.openId;
+        }
+        var user = eval("(" + event.data + ")");
+
 
     };
     websocket.onerror = function (event) {
