@@ -96,7 +96,7 @@
             <div class="pull-bottom sm-pull-bottom">
                 <div class="m-b-30 p-r-80 sm-m-t-20 sm-p-r-15 sm-p-b-20 clearfix">
                     <div class="col-sm-3 col-md-2 no-padding">
-                        <img alt="" class="m-t-5" height="60" src="wechatlogin/generateqrcode4login" width="60">
+                        <img id="qrimg" alt="" class="m-t-5" height="60" src="wechatlogin/generateqrcode4login" width="60">
                     </div>
                     <div class="col-sm-8 p-l-30 m-t-10">
                         <p>
@@ -113,6 +113,9 @@
 </div>
 
 <!-- BEGIN VENDOR JS -->
+<script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/js/custom/pace.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/custom/login.js}" type="text/javascript"></script>
 </body>
 </html>

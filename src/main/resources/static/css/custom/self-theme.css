@@ -368,15 +368,13 @@ td a:hover {
 }
 .right-panel>.tabs-container>ul {
     background-color: #58b495;
-    opacity: .9; 
     color: #fff;
 }
 .right-panel>.tabs-container>.tab-content .panel-body {
-    background-color: #142d25;
     color: #fff;
     border: none;
-    opacity: .8;
     overflow: auto;
+    background-color: rgba(20, 45, 37, 0.8);
 }
 .right-panel .tab-pane>.panel-body {
 	padding-left: 0;
@@ -424,10 +422,11 @@ td a:hover {
     padding-top: 15px!important;
 }
 .overview-panel {
-	background: #142d25;
-    opacity: .9;
+    /* background: #142d25;
+    opacity: .9; */
     height: calc(100vh - 65px);
     overflow: auto;
+    background-color: rgba(20, 45, 37, 0.8);
 }
 #tab-1>.panel-body, #tab-2>.panel-body {
 	padding: 0;
@@ -441,7 +440,7 @@ td a:hover {
     padding-bottom: 55px!important;
 }
 .item-payment>.cell-payment:first-child {
-    border-bottom: 1px solid #3a3939;
+    border-bottom: 1px solid #565656;
 }
 .item-investment>.cell-investment>.detail-investment {
 	margin: 5px 0;
@@ -533,7 +532,7 @@ li.active>a> .control-tips {
     border-top: none;
 }
 .panel-body .table > thead > tr > th {
-    border-bottom: 1px solid #3a3939;  
+    border-bottom: 1px solid #565656;
 }
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
     padding: 6px;
@@ -548,7 +547,7 @@ li.active>a> .control-tips {
     transform: rotate(90deg);
 }
 .total-investment {
-	min-width: 100px;
+    min-width: 150px;
 }
 .tip-item {
 	background: #58b495;

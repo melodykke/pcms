@@ -3,6 +3,7 @@ package com.gzzhsl.pcms.controller.wechat;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import com.gzzhsl.pcms.enums.WechatAuthStateEnum;
 import com.gzzhsl.pcms.service.PersonService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.service.WechatAuthService;
+import com.gzzhsl.pcms.service.impl.WechatLoginWebSocket;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.CodeUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
@@ -32,9 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -57,6 +57,8 @@ public class WechatLoginController {
     private UserService userService;
     @Autowired
     private PersonService personService;
+    @Autowired
+    private WechatLoginWebSocket wechatLoginWebSocket;
 
 
 	@RequestMapping(value = "/logincheck", method = { RequestMethod.GET })
@@ -70,7 +72,7 @@ public class WechatLoginController {
 		WechatUser user = null;
 		String openId = null;
 		WechatAuth auth = null;
-		if (null != code) {
+		if (null != code) {  // 扫码后首先获取微信账户信息（获取openId)
 			UserAccessToken token;
 			try {
 				// 通过code获取access_token
@@ -84,7 +86,7 @@ public class WechatLoginController {
 				user = WechatUtil.getUserInfo(accessToken, openId);
 				log.info("weixin login user:" + user.toString());
 				request.getSession().setAttribute("openId", openId);
-				auth = wechatAuthService.getWechatAuthByOpenId(openId);
+				auth = wechatAuthService.getWechatAuthByOpenId(openId); // 检查系统中有无wechatAuth信息
 			} catch (IOException e) {
 				log.error("error in getUserAccessToken or getUserInfo or findByOpenId: " + e.toString());
 				e.printStackTrace();
@@ -92,7 +94,7 @@ public class WechatLoginController {
 		}
 		// 若微信帐号为空则需要注册微信帐号，同时注册用户信息
 		if (auth == null) {
-			PersonInfo personInfo = WechatUtil.getPersonInfoFromRequest(user);
+		/*	PersonInfo personInfo = WechatUtil.getPersonInfoFromRequest(user);
 			auth = new WechatAuth();
 			auth.setOpenId(openId);
 			auth.setPersonInfo(personInfo);
@@ -100,22 +102,41 @@ public class WechatLoginController {
             UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
             userService.updateUserOpenId(openId, thisUser.getUserId());
             personInfo = personService.getById(auth.getPersonInfo().getPersonId());
-            request.getSession().setAttribute("person", personInfo);
+            request.getSession().setAttribute("person", personInfo);*/
 		} else {
-            UserInfo userInfo = userService.findByOpenId(openId);
-		    if (userInfo != null) {
-                Subject subject = SecurityUtils.getSubject();
-                MyUsernamePasswordToken token = new MyUsernamePasswordToken(userInfo.getUsername());
-                try {
-                    subject.login(token);
-                } catch (AuthenticationException e) {
-                    return "error";
-                }
-                return "index";
-            }
+
+                wechatLoginWebSocket.sendMsg(ResultUtil.success(openId));
+                return "mobileLoginNote";
         }
-        return "error";
+        return "page403";
 	}
+
+    @GetMapping("/wechatauthlogin")
+    public String toWechatAuthLogin() {
+	    return "wechatauthlogin";
+    }
+
+	@PostMapping("/wechatauthlogin")
+    @ResponseBody
+	public ResultVO wechatAuthLogin(@RequestBody Map<String, Object> map) {
+        System.out.println("wechatauthlogin");
+        String openId = (String) map.get("openId");
+        System.out.println(openId);
+        UserInfo userInfo = userService.findByOpenId(openId);
+        if (userInfo != null) {
+            Subject subject = SecurityUtils.getSubject();
+            MyUsernamePasswordToken token = new MyUsernamePasswordToken(userInfo.getUsername());
+            try {
+                subject.login(token);
+            } catch (AuthenticationException e) {
+                e.printStackTrace();
+            }
+            return ResultUtil.success();
+        }
+        return ResultUtil.failed();
+    }
+
+
 
     /**
      * 生成带有url的二维码， 微信扫一扫就能连接到对应的URL里面区

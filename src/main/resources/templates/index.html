@@ -213,455 +213,462 @@
             </nav>
         </div>
 
-            <div id="main_content" class="map-content">
+        <shiro:hasRole name="manager">
+            <div class="map-content">
                 <div id="allmap"></div>
             </div>
 
-        <div class="right-tool">
-            <div class="overview-tool">
-                <div id="toggle3" class="tip-btn">
-                    <i class="fa fa-angle-double-left"></i>
-                    <span>总概览</span>
+            <div class="right-tool">
+                <div class="overview-tool">
+                    <div id="toggle3" class="tip-btn">
+                        <i class="fa fa-angle-double-left"></i>
+                        <span>总概览</span>
+                    </div>
+                    <div id="toggle2" class="tip-btn">
+                        <i class="fa fa-angle-double-left"></i>
+                        <span>待办信息</span>
+                    </div>
+                    <div id="toggle1" class="tip-btn">
+                        <i class="fa fa-angle-double-left"></i>
+                        <span>详情数据</span>
+                    </div>
                 </div>
-                <div id="toggle2" class="tip-btn">
-                    <i class="fa fa-angle-double-left"></i>
-                    <span>待办信息</span>
-                </div>
-                <div id="toggle1" class="tip-btn">
-                    <i class="fa fa-angle-double-left"></i>
-                    <span>详情数据</span>
-                </div>
-            </div>
-            <div class="right-panel">
-                <!-- 第一个悬浮框 -->
-                <div class="tabs-container" id="container1">
-                    <ul class="nav nav-tabs">
-                        <li class="col-lg-6 active">
-                            <a data-toggle="tab" href="#tab-3" aria-expanded="true">
-                                <i class="fa fa-laptop"></i>
-                                <span class="control-tips">概述</span>
-                            </a>
-                        </li>
-                        <li class="col-lg-6">
-                            <a data-toggle="tab" href="#tab-4" aria-expanded="false">
-                                <i class="fa fa-desktop"></i>
-                                <span class="control-tips">资金</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="tab-3" class="tab-pane active">
-                            <div class="panel-body" id="item_detail">
-                                <div class="col-lg-12 item-detail">
-                                    <div class="panel-detail-title">思南水库</div>
-                                    <div>
-                                        <label>所在位置：</label>
-                                        <span id="location_t">50000000</span>
-                                    </div>
-                                    <div>
-                                        <label>水库规模：</label>
-                                        <span id="scale_t">50000000</span>
-                                    </div>
-                                    <div>
-                                        <label>水库等级：</label>
-                                        <span id="level_t">50000000</span>
-                                    </div>
-                                    <div>
-                                        <label>所属单位：</label>
-                                        <span id="legal_representative_name">50000000</span>
-                                    </div>
-                                    <div>
-                                        <label>主要功能：</label>
-                                        <span id="project_task">50000000</span>
-                                    </div>
-                                    <div>
-                                        <label>水库概述：</label>
-                                        <span id="overview_t">50000000</span>
+                <div class="right-panel">
+                    <!-- 第一个悬浮框 -->
+                    <div class="tabs-container" id="container1">
+                        <ul class="nav nav-tabs">
+                            <li class="col-lg-6 active">
+                                <a data-toggle="tab" href="#tab-3" aria-expanded="true">
+                                    <i class="fa fa-laptop"></i>
+                                    <span class="control-tips">概述</span>
+                                </a>
+                            </li>
+                            <li class="col-lg-6">
+                                <a data-toggle="tab" href="#tab-4" aria-expanded="false">
+                                    <i class="fa fa-desktop"></i>
+                                    <span class="control-tips">资金</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-3" class="tab-pane active">
+                                <div class="panel-body" id="item_detail">
+                                    <div class="col-lg-12 item-detail">
+                                        <div class="panel-detail-title">思南水库</div>
+                                        <div>
+                                            <label>所在位置：</label>
+                                            <span id="location_t">50000000</span>
+                                        </div>
+                                        <div>
+                                            <label>水库规模：</label>
+                                            <span id="scale_t">50000000</span>
+                                        </div>
+                                        <div>
+                                            <label>水库等级：</label>
+                                            <span id="level_t">50000000</span>
+                                        </div>
+                                        <div>
+                                            <label>所属单位：</label>
+                                            <span id="legal_representative_name">50000000</span>
+                                        </div>
+                                        <div>
+                                            <label>主要功能：</label>
+                                            <span id="project_task">50000000</span>
+                                        </div>
+                                        <div>
+                                            <label>水库概述：</label>
+                                            <span id="overview_t">50000000</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="tab-4" class="tab-pane">
-                            <div class="panel-body">
-                                <div class="col-lg-12 item-payment">
-                                    <div class="col-lg-6 cell-payment">
-                                        <div class="col-lg-12 detail-payment">
-                                            <div class="panel-font">中央累计拨付</div>
-                                            <div>
-                                                <span>￥</span>
-                                                <span class="font-num">2100000</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 detail-payment">
-                                            <div class="panel-font">当前累计拨付</div>
-                                            <div>
-                                                <span>￥</span>
-                                                <span class="font-num">2100000</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 map-payment">
-                                        <div id="payment_chart" style='width: 200px;height:250px;'></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 item-investment">
-                                    <div class="col-lg-6  cell-investment">
-                                        <div class="col-lg-12 detail-investment">
-                                            <div class="panel-font">省政府投资</div>
-                                            <div>
-                                                <span>￥</span>
-                                                <span class="font-num">2100000</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 detail-investment">
-                                            <div class="panel-font">中央投资</div>
-                                            <div>
-                                                <span>￥</span>
-                                                <span class="font-num">2100000</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="col-lg-6 detail-investment">
-                                                <div class="panel-font">当前投资</div>
-                                                <div class="total-investment">
+                            <div id="tab-4" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="col-lg-12 item-payment">
+                                        <div class="col-lg-6 cell-payment">
+                                            <div class="col-lg-12 detail-payment">
+                                                <div class="panel-font">中央累计拨付</div>
+                                                <div>
                                                     <span>￥</span>
                                                     <span class="font-num">2100000</span>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 detail-investment under-pie">
-                                                <div class="panel-font">总投资</div>
-                                                <div class="total-investment">
+                                            <div class="col-lg-12 detail-payment">
+                                                <div class="panel-font">当前累计拨付</div>
+                                                <div>
                                                     <span>￥</span>
                                                     <span class="font-num">2100000</span>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-6 map-payment">
+                                            <div id="payment_chart" style='width: 200px;height:250px;'></div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 map-investment">
-                                        <div id="investment_chart" style='width: 200px;height:250px;'></div>
+                                    <div class="col-lg-12 item-investment">
+                                        <div class="col-lg-6  cell-investment">
+                                            <div class="col-lg-12 detail-investment">
+                                                <div class="panel-font">省政府投资</div>
+                                                <div>
+                                                    <span>￥</span>
+                                                    <span class="font-num">2100000</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 detail-investment">
+                                                <div class="panel-font">中央投资</div>
+                                                <div>
+                                                    <span>￥</span>
+                                                    <span class="font-num">2100000</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="col-lg-6 detail-investment">
+                                                    <div class="panel-font">当前投资</div>
+                                                    <div class="total-investment">
+                                                        <span>￥</span>
+                                                        <span class="font-num">2100000</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 detail-investment under-pie">
+                                                    <div class="panel-font">总投资</div>
+                                                    <div class="total-investment">
+                                                        <span>￥</span>
+                                                        <span class="font-num">2100000</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 map-investment">
+                                            <div id="investment_chart" style='width: 200px;height:250px;'></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- 第二个悬浮框 -->
-                <div class="tabs-container" id="container2">
-                    <ul class="nav nav-tabs">
-                        <li class="col-lg-6 active">
-                            <a data-toggle="tab" href="#tab-1" aria-expanded="true">
-                                <i class="fa fa-laptop"></i>
-                                <span class="control-tips">待办</span>
-                            </a>
-                        </li>
-                        <li class="col-lg-6">
-                            <a data-toggle="tab" href="#tab-2" aria-expanded="false">
-                                <i class="fa fa-desktop"></i>
-                                <span class="control-tips">申请</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="tab-1" class="tab-pane active">
-                            <div class="panel-body">
-                                <table class="table table-hover no-margins">
-                                    <thead>
-                                    <tr>
-                                        <th title="水库">
-                                            <i class="fa fa-adjust table-icon"></i>水库
-                                        </th>
-                                        <th title="上报时间">
-                                            <i class="fa fa-clock-o table-icon"></i>上报时间
-                                        </th>
-                                        <th title="水库法人">
-                                            <i class="fa fa-user-o table-icon" aria-hidden="true"></i>水库法人
-                                        </th>
-                                        <th title="拨付金额">
-                                            <i class="fa fa-cny table-icon"></i>拨付金额(万元)
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="commission_detail">
-                                    <tr>
-                                        <td title="小河水库">
-                                            <a>小河水库</a>
-                                        </td>
-                                        <td>
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2017-03-18
-                                        </td>
-                                        <td title="张三">张三</td>
-                                        <td class="text-navy" title="1000000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥1000000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="铜仁水库">
-                                            <!-- <span class="label label-warning">铜仁水库</span> -->
-                                            <a>铜仁水库</a>
-                                        </td>
-                                        <td title="2017-01-06">
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2017-01-06
-                                        </td>
-                                        <td title="李四">李四</td>
-                                        <td class="text-navy" title="500000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥500000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="思南水库">
-                                            <a>思南水库</a>
-                                        </td>
-                                        <td title="2017-11-12">
-                                            <!-- <i class="fa fa-clock-o"></i>  -->
-                                            2017-11-12
-                                        </td>
-                                        <td title="王二">王二</td>
-                                        <td class="text-navy" title="2155000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥2155000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="黔东南水库">
-                                            <a>黔东南水库</a>
-                                        </td>
-                                        <td title="2017-10-12">
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2017-10-12
-                                        </td>
-                                        <td title="赵四">赵四</td>
-                                        <td class="text-navy" title="983000">
-                                            <!-- <i class="fa fa-level-up"></i>  -->
-                                            ￥983000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a title="遵义水库">遵义水库</a>
-                                        </td>
-                                        <td>
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2016-09-20
-                                        </td>
-                                        <td title="孙五">孙五</td>
-                                        <td class="text-navy" title="764000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥764000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="毕节水库">
-                                            <!-- <span class="label label-primary">Completed</span> -->
-                                            <a>毕节水库</a>
-                                        </td>
-                                        <td title="2017-05-23">
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2017-05-23
-                                        </td>
-                                        <td title="李六一">李六一</td>
-                                        <td class="text-navy" title="870000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥870000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="织金水库">
-                                            <!-- <small>Pending...</small> -->
-                                            <a>织金水库</a>
-                                        </td>
-                                        <td title="2015-11-23">
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2015-11-23
-                                        </td>
-                                        <td title="张三">钱九</td>
-                                        <td class="text-navy" title="760000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥760000
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                    <!-- 第二个悬浮框 -->
+                    <div class="tabs-container" id="container2">
+                        <ul class="nav nav-tabs">
+                            <li class="col-lg-6 active">
+                                <a data-toggle="tab" href="#tab-1" aria-expanded="true">
+                                    <i class="fa fa-laptop"></i>
+                                    <span class="control-tips">待办</span>
+                                </a>
+                            </li>
+                            <li class="col-lg-6">
+                                <a data-toggle="tab" href="#tab-2" aria-expanded="false">
+                                    <i class="fa fa-desktop"></i>
+                                    <span class="control-tips">申请</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <table class="table table-hover no-margins">
+                                        <thead>
+                                        <tr>
+                                            <th title="水库">
+                                                <i class="fa fa-adjust table-icon"></i>水库
+                                            </th>
+                                            <th title="上报时间">
+                                                <i class="fa fa-clock-o table-icon"></i>上报时间
+                                            </th>
+                                            <th title="水库法人">
+                                                <i class="fa fa-user-o table-icon" aria-hidden="true"></i>水库法人
+                                            </th>
+                                            <th title="拨付金额">
+                                                <i class="fa fa-cny table-icon"></i>拨付金额(万元)
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="commission_detail">
+                                        <tr>
+                                            <td title="小河水库">
+                                                <a>小河水库</a>
+                                            </td>
+                                            <td>
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2017-03-18
+                                            </td>
+                                            <td title="张三">张三</td>
+                                            <td class="text-navy" title="1000000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥1000000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="铜仁水库">
+                                                <!-- <span class="label label-warning">铜仁水库</span> -->
+                                                <a>铜仁水库</a>
+                                            </td>
+                                            <td title="2017-01-06">
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2017-01-06
+                                            </td>
+                                            <td title="李四">李四</td>
+                                            <td class="text-navy" title="500000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥500000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="思南水库">
+                                                <a>思南水库</a>
+                                            </td>
+                                            <td title="2017-11-12">
+                                                <!-- <i class="fa fa-clock-o"></i>  -->
+                                                2017-11-12
+                                            </td>
+                                            <td title="王二">王二</td>
+                                            <td class="text-navy" title="2155000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥2155000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="黔东南水库">
+                                                <a>黔东南水库</a>
+                                            </td>
+                                            <td title="2017-10-12">
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2017-10-12
+                                            </td>
+                                            <td title="赵四">赵四</td>
+                                            <td class="text-navy" title="983000">
+                                                <!-- <i class="fa fa-level-up"></i>  -->
+                                                ￥983000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a title="遵义水库">遵义水库</a>
+                                            </td>
+                                            <td>
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2016-09-20
+                                            </td>
+                                            <td title="孙五">孙五</td>
+                                            <td class="text-navy" title="764000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥764000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="毕节水库">
+                                                <!-- <span class="label label-primary">Completed</span> -->
+                                                <a>毕节水库</a>
+                                            </td>
+                                            <td title="2017-05-23">
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2017-05-23
+                                            </td>
+                                            <td title="李六一">李六一</td>
+                                            <td class="text-navy" title="870000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥870000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="织金水库">
+                                                <!-- <small>Pending...</small> -->
+                                                <a>织金水库</a>
+                                            </td>
+                                            <td title="2015-11-23">
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2015-11-23
+                                            </td>
+                                            <td title="张三">钱九</td>
+                                            <td class="text-navy" title="760000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥760000
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <div id="tab-2" class="tab-pane">
-                            <div class="panel-body">
-                                <table class="table table-hover no-margins">
-                                    <thead>
-                                    <tr>
-                                        <th title="水库">
-                                            <i class="fa fa-adjust table-icon"></i>水库
-                                        </th>
-                                        <th title="上报时间">
-                                            <i class="fa fa-clock-o table-icon"></i>上报时间
-                                        </th>
-                                        <th title="水库法人">
-                                            <i class="fa fa-user-o table-icon" aria-hidden="true"></i>水库法人
-                                        </th>
-                                        <th title="拨付金额">
-                                            <i class="fa fa-cny table-icon"></i>预算(万元)
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="application_detail">
-                                    <tr>
-                                        <td title="小河水库">
-                                            <a>小河水库</a>
-                                        </td>
-                                        <td>
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2017-03-18
-                                        </td>
-                                        <td title="张三">张三</td>
-                                        <td class="text-navy" title="1000000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥1000000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="铜仁水库">
-                                            <!-- <span class="label label-warning">铜仁水库</span> -->
-                                            <a>铜仁水库</a>
-                                        </td>
-                                        <td title="2017-01-06">
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2017-01-06
-                                        </td>
-                                        <td title="李四">李四</td>
-                                        <td class="text-navy" title="500000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥500000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="思南水库">
-                                            <a>思南水库</a>
-                                        </td>
-                                        <td title="2017-11-12">
-                                            <!-- <i class="fa fa-clock-o"></i>  -->
-                                            2017-11-12
-                                        </td>
-                                        <td title="王二">王二</td>
-                                        <td class="text-navy" title="2155000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥2155000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="黔东南水库">
-                                            <a>黔东南水库</a>
-                                        </td>
-                                        <td title="2017-10-12">
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2017-10-12
-                                        </td>
-                                        <td title="赵四">赵四</td>
-                                        <td class="text-navy" title="983000">
-                                            <!-- <i class="fa fa-level-up"></i>  -->
-                                            ￥983000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a title="遵义水库">遵义水库</a>
-                                        </td>
-                                        <td>
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2016-09-20
-                                        </td>
-                                        <td title="孙五">孙五</td>
-                                        <td class="text-navy" title="764000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥764000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="毕节水库">
-                                            <!-- <span class="label label-primary">Completed</span> -->
-                                            <a>毕节水库</a>
-                                        </td>
-                                        <td title="2017-05-23">
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2017-05-23
-                                        </td>
-                                        <td title="李六一">李六一</td>
-                                        <td class="text-navy" title="870000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥870000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td title="织金水库">
-                                            <!-- <small>Pending...</small> -->
-                                            <a>织金水库</a>
-                                        </td>
-                                        <td title="2015-11-23">
-                                            <!-- <i class="fa fa-clock-o"></i> -->
-                                            2015-11-23
-                                        </td>
-                                        <td title="张三">钱九</td>
-                                        <td class="text-navy" title="760000">
-                                            <!-- <i class="fa fa-level-up"></i> -->
-                                            ￥760000
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div id="tab-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <table class="table table-hover no-margins">
+                                        <thead>
+                                        <tr>
+                                            <th title="水库">
+                                                <i class="fa fa-adjust table-icon"></i>水库
+                                            </th>
+                                            <th title="上报时间">
+                                                <i class="fa fa-clock-o table-icon"></i>上报时间
+                                            </th>
+                                            <th title="水库法人">
+                                                <i class="fa fa-user-o table-icon" aria-hidden="true"></i>水库法人
+                                            </th>
+                                            <th title="拨付金额">
+                                                <i class="fa fa-cny table-icon"></i>预算(万元)
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="application_detail">
+                                        <tr>
+                                            <td title="小河水库">
+                                                <a>小河水库</a>
+                                            </td>
+                                            <td>
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2017-03-18
+                                            </td>
+                                            <td title="张三">张三</td>
+                                            <td class="text-navy" title="1000000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥1000000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="铜仁水库">
+                                                <!-- <span class="label label-warning">铜仁水库</span> -->
+                                                <a>铜仁水库</a>
+                                            </td>
+                                            <td title="2017-01-06">
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2017-01-06
+                                            </td>
+                                            <td title="李四">李四</td>
+                                            <td class="text-navy" title="500000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥500000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="思南水库">
+                                                <a>思南水库</a>
+                                            </td>
+                                            <td title="2017-11-12">
+                                                <!-- <i class="fa fa-clock-o"></i>  -->
+                                                2017-11-12
+                                            </td>
+                                            <td title="王二">王二</td>
+                                            <td class="text-navy" title="2155000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥2155000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="黔东南水库">
+                                                <a>黔东南水库</a>
+                                            </td>
+                                            <td title="2017-10-12">
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2017-10-12
+                                            </td>
+                                            <td title="赵四">赵四</td>
+                                            <td class="text-navy" title="983000">
+                                                <!-- <i class="fa fa-level-up"></i>  -->
+                                                ￥983000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a title="遵义水库">遵义水库</a>
+                                            </td>
+                                            <td>
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2016-09-20
+                                            </td>
+                                            <td title="孙五">孙五</td>
+                                            <td class="text-navy" title="764000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥764000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="毕节水库">
+                                                <!-- <span class="label label-primary">Completed</span> -->
+                                                <a>毕节水库</a>
+                                            </td>
+                                            <td title="2017-05-23">
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2017-05-23
+                                            </td>
+                                            <td title="李六一">李六一</td>
+                                            <td class="text-navy" title="870000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥870000
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td title="织金水库">
+                                                <!-- <small>Pending...</small> -->
+                                                <a>织金水库</a>
+                                            </td>
+                                            <td title="2015-11-23">
+                                                <!-- <i class="fa fa-clock-o"></i> -->
+                                                2015-11-23
+                                            </td>
+                                            <td title="张三">钱九</td>
+                                            <td class="text-navy" title="760000">
+                                                <!-- <i class="fa fa-level-up"></i> -->
+                                                ￥760000
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- 第三个悬浮框 -->
-                <div class="tabs-container" id="container3">
-                    <div class="overview-panel">
-                        <div class="overview-data">
-                            <div class="col-lg-6 overview-block">
-                                <div>
-                                    <div>总概算</div>
-                                    <div class="cost-detail">
-                                        <span class="font-num">5000</span>
-                                        <span>(万元)</span>
+                    <!-- 第三个悬浮框 -->
+                    <div class="tabs-container" id="container3">
+                        <div class="overview-panel">
+                            <div class="overview-data">
+                                <div class="col-lg-6 overview-block">
+                                    <div>
+                                        <div>总概算</div>
+                                        <div class="cost-detail">
+                                            <span class="font-num">5000</span>
+                                            <span>(万元)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 overview-block">
+                                    <div>
+                                        <div>总项目投资</div>
+                                        <div class="cost-detail">
+                                            <span class="font-num">7000</span>
+                                            <span>(万元)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 overview-block">
+                                    <div>
+                                        <div>实际投资完成量</div>
+                                        <div class="cost-detail">
+                                            <span class="font-num">1000</span>
+                                            <span>(万元)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 overview-block">
+                                    <div>
+                                        <div>实际投资拨付</div>
+                                        <div class="cost-detail">
+                                            <span class="font-num">800</span>
+                                            <span>(万元)</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 overview-block">
-                                <div>
-                                    <div>总项目投资</div>
-                                    <div class="cost-detail">
-                                        <span class="font-num">7000</span>
-                                        <span>(万元)</span>
-                                    </div>
-                                </div>
+                            <div class="overview-map">
+                                <div id="overview_map" style="height: 400px;width: 350px;margin: 0 auto;"></div>
                             </div>
-                            <div class="col-lg-6 overview-block">
-                                <div>
-                                    <div>实际投资完成量</div>
-                                    <div class="cost-detail">
-                                        <span class="font-num">1000</span>
-                                        <span>(万元)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 overview-block">
-                                <div>
-                                    <div>实际投资拨付</div>
-                                    <div class="cost-detail">
-                                        <span class="font-num">800</span>
-                                        <span>(万元)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="overview-map">
-                            <div id="overview_map" style="height: 400px;width: 350px;margin: 0 auto;"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </shiro:hasRole>
+
+        <shiro:hasAnyRolesRole name="reporter, checker">
+            <div class="wrapper wrapper-content" id="main_content">
+            </div>
+        </shiro:hasAnyRolesRole>
         <div class="footer">
             <div class="pull-right">
                 <strong>智慧监管</strong>

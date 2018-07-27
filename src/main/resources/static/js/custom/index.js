@@ -1090,17 +1090,10 @@ $(function () {
 
 
 
-    /*var map = new BMap.Map("allmap");
-           var point = new BMap.Point(116.331398,39.897445);
-           map.centerAndZoom(point,12); */
-    /*
-    var marker = new BMap.Marker(point);        // 创建标注
-    map.addOverlay(marker); */                    // 将标注添加到地图中
-
     // 百度地图API功能
     var map = new BMap.Map("allmap", { mapType: BMAP_HYBRID_MAP });
     var point = new BMap.Point(106.630905, 26.674511);
-    map.centerAndZoom(point, 8); // 初始化地图，设置中心店坐标和地图级别
+    map.centerAndZoom(point, 9); // 初始化地图，设置中心店坐标和地图级别
 
 
     map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
@@ -1146,7 +1139,7 @@ $(function () {
 
         // 定义展示数据
         var str = [
-            "<div class='map-tips'><label>水库：</label><span class='plant-name'>" + data.plant_name + "</span></div>",
+            "<div class='map-tips'><label>水库：</label><span class='plant-name'>" + data.plantName + "</span></div>",
             "<div class='map-tips'><label>位置：</label><span>" + data.location + "</span></div>",
             // "<label>类型:</label><span>" + data.dam_type + "</span><br/>",
             "<div class='map-tips'><label>规模：</label><span>" + data.scale + "</span></div>",
@@ -1184,6 +1177,8 @@ $(function () {
                 //lineHeight: "26px"
             });
             marker.setLabel(label);
+            marker.setTop(true,999);
+
             /* var opts = { width: 120, height: 150, title: "详细信息" };
             var infoWindow = new BMap.InfoWindow(detail, opts);
             map.openInfoWindow(infoWindow, point); */
@@ -1194,19 +1189,28 @@ $(function () {
             var label = this.getLabel();
             label.setContent("");//设置标签内容为空
             label.setStyle({ border: "none", width: "0px", padding: "0px" });//设置标签边框宽度为0
+            marker.setTop(false);
         });
 
         /*  marker.addEventListener("mouseout", function (e) {
              map.closeInfoWindow();//设置标签内容为空
          }); */
     }
-
+    $.ajax({
+        url: "index/getallbaseinfo",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+            allData = data.data;
+            /*allData = [{ "latitude": 26.9852206, "longitude": 107.7936172, "plant_name": "黄平县印地坝水库", "location": "黄平县旧州镇境内", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "scale": "中型", "level": "Ⅲ", "overview": "黄平县印地坝水库工程位于黄平县旧州镇境内，坝址位于舞阳河支流冷水河段，水库正常蓄水位720m，死水位693m，设计洪水位722.24m（P=2%），校核洪水位723.27m（P=0.2%）；水库总库容为1462万m3，正常蓄水位相应库容为1154万m3，死库容为50万m3，兴利库容为1104万m3。印地坝水库是以城镇供水、农田灌溉和农村人畜饮水为建设任务的中型水库工程。", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "主要任务：城镇供水；农田灌溉和农村人畜饮水。\n主要建筑物：水库枢纽工程由碾压混凝土重力坝、坝顶溢流表孔、坝 身取水兼放空建筑物及右岸山体处理等组成。" },
+                { "latitude": 27.270933, "longitude": 108.383663, "plant_name": "镇远县天印水库", "location": "镇远县都坪镇天印村", "scale": "中型", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "level": "Ⅲ", "overview": "天印水库拟建于龙江河中游右岸一级支流龙洞河上，坝址在镇远县都坪镇天印村，距龙洞河汇口约4km。天印水库坝址以上集雨面积85.3km2，多年平均年径流量4644万m3，多年平均流量1.47 m3/s，水库具有年调节性能。水库正常蓄水位592.5m，相应库容941万m3，死水位568.5m，死库容67万m3，兴利库容874万m3，总库容1074万m3。水库工程等别为III等，工程规模为中型。 天印水库工程任务为供水、灌溉。水库供水范围为镇远县的都坪、江古和岑巩县的龙田、平庄4个乡镇，设计水平年（2030年）总", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "" }]*/
+            for (var i = 0; i < allData.length; i++) {
+                createMarker(allData[i]);
+            }
+        }
+    });
     // var allData = [[106.630905, 26.674511, "小石", "28y", "170cm", "70kg"], [108.259864, 27.944777, "小王", "28y", "160cm", "50kg"]];
-    var allData = [{ "latitude": 26.9852206, "longitude": 107.7936172, "plant_name": "黄平县印地坝水库", "location": "黄平县旧州镇境内", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "scale": "中型", "level": "Ⅲ", "overview": "黄平县印地坝水库工程位于黄平县旧州镇境内，坝址位于舞阳河支流冷水河段，水库正常蓄水位720m，死水位693m，设计洪水位722.24m（P=2%），校核洪水位723.27m（P=0.2%）；水库总库容为1462万m3，正常蓄水位相应库容为1154万m3，死库容为50万m3，兴利库容为1104万m3。印地坝水库是以城镇供水、农田灌溉和农村人畜饮水为建设任务的中型水库工程。", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "主要任务：城镇供水；农田灌溉和农村人畜饮水。\n主要建筑物：水库枢纽工程由碾压混凝土重力坝、坝顶溢流表孔、坝 身取水兼放空建筑物及右岸山体处理等组成。" },
-        { "latitude": 27.270933, "longitude": 108.383663, "plant_name": "镇远县天印水库", "location": "镇远县都坪镇天印村", "scale": "中型", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "level": "Ⅲ", "overview": "天印水库拟建于龙江河中游右岸一级支流龙洞河上，坝址在镇远县都坪镇天印村，距龙洞河汇口约4km。天印水库坝址以上集雨面积85.3km2，多年平均年径流量4644万m3，多年平均流量1.47 m3/s，水库具有年调节性能。水库正常蓄水位592.5m，相应库容941万m3，死水位568.5m，死库容67万m3，兴利库容874万m3，总库容1074万m3。水库工程等别为III等，工程规模为中型。 天印水库工程任务为供水、灌溉。水库供水范围为镇远县的都坪、江古和岑巩县的龙田、平庄4个乡镇，设计水平年（2030年）总", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "" }]
-    for (var i = 0; i < allData.length; i++) {
-        createMarker(allData[i]);
-    }
+
     /* $(function () {
 
         var allData = [[106.630905, 26.674511, "小石", "28y", "170cm", "70kg"], [108.259864, 27.944777, "小王", "28y", "160cm", "50kg"]];
@@ -1272,22 +1276,22 @@ $(function () {
      */
     function addProjectDetail(data) {
         var strHtml = [
-            '<div class="panel-detail-title">' + data.plant_name + '</div>',
+            '<div class="panel-detail-title">' + data.plantName + '</div>',
             '<div class="col-lg-12 panel-item"><div><label>水库规模：</label>',
             '<span id="scale">' + data.scale + '</span></div>',
             ' <div><label>水库等级：</label>',
             '<span id="level">' + data.level + '</span></div>',
             '<div><label>所属单位：</label>',
-            '<span id="legal_representative_name">' + data.legal_representative_name + '</span></div>',
+            '<span id="legal_representative_name">' + data.legalRepresentativeName + '</span></div>',
             '<div><label>所在位置：</label>',
             '<span id="location">' + data.location + '</span></div>',
             '<div><label>主要功能：</label>',
-            '<span id="project_task">' + data.project_task + '</span></div>',
+            '<span id="project_task">' + data.projectTask + '</span></div>',
 
             '<div><label>水库概述：</label>',
             '<span id="overview">' + data.overview + '</span></div>'
         ]
-        $("#plant_name").text(data.plant_name);
+        $("#plant_name").text(data.plantName);
         $("#item_detail").html(strHtml.join(""));
     }
 
@@ -1424,6 +1428,18 @@ $(function () {
                     data: ['总概算', '总项目投资', '实际投资完成量', '实际投资拨付'],
                     axisTick: {
                         alignWithLabel: true
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            // 使用深浅的间隔色
+                            color: '#565656'
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#fff',
+                            fontFamily: 'Microsoft YaHei'
+                        }
                     }
                 }
             ],
@@ -1437,11 +1453,17 @@ $(function () {
                     axisLine: {
                         show: false,
                     },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#f0ab58',
+                            fontFamily: 'Lccd'
+                        }
+                    },
                     splitLine: {
                         show: true,  //显示分割线
                         lineStyle: {
                             // 使用深浅的间隔色
-                            color: '#3a3939',
+                            color: '#565656',
                             type: 'dotted'
                         }
                     }
