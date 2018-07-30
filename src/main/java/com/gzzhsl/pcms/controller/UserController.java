@@ -7,6 +7,7 @@ import com.gzzhsl.pcms.entity.PersonInfo;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.PersonService;
+import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.HttpServletRequestUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
@@ -19,13 +20,12 @@ import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
 
@@ -36,6 +36,8 @@ public class UserController {
 
     @Autowired
     private PersonService personService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/personinfo")
     public String personInfo() {
@@ -50,6 +52,15 @@ public class UserController {
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(userInfo, userInfoVO);
+        PersonInfo thisPerson = userInfo.getPersonInfo();
+        if (thisPerson != null) {
+            if (thisPerson.getProfileImg() != null || "".equals(thisPerson.getProfileImg())) {
+                userInfoVO.setProfileImg(thisPerson.getProfileImg());
+            }
+            if (thisPerson.getNickName() != null || "".equals(thisPerson.getNickName())) {
+                userInfoVO.setNickname(thisPerson.getNickName());
+            }
+        }
         return ResultUtil.success(userInfoVO);
     }
 
@@ -94,26 +105,38 @@ public class UserController {
 
     @PostMapping("/personinfosubmit")
     @ResponseBody
-    public ResultVO personInfoSubmit(HttpServletRequest request){
-        System.out.println("/personinfosubmit called");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String personInfoStr = HttpServletRequestUtil.getString(request, "personInfoStr");
-        try {
-            PersonInfo personInfo = objectMapper.readValue(personInfoStr, PersonInfo.class);
-            UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-            if (userInfo.getPersonInfo() != null) {
-                log.error("【个人信息】 重复提交个人信息");
-                throw new SysException(SysEnum.PERSON_INFO_DUPLICATED);
-            }
-            personInfo.setUserInfo(userInfo);
-            personInfo.setCreateTime(new Date());
-            PersonInfo personInfoRt = personService.save(personInfo);
-            if (personInfoRt == null || personInfoRt.getPersonId() == null) {
-                log.error("【个人信息】 个人信息持久化错误， 参数不正确");
-                throw new SysException(SysEnum.DATA_SUBMIT_FAILED);
-            }
-        } catch (IOException e) {
-            log.error("【个人信息】 个人信息提交错误， 参数不正确");
+    public ResultVO personInfoSubmit(@RequestBody @Valid PersonInfoVO personInfoVO, BindingResult bindingResult){
+        if (personInfoVO == null) {
+            log.error("【个人信息】 个人信息错误，没有收到有效的personInfoVO , " +
+                    "实际personInfoVO = {}", personInfoVO);
+            throw new SysException(SysEnum.PERSON_INFO_ERROR);
+        }
+        if(bindingResult.hasErrors()){
+            log.error("【个人信息】参数验证错误， 参数不正确 personInfoVO = {}， 错误：{}", personInfoVO, bindingResult.getFieldError().getDefaultMessage());
+            throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
+        }
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+
+        PersonInfo thisPerson = thisUser.getPersonInfo();
+        if (thisPerson != null) {
+            thisPerson.setName(personInfoVO.getName());
+            thisPerson.setTel(personInfoVO.getTel());
+            thisPerson.setQq(personInfoVO.getQq());
+            thisPerson.setEmail(personInfoVO.getEmail());
+            thisPerson.setId_num(personInfoVO.getId_num());
+            thisPerson.setTitle(personInfoVO.getTitle());
+            thisPerson.setAddress(personInfoVO.getAddress());
+        } else {
+            thisPerson = new PersonInfo();
+            BeanUtils.copyProperties(personInfoVO, thisPerson);
+            thisPerson.setCreateTime(new Date());
+        }
+        thisPerson.setUserInfo(thisUser);
+        thisPerson.setUpdateTime(new Date());
+        PersonInfo personInfoRt = personService.save(thisPerson);
+        if (personInfoRt == null || personInfoRt.getPersonId() == null) {
+            log.error("【个人信息】 个人信息持久化错误， 参数不正确");
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED);
         }
         return ResultUtil.success();

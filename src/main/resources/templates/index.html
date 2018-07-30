@@ -49,7 +49,7 @@
                 <li class="nav-header">
                     <div class="dropdown profile-element">
                         <span>
-                            <img alt="image" class="img-circle" src="img/portait_logo.png"/>
+                            <img id="profile_img" alt="image" class="img-circle"/>
                         </span>
                         <a id="person_menu" data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">
@@ -661,10 +661,174 @@
             </div>
         </shiro:hasRole>
 
-        <shiro:hasAnyRolesRole name="reporter, checker">
+        <shiro:hasAnyRoles name="reporter, checker">
             <div class="wrapper wrapper-content" id="main_content">
+                <div class="overview-mask"></div>
+                <img src="img/background/page_bg.gif" class="overview-img">
+                <div class="col-lg-8">
+
+                    <div class="row">
+                        <div class="overview-btn">
+                            <div class="manage-btn">
+                                <button class="btn btn-primary dim btn-large-dim col-lg-3" type="button">
+                                    <i class="fa fa-pencil"></i>
+                                    <span>项目填报</span>
+                                </button>
+                                <button class="btn btn-warning dim btn-large-dim col-lg-3" type="button">
+                                    <i class="fa fa-folder-open"></i>
+                                    <span>项目管理</span>
+                                </button>
+                                <button class="btn btn-success dim btn-large-dim col-lg-3" type="button">
+                                    <i class="fa fa-file"></i>
+                                    <span>招标管理</span>
+                                </button>
+                                <button class="btn btn-primary dim btn-large-dim col-lg-3" type="button">
+                                    <i class="fa fa-pencil"></i>
+                                    <span>投资管理</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="public-news">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <span>公告</span>
+                                </div>
+                                <div class="ibox-content no-padding">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <a>国家重大建设项目库网络培训服务开通啦</a>
+                                            <div>
+                                                <div class="public-depart">
+                                                    <span>贵州水利厅</span>
+                                                </div>
+                                                <div class="public-time">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <span>2017-07-11</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <a>国家重大建设项目库网络培训服务开通啦</a>
+                                            <div>
+                                                <div class="public-depart">
+                                                    <span>贵州水利厅</span>
+                                                </div>
+                                                <div class="public-time">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <span>2017-07-11</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <a>国家重大建设项目库网络培训服务开通啦</a>
+                                            <div>
+                                                <div class="public-depart">
+                                                    <span>贵州水利厅</span>
+                                                </div>
+                                                <div class="public-time">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <span>2017-07-11</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item ">
+                                            <a>国家重大建设项目库网络培训服务开通啦</a>
+                                            <div>
+                                                <div class="public-depart">
+                                                    <span>贵州水利厅</span>
+                                                </div>
+                                                <div class="public-time">
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <span>2017-07-11</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="item-desc">
+                        <div class="item-name">
+                            黄平县印地坝水库
+                        </div>
+                        <div class="item-others">
+                            <div>
+                                <label>法人：</label>
+                                <span>王XX</span>
+                            </div>
+                            <div>
+                                <label>规模：</label>
+                                <span>中型</span>
+                            </div>
+                            <div>
+                                <label>等级：</label>
+                                <span>Ⅲ</span>
+                            </div>
+                            <div>
+                                <label>手机：</label>
+                                <span>139xxxxxxxx</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backlog-list">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>待办</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <ul class="list-group clear-list m-t">
+                                    <li class="list-group-item fist-item">
+                                        <span class="pull-right">
+                                            09:00 pm
+                                        </span>
+                                        <span class="label label-success">1</span> 流程审批
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">
+                                            10:16 am
+                                        </span>
+                                        <span class="label label-info">2</span> 月报审核
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">
+                                            08:22 pm
+                                        </span>
+                                        <span class="label label-primary">3</span> 项目审批
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">
+                                            11:06 pm
+                                        </span>
+                                        <span class="label label-default">4</span> 招标书
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">
+                                            12:00 am
+                                        </span>
+                                        <span class="label label-primary">5</span> 流程审批
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </shiro:hasAnyRolesRole>
+        </shiro:hasAnyRoles>
         <div class="footer">
             <div class="pull-right">
                 <strong>智慧监管</strong>

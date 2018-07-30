@@ -32,11 +32,14 @@ public class PersonInfo {
     private String id_num;
     private String title;
     private String address;
+    private String province;
+    private String city;
+    private String country;
     @JsonBackReference
     @OneToOne
     @JoinColumn(name = "user_id")
     private UserInfo userInfo;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "wechat_auth_id")
     private WechatAuth wechatAuth;
     private Date createTime;

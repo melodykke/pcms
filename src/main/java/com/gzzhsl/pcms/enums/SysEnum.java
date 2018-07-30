@@ -15,6 +15,9 @@ public enum SysEnum {
     DATA_SUBMIT_FAILED(1004, "数据提交错误"),
     PERSON_INFO_DUPLICATED(1005, "重复提交个人信息"),
     USER_INFO_DUPLICATED(1006, "存在重复的用户名"),
+    PERSON_INFO_ERROR(1007, "提交个人信息错误"),
+
+    WECHAT_BINDING_ERROR(1010, "微信绑定出错，请联系管理员！"),
 
     MONTHLY_REPORT_IMG_ERROR(1100, "月报图片错误"),
     MONTHLY_REPORT_ERROR(1101, "月报错误"),

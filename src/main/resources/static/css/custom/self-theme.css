@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'Lccd';
-    src: url('../fonts/Lccd.eot');
+    src: url('../../fonts/Lccd.eot');
     src: local('fontName Regular'),
          local('fontName'),
-         url('../fonts/Lccd.woff') format('woff'),
-         url('../fonts/Lccd.ttf') format('truetype'),
-         url('../fonts/Lccd.svg#fontName') format('svg');
+         url('../../fonts/Lccd.woff') format('woff'),
+         url('../../fonts/Lccd.ttf') format('truetype'),
+         url('../../fonts/Lccd.svg#fontName') format('svg');
 }  
 html, body {
     height: 100%;
@@ -551,4 +551,107 @@ li.active>a> .control-tips {
 }
 .tip-item {
 	background: #58b495;
+}
+
+/* -------------------------------------------------业主方首页----------------------------------------------- */
+.item-desc {
+    border: 1px solid #fff;
+    background: #fff;
+    margin-bottom: 20px;
+    font-weight: bold;
+    height: 155px;
+    padding: 0 15px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.item-name {
+    font-size: 18px;
+    padding: 10px 5px;
+    color: #58b495;
+}
+.item-others>div {
+    padding: 2px 5px;
+}
+.manage-tips {
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 1px solid #000;
+    font-weight: bold;
+    margin: 0 30px;
+    padding-bottom: 5px;
+}
+.manage-btn {
+    text-align: right;
+}
+.manage-btn>button {
+    box-shadow: none!important;
+    width: 23%;
+}
+.manage-btn>button>span {
+    font-size: 22px;
+    line-height: 90px;
+    top: -3px;
+    position: relative;
+}
+.overview-size {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.backlog-list>.ibox>.ibox-title {
+    border-bottom: 1px solid #e0e0e0;
+}
+.backlog-list>.ibox>.ibox-content {
+    padding-top: 0;
+}
+/* 公告 */
+.public-news .ibox-title {
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    color: #58b495;
+    font-weight: bold;
+}
+.public-news .ibox-title>span {
+    font-size: 16px;
+}
+.public-news .ibox-content.no-padding {
+    background: none;
+}
+.public-news .ibox-content.no-padding>.list-group small {
+    text-align: right;
+}
+/* 背景 */
+.overview-img {
+    width: calc(100vw - 220px);
+    position: absolute;
+    left: 0;
+    bottom: 38px;
+}
+.overview-mask {
+    width: calc(100vw - 220px);
+    height: calc(100vh - 98px);
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #fff;
+}
+.public-news>.ibox.float-e-margins {
+    box-shadow: none
+}
+.public-news .ibox-content.no-padding>.list-group>.list-group-item>a {
+    font-size: 16px;
+    color: #4384c7;
+}
+.public-news .ibox-content.no-padding>.list-group>.list-group-item {
+    border: none;
+}
+.public-news .ibox-content.no-padding>.list-group {
+    padding: 10px;
+}
+.public-depart {
+    display: inline-block;
+}
+.public-time {
+    float: right;
+}
+.list-group-item>div {
+    margin-top: 5px;
 }

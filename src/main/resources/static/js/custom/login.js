@@ -17,7 +17,7 @@ $(function () {
     var websocket = null;
     console.log(111111)
     if ('WebSocket' in window) {
-        websocket = new WebSocket('ws://sell01.natapp1.cc/wechatloginwebsocket')
+        websocket = new WebSocket('ws://pcms.natapp1.cc/wechatloginwebsocket')
     } else {
         alert('该浏览器不支持ws！');
     }

@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 public class PersonInfo2VO {
     public static PersonInfoVO convert(PersonInfo personInfo) {
         PersonInfoVO personInfoVO = new PersonInfoVO();
-        if (personInfo.getId_num() != null || personInfo.getId_num() != "") {
+        if (personInfo.getId_num() != null || "".equals(personInfo.getId_num())) {
             String iDNum = personInfo.getId_num();
         // 隐藏身份证部分位置数字
             StringBuilder sb = new StringBuilder(personInfo.getId_num());

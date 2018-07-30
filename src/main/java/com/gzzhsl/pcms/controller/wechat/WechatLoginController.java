@@ -15,9 +15,12 @@ import com.gzzhsl.pcms.dto.UserAccessToken;
 import com.gzzhsl.pcms.dto.WechatUser;
 import com.gzzhsl.pcms.entity.PersonInfo;
 import com.gzzhsl.pcms.entity.WechatAuth;
+import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.enums.WechatAuthStateEnum;
+import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.PersonService;
 import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.service.WeChatLoginService;
 import com.gzzhsl.pcms.service.WechatAuthService;
 import com.gzzhsl.pcms.service.impl.WechatLoginWebSocket;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
@@ -33,6 +36,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +64,8 @@ public class WechatLoginController {
     private PersonService personService;
     @Autowired
     private WechatLoginWebSocket wechatLoginWebSocket;
-
+    @Autowired
+    private WeChatLoginService weChatLoginService;
 
 	@RequestMapping(value = "/logincheck", method = { RequestMethod.GET })
 	public String doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -100,8 +105,8 @@ public class WechatLoginController {
             PersonInfo personInfo = WechatUtil.getPersonInfoFromRequest(user);
             auth = new WechatAuth();
             auth.setOpenId(openId);
-            auth.setPersonInfo(personInfo);
-            WechatAuth wechatAuthRt = wechatAuthService.register(auth);
+            personInfo.setWechatAuth(auth);
+            personService.save(personInfo);
             wechatLoginWebSocket.sendMsg(ResultUtil.failed(user));
             return "mobileBindingNote";
         } else if (userInfo == null) {
@@ -123,7 +128,7 @@ public class WechatLoginController {
         long timeStamp = System.currentTimeMillis();
       /*  String content = "{aaauserIdaaa:" + thisUser.getUserId()+",aaacreateTimeaaa:"+timeStamp+"}";*/
         try {
-            String longUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc58eaa0636f208e6&redirect_uri=http://sell01.natapp1.cc/wechatlogin/logincheck&response_type=code&scope=snsapi_userinfo&time="+ new Date()+"#wechat_redirect";
+            String longUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc58eaa0636f208e6&redirect_uri=http://pcms.natapp1.cc/wechatlogin/logincheck&response_type=code&scope=snsapi_userinfo&time="+ new Date()+"#wechat_redirect";
             String shortUrl = ShortNetAddressUtil.getShortURL(longUrl);
             BitMatrix qRCodeImg = CodeUtil.generateQRCodeStream(shortUrl, response);
             MatrixToImageWriter.writeToStream(qRCodeImg, "png", response.getOutputStream());
@@ -168,18 +173,7 @@ public class WechatLoginController {
         String openId = (String) map.get("openId");
         String username = (String) map.get("username");
         String password = (String) map.get("password");
-        UserInfo userInfo = userService.getUserByUsername(username);
-        if (userInfo == null) {
-            return ResultUtil.failed("查无此用户！！");
-        } else {
-            if (!userInfo.getPassword().equals(UserUtil.getEncriPwd(password))){
-                return ResultUtil.failed("账户密码不正确！！");
-            } else {
-                Integer intRt = userService.updateUserOpenId(openId, userInfo.getUserId());
-                System.out.println(intRt);
-                return ResultUtil.success();
-            }
-        }
+        return weChatLoginService.doWeChatBinding(openId, username, password);
     }
 
 

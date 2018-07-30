@@ -1,6 +1,7 @@
 package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.entity.PersonInfo;
+import com.gzzhsl.pcms.entity.WechatAuth;
 import com.gzzhsl.pcms.repository.PersonRepository;
 import com.gzzhsl.pcms.service.PersonService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
@@ -28,5 +29,15 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonInfo getByUserInfo(UserInfo userInfo) {
         return personRepository.findByUserInfo(userInfo);
+    }
+
+    @Override
+    public PersonInfo getByWeChatAuth(WechatAuth wechatAuth) {
+        return personRepository.findByWechatAuth(wechatAuth);
+    }
+
+    @Override
+    public void deleteByPersonId(String personId) {
+        personRepository.deleteByPersonId(personId);
     }
 }

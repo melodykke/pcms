@@ -13,8 +13,14 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PersonRepositoryTest {
+
+
     @Autowired
     private PersonRepository personRepository;
+    @Test
+    public void deleteByPersonId() throws Exception {
+        personRepository.deleteByPersonId("21312321");
+    }
 
     @Test
     public void save() throws Exception {

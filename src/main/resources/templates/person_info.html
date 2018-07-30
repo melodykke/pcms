@@ -38,20 +38,48 @@
     </div>
 </div>
 
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
+<div class="wrapper wrapper-content">
+    <div class="row animated fadeInRight">
+        <div class="col-md-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>用户个人信息 <small> 下列每项指标需逐项谨慎填写，部分项一经审核不可更改。 </small></h5>
+                    <h5>个人信息设置</h5>
+                </div>
+                <div>
+                    <div class="ibox-content no-padding border-left-right">
+                        <img alt="image" class="img-responsive" id="detail_profile_img">
+                    </div>
+                    <div class="ibox-content profile-content">
+                        <h4><strong id="nickname"></strong></h4>
+                        <p><i class="fa fa-map-marker"></i> <small id="country"></small> <small id="province"></small> <small id="city"></small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>详细信息</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
                         </a>
-
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="ibox-content">
+
                     <form id="person_info_form" class="form-horizontal">
                         <div class="form-group"><label class="col-sm-2 control-label">姓名: </label>
                             <div class="col-sm-10"><input id="person_name" type="text" name="name" class="form-control required"></div>
@@ -80,15 +108,18 @@
                         <div class="form-group"><label class="col-sm-2 control-label">通讯地址</label>
                             <div class="col-sm-10"><input id="address" type="text" name="address" class="form-control required"></div>
                         </div>
-                        <div id="person_info_ops_btns" class="form-group">
-                            <div class="col-sm-4 col-sm-offset-2">
-                                <button id="reset" class="btn btn-white">清空</button>
-                                <button id="person_info_submit" class="btn btn-primary">保存</button>
-                            </div>
-                        </div>
+                        <br/>
+                        <br/>
                     </form>
+                    <div id="person_info_ops_btns" class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button id="person_detail_modify" class="btn btn-white">修改</button>
+                            <button id="person_info_submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

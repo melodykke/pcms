@@ -13,6 +13,7 @@ $(function () {
 
     var contentDiv = $('#main_content');
 
+
     $('#project_monthly_report').click(function () {
         $.ajax({
             url: 'baseinfo/hasbaseinfo',
@@ -94,8 +95,17 @@ $(function () {
                 // 从返回的JSON当中获取product对象的信息，并赋值给表单
                 var userInfo = data.data;
                 $('#username .font-bold').html(userInfo.name);
-                $('#name').html(userInfo.username + ' <b class="caret"></b>');
                 dows(userInfo.username);
+                if (data.data.profileImg === null) {
+                    $('#profile_img').attr("src", "img/portait_logo.png")
+                } else {
+                    $('#profile_img').attr("src", data.data.profileImg)
+                }
+                if (data.data.nickname === null) {
+                    $('#name').html(userInfo.username + ' <b class="caret"></b>');
+                } else {
+                    $('#name').html(data.data.nickname + ' <b class="caret"></b>');
+                }
             }
         });
     }
@@ -427,8 +437,7 @@ $(function () {
         var flag = false;
         $.getJSON('user/haspersoninfo', function (data) {
             flag = true;
-        })
-
+        });
         return flag;
     }
 
@@ -481,23 +490,20 @@ $(function () {
         },
         submitHandler: function (form) {
             if (confirm("若以上信息确认无误，请确认提交!")) {
-                var formData = new FormData();
-                var personInfo = {};  // 空对象
-                personInfo.name = $('#person_name').val();
-                personInfo.tel = $('#tel').val();
-                personInfo.qq = $('#qq').val();
-                personInfo.email = $('#email').val();
-                personInfo.id_num = $('#id_num').val();
-                personInfo.title = $('#title').val();
-                personInfo.address = $('#address').val();
-                formData.append('personInfoStr', JSON.stringify(personInfo));
+                var personInfoVO = {};
+                personInfoVO.name = $('#person_name').val();
+                personInfoVO.tel = $('#tel').val();
+                personInfoVO.qq = $('#qq').val();
+                personInfoVO.email = $('#email').val();
+                personInfoVO.id_num = $('#id_num').val();
+                personInfoVO.title = $('#title').val();
+                personInfoVO.address = $('#address').val();
                 $.ajax({
-                    url: savePersonInfoUrl,
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    cache: false,
+                    url: "user/personinfosubmit",
+                    type: "POST",
+                    data: JSON.stringify(personInfoVO),
+                    contentType: "application/json",
+                    dataType: "json",
                     success: function (data) {
                         if (data.code == 1002) {
                             $('#person_info_modal').modal('hide');
@@ -589,7 +595,7 @@ $(function () {
 
     /*websocket*/
     function reconnect(username) {
-        websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
+        websocket = new WebSocket('ws://pcms.natapp1.cc/websocket/' + username)
     }
 
     function dows(username) {
@@ -609,7 +615,7 @@ $(function () {
             }
         }
         if ('WebSocket' in window) {
-            websocket = new WebSocket('ws://sell01.natapp1.cc/websocket/' + username)
+            websocket = new WebSocket('ws://pcms.natapp1.cc/websocket/' + username)
         } else {
             alert('该浏览器不支持ws！');
         }
@@ -1089,37 +1095,44 @@ $(function () {
 
 
 
+   /* 管理部主页js*/
+    function initMap() {
+        var def = $.Deferred();
+        // 百度地图API功能
+        var map = new BMap.Map("allmap", { mapType: BMAP_HYBRID_MAP });
+        var point = new BMap.Point(106.630905, 26.674511);
+        map.centerAndZoom(point, 8); // 初始化地图，设置中心店坐标和地图级别
 
-    // 百度地图API功能
-    var map = new BMap.Map("allmap", { mapType: BMAP_HYBRID_MAP });
-    var point = new BMap.Point(106.630905, 26.674511);
-    map.centerAndZoom(point, 9); // 初始化地图，设置中心店坐标和地图级别
+        map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
 
 
-    map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+        map.setCurrentCity("贵阳");
+        map.enableScrollWheelZoom(true);
 
-    //向地图中添加缩放控件
-    var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
-    map.addControl(ctrl_nav);
+        //控制地图的最大和最小缩放级别
+        map.setMinZoom(8);
+        //map.setMaxZoom(18);
 
-
-    map.setCurrentCity("贵阳");
-    map.enableScrollWheelZoom(true);
-
-    //控制地图的最大和最小缩放级别
-    map.setMinZoom(8);
-    //map.setMaxZoom(18);
-
-    var b = new BMap.Bounds(new BMap.Point(102.795069, 24.879701), new BMap.Point(111.69936, 29.04118)); // 范围 左下角，右上角的点位置
-    try {    // js中尽然还有try catch方法，可以避免bug引起的错误
-        BMapLib.AreaRestriction.setBounds(map, b); // 已map为中心，已b为范围的地图
-    } catch (e) {
-        // 捕获错误异常
-        alert(e);
+        var b = new BMap.Bounds(new BMap.Point(102.795069, 24.879701), new BMap.Point(111.69936, 29.04118)); // 范围 左下角，右上角的点位置
+        try {    // js中尽然还有try catch方法，可以避免bug引起的错误
+            BMapLib.AreaRestriction.setBounds(map, b); // 已map为中心，已b为范围的地图
+        } catch (e) {
+            // 捕获错误异常
+            alert(e);
+        }
+        // 监听地图模块加载完成
+        map.addEventListener("tilesloaded", function () {
+            def.resolve(map);
+        })
+        return def.promise();
     }
 
     // 地图打点
-    function createMarker(data) {
+    function createMarker(data, map) {
         var myIcon = new BMap.Icon("markers1.png", new BMap.Size(23, 25), {
             // 指定定位位置。
             // 当标注显示在地图上时，其所指向的地理位置距离图标左上
@@ -1196,19 +1209,23 @@ $(function () {
              map.closeInfoWindow();//设置标签内容为空
          }); */
     }
-    $.ajax({
-        url: "index/getallbaseinfo",
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
-            allData = data.data;
-            /*allData = [{ "latitude": 26.9852206, "longitude": 107.7936172, "plant_name": "黄平县印地坝水库", "location": "黄平县旧州镇境内", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "scale": "中型", "level": "Ⅲ", "overview": "黄平县印地坝水库工程位于黄平县旧州镇境内，坝址位于舞阳河支流冷水河段，水库正常蓄水位720m，死水位693m，设计洪水位722.24m（P=2%），校核洪水位723.27m（P=0.2%）；水库总库容为1462万m3，正常蓄水位相应库容为1154万m3，死库容为50万m3，兴利库容为1104万m3。印地坝水库是以城镇供水、农田灌溉和农村人畜饮水为建设任务的中型水库工程。", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "主要任务：城镇供水；农田灌溉和农村人畜饮水。\n主要建筑物：水库枢纽工程由碾压混凝土重力坝、坝顶溢流表孔、坝 身取水兼放空建筑物及右岸山体处理等组成。" },
-                { "latitude": 27.270933, "longitude": 108.383663, "plant_name": "镇远县天印水库", "location": "镇远县都坪镇天印村", "scale": "中型", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "level": "Ⅲ", "overview": "天印水库拟建于龙江河中游右岸一级支流龙洞河上，坝址在镇远县都坪镇天印村，距龙洞河汇口约4km。天印水库坝址以上集雨面积85.3km2，多年平均年径流量4644万m3，多年平均流量1.47 m3/s，水库具有年调节性能。水库正常蓄水位592.5m，相应库容941万m3，死水位568.5m，死库容67万m3，兴利库容874万m3，总库容1074万m3。水库工程等别为III等，工程规模为中型。 天印水库工程任务为供水、灌溉。水库供水范围为镇远县的都坪、江古和岑巩县的龙田、平庄4个乡镇，设计水平年（2030年）总", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "" }]*/
-            for (var i = 0; i < allData.length; i++) {
-                createMarker(allData[i]);
-            }
-        }
-    });
+    if ($("#allmap") && $("#allmap").length > 0) {
+        $.when(initMap()).done(function (map) {
+            $.ajax({
+                url: "index/getallbaseinfo",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    allData = data.data;
+                    /*allData = [{ "latitude": 26.9852206, "longitude": 107.7936172, "plant_name": "黄平县印地坝水库", "location": "黄平县旧州镇境内", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "scale": "中型", "level": "Ⅲ", "overview": "黄平县印地坝水库工程位于黄平县旧州镇境内，坝址位于舞阳河支流冷水河段，水库正常蓄水位720m，死水位693m，设计洪水位722.24m（P=2%），校核洪水位723.27m（P=0.2%）；水库总库容为1462万m3，正常蓄水位相应库容为1154万m3，死库容为50万m3，兴利库容为1104万m3。印地坝水库是以城镇供水、农田灌溉和农村人畜饮水为建设任务的中型水库工程。", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "主要任务：城镇供水；农田灌溉和农村人畜饮水。\n主要建筑物：水库枢纽工程由碾压混凝土重力坝、坝顶溢流表孔、坝 身取水兼放空建筑物及右岸山体处理等组成。" },
+                        { "latitude": 27.270933, "longitude": 108.383663, "plant_name": "镇远县天印水库", "location": "镇远县都坪镇天印村", "scale": "中型", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "level": "Ⅲ", "overview": "天印水库拟建于龙江河中游右岸一级支流龙洞河上，坝址在镇远县都坪镇天印村，距龙洞河汇口约4km。天印水库坝址以上集雨面积85.3km2，多年平均年径流量4644万m3，多年平均流量1.47 m3/s，水库具有年调节性能。水库正常蓄水位592.5m，相应库容941万m3，死水位568.5m，死库容67万m3，兴利库容874万m3，总库容1074万m3。水库工程等别为III等，工程规模为中型。 天印水库工程任务为供水、灌溉。水库供水范围为镇远县的都坪、江古和岑巩县的龙田、平庄4个乡镇，设计水平年（2030年）总", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "" }]*/
+                    for (var i = 0; i < allData.length; i++) {
+                        createMarker(allData[i], map);
+                    }
+                }
+            });
+        });
+    }
     // var allData = [[106.630905, 26.674511, "小石", "28y", "170cm", "70kg"], [108.259864, 27.944777, "小王", "28y", "160cm", "50kg"]];
 
     /* $(function () {

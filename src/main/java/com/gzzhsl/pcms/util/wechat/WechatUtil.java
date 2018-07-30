@@ -16,6 +16,7 @@ import javax.net.ssl.TrustManager;
 import com.gzzhsl.pcms.dto.UserAccessToken;
 import com.gzzhsl.pcms.dto.WechatUser;
 import com.gzzhsl.pcms.entity.PersonInfo;
+import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,6 +127,9 @@ public class WechatUtil {
 		PersonInfo personInfo = new PersonInfo();
 		personInfo.setNickName(user.getNickName());
 		personInfo.setGender(user.getSex() + "");
+        personInfo.setProvince(user.getProvince());
+        personInfo.setCity(user.getCity());
+        personInfo.setCountry(user.getCountry());
 		personInfo.setProfileImg(user.getHeadimgurl());
 		personInfo.setEnableStatus(1);
 		return personInfo;
