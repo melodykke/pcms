@@ -9,6 +9,7 @@ import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.MonthlyReportExcelCalcUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
+import com.gzzhsl.pcms.vo.CardVO;
 import com.gzzhsl.pcms.vo.MonthlyReportExcelModel;
 import com.gzzhsl.pcms.vo.ResultVO;
 import org.apache.shiro.SecurityUtils;
@@ -75,4 +76,24 @@ public class ReporterController {
         }
         return ResultUtil.success(monthlyReportExcelModelWithSofarParams);
     }
+
+    @GetMapping("getthiscard")
+    @ResponseBody
+    public ResultVO getThisCard() {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        BaseInfo thisProject = thisUser.getBaseInfo();
+        if (thisProject != null) {
+            CardVO cardVO = new CardVO();
+            cardVO.setPlantName(thisProject.getPlantName());
+            cardVO.setLegalPersonName(thisProject.getLegalPersonName());
+            cardVO.setScale(thisProject.getScale());
+            cardVO.setLevel(thisProject.getLevel());
+            //cardVO.setProjectStatus();
+            return ResultUtil.success(cardVO);
+        } else {
+            return ResultUtil.failed();
+        }
+    }
+
 }

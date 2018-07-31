@@ -6,6 +6,7 @@ $(function () {
     var getoverallfeedbackUrl = "/feedback/getoverallfeedback";
     var saveFilesUrl = '/baseinfo/addfiles';
     var saveBaseInfoUrl = '/baseinfo/savebaseinfo';
+    var getThisCardUrl = 'reporter/getthiscard';
     // 提交个人信息
     var savePersonInfoUrl = '/user/personinfosubmit';
     var rtFileTempPath; // 服务器文件暂存地址
@@ -77,6 +78,7 @@ $(function () {
     getThisProject(getThisProjectUrl);
     getOverallNotification(getoverallnotificationUrl);
     getOverallFeedback(getoverallfeedbackUrl);
+    getThisCard(getThisCardUrl)
     setInterval(function () {
         getOverallNotification(getoverallnotificationUrl);
     }, 30000);
@@ -109,7 +111,38 @@ $(function () {
             }
         });
     }
+    function getThisCard(url) {
+        $.getJSON(url, function (data) {
+            if (data.code == 1002) {
+                console.log(data)
+                var card = data.data;
+                var cardHtml = '<div class="item-name">\n' +
+                    '                            '+ card.plantName +'\n' +
+                    '                        </div>\n' +
+                    '                        <div class="item-others">\n' +
+                    '                            <div>\n' +
+                    '                                <label>法人：</label>\n' +
+                    '                                <span>'+ card.legalPersonName +'</span>\n' +
+                    '                            </div>\n' +
+                    '                            <div>\n' +
+                    '                                <label>规模：</label>\n' +
+                    '                                <span>'+ card.scale +'</span>\n' +
+                    '                            </div>\n' +
+                    '                            <div>\n' +
+                    '                                <label>等级：</label>\n' +
+                    '                                <span>'+ card.level +'</span>\n' +
+                    '                            </div>\n' +
+                    '                            <div>\n' +
+                    '                                <label>项目状态：</label>\n' +
+                    '                                <span>'+ card.projectStatus +'</span>\n' +
+                    '                            </div>\n' +
+                    '                        </div>';
+                $('#self_card').html(cardHtml);
+            } else {
 
+            }
+        });
+    }
     // 若果有 存入域 否则提示完善资料
     function getThisProject(url) {
         $.getJSON(url, function (data) {
@@ -1101,7 +1134,7 @@ $(function () {
         // 百度地图API功能
         var map = new BMap.Map("allmap", { mapType: BMAP_HYBRID_MAP });
         var point = new BMap.Point(106.630905, 26.674511);
-        map.centerAndZoom(point, 8); // 初始化地图，设置中心店坐标和地图级别
+        map.centerAndZoom(point, 9); // 初始化地图，设置中心店坐标和地图级别
 
         map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
 
@@ -1133,21 +1166,13 @@ $(function () {
 
     // 地图打点
     function createMarker(data, map) {
-        var myIcon = new BMap.Icon("markers1.png", new BMap.Size(23, 25), {
-            // 指定定位位置。
-            // 当标注显示在地图上时，其所指向的地理位置距离图标左上
-            // 角各偏移10像素和25像素。您可以看到在本例中该位置即是
-            // 图标中央下端的尖角位置。
-            anchor: new BMap.Size(10, 25),
-            // 设置图片偏移。
-            // 当您需要从一幅较大的图片中截取某部分作为标注图标时，您
-            // 需要指定大图的偏移位置，此做法与css sprites技术类似。
-            imageOffset: new BMap.Size(0, 0 - 25)   // 设置图片偏移
+        var myIcon = new BMap.Icon("icon/水库点.png", new BMap.Size(25, 25), {
+            imageSize: new BMap.Size(25, 25)
         });
         // 创建标注对象并添加到地图
-        // var marker = new BMap.Marker(point, {icon: myIcon});
+
         var point_item = new BMap.Point(data.longitude, data.latitude);
-        var marker = new BMap.Marker(point_item);
+        var marker = new BMap.Marker(point_item, {icon: myIcon});
         map.addOverlay(marker);
 
         // 定义展示数据
@@ -1205,37 +1230,8 @@ $(function () {
             marker.setTop(false);
         });
 
-        /*  marker.addEventListener("mouseout", function (e) {
-             map.closeInfoWindow();//设置标签内容为空
-         }); */
     }
-    if ($("#allmap") && $("#allmap").length > 0) {
-        $.when(initMap()).done(function (map) {
-            $.ajax({
-                url: "index/getallbaseinfo",
-                type: "GET",
-                dataType: "json",
-                success: function (data) {
-                    allData = data.data;
-                    /*allData = [{ "latitude": 26.9852206, "longitude": 107.7936172, "plant_name": "黄平县印地坝水库", "location": "黄平县旧州镇境内", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "scale": "中型", "level": "Ⅲ", "overview": "黄平县印地坝水库工程位于黄平县旧州镇境内，坝址位于舞阳河支流冷水河段，水库正常蓄水位720m，死水位693m，设计洪水位722.24m（P=2%），校核洪水位723.27m（P=0.2%）；水库总库容为1462万m3，正常蓄水位相应库容为1154万m3，死库容为50万m3，兴利库容为1104万m3。印地坝水库是以城镇供水、农田灌溉和农村人畜饮水为建设任务的中型水库工程。", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "主要任务：城镇供水；农田灌溉和农村人畜饮水。\n主要建筑物：水库枢纽工程由碾压混凝土重力坝、坝顶溢流表孔、坝 身取水兼放空建筑物及右岸山体处理等组成。" },
-                        { "latitude": 27.270933, "longitude": 108.383663, "plant_name": "镇远县天印水库", "location": "镇远县都坪镇天印村", "scale": "中型", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "level": "Ⅲ", "overview": "天印水库拟建于龙江河中游右岸一级支流龙洞河上，坝址在镇远县都坪镇天印村，距龙洞河汇口约4km。天印水库坝址以上集雨面积85.3km2，多年平均年径流量4644万m3，多年平均流量1.47 m3/s，水库具有年调节性能。水库正常蓄水位592.5m，相应库容941万m3，死水位568.5m，死库容67万m3，兴利库容874万m3，总库容1074万m3。水库工程等别为III等，工程规模为中型。 天印水库工程任务为供水、灌溉。水库供水范围为镇远县的都坪、江古和岑巩县的龙田、平庄4个乡镇，设计水平年（2030年）总", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "" }]*/
-                    for (var i = 0; i < allData.length; i++) {
-                        createMarker(allData[i], map);
-                    }
-                }
-            });
-        });
-    }
-    // var allData = [[106.630905, 26.674511, "小石", "28y", "170cm", "70kg"], [108.259864, 27.944777, "小王", "28y", "160cm", "50kg"]];
 
-    /* $(function () {
-
-        var allData = [[106.630905, 26.674511, "小石", "28y", "170cm", "70kg"], [108.259864, 27.944777, "小王", "28y", "160cm", "50kg"]];
-        for (var i = 0; i < allData.length; i++) {
-            createMarker(allData[i]);
-        }
-
-    }); */
     /**
      *  关闭地图数据的下拉面板
      */
@@ -1353,7 +1349,7 @@ $(function () {
 
     // 动画
     function toggleMove(id) {
-        $('.right-panel').stop().animate({ marginRight: "-400px" }, 300);
+        $('.right-panel').stop().animate({ marginRight: "-450px" }, 300);
         setTimeout(function () {
             if (!$("[id=" + id + "]").hasClass("active")) {
                 $("[id=" + id + "]").siblings().removeClass('active');
@@ -1594,15 +1590,443 @@ $(function () {
         // 申请
         addApplication(commissionData);
 
-        // echart数据处理
+    });
 
+    /**
+     *  initRegionPie 投资分布图
+     */
+    function initRegionPie(id, data, seriesKey, name, orient) {
+        var myChart = echarts.init(document.getElementById(id));
+        var chartData = getData(data, seriesKey);
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                // position: "right",
+                position: [10, 10],
+                textStyle: {
+                    fontFamily: 'Microsoft YaHei'
+                },
+                formatter: "{a} <br/>{b} :<span class='map-num'> {c} ({d}%)</span>"
+            },
+            legend: {
+                type: 'scroll',
+                orient: orient ? 'vertical' : 'horizontal',
+                right: 10,
+                top: 5,
+                bottom: 20,
+                pageIconColor: "#fff",
+                textStyle: {
+                    color: "#fff"
+                },
+                pageButtonItemGap: 1,
+                pageTextStyle: {
+                    color: "#fff"
+                },
+                pageIconSize: 10,
+                itemWidth: 20,
+                itemHeight: 10,
+                data: chartData.legendData,
+            },
+            series: [
+                {
+                    name: name,
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['40%', '50%'],
+                    label: {
+                        show: false,
+                        // position: "inside"
+                    },
+                    data: chartData.seriesData,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        // 设置参数并初始化
+        myChart.setOption(option);
+
+        myChart.on('click', function (params) {
+            if (params.componentType === 'series' && params.data.children && params.data.children.length > 0) {
+                slideDetail("grid", params.data.children, params.data.name);
+            } else {
+                closeDetail();
+            }
+        });
+    }
+    function getData(data, seriesKey) {
+        var legendData = [],
+            seriesData = [];
+        $.each(data, function (i, n) {
+            legendData.push(n.name);
+            n.value = n[seriesKey];
+            seriesData.push(n);
+        });
+        var chartData = {
+            legendData: legendData,
+            seriesData: seriesData
+        }
+        return chartData;
+    }
+    /**
+     *  programStatus 项目状态统计图
+     */
+    function initProgramStatus(id, data) {
+
+    }
+    /**
+     *  initProgramFunnel 明星工程
+     */
+    function initProgramFunnel(id, data, name, hasChild, orient) {
+        var myChart = echarts.init(document.getElementById(id));
+        var chartData = getData(data, "value");
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                textStyle: {
+                    fontFamily: 'Microsoft YaHei'
+                },
+                formatter: "{a} <br/>{b} : <span class='map-num'>{c}%</span>"
+            },
+            legend: {
+                type: 'scroll',
+                orient: orient ? 'vertical' : 'horizontal',
+                right: 10,
+                top: 5,
+                bottom: 20,
+                pageIconColor: "#fff",
+                textStyle: {
+                    color: "#fff"
+                },
+                pageButtonItemGap: 1,
+                pageTextStyle: {
+                    color: "#fff"
+                },
+                pageIconSize: 10,
+                itemWidth: 20,
+                itemHeight: 10,
+                data: chartData.legendData
+            },
+            series: [
+                {
+                    name: name,
+                    type: 'funnel',
+                    left: '10%',
+                    width: '80%',
+                    maxSize: '80%',
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'inside',
+                            formatter: '{b}',
+                            textStyle: {
+                                color: '#fff'
+                            }
+                        },
+                        emphasis: {
+                            position: 'inside',
+                            formatter: "{b}: {c}%",
+                            textStyle: {
+                                color: '#fff',
+                                fontFamily: 'Lccd'
+                            }
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            // opacity: 0.5,
+                            borderColor: '#fff',
+                            borderWidth: 1
+                        }
+                    },
+                    data: chartData.seriesData
+                }
+            ]
+        };
+        // 设置参数并初始化
+        myChart.setOption(option);
+        // 点击事件
+        myChart.on('click', function (params) {
+            if (params.componentType === 'series' && params.data.children && Object.keys(params.data.children).length > 0) {
+                $("#item_title").text(params.name);
+                $.when(slideDetail("chart")).done(function () {
+                    setTimeout(function () {
+                        initProgramInvestment("chart_detail", params.data.children, ["申请拨付", "实际拨付"]);
+                    }, 500);
+                });
+            } else {
+                closeDetail();
+            }
+        });
+    }
+    /**
+     *  initProgramInvestment 各项目进度图
+     */
+    function initProgramInvestment(id, data, legendData) {
+        var myChart = echarts.init(document.getElementById(id));
+        var chartData = getBarData(data);
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                position: [10, 10],
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                textStyle: {
+                    fontFamily: 'Microsoft YaHei'
+                },
+                formatter: "<span style='color:#f0ab58'>{b}</span> <br/>{a0} : <span class='map-num'>{c0}</span>(万元)<br/>{a1} : <span class='map-num'>{c1}</span>(万元)"
+            },
+            legend: {
+                orient: 'horizontal',
+                top: 5,
+                textStyle: {
+                    color: "#fff"
+                },
+                itemWidth: 20,
+                itemHeight: 10,
+                data: legendData
+            },
+            grid: {
+                left: '2px',
+                containLabel: true
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            // 使用深浅的间隔色
+                            color: '#565656'
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#fff',
+                            fontFamily: 'Microsoft YaHei'
+                        }
+                    },
+                    data: chartData.xAxisData
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    axisTick: {
+                        show: false
+                    },
+                    // y 轴线
+                    axisLine: {
+                        show: false,
+                    },
+                    splitLine: {
+                        show: true,  //显示分割线
+                        lineStyle: {
+                            // 使用深浅的间隔色
+                            color: '#565656',
+                            type: 'dotted'
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#f0ab58',
+                            fontFamily: 'Lccd'
+                        }
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: legendData[0],
+                    type: 'bar',
+                    color: '#1ab394 ',
+                    data: chartData.actualSeries
+                },
+                {
+                    name: legendData[1],
+                    type: 'bar',
+                    color: '#f0ab58',
+                    data: chartData.totalSeries
+                }
+            ]
+        };
+        myChart.setOption(option);
+
+        // 点击事件
+        myChart.on('click', function (params) {
+            if (params.componentType === 'series' && params.data.children && Object.keys(params.data.children).length > 0) {
+                $.when(slideDetail("chart")).done(function () {
+                    $("#item_title").text(params.name);
+                    setTimeout(function () {
+                        initProgramInvestment("chart_detail", params.data.children, ["实际投资", "总投资"]);
+                    }, 500);
+                });
+            } else {
+                closeDetail();
+            }
+        });
+    }
+    function getBarData(data) {
+        var xAxisData = [],
+            totalSeries = [],
+            actualSeries = [];
+        $.each(data, function (i, n) {
+            xAxisData.push(n.name || n.time);
+            totalSeries.push({ value: n.total, children: n.children });
+            actualSeries.push({ value: n.actual, children: n.children });
+        });
+        var chartData = {
+            xAxisData: xAxisData,
+            totalSeries: totalSeries,
+            actualSeries: actualSeries
+        };
+        return chartData;
+    }
+    function closeItemChart() {
+        $(".chart-div").slideUp(300);
+        $(".overview-grid").slideUp(300);
+        setTimeout(function () {
+            $("#chart_div").html("<div id='chart_detail' />");
+            $(".overview-grid").html('<table id="table_list_1"></table><div id="pager_list_1"></div>');
+        }, 300);
+    }
+    function slideDetail(open, data, name) {
+        var def = $.Deferred();
+        closeDetail();
+        if (open === "grid") {
+            setTimeout(function () {
+                initGrid("table_list_1", data, name);
+                $(".overview-grid").slideDown(300);
+                def.resolve();
+            }, 500);
+        } else {
+            setTimeout(function () {
+                $(".chart-div").slideDown(300);
+                def.resolve();
+            }, 500);
+        }
+        return def.promise();
+    }
+    function closeDetail() {
+        // 隐藏所有详情
+        $(".chart-div").slideUp(300);
+        $(".overview-grid").slideUp(300);
+        setTimeout(function () {
+            $("#chart_div").html("<div id='chart_detail' />");
+            $(".overview-grid").html('<table id="table_list_1"></table><div id="pager_list_1"></div>');
+        }, 300);
+    }
+    function initGrid(id, data, name) {
+        $(".overview-grid").html('<table id="table_list_1"></table><div id="pager_list_1"></div>');
+        var mydata = [];
+        var index = 1;
+        $.each(data, function (i, n) {
+            n.seq = index;
+            n.percent = n.actual / n.total;
+            mydata.push(n);
+            index++;
+        });
+        $("#table_list_1").jqGrid({
+            data: mydata,
+            datatype: "local",
+            height: 210,
+            autowidth: true,
+            shrinkToFit: true,
+            rowNum: 14,
+            rowList: [10, 20, 30],
+            colNames: ['序号', '水库', '实际投资', '总投资', '项目进度'],
+            colModel: [
+                { name: 'seq', index: 'seq', width: 60, sorttype: "int" },
+                { name: 'name', index: 'name', width: 100 },
+                { name: 'actual', index: 'actual', width: 80, align: "right", sorttype: "float", formatter: "number" },
+                { name: 'total', index: 'total', width: 80, align: "right", sorttype: "float", formatter: "number" },
+                { name: 'percent', index: 'percent', width: 80, align: "right", sorttype: "float" },
+            ],
+            pager: "#pager_list_1",
+            viewrecords: true,
+            caption: name,
+            hidegrid: false
+        });
+    }
+    if ($("#allmap") && $("#allmap").length > 0) {
+        $.when(initMap()).done(function (map) {
+            $.ajax({
+                url: "index/getallbaseinfo",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    allData = data.data;
+                    /*allData = [{ "latitude": 26.9852206, "longitude": 107.7936172, "plant_name": "黄平县印地坝水库", "location": "黄平县旧州镇境内", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "scale": "中型", "level": "Ⅲ", "overview": "黄平县印地坝水库工程位于黄平县旧州镇境内，坝址位于舞阳河支流冷水河段，水库正常蓄水位720m，死水位693m，设计洪水位722.24m（P=2%），校核洪水位723.27m（P=0.2%）；水库总库容为1462万m3，正常蓄水位相应库容为1154万m3，死库容为50万m3，兴利库容为1104万m3。印地坝水库是以城镇供水、农田灌溉和农村人畜饮水为建设任务的中型水库工程。", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "主要任务：城镇供水；农田灌溉和农村人畜饮水。\n主要建筑物：水库枢纽工程由碾压混凝土重力坝、坝顶溢流表孔、坝 身取水兼放空建筑物及右岸山体处理等组成。" },
+                        { "latitude": 27.270933, "longitude": 108.383663, "plant_name": "镇远县天印水库", "location": "镇远县都坪镇天印村", "scale": "中型", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "level": "Ⅲ", "overview": "天印水库拟建于龙江河中游右岸一级支流龙洞河上，坝址在镇远县都坪镇天印村，距龙洞河汇口约4km。天印水库坝址以上集雨面积85.3km2，多年平均年径流量4644万m3，多年平均流量1.47 m3/s，水库具有年调节性能。水库正常蓄水位592.5m，相应库容941万m3，死水位568.5m，死库容67万m3，兴利库容874万m3，总库容1074万m3。水库工程等别为III等，工程规模为中型。 天印水库工程任务为供水、灌溉。水库供水范围为镇远县的都坪、江古和岑巩县的龙田、平庄4个乡镇，设计水平年（2030年）总", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "" }]*/
+                    for (var i = 0; i < allData.length; i++) {
+                        createMarker(allData[i], map);
+                    }
+                }
+            });
+        });
+        // echart数据处理
         // 饼图
         var paymentData = [{ value: 1500000, name: '中央累计拨付' }, { value: 2100000, name: '当前累计拨付' }]
         initPieChart("payment_chart", paymentData);
         var investmentData = [{ value: 1500000, name: '省政府投资' }, { value: 2100000, name: '中央投资' }, { value: 3100000, name: '当前投资' }]
         initPieChart("investment_chart", investmentData);
-        // 柱状图
-        initBarChart("overview_map");
-    })
+        // 投资分布
+        var regionData = [
+            { name: "安顺", total: 698600.98, actual: 225969, children: [{ name: "西秀区干沟水库", total: 698600.98, actual: 225969 }, { name: "西秀区雨棚水库", total: 2543666.74, actual: 213930 }, { name: "西秀区新场河水库工程", total: 435870.32, actual: 195615 }, { name: "紫云县打冲沟水库", total: 1808457.64, actual: 504616 }, { name: "镇宁自治县白沙水库", total: 1243110.22, actual: 843085 }, { name: "织金县白泥坡水库", total: 1259083.94, actual: 227307 }, { name: "普定县木栱河水库", total: 1371855.03, actual: 468491 }, { name: "镇宁县纳井田水库工程", total: 1148453.13, actual: 344755 }, { name: "长顺县马龙田水库", total: 1715567.5803, actual: 827124 }] },
+            { name: "毕节", total: 2543666.74, actual: 213930, children: [{ name: "黔西县附廓水库加高扩建工程", total: 698600.98, actual: 225969 }, { name: "赫章县万家沟水库", total: 2543666.74, actual: 213930 }, { name: "七星关区普宜水库", total: 435870.32, actual: 195615 }, { name: "七星关区龙官桥水库", total: 1808457.64, actual: 504616 }, { name: "七星关区双河口水库", total: 1243110.22, actual: 843085 }, { name: "织金县洗马塘水库", total: 1259083.94, actual: 227307 }, { name: "赫章县河口水库", total: 1371855.03, actual: 468491 }, { name: "大方县岔河水库灌溉工程", total: 1148453.13, actual: 344755 }, { name: "纳雍县金蟾水库灌溉工程", total: 1715567.5803, actual: 827124 }] },
+            { name: "贵阳", total: 435870.32, actual: 195615, children: [{ name: "修文县金龙水库", total: 698600.98, actual: 225969 }, { name: "花溪区栗木水库", total: 2543666.74, actual: 213930 }, { name: "开阳县杉木林水库工程", total: 435870.32, actual: 195615 }, { name: "贵阳市红岩水库", total: 1808457.64, actual: 504616 }, { name: "黔西县附廓水库加高扩建工程", total: 1243110.22, actual: 843085 }, { name: "威宁县杨湾桥水库", total: 1259083.94, actual: 227307 }, { name: "清镇市燕尾水库", total: 1371855.03, actual: 468491 }, { name: "长顺县马龙田水库", total: 1148453.13, actual: 344755 }, { name: "习水县铜灌口水库灌区工程", total: 1715567.5803, actual: 827124 }] },
+            { name: "六盘水", total: 1808457.64, actual: 504616, children: [{ name: "钟山区中坡水库", total: 698600.98, actual: 225969 }, { name: "水城县出水沟水库", total: 2543666.74, actual: 213930 }, { name: "六盘水市双桥水库供水工程", total: 435870.32, actual: 195615 }, { name: "盘县卡河水库工程", total: 1808457.64, actual: 504616 }, { name: "钟山区关门山水库工程", total: 1243110.22, actual: 843085 }, { name: "盘县石桥水库", total: 1259083.94, actual: 227307 }, { name: "钟山区韭菜坪水库", total: 1371855.03, actual: 468491 }, { name: "六枝特区纳革水库", total: 1148453.13, actual: 344755 }, { name: "钟山区红岩水库", total: 1715567.5803, actual: 827124 }] },
+            { name: "黔东南", total: 1243110.22, actual: 843085, children: [{ name: "黄平县印地坝水库", total: 698600.98, actual: 225969 }, { name: "镇远县天印水库", total: 2543666.74, actual: 213930 }, { name: "天柱鱼塘水库首部枢纽及库区复建工程", total: 435870.32, actual: 195615 }, { name: "剑河县地豆水库", total: 1808457.64, actual: 504616 }, { name: "镇远县狗鱼塘水库", total: 1243110.22, actual: 843085 }, { name: "施秉县潭子湾水库", total: 1259083.94, actual: 227307 }, { name: "雷山县西江水库", total: 1371855.03, actual: 468491 }, { name: "从江县登盆水库", total: 1148453.13, actual: 344755 }, { name: "台江县南开水库工程", total: 1715567.5803, actual: 827124 }] },
+            { name: "黔南", total: 1259083.94, actual: 227307, children: [{ name: "三都县甲晒水库", total: 698600.98, actual: 225969 }, { name: "长顺县马龙田水库", total: 2543666.74, actual: 213930 }, { name: "福泉市官阳冲水库", total: 435870.32, actual: 195615 }, { name: "惠水县平寨水库", total: 1808457.64, actual: 504616 }, { name: "荔波县拉寨水库", total: 1243110.22, actual: 843085 }, { name: "荔波县拉毛水库工程", total: 1259083.94, actual: 227307 }, { name: "三都县甲照水库工程", total: 1371855.03, actual: 468491 }, { name: "都匀市大河水库", total: 1148453.13, actual: 344755 }, { name: "罗甸县林霞水库", total: 1715567.5803, actual: 827124 }] },
+            { name: "黔西南", total: 1371855.03, actual: 468491, children: [{ name: "普安县大湾水库", total: 698600.98, actual: 225969 }, { name: "普安县三岔河水库", total: 2543666.74, actual: 213930 }, { name: "册亨县者述水库", total: 435870.32, actual: 195615 }, { name: "册亨县新花水库", total: 1808457.64, actual: 504616 }, { name: "晴隆县西泌河水库工程", total: 1243110.22, actual: 843085 }, { name: "马岭水利枢纽工程", total: 1259083.94, actual: 227307 }, { name: "安龙县者山河水库", total: 1371855.03, actual: 468491 }, { name: "兴义市木浪河水库扩建工程", total: 1148453.13, actual: 344755 }, { name: "册亨县册亨水库工程", total: 1715567.5803, actual: 827124 }] },
+            { name: "铜仁", total: 1148453.13, actual: 344755, children: [{ name: "思南县沙坝水库工程", total: 698600.98, actual: 225969 }, { name: "思南县双河口水库", total: 2543666.74, actual: 213930 }, { name: "思南县枹木寨水利灌溉工程", total: 435870.32, actual: 195615 }, { name: "松桃县盐井水利工程", total: 1808457.64, actual: 504616 }, { name: "江口县鱼粮水库工程", total: 1243110.22, actual: 843085 }, { name: "松桃县白泥水库工程", total: 1259083.94, actual: 227307 }, { name: "江口县军屯水库工程", total: 1371855.03, actual: 468491 }, { name: "尖坡水库", total: 1148453.13, actual: 344755 }, { name: "万山区老山口水库", total: 1715567.5803, actual: 827124 }] },
+            { name: "遵义", total: 1715567.5803, actual: 827124, children: [{ name: "余庆县小乌江水库", total: 698600.98, actual: 225969 }, { name: "播州区清水河水库", total: 2543666.74, actual: 213930 }, { name: "道真县沙坝水库扩建加高工程", total: 435870.32, actual: 195615 }, { name: "播州区苟江水库", total: 1808457.64, actual: 504616 }, { name: "习水县铜灌口水库灌区工程", total: 1243110.22, actual: 843085 }, { name: "汇川区麻沟水库工程", total: 1259083.94, actual: 227307 }, { name: "遵义市中桥水库工程", total: 1371855.03, actual: 468491 }, { name: "播州区平正水库", total: 1148453.13, actual: 344755 }, { name: "正安县杨柳溪水库工程", total: 1715567.5803, actual: 827124 }] }
+        ]
+        initRegionPie("region_pie", regionData, "total", "投资");
+        // 项目状态
+        var statusData = [
+            { name: "大坝开挖", value: 25 },
+            { name: "大坝填筑", value: 38 },
+            { name: "前期工作", value: 174 },
+            { name: "三通一平", value: 6 },
+            { name: "施工准备", value: 13 },
+            { name: "通水验收", value: 1 },
+            { name: "项目关闭", value: 0 },
+            { name: "蓄水验收", value: 33 },
+            { name: "蓄水准备", value: 36 }
+        ]
+        initRegionPie("program_status", statusData, "value", "阶段数量(占比)");
+        // 总投资与实际投资占比
+        initProgramInvestment("program_investment", regionData, ["实际投资", "总投资"]);
+
+        // 明星工程
+        var programStarData = [
+            { value: 30, name: '镇远县狗鱼塘水库', children: [{ time: "2017-01-01", actual: 225969, total: 698600.98 }, { time: "2017-01-02", actual: 213930, total: 2543666.74 }, { time: "2017-01-03", actual: 195615, total: 435870.32 }, { time: "2017-01-04", actual: 504616, total: 1808457.64 }, { time: "2017-01-05", actual: 843085, total: 1243110.22 }, { time: "2017-01-06", actual: 227307, total: 1259083.94 }, { time: "2017-01-07", actual: 468491, total: 1371855.03 }, { time: "2017-01-08", actual: 344755, total: 1148453.13 }, { time: "2017-01-09", actual: 827124, total: 1715567.5803 }] },
+            { value: 10, name: '思南县枹木寨水利灌溉工程', children: [{ time: "2017-01-01", actual: 225239, total: 698600.98 }, { time: "2017-01-02", actual: 2121930, total: 2543666.74 }, { time: "2017-01-03", actual: 635615, total: 435870.32 }, { time: "2017-01-04", actual: 534616, total: 1808457.64 }, { time: "2017-01-05", actual: 837085, total: 1243110.22 }, { time: "2017-01-06", actual: 221207, total: 1259083.94 }, { time: "2017-01-07", actual: 484491, total: 1371855.03 }, { time: "2017-01-08", actual: 348755, total: 1148453.13 }, { time: "2017-01-09", actual: 884124, total: 1715567.5803 }] },
+            { value: 5, name: '播州区苟江水库', children: [{ time: "2017-01-01", actual: 223739, total: 698600.98 }, { time: "2017-01-02", actual: 212120, total: 2543666.74 }, { time: "2017-01-03", actual: 694615, total: 435870.32 }, { time: "2017-01-04", actual: 53716, total: 1808457.64 }, { time: "2017-01-05", actual: 873085, total: 1243110.22 }, { time: "2017-01-06", actual: 223207, total: 1259083.94 }, { time: "2017-01-07", actual: 484491, total: 1371855.03 }, { time: "2017-01-08", actual: 348235, total: 1148453.13 }, { time: "2017-01-09", actual: 884834, total: 1715567.5803 }] },
+            { value: 50, name: '黔西县附廓水库加高扩建工程', children: [{ time: "2017-01-01", actual: 278739, total: 698600.98 }, { time: "2017-01-02", actual: 2121340, total: 2543666.74 }, { time: "2017-01-03", actual: 699315, total: 435870.32 }, { time: "2017-01-04", actual: 523516, total: 1808457.64 }, { time: "2017-01-05", actual: 879485, total: 1243110.22 }, { time: "2017-01-06", actual: 223297, total: 1259083.94 }, { time: "2017-01-07", actual: 423491, total: 1371855.03 }, { time: "2017-01-08", actual: 349435, total: 1148453.13 }, { time: "2017-01-09", actual: 8884534, total: 1715567.5803 }] },
+            { value: 80, name: '七星关区双河口水库', children: [{ time: "2017-01-01", actual: 278349, total: 698600.98 }, { time: "2017-01-02", actual: 2154340, total: 2543666.74 }, { time: "2017-01-03", actual: 635315, total: 435870.32 }, { time: "2017-01-04", actual: 523226, total: 1808457.64 }, { time: "2017-01-05", actual: 884485, total: 1243110.22 }, { time: "2017-01-06", actual: 242297, total: 1259083.94 }, { time: "2017-01-07", actual: 428391, total: 1371855.03 }, { time: "2017-01-08", actual: 3459435, total: 1148453.13 }, { time: "2017-01-09", actual: 8354534, total: 1715567.5803 }] }
+        ]
+        initProgramFunnel("program_funnel", programStarData, "工程进度");
+
+    }
 });
 
+function closeDetail() {
+    // 隐藏所有详情
+    $(".chart-div").slideUp(300);
+    $(".overview-grid").slideUp(300);
+    setTimeout(function () {
+        $("#chart_div").html("<div id='chart_detail' />");
+        $(".overview-grid").html('<table id="table_list_1"></table><div id="pager_list_1"></div>');
+    }, 300);
+}

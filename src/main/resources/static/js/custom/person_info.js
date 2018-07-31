@@ -3,9 +3,36 @@ $(function () {
     var savePersonInfoUrl = '/user/personinfosubmit';
     // 用户个人信息页面判断是否已经提交过，如果已经提交则显示
     var hasPersonInfoSubmittedUrl = '/user/doesthisuserhaspersoninfo';
+    var getAccountInfoUrl = '/user/getaccountinfo';
     showPersonInfo();
-
-
+    getAccountInfo();
+    // 获取系统账号信息
+    function getAccountInfo() {
+        $.getJSON(getAccountInfoUrl, function (data) {
+            var accountInfo = data.data;
+            var username = accountInfo.username;
+            var accountType = accountInfo.accountType;
+            var active = '';
+            if (accountInfo.active == 1) {
+                active = "已激活"
+            } else {
+                active = "未激活"
+            }
+            var acountInfoHtml = '<div>\n' +
+                '                                        <label>系统账户名：</label>\n' +
+                '                                        <span>'+ username +'</span>\n' +
+                '                                    </div>\n' +
+                '                                    <div>\n' +
+                '                                        <label>账号类型：</label>\n' +
+                '                                        <span>'+ accountType +'</span>\n' +
+                '                                    </div>\n' +
+                '                                    <div>\n' +
+                '                                        <label>状态：</label>\n' +
+                '                                        <span>'+ active +'</span>\n' +
+                '                                    </div>';
+            $('#accountInfoDiv').html(acountInfoHtml)
+        })
+    }
 
     // 显示用户个人信息
     function showPersonInfo() {
@@ -28,7 +55,7 @@ $(function () {
                 $('#id_num').val(data.data.id_num).attr('readonly', true);
                 $('#title').val(data.data.title).attr('readonly', true);
                 $('#address').val(data.data.address).attr('readonly', true);
-
+                $('#person_info_submit').hide();
             }
         })
     }
@@ -41,6 +68,7 @@ $(function () {
         $('#id_num').attr('readonly', false);
         $('#title').attr('readonly', false);
         $('#address').attr('readonly', false);
+        $('#person_info_submit').show();
     })
 
     $('#person_info_submit').on('click', function (e) {
@@ -64,7 +92,6 @@ $(function () {
                         title: "SUCCESS！",
                         text: "修改成功！",
                         type: "success",
-                        showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
                         confirmButtonText: "确定!",
                         closeOnConfirm: true
@@ -76,6 +103,7 @@ $(function () {
                         $('#id_num').attr('readonly', true);
                         $('#title').attr('readonly', true);
                         $('#address').attr('readonly', true);
+                        $('#person_info_submit').hide();
                     })
 
                 } else {

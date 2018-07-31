@@ -8,9 +8,11 @@ import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.PersonService;
 import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.HttpServletRequestUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
+import com.gzzhsl.pcms.vo.AccountInfoVO;
 import com.gzzhsl.pcms.vo.PersonInfoVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import com.gzzhsl.pcms.vo.UserInfoVO;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -50,9 +53,10 @@ public class UserController {
     @ResponseBody
     public ResultVO getSubject(){
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         UserInfoVO userInfoVO = new UserInfoVO();
-        BeanUtils.copyProperties(userInfo, userInfoVO);
-        PersonInfo thisPerson = userInfo.getPersonInfo();
+        BeanUtils.copyProperties(thisUser, userInfoVO);
+        PersonInfo thisPerson = thisUser.getPersonInfo();
         if (thisPerson != null) {
             if (thisPerson.getProfileImg() != null || "".equals(thisPerson.getProfileImg())) {
                 userInfoVO.setProfileImg(thisPerson.getProfileImg());
@@ -78,6 +82,39 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getaccountinfo")
+    @ResponseBody
+    public ResultVO getAccountInfo() {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        AccountInfoVO accountInfoVO = new AccountInfoVO();
+        List<SysRole> roles = thisUser.getSysRoleList();
+        if (roles != null && roles.size() > 0) {
+            for (SysRole sysRole : roles) {
+                if ("reporter".equals(sysRole.getRole())) {
+                    accountInfoVO.setAccountType("报送账号");
+                    break;
+                }
+                if ("checker".equals(sysRole.getRole())) {
+                    accountInfoVO.setAccountType("业主账号");
+                    break;
+                }
+                if ("manager".equals(sysRole.getRole())) {
+                    accountInfoVO.setAccountType("业主账号");
+                    break;
+                }
+                if ("admin".equals(sysRole.getRole())) {
+                    accountInfoVO.setAccountType("系统管理员");
+                    break;
+                }
+            }
+        } else {
+            accountInfoVO.setAccountType("未配置");
+        }
+        accountInfoVO.setUsername(thisUser.getUsername());
+        accountInfoVO.setActive(thisUser.getActive());
+        return ResultUtil.success(accountInfoVO);
+    }
 
     @GetMapping("/doesthisuserhaspersoninfo")
     @ResponseBody

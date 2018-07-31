@@ -30,6 +30,8 @@
     <link th:href="@{/css/custom/index.css}" rel="stylesheet">
     <link th:href="@{/css/custom/self-theme.css}" rel="stylesheet">
 
+    <link th:href="@{/css/plugins/jqGrid/ui.jqgrid.css}" rel="stylesheet">
+    <link th:href="@{/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css}" rel="stylesheet">
     <!-- 百度地图 -->
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=kZmpkejBXwfYBNQp4Rzz38DRNMhUqsHj"></script>
     <script type="text/javascript"
@@ -86,10 +88,10 @@
                             <a id="menu_2" href="#">项目前期 <span class="fa arrow"></span></a>
                             <ul class="nav nav-third-level">
                                 <li>
-                                    <a href="#" id="pre_progress_new">前期进度</a>
+                                    <a href="#" id="base_info">项目概况</a>
                                 </li>
                                 <li>
-                                    <a href="#" id="base_info">项目概况</a>
+                                    <a href="#" id="pre_progress_new">前期进度</a>
                                 </li>
                                 <li>
                                     <a href="#">招标管理 <span class="fa arrow"></span></a>
@@ -146,9 +148,6 @@
                         </li>
                         <li>
                             <a href="#" id="operation_log">操作日志</a>
-                        </li>
-                        <li>
-                            <a href="#" id="bind_wechat_btn">绑定微信</a>
                         </li>
                     </ul>
                 </li>
@@ -227,6 +226,25 @@
                     <div id="toggle1" class="tip-btn">
                         <i class="fa fa-angle-double-left"></i>
                         <span>详情数据</span>
+                    </div>
+                    <div class="overview-detail">
+                        <!-- grid详情 -->
+                        <div class="overview-grid">
+                            <table id="table_list_1"></table>
+                            <div id="pager_list_1"></div>
+                        </div>
+                        <!-- echart详情 -->
+                        <div class="chart-div">
+                            <div class="chart-detail-title">
+                                <span id="item_title">详情</span>
+                                <a class="close-link" onclick="closeDetail()">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                            <div id="chart_div" class="chart-detail">
+                                <div id="chart_detail">chart</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="right-panel">
@@ -653,7 +671,31 @@
                                 </div>
                             </div>
                             <div class="overview-map">
-                                <div id="overview_map" style="height: 400px;width: 350px;margin: 0 auto;"></div>
+                                <!-- <div id="overview_map" style="height: 400px;width: 350px;margin: 0 auto;"></div> -->
+                                <div class="col-lg-6">
+                                    <div class="map-title">
+                                        <span>投资分布图</span>
+                                    </div>
+                                    <div id="region_pie" style="height: 230px; width: 220px;"></div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="map-title">
+                                        <span>明星工程(前五)</span>
+                                    </div>
+                                    <div id="program_funnel" style="height: 230px;width: 220px;"></div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="map-title">
+                                        <span>项目状态统计图</span>
+                                    </div>
+                                    <div id="program_status" style="height: 230px;width: 220px;"></div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="map-title">
+                                        <span>各项目进度图</span>
+                                    </div>
+                                    <div id="program_investment" style="height: 230px;width: 220px;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -754,28 +796,8 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="item-desc">
-                        <div class="item-name">
-                            黄平县印地坝水库
-                        </div>
-                        <div class="item-others">
-                            <div>
-                                <label>法人：</label>
-                                <span>王XX</span>
-                            </div>
-                            <div>
-                                <label>规模：</label>
-                                <span>中型</span>
-                            </div>
-                            <div>
-                                <label>等级：</label>
-                                <span>Ⅲ</span>
-                            </div>
-                            <div>
-                                <label>手机：</label>
-                                <span>139xxxxxxxx</span>
-                            </div>
-                        </div>
+                    <div class="item-desc" id="self_card">
+
                     </div>
                     <div class="backlog-list">
                         <div class="ibox float-e-margins">
@@ -1599,12 +1621,13 @@
 <!-- Data picker -->
 <script th:src="@{/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
 <script th:src="@{/js/custom/bootstrap-datepicker.zh-CN.js}"></script>
-
-
-
 <!-- echarts -->
 <script th:src="@{/js/custom/echarts.min.js}"></script>
 <script th:src="@{/js/custom/bmap.min.js}"></script>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/js/plugins/jqGrid/i18n/grid.locale-en.js}"></script>
+<script th:src="@{/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
 </body>
 </html>

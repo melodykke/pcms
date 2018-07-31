@@ -12,7 +12,6 @@
     <title>个人信息</title>
 
 
-
     <link th:href="@{/css/plugins/iCheck/custom.css}" rel="stylesheet">
     <link th:href="@{/css/animate.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
@@ -43,7 +42,7 @@
         <div class="col-md-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>个人信息设置</h5>
+                    <h5>个人信息</h5>
                 </div>
                 <div>
                     <div class="ibox-content no-padding border-left-right">
@@ -51,7 +50,25 @@
                     </div>
                     <div class="ibox-content profile-content">
                         <h4><strong id="nickname"></strong></h4>
-                        <p><i class="fa fa-map-marker"></i> <small id="country"></small> <small id="province"></small> <small id="city"></small></p>
+                        <p><i class="fa fa-map-marker"></i>
+                            <small id="country"></small>
+                            <small id="province"></small>
+                            <small id="city"></small>
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <div class="ibox float-e-margins">
+                        <div>
+                            <div class="item-desc" id="self_card">
+                                <div class="item-name">
+
+                                </div>
+                                <div class="item-others" id="accountInfoDiv">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -82,34 +99,41 @@
 
                     <form id="person_info_form" class="form-horizontal">
                         <div class="form-group"><label class="col-sm-2 control-label">姓名: </label>
-                            <div class="col-sm-10"><input id="person_name" type="text" name="name" class="form-control required"></div>
+                            <div class="col-sm-10"><input id="person_name" type="text" name="name"
+                                                          class="form-control required"></div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group"><label class="col-sm-2 control-label">联系电话: </label>
-                            <div class="col-sm-10"><input id="tel" type="text" name="tel" class="form-control required"></div>
+                            <div class="col-sm-10"><input id="tel" type="text" name="tel" class="form-control required">
+                            </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group"><label class="col-sm-2 control-label">QQ: </label>
-                            <div class="col-sm-10"><input id="qq" type="text" name="qq" class="form-control required"></div>
+                            <div class="col-sm-10"><input id="qq" type="text" name="qq" class="form-control required">
+                            </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group"><label class="col-sm-2 control-label">邮箱: </label>
-                            <div class="col-sm-10"><input id="email" type="text" name="email" class="form-control required"></div>
+                            <div class="col-sm-10"><input id="email" type="text" name="email"
+                                                          class="form-control required"></div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group"><label class="col-sm-2 control-label">身份证号码: </label>
-                            <div class="col-sm-10"><input id="id_num" type="text" name="id_num" class="form-control required"></div>
+                            <div class="col-sm-10"><input id="id_num" type="text" name="id_num"
+                                                          class="form-control required"></div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group"><label class="col-sm-2 control-label">职位</label>
-                            <div class="col-sm-10"><input id="title" type="text" name="title" class="form-control required"></div>
+                            <div class="col-sm-10"><input id="title" type="text" name="title"
+                                                          class="form-control required"></div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group"><label class="col-sm-2 control-label">通讯地址</label>
-                            <div class="col-sm-10"><input id="address" type="text" name="address" class="form-control required"></div>
+                            <div class="col-sm-10"><input id="address" type="text" name="address"
+                                                          class="form-control required"></div>
                         </div>
                         <br/>
-                        <br/>
+
                     </form>
                     <div id="person_info_ops_btns" class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
@@ -123,9 +147,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
 <!-- Mainly scripts -->

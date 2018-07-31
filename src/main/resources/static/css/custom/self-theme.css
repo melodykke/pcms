@@ -323,12 +323,12 @@ td a:hover {
     /* width: 230px; */
 }
 .right-panel {
-    width: 400px;
+    width: 450px;
     height: calc(100vh - 65px);
     border: 1px solid #e0e0e0;
     background: transparent;
     display: inline-block;
-    margin-right: -400px;
+    margin-right: -450px;
     /* opacity: .5; */
     /* z-index: 200; */
 }
@@ -338,10 +338,11 @@ td a:hover {
 }
 .overview-tool {
     display: inline-block;
-	top: calc(100vh / 2);
+	top: calc(100vh - 558px);
     position: relative;
     color: #fff;
     vertical-align: top;
+    width:0;
 }
 .tip-btn {
     border: 1px solid #fff;
@@ -490,7 +491,7 @@ li.active>a> .control-tips {
 } 
 .overview-data {
     /* padding: 15px; */
-	height: calc((100vh - 120px)/2 - 50px);
+    height: 250px;
 }
 .overview-block {
     text-align: left;
@@ -654,4 +655,98 @@ li.active>a> .control-tips {
 }
 .list-group-item>div {
     margin-top: 5px;
+}
+.overview-map>div {
+    padding: 0;
+}
+.map-title>span {
+    color: #f0ab58;
+    border-bottom: 1px solid #565656;
+    width: 120px;
+    margin-left: 10px;
+    padding: 5px 0;
+    display: inline-block;
+    font-size: 16px;
+}
+.map-num {
+    color: #f0ab58;
+    font-size: 18px;
+    font-family:'Lccd'
+}
+.overview-detail {
+    margin-top: 10px;
+    margin-right: -8px;
+    overflow: hidden;
+    white-space: nowrap;
+    float: right;
+    clear: both;
+    height: 300px;
+    /* background-color: rgba(20, 45, 37, 0.8); */
+    position: relative;
+    bottom: -12px;
+}
+.chart-detail, .chart-detail>div {
+    width: 100%;
+    height: 100%;
+}
+.overview-detail .chart-detail-title {
+    padding: 5px 10px;
+    border-bottom: 1px solid #565656;
+}
+.overview-detail .chart-detail-title>a {
+    float: right;
+    color: #fff;
+}
+.overview-grid {
+    width: 400px;
+    /* display: inline-block; */
+    display: none;
+    margin-right: 3px;
+}
+.chart-div {
+    width: 300px;
+    height: 100%;
+    background-color:rgba(20, 45, 37, 0.8);
+    display: none;
+}
+.overview-grid .ui-jqgrid-titlebar.ui-jqgrid-caption.ui-widget-header.ui-corner-top.ui-helper-clearfix {
+    background: rgba(20, 45, 37, 0.8);
+    color: #f0ab58;
+    font-weight: normal;
+    font-size: 20px;
+    font-family: 'Microsoft YaHei';
+    height: 30px;
+    padding: 5px;
+    border-style: none;
+}
+.overview-grid .ui-jqgrid>.ui-jqgrid-view {
+    background: rgba(20, 45, 37, 0.8);
+    border-radius: 0;
+}
+.overview-grid table>thead>tr>th {
+    background: rgba(20, 45, 37, 0.8)!important;
+    color: #fff!important;
+    font-size: 14px;
+    font-family: 'Microsoft YaHei';
+}
+.overview-grid table>tbody>tr {
+    background: rgba(20, 45, 37, 0.8);
+    color: #fff;
+    font-family: 'Microsoft YaHei';
+    border: 1px solid #565656;
+}
+.overview-grid .ui-jqgrid-bdiv>div>table>tbody>tr>td:nth-child(n+3){
+    font-family: 'Lccd';
+    color: #f0ab58;
+    font-size: 14px;
+}
+.overview-grid > div{
+    border-style: none;
+}
+#pager_list_1 table>tbody>tr>td {
+    background-color: rgba(20, 45, 37, 0.8);
+}
+.overview-grid #table_list_1>tbody>.ui-widget-content.ui-state-highlight,.overview-grid #table_list_1>tbody>.ui-widget-content.ui-state-hover {
+    background: rgba(20, 25, 23, 0.8);
+    color: #fff;
 }
