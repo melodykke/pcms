@@ -23,13 +23,10 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="text-center float-e-margins p-md">
-                        <span>项目状态分为：前期工作、施工准备、三通一平、大坝开挖、大坝填筑、蓄水准备、蓄水验收、通水验收、项目完结。 结合项目实际，请及时更新项目状态。以上各状态按项目建设时间顺序，状态节点不可逆。 </span>
+                        <span>项目状态分为：前期工作->施工准备->三通一平->大坝开挖->大坝填筑->蓄水准备->蓄水验收->通水验收->项目完结。 结合项目实际，请及时更新项目状态。以上各状态按项目建设时间顺序，状态节点不可逆。 </span>
                     </div>
                     <div class="ibox-content" id="ibox-content">
-
                         <div id="vertical-timeline" class="vertical-container dark-timeline">
-
-
                             <div class="vertical-timeline-block">
                                 <div class="vertical-timeline-icon blue-bg">
                                     <i class="fa fa-file-text"></i>
@@ -38,7 +35,7 @@
                                 <div class="vertical-timeline-content">
                                     <h2>开始</h2>
                                     <p></p>
-                                    <a href="#" class="btn btn-sm btn-success">更新至下一阶段</a>
+                                    <a id="update_status_a" href="#" data-id="0" class="btn btn-sm btn-success">更新至下一阶段并保存</a>
                                     <span class="vertical-date">
                                         <br/>
                                         <small> </small>
@@ -67,5 +64,6 @@
     <!-- Peity -->
     <script th:src="@{/js/demo/peity-demo.js}"></script>
 
+    <script th:src="@{/js/custom/project_status.js}"></script>
 
 </html>

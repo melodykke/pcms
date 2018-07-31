@@ -73,7 +73,7 @@ public class UserController {
     @ResponseBody
     public ResultVO getThisProject(HttpServletRequest request, HttpServletResponse response){
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null) {
             return ResultUtil.failed(SysEnum.NO_PROJECT_IN_THISUSER);
         }else {

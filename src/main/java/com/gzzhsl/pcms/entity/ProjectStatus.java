@@ -1,5 +1,7 @@
 package com.gzzhsl.pcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -23,9 +25,12 @@ public class ProjectStatus {
 
     @ManyToOne
     @JoinColumn(name = "base_info_id")
+    @JsonBackReference
     private BaseInfo baseInfo;
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date createTime;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date updateTime;
 
 

@@ -1,6 +1,7 @@
 package com.gzzhsl.pcms.handle;
 
 
+import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.ResultVO;
@@ -16,7 +17,7 @@ public class SysExceptionHandler {
 
     @ExceptionHandler({SysException.class})
     @ResponseBody
-    public ResultVO SysExceptionHandle(Exception e){
+    public ResultVO sysExceptionHandle(Exception e){
         if(e instanceof SysException){
             log.info("【系统异常】" + e);
             return ResultUtil.failed(((SysException)e).getCode(), e.getMessage());
@@ -27,11 +28,14 @@ public class SysExceptionHandler {
     }
 
     @ExceptionHandler({UnauthorizedException.class})
-    public String UnauthrizedHandle(Exception e) {
+    @ResponseBody
+    public ResultVO unauthrizedHandle(Exception e) {
         if (e instanceof UnauthorizedException) {
-            return "/page403";
+            log.info("【未授权异常】" + e);
+            return ResultUtil.failed(SysEnum.NO_AUTHORIZATION_ERROR);
         } else {
-            return "/login";
+            log.info("【未授权引起的未知异常】" + e);
+            return ResultUtil.failed();
         }
     }
 }

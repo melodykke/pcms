@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class TimeLineItem {
     private String type;
     private String msg;
     @OneToOne(mappedBy = "timeLineItem")
+    @JsonBackReference
     private ProjectStatus projectStatus;
     private Date createTime;
     private Date updateTime;

@@ -1,5 +1,5 @@
 $(function () {
-
+    var hasProject = false;
     var getThisUserUrl = "/user/getthisuser"; //拿到当前用户信息的url
     var getThisProjectUrl = "/user/getthisproject";
     var getoverallnotificationUrl = "/notification/getoverallnotification";
@@ -75,7 +75,17 @@ $(function () {
         contentDiv.load('tender/totendershow');
     });
     $('#project_status_a').click(function () {
-        contentDiv.load('index/toprojectstatus');
+        if (hasProject == true) {
+            contentDiv.load('index/toprojectstatus');
+        } else {
+            swal({
+                title: "未查到项目信息",
+                text: "请先填写项目概况!",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "好确定!",
+            })
+        }
     });
     getThisUser(getThisUserUrl);
     getThisProject(getThisProjectUrl);
@@ -151,6 +161,7 @@ $(function () {
         $.getJSON(url, function (data) {
             if (data.code == 1002) {
                 // 若果有 存入域 否则提示完善资料
+                hasProject = true;
             }
         });
     }
