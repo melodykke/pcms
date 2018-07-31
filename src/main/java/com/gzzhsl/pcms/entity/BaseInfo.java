@@ -102,6 +102,9 @@ public class BaseInfo {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "baseInfo")
     private List<Tender> tenders;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "baseInfo")
+    private List<ProjectStatus> projectStatuses;
+
     private Date createTime;
     private Date updateTime;
 }

@@ -74,6 +74,9 @@ $(function () {
     $('#tender_manage_entry').click(function () {
         contentDiv.load('tender/totendershow');
     });
+    $('#project_status_a').click(function () {
+        contentDiv.load('index/toprojectstatus');
+    });
     getThisUser(getThisUserUrl);
     getThisProject(getThisProjectUrl);
     getOverallNotification(getoverallnotificationUrl);

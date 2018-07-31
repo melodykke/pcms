@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <link th:href="@{/css/plugins/iCheck/custom.css}" rel="stylesheet">
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>工程项目状态</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/index">主页</a>
+                </li>
+                <li class="active">
+                    <strong>本页</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="row animated fadeInRight">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="text-center float-e-margins p-md">
+                        <span>项目状态分为：前期工作、施工准备、三通一平、大坝开挖、大坝填筑、蓄水准备、蓄水验收、通水验收、项目完结。 结合项目实际，请及时更新项目状态。以上各状态按项目建设时间顺序，状态节点不可逆。 </span>
+                    </div>
+                    <div class="ibox-content" id="ibox-content">
+
+                        <div id="vertical-timeline" class="vertical-container dark-timeline">
+
+
+                            <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon blue-bg">
+                                    <i class="fa fa-file-text"></i>
+                                </div>
+
+                                <div class="vertical-timeline-content">
+                                    <h2>开始</h2>
+                                    <p></p>
+                                    <a href="#" class="btn btn-sm btn-success">更新至下一阶段</a>
+                                    <span class="vertical-date">
+                                        <br/>
+                                        <small> </small>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+    <script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <!-- Peity -->
+    <script th:src="@{/js/plugins/peity/jquery.peity.min.js}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script th:src="@{/js/inspinia.js}"></script>
+    <script th:src="@{/js/plugins/pace/pace.min.js}"></script>
+
+    <!-- Peity -->
+    <script th:src="@{/js/demo/peity-demo.js}"></script>
+
+
+</html>

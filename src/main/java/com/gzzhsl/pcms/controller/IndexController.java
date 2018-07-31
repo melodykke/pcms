@@ -6,6 +6,7 @@ import com.gzzhsl.pcms.vo.ResultVO;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,5 +23,10 @@ public class IndexController {
     @RequiresRoles(value = "manager")
     public ResultVO getAllBaseInfo() {
         return ResultUtil.success(baseInfoService.getAllProject());
+    }
+
+    @GetMapping("/toprojectstatus")
+    public String toProjectStatus() {
+        return "project_status";
     }
 }
