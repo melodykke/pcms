@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.List;
 
 import static javafx.scene.input.KeyCode.R;
 
@@ -55,6 +56,11 @@ public class IndexController {
     @GetMapping("/getprojectstatus")
     @ResponseBody
     public ResultVO getProjectStatus() {
-        return projectStatusService.getProjectStatus();
+        List<ProjectStatus> projectStatusList = projectStatusService.getProjectStatus();
+        if (projectStatusList == null || projectStatusList.size() == 0) {
+            return ResultUtil.failed();
+        } else {
+            return ResultUtil.success(projectStatusList);
+        }
     }
 }

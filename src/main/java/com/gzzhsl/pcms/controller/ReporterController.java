@@ -1,10 +1,9 @@
 package com.gzzhsl.pcms.controller;
 
-import com.gzzhsl.pcms.entity.AnnualInvestment;
-import com.gzzhsl.pcms.entity.BaseInfo;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
+import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.service.MonthlyReportExcelService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
+import com.gzzhsl.pcms.service.TimeLineItemService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.MonthlyReportExcelCalcUtil;
@@ -37,6 +36,8 @@ public class ReporterController {
     private ProjectMonthlyReportService projectMonthlyReportService;
     @Autowired
     private MonthlyReportExcelService monthlyReportExcelService;
+    @Autowired
+    private TimeLineItemService timeLineItemService;
 
     @GetMapping("/projectmonthlyreport")
     @RequiresRoles(value = {"reporter", "checker"}, logical = Logical.OR)
@@ -89,7 +90,12 @@ public class ReporterController {
             cardVO.setLegalPersonName(thisProject.getLegalPersonName());
             cardVO.setScale(thisProject.getScale());
             cardVO.setLevel(thisProject.getLevel());
-            //cardVO.setProjectStatus();
+            TimeLineItem lastTimeLineItem = timeLineItemService.getLatestOne();
+            if (lastTimeLineItem == null) {
+                cardVO.setProjectStatus("项目开始");
+            } else {
+                cardVO.setProjectStatus(lastTimeLineItem.getType());
+            }
             return ResultUtil.success(cardVO);
         } else {
             return ResultUtil.failed();

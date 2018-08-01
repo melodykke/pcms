@@ -66,7 +66,7 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
     }
 
     @Override
-    public ResultVO getProjectStatus() {
+    public List<ProjectStatus> getProjectStatus() {
         try {
             UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
             BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
@@ -78,10 +78,12 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
                 }
             };
             Sort sort = new Sort(Sort.Direction.ASC, "createTime");
-            projectStatuses = projectStatusRepository.findAll(querySpecification, sort);
-            return ResultUtil.success(projectStatuses);
+
+            return projectStatuses = projectStatusRepository.findAll(querySpecification, sort);
         } catch (Exception e) {
-            return ResultUtil.failed();
+            return null;
         }
     }
+
+
 }

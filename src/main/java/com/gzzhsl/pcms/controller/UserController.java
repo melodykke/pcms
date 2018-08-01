@@ -1,6 +1,6 @@
 package com.gzzhsl.pcms.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.gzzhsl.pcms.converter.PersonInfo2VO;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.PersonInfo;
@@ -10,7 +10,6 @@ import com.gzzhsl.pcms.service.PersonService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
-import com.gzzhsl.pcms.util.HttpServletRequestUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.AccountInfoVO;
 import com.gzzhsl.pcms.vo.PersonInfoVO;
@@ -24,11 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
