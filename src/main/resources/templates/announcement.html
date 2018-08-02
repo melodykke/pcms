@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <!-- 自定义 -->
+    <link th:href="@{/css/custom/self-theme.css}" rel="stylesheet">
+    <link th:href="@{/css/custom/jquery.dropdown.min.css}" rel="stylesheet">
+
+</head>
+
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row notice-row">
+                    <div class="public-panel">
+                        <div class="public-title">
+                            <span>发布公告</span>
+                        </div>
+                        <div class="public-content">
+                            <div class="public-item">
+                                <div class="public-label col-lg-2 col-md-2">
+                                    <label>* 公告类型：</label>
+                                </div>
+                                <div class="public-detail col-lg-10 col-md-10">
+                                    <div id="notice_type" class="col-lg-5 col-md-5">
+                                        <select style="display:none" placeholder="--请选择类型--">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="public-item">
+                                <div class="public-label col-lg-2 col-md-2">
+                                    <label>置顶：</label>
+                                </div>
+                                <div class="public-detail col-lg-10 col-md-10">
+                                    <input type="checkbox" data-for="noticeTop" />
+                                </div>
+                            </div>
+                            <div class="public-item">
+                                <div class="public-label col-lg-2 col-md-2">
+                                    <label>* 标题：</label>
+                                </div>
+                                <div class="public-detail col-lg-10 col-md-10">
+                                    <input type="text" class="col-lg-5 col-md-5" data-for="noticeTitle" />
+                                </div>
+                            </div>
+                            <div class="public-item">
+                                <div class="public-label col-lg-2 col-md-2">
+                                    <label>关键字：</label>
+                                </div>
+                                <div class="public-detail col-lg-10 col-md-10">
+                                    <input type="text" class="col-lg-5 col-md-5" data-for="noticeKeywords" />
+                                </div>
+                            </div>
+                            <div class="public-item">
+                                <div class="public-label col-lg-2 col-md-2">
+                                    <label>* 内容：</label>
+                                </div>
+                                <div class="public-detail col-lg-10 col-md-10" data-for="noticeContent">
+                                    <div id="editor">
+                                        <!--<p>请填写公告内容...</p>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="public-tool">
+                            <div>
+                                <button type="button" class="btn btn-outline btn-primary" id="announcement_post">发布</button>
+                                <button type="button" class="btn btn-outline btn-info" onclick="openPreview()">预览</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    <!-- 弹出层 -->
+    <div id="dialog" class="dialog-hide animated fadeInRight"></div>
+    <!-- 遮罩层 -->
+    <div id="mask" class="mask-position"></div>
+    <!-- 全屏层 -->
+    <div id="fullscreen_map" style="display: none;">test</div>
+
+    <!-- 下拉框 -->
+    <script th:src="@{/js/custom/jquery.dropdown.min.js}"></script>
+
+    <!-- 富文本编辑器 -->
+    <script type="text/javascript" th:src="@{/js/custom/wangEditor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/custom/announcement.js}"></script>
+
+</body>
+
+</html>

@@ -1,5 +1,7 @@
 package com.gzzhsl.pcms.vo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gzzhsl.pcms.entity.AnnualInvestment;
 import com.gzzhsl.pcms.entity.AnnualInvestmentImg;
 import com.gzzhsl.pcms.entity.BaseInfo;
@@ -21,6 +23,7 @@ public class AnnualInvestmentVO {
     private BigDecimal applyFigure;
     @NotNull(message = "资金核准额不能为空")
     private BigDecimal approvedFigure;
+    @JsonBackReference
     private BaseInfo baseInfo;
     private Byte state;
     private String submitter;

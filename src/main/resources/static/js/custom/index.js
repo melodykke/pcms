@@ -74,6 +74,9 @@ $(function () {
     $('#tender_manage_entry').click(function () {
         contentDiv.load('tender/totendershow');
     });
+    $('#announcement_a').click(function () {
+        $('#content').load('announcement/toannouncement');
+    });
     $('#project_status_a').click(function () {
         if (hasProject == true) {
             contentDiv.load('index/toprojectstatus');
@@ -88,20 +91,25 @@ $(function () {
         }
     });
     getThisUser(getThisUserUrl);
-    getThisProject(getThisProjectUrl);
-    getOverallNotification(getoverallnotificationUrl);
-    getOverallFeedback(getoverallfeedbackUrl);
-    getThisCard(getThisCardUrl)
-    setInterval(function () {
-        getOverallNotification(getoverallnotificationUrl);
-    }, 30000);
-    setInterval(function () {
-        getOverallFeedback(getoverallfeedbackUrl);
-    }, 30000);
-
-    function getpn() {
-        console.log($('#plantName'));
+    if ($('#notification_entrance').length > 0 || $('#feedback_entrance').length > 0) {
+        getThisProject(getThisProjectUrl);
     }
+    if ($('#notification_entrance').length > 0) {
+        getOverallNotification(getoverallnotificationUrl);
+        setInterval(function () {
+            getOverallNotification(getoverallnotificationUrl);
+        }, 30000);
+    }
+    if ($('#feedback_entrance').length > 0) {
+    getOverallFeedback(getoverallfeedbackUrl);
+        setInterval(function () {
+            getOverallFeedback(getoverallfeedbackUrl);
+        }, 30000);
+    }
+    if ($('#self_card').length > 0) {
+        getThisCard(getThisCardUrl);
+    }
+
 
 
     function getThisUser(url) {
@@ -332,7 +340,6 @@ $(function () {
             return form.valid();
         },
         onFinished: function (event, currentIndex) {
-            getpn();
             var baseInfoVO = {};
             var form = $(this);
             console.log($('#plantName'))
@@ -1979,8 +1986,6 @@ $(function () {
                 dataType: "json",
                 success: function (data) {
                     allData = data.data;
-                    /*allData = [{ "latitude": 26.9852206, "longitude": 107.7936172, "plant_name": "黄平县印地坝水库", "location": "黄平县旧州镇境内", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "scale": "中型", "level": "Ⅲ", "overview": "黄平县印地坝水库工程位于黄平县旧州镇境内，坝址位于舞阳河支流冷水河段，水库正常蓄水位720m，死水位693m，设计洪水位722.24m（P=2%），校核洪水位723.27m（P=0.2%）；水库总库容为1462万m3，正常蓄水位相应库容为1154万m3，死库容为50万m3，兴利库容为1104万m3。印地坝水库是以城镇供水、农田灌溉和农村人畜饮水为建设任务的中型水库工程。", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "主要任务：城镇供水；农田灌溉和农村人畜饮水。\n主要建筑物：水库枢纽工程由碾压混凝土重力坝、坝顶溢流表孔、坝 身取水兼放空建筑物及右岸山体处理等组成。" },
-                        { "latitude": 27.270933, "longitude": 108.383663, "plant_name": "镇远县天印水库", "location": "镇远县都坪镇天印村", "scale": "中型", "dam_type": "碾压混凝土重力坝", "legal_representative_name": "黔东南州水利投资有限责任公司", "level": "Ⅲ", "overview": "天印水库拟建于龙江河中游右岸一级支流龙洞河上，坝址在镇远县都坪镇天印村，距龙洞河汇口约4km。天印水库坝址以上集雨面积85.3km2，多年平均年径流量4644万m3，多年平均流量1.47 m3/s，水库具有年调节性能。水库正常蓄水位592.5m，相应库容941万m3，死水位568.5m，死库容67万m3，兴利库容874万m3，总库容1074万m3。水库工程等别为III等，工程规模为中型。 天印水库工程任务为供水、灌溉。水库供水范围为镇远县的都坪、江古和岑巩县的龙田、平庄4个乡镇，设计水平年（2030年）总", "central_accumulative_payment": "中央累计拨付", "central_investment": "中央投资", "local_accumulative_payment": "当前累计拨付", "local_investment": "当前投资", "provincial_investment": "省政府投资", "provincial_loan": "省政府贷款", "total_investment": "总投资", "project_task": "" }]*/
                     for (var i = 0; i < allData.length; i++) {
                         createMarker(allData[i], map);
                     }
@@ -2033,6 +2038,45 @@ $(function () {
         initProgramFunnel("program_funnel", programStarData, "工程进度");
 
     }
+
+    /*公告*/
+    var $ul = $("#loopNotice");
+    //获得ul长度
+    var ulwidth = $("#loopNotice").width();
+    //给li定位 起始位置
+    function positionli() {
+        $ul.find("li").each(function () {
+            var index = $(this).index();
+            var left = index * ulwidth + ulwidth;
+            $(this).css({ left: left });
+        });
+    }
+    //轮播
+    function move() {
+        $ul.find("li").each(function () {
+            var liindex = $(this).index();
+            var lastleft = -($ul.find("li").length - liindex) * ulwidth;
+
+            $(this).animate({ left: lastleft }, 20000, 'linear', function () {
+                positionli();
+                move();
+            });
+        });
+    }
+    positionli();
+    move();
+
+    $.getJSON("announcement/gethotlatests", function (data) {
+        var announcementItems = data.data.content;
+        var announcementHtml = '';
+        announcementItems.map(function (item, index) {
+           var itemHtml = '  <li>\n' +
+               '                        <a>'+ item.title +'</a>\n' +
+               '                    </li>'
+            announcementHtml += itemHtml;
+        });
+        $('#loopNotice').html(announcementHtml)
+    })
 });
 
 function closeDetail() {

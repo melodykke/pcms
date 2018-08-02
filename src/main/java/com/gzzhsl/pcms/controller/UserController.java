@@ -17,6 +17,8 @@ import com.gzzhsl.pcms.vo.ResultVO;
 import com.gzzhsl.pcms.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,7 @@ public class UserController {
     }
 
     @GetMapping("/getthisproject")
-    @RequiresUser
+    @RequiresRoles(value = {"reporter", "checker"}, logical = Logical.OR)
     @ResponseBody
     public ResultVO getThisProject(HttpServletRequest request, HttpServletResponse response){
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();

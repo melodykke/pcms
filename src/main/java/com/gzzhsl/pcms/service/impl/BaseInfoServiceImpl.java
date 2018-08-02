@@ -11,10 +11,7 @@ import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.BaseInfoRepository;
 import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.repository.UserRepository;
-import com.gzzhsl.pcms.service.BaseInfoService;
-import com.gzzhsl.pcms.service.FeedbackService;
-import com.gzzhsl.pcms.service.OperationLogService;
-import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.service.*;
 import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
@@ -53,7 +50,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     @Autowired
     private FeedbackService feedbackService;
     @Autowired
-    private BaseInfoImgServiceImpl baseInfoImgService;
+    private BaseInfoImgService baseInfoImgService;
     @Autowired
     private WebSocket webSocket;
 

@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.controller;
 
+import com.gzzhsl.pcms.converter.BaseInfo2ManagerIndexVO;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.ProjectStatus;
 import com.gzzhsl.pcms.entity.TimeLineItem;
@@ -10,6 +11,7 @@ import com.gzzhsl.pcms.service.TimeLineItemService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
+import com.gzzhsl.pcms.vo.BaseInfoManagerIndexVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static javafx.scene.input.KeyCode.R;
 
@@ -38,7 +41,9 @@ public class IndexController {
     @ResponseBody
     @RequiresRoles(value = "manager")
     public ResultVO getAllBaseInfo() {
-        return ResultUtil.success(baseInfoService.getAllProject());
+        List<BaseInfo> baseInfos = baseInfoService.getAllProject();
+        List<BaseInfoManagerIndexVO> baseInfoManagerIndexVOs = baseInfos.stream().map(e -> BaseInfo2ManagerIndexVO.convert(e)).collect(Collectors.toList());
+        return ResultUtil.success(baseInfoManagerIndexVOs);
     }
 
     @GetMapping("/toprojectstatus")

@@ -4,6 +4,7 @@ import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.RoleRepository;
 import com.gzzhsl.pcms.service.AccountService;
+import com.gzzhsl.pcms.service.SysService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
@@ -26,7 +27,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserService userService;
     @Autowired
-    private SysServiceImpl sysService;
+    private SysService sysService;
     @Autowired
     private RoleRepository roleRepository;
 
