@@ -1,5 +1,30 @@
 $(function () {
+    var announcementId = '';
+    initThisPage();
+    function initThisPage() {
+        $.ajax({
+            url: "announcement/isedit",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var param = data.data;
+                announcementId = param.announcementId;
+                if (param) {
+                    // 页面赋值
+                    // 下拉框赋值
+                    $("#notice_type").find("select").val(param.type);
+                    var type_value = $("#notice_type").find("select").find("[value='" + param.type + "']").text();
+                    $("#notice_type .dropdown-display .dropdown-selected").text(type_value);
+                    $("[data-for=noticeTop]").prop("checked", param.hot);
+                    $("[data-for=noticeTitle]").val(param.title);
+                    $("[data-for=noticeKeywords]").val(param.keyword);
+                    editor.txt.html(param.content);
+                }
+            }
 
+        });
+
+    }
     $('#announcement_post').on('click', function (e) {
         swal({
             title: "提示",
@@ -21,13 +46,42 @@ $(function () {
                 contentType: "application/json",
                 dataType: "json",
                 success: function (data) {
-                    console.log(data)
+                    if (data.code == 1002) {
+                        swal({
+                            title: "提示",
+                            text: "发布成功！",
+                            type: "success",
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "发布!",
+                            closeOnConfirm: true
+                        }, function () {
+                            $('#content').load('announcement/toannouncementmanagement');
+                        })
+                    }
                 }
             })
         });
     });
+    function getNoticeData() {
 
-
+        var date = new Date(),
+            dateStr = date.toISOString(),
+            hourStr = date.toTimeString();
+        var time = dateStr.substring(0, dateStr.indexOf("T")) + " " + hourStr.substring(0, hourStr.lastIndexOf(":"));
+        var noticeData = {
+            type_value: $("#notice_type").find("select").val(),
+            type: $("#notice_type").find("select").find("option:selected").text(),
+            hot: $("[data-for=noticeTop]").is(":checked"),
+            title: $("[data-for=noticeTitle]").val(),
+            time: time,
+            keyword: $("[data-for=noticeKeywords]").val(),
+            content: editor.txt.html()
+        }
+        if (announcementId != '') {
+            noticeData.announcementId = announcementId;
+        }
+        return noticeData;
+    }
 });
 var type_value, type_text;
 // 下拉框渲染
@@ -86,22 +140,7 @@ function closeDialog() {
     $("#dialog").addClass("dialog-hide");
     $("#mask").hide();
 }
-function getNoticeData() {
-    var date = new Date(),
-        dateStr = date.toISOString(),
-        hourStr = date.toTimeString();
-    var time = dateStr.substring(0, dateStr.indexOf("T")) + " " + hourStr.substring(0, hourStr.lastIndexOf(":"));
-    var noticeData = {
-        type_value: $("#notice_type").find("select").val(),
-        type: $("#notice_type").find("select").find("option:selected").text(),
-        hot: $("[data-for=noticeTop]").is(":checked"),
-        title: $("[data-for=noticeTitle]").val(),
-        time: time,
-        keyword: $("[data-for=noticeKeywords]").val(),
-        content: editor.txt.html()
-    }
-    return noticeData;
-}
+
 function getRequest() {
     var url = location.search; //获取url中"?"符后的字串
     var param = decodeURIComponent(url),
@@ -118,21 +157,3 @@ function getRequest() {
     }
     return theRequest;
 }
-function initThisPage() {
-    var param = getRequest();
-    if (param) {
-        // 页面赋值
-        // 下拉框赋值
-        $("#notice_type").find("select").val(param.type);
-        var type_value = $("#notice_type").find("select").find("[value='" + param.type + "']").text();
-        $("#notice_type .dropdown-display .dropdown-selected").text(type_value);
-        $("[data-for=noticeTop]").prop("checked", param.hot);
-        $("[data-for=noticeTitle]").val(param.title);
-        $("[data-for=noticeKeywords]").val(param.keyword);
-        editor.txt.html(param.content);
-    }
-}
-
-$(function () {
-    initThisPage();
-});

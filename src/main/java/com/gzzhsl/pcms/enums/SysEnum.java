@@ -16,6 +16,7 @@ public enum SysEnum {
     PERSON_INFO_DUPLICATED(1005, "重复提交个人信息"),
     USER_INFO_DUPLICATED(1006, "存在重复的用户名"),
     PERSON_INFO_ERROR(1007, "提交个人信息错误"),
+    LOGIN_INACTIVE_ERROR(1008, "登陆账号未激活！"),
 
     WECHAT_BINDING_ERROR(1010, "微信绑定出错，请联系管理员！"),
 

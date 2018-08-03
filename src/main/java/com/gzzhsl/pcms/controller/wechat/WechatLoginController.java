@@ -155,7 +155,8 @@ public class WechatLoginController {
             try {
                 subject.login(token);
             } catch (AuthenticationException e) {
-                e.printStackTrace();
+                log.error("【微信登陆错误】 e -> "+ e.getMessage());
+                throw new SysException(SysEnum.LOGIN_INACTIVE_ERROR);
             }
             return ResultUtil.success();
         }

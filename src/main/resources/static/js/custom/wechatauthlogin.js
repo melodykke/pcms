@@ -10,6 +10,8 @@ $(function () {
            success: function (data) {
                if (data.code == "1002") {
                    window.location.href = "/index";
+               } else {
+                    $('#msg').html(data.msg)
                }
            }
        })

@@ -877,6 +877,9 @@ li.active>a> .control-tips {
 
 /* ------------------------------所有水库------------------------------------- */
 
+.all-reservoir .ui-jqgrid .ui-jqgrid-bdiv {
+    height: calc(100vh - 350px)!important;
+}
 .all-reservoir>.tabs-container>.tab-content {
     background: #fff;
     height: calc(100vh - 215px);

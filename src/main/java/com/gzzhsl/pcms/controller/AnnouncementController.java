@@ -18,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 @Controller
@@ -27,10 +29,23 @@ public class AnnouncementController {
     @Autowired
     private AnnouncementService announcementService;
 
+    private String announcementId;
+
     @GetMapping("/toannouncement")
     @RequiresRoles(value = "manager")
-    public String toAnnouncement() {
+    public String toAnnouncement(String announcementId) {
+        this.announcementId = announcementId;
         return "announcement";
+    }
+    @GetMapping("/isedit")
+    @ResponseBody
+    public ResultVO isEdit() {
+        if (announcementId != null && announcementId != "") {
+            Announcement announcement = announcementService.getById(announcementId);
+            announcementId = null;
+            return ResultUtil.success(announcement);
+        }
+        return null;
     }
     @GetMapping("/toannouncementmanagement")
     @RequiresRoles(value = "manager")
@@ -80,7 +95,7 @@ public class AnnouncementController {
     @GetMapping("getnormallatests")
     @ResponseBody
     public ResultVO getNormalLatests() {
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
         PageRequest pageRequest = new PageRequest(0, 3, sort);
         Page<Announcement> announcements = announcementService.getNormalLatests(pageRequest);
         if (announcements != null && announcements.getContent().size() > 0) {
@@ -93,7 +108,7 @@ public class AnnouncementController {
     @GetMapping("gethotlatests")
     @ResponseBody
     public ResultVO getHotLatests() {
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
         PageRequest pageRequest = new PageRequest(0, 3, sort);
         Page<Announcement> announcements = announcementService.getHotLatests(pageRequest);
         if (announcements != null && announcements.getContent().size() > 0) {

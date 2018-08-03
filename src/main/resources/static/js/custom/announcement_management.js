@@ -40,6 +40,10 @@ function initGrid(url, type, param) {
         rowNum: 20,
         page: 1,
         rowList: [20, 40, 60],
+        loadComplete: function (data) {
+            gridData = data.content;
+
+        }
     });
 
 }
@@ -83,9 +87,9 @@ function toPublishNotice() {
 function modifyNotice() {
     var rowData = getSelectedRowData();
     if (rowData) {
-        var param = parseParam(rowData),
-            urlParam = encodeURIComponent(param);
-        location.href = "publish_notice.html?" + urlParam;
+        // var param = parseParam(rowData),
+        //     urlParam = encodeURIComponent(param);
+        $('#content').load('/announcement/toannouncement?announcementId=' + rowData.announcementId);
     }
 }
 // 删除
