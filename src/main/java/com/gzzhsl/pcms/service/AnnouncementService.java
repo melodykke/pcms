@@ -13,7 +13,8 @@ public interface AnnouncementService {
 
     Announcement save(AnnouncementVO announcementVO);
     Announcement delete(Announcement announcement);
-
+    List<Announcement> getAll();
     Page<Announcement> getNormalLatests(Pageable pageable);
     Page<Announcement> getHotLatests(Pageable pageable);
+    Page<Announcement> findAll(Pageable pageable);
 }

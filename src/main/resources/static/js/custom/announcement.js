@@ -102,3 +102,37 @@ function getNoticeData() {
     }
     return noticeData;
 }
+function getRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var param = decodeURIComponent(url),
+        urlParam = decodeURIComponent(param);
+    var theRequest = new Object();
+    if (urlParam.indexOf("?") != -1) {
+        var str = urlParam.substr(1);
+        strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+            theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+        }
+    } else {
+        theRequest = false;
+    }
+    return theRequest;
+}
+function initThisPage() {
+    var param = getRequest();
+    if (param) {
+        // 页面赋值
+        // 下拉框赋值
+        $("#notice_type").find("select").val(param.type);
+        var type_value = $("#notice_type").find("select").find("[value='" + param.type + "']").text();
+        $("#notice_type .dropdown-display .dropdown-selected").text(type_value);
+        $("[data-for=noticeTop]").prop("checked", param.hot);
+        $("[data-for=noticeTitle]").val(param.title);
+        $("[data-for=noticeKeywords]").val(param.keyword);
+        editor.txt.html(param.content);
+    }
+}
+
+$(function () {
+    initThisPage();
+});

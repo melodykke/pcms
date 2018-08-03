@@ -52,6 +52,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    public List<Announcement> getAll() {
+        return announcementRepository.findAll();
+    }
+
+    @Override
     public Page<Announcement> getNormalLatests(Pageable pageable) {
         Page<Announcement> announcements = null;
         Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
@@ -71,6 +76,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         };
         Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
         announcements = announcementRepository.findAll(querySpecification, pageable);
+        return announcements;
+    }
+
+    @Override
+    public Page<Announcement> findAll(Pageable pageable) {
+        Page<Announcement> announcements = announcementRepository.findAll(pageable);
         return announcements;
     }
 }

@@ -77,6 +77,9 @@ $(function () {
     $('#announcement_a').click(function () {
         $('#content').load('announcement/toannouncement');
     });
+    $('#announcement_management').click(function () {
+        $('#content').load('announcement/toannouncementmanagement');
+    });
     $('#project_status_a').click(function () {
         if (hasProject == true) {
             contentDiv.load('index/toprojectstatus');
@@ -2040,31 +2043,6 @@ $(function () {
     }
 
     /*公告*/
-    var $ul = $("#loopNotice");
-    //获得ul长度
-    var ulwidth = $("#loopNotice").width();
-    //给li定位 起始位置
-    function positionli() {
-        $ul.find("li").each(function () {
-            var index = $(this).index();
-            var left = index * ulwidth + ulwidth;
-            $(this).css({ left: left });
-        });
-    }
-    //轮播
-    function move() {
-        $ul.find("li").each(function () {
-            var liindex = $(this).index();
-            var lastleft = -($ul.find("li").length - liindex) * ulwidth;
-
-            $(this).animate({ left: lastleft }, 20000, 'linear', function () {
-                positionli();
-                move();
-            });
-        });
-    }
-    positionli();
-    move();
 
     $.getJSON("announcement/gethotlatests", function (data) {
         var announcementItems = data.data.content;

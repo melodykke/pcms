@@ -8,6 +8,7 @@ import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.AnnouncementVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,12 +28,18 @@ public class AnnouncementController {
     private AnnouncementService announcementService;
 
     @GetMapping("/toannouncement")
+    @RequiresRoles(value = "manager")
     public String toAnnouncement() {
         return "announcement";
     }
-
+    @GetMapping("/toannouncementmanagement")
+    @RequiresRoles(value = "manager")
+    public String toAnnouncementManagement() {
+        return "announcement_management";
+    }
     @PostMapping("/post")
     @ResponseBody
+    @RequiresRoles(value = "manager")
     public ResultVO post(@RequestBody @Valid AnnouncementVO announcementVO, BindingResult bindingResult) {
         if (announcementVO == null) {
             log.error("【公告错误】 没有收到有效的announcementVO， announcementVO={}", announcementVO);
@@ -47,6 +54,40 @@ public class AnnouncementController {
             return ResultUtil.success();
         }
         return ResultUtil.failed();
+    }
+
+    @GetMapping("/getallannouncement")
+    @ResponseBody
+    public ResultVO getAllAnnouncement() {
+        return ResultUtil.success(announcementService.getAll());
+    }
+
+    @GetMapping("/getannouncements")
+    @ResponseBody
+    public Page<Announcement> getAnnouncements(@RequestParam(required = false, name = "rows", defaultValue = "15") Integer pageSize,
+                                                 @RequestParam(required = false, name = "startIndex") Integer startIndex,
+                                                 @RequestParam(required = false, name = "page", defaultValue = "1") Integer pageIndex,
+                                                 @RequestParam(required = false, name = "type", defaultValue = "") String type) {
+        Integer page = pageIndex-1;
+        Integer size = pageSize;
+        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
+        PageRequest pageRequest = new PageRequest(page, size, sort);
+        Page<Announcement> announcements = announcementService.findAll(pageRequest);
+        return announcements;
+    }
+
+
+    @GetMapping("getnormallatests")
+    @ResponseBody
+    public ResultVO getNormalLatests() {
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        PageRequest pageRequest = new PageRequest(0, 3, sort);
+        Page<Announcement> announcements = announcementService.getNormalLatests(pageRequest);
+        if (announcements != null && announcements.getContent().size() > 0) {
+            return ResultUtil.success(announcements);
+        } else {
+            return ResultUtil.failed();
+        }
     }
 
     @GetMapping("gethotlatests")

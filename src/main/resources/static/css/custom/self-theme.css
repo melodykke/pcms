@@ -136,7 +136,7 @@ tbody {
     border-top: none;
 }
 .md-skin .wrapper-content {
-    padding: 20px 10px 40px;
+    padding: 20px 0 40px;
 }
 .map-row .ibox-map {
     padding-right: 15px;
@@ -722,6 +722,8 @@ li.active>a> .control-tips {
 .overview-grid .ui-jqgrid>.ui-jqgrid-view {
     background: rgba(20, 45, 37, 0.8);
     border-radius: 0;
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
 }
 .overview-grid table>thead>tr>th {
     background: rgba(20, 45, 37, 0.8)!important;
@@ -872,40 +874,193 @@ li.active>a> .control-tips {
     width: calc(100vw - 220px);
     left: 220px;
 }
+
+/* ------------------------------所有水库------------------------------------- */
+
+.all-reservoir>.tabs-container>.tab-content {
+    background: #fff;
+    height: calc(100vh - 215px);
+    padding: 1px;
+}
+.all-reservoir .panel-body {
+    margin: 20px;
+}
+.self-grid {
+    width: 100%;
+}
+.self-grid .ui-jqgrid .ui-jqgrid-htable th {
+    height: 30px;
+}
+.all-reservoir .nav.nav-tabs>li>a {
+    margin: 0px -1px;
+}
+/* ------------------按钮样式-------------------- */
+.grid-tools {
+    margin: 20px;
+}
+.grid-tools>button:focus {
+    outline: none;
+}
+.grid-btn {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    width: 100px;
+    height: 30px;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+.grid-btn>i {
+    position: relative;
+    left: -10px;
+}
+.create-btn {
+    color: #58b495;
+}
+.create-btn:hover {
+    background-color: #58b495;
+    color: #fff;
+}
+.modify-btn {
+    color: #23c6c8;
+}
+.modify-btn:hover {
+    background-color: #23c6c8;
+    color: #fff;
+}
+.delete-btn:hover {
+    background-color: #e6e6e6;
+}
+.refresh-btn {
+    color: #1c84c6;
+}
+.refresh-btn:hover {
+    background-color: #1c84c6;
+    color: #fff;
+}
+.publish-btn {
+    color: #fff;
+    border-color: #f79d3c;
+    background: rgba(247, 157, 60, .9);
+    position: relative;
+    outline: none;
+    box-shadow: inset 0 0 0 #f79d3c, 0 1px 0 0 #f79d3c, 0 3px 5px #999999;
+}
+.publish-notice>.publish-btn {
+    height: 35px;
+    width: 135px;
+    box-shadow: inset 0 0 0 #f79d3c, 0 4px 0 0 #f79d3c, 0 8px 5px #999999;
+}
+.publish-btn:active {
+    top: 1px;
+}
+.publish-notice>.publish-btn:active {
+    top: 2px;
+}
+
+.grid-tools>.search-block {
+    float: right;
+}
+.grid-tools>.search-block>input {
+    width: 300px;
+    border-radius: 15px;
+    border: 1px solid #e0e0e0;
+    padding-left: 15px;
+    padding-right: 27px;
+    height: 30px;
+}
+.grid-tools>.search-block>a {
+    color: #18a689;
+}
+.grid-tools>.search-block>a>i {
+    text-align: center;
+    position: relative;
+    right: -296px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 20px;
+    z-index: 1;
+    background: #fff;
+}
+.grid-tools>.search-block>input:focus {
+    outline: none;
+    border-color: rgba(26, 179, 148,.5)!important;
+    box-shadow: 0 0 1px 0px rgba(26, 179, 148,.5);
+}
+/* --------------------------公告管理----------------------- */
+.publish-notice {
+    margin: 20px;
+    margin-top: 15px;
+    text-align: right;
+}
+/* --------------面包屑-------------- */
+.breadcrumb>li>a{
+    color: #18a689;
+}
+
+
+
 /* ---公告滚动--- */
+@keyframes move {
+    0% {
+        left: 0;
+    }
+    100% {
+        left: -350%;
+    }
+}
+@-webkit-keyframes move {
+    0% {
+        left: 0;
+    }
+    100% {
+        left: -350%;
+    }
+}
 .notice-transform {
     min-width: calc(100% - 530px);
     height: 38px;
     position: absolute;
-    left: 360px;
+    left: 400px;
     top: 0;
+    overflow: hidden;
 }
 
 .notice-ul {
-    height: 100%;
-    overflow: hidden;
     position: relative;
-    margin-left: 50px;
+    padding-left: 0px;
     margin-top: 0px;
     line-height: 38px;
+    width: 300%;
+    animation: 40s move infinite linear;
+    -webkit-animation: 40s move infinite linear;
+    -o-animation: 40s move infinite linear;
+}
+.notice-transform:hover .notice-ul {
+    animation-play-state: paused;
+    -webkit-animation-play-state:paused;
+    -o-animation-play-state: paused;
 }
 
 .notice-ul>li {
     font-size: 14px;
-    position: absolute;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     color: #000;
-    display: inline-block;
-    width: 50%;
+    float: left;
+    width: 33%;
+    height: 38px;
+    line-height: 38px;
+    list-style: none;
+    text-align: right;
 }
 .loop-title {
     position: absolute;
     height: 38px;
     line-height: 38px;
     top: 0;
-    left: 350px;
+    left: 340px;
     color: #135192;
 }
 .loop-title>i {

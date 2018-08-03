@@ -107,7 +107,7 @@ public class NotificationController {
     @ResponseBody
     public Page<Notification> queryNotification(@RequestParam(required = false, name = "pageSize", defaultValue = "15") Integer pageSize,
                                        @RequestParam(required = false, name = "startIndex") Integer startIndex,
-                                       @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                       @RequestParam(required = false, name = "pageIndex", defaultValue = "0") Integer pageIndex,
                                        @RequestParam(required = false, name = "type", defaultValue = "") String type){
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();

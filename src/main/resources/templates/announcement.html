@@ -16,82 +16,97 @@
     <link th:href="@{/css/custom/jquery.dropdown.min.css}" rel="stylesheet">
 
 </head>
+<body>
+<div class="row wrapper border-bottom white-bg page-heading" id="main-breadcrumb">
+    <div class="col-sm-4">
+        <h2>这是首页</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">首页</a>
+            </li>
+            <li class="active">
+                <strong>当前页面</strong>
+            </li>
+        </ol>
+    </div>
+</div>
 
-
-            <div class="wrapper wrapper-content animated fadeInRight">
-                <div class="row notice-row">
-                    <div class="public-panel">
-                        <div class="public-title">
-                            <span>发布公告</span>
-                        </div>
-                        <div class="public-content">
-                            <div class="public-item">
-                                <div class="public-label col-lg-2 col-md-2">
-                                    <label>* 公告类型：</label>
-                                </div>
-                                <div class="public-detail col-lg-10 col-md-10">
-                                    <div id="notice_type" class="col-lg-5 col-md-5">
-                                        <select style="display:none" placeholder="--请选择类型--">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                        </select>
-                                    </div>
-                                </div>
+<div class="wrapper wrapper-content animated fadeInRight">
+        <div id="animation_box" class="animated">
+            <div class="row notice-row">
+                <div class="public-panel">
+                    <div class="public-title">
+                        <span>发布公告</span>
+                    </div>
+                    <div class="public-content">
+                        <div class="public-item">
+                            <div class="public-label col-lg-2 col-md-2">
+                                <label>* 公告类型：</label>
                             </div>
-                            <div class="public-item">
-                                <div class="public-label col-lg-2 col-md-2">
-                                    <label>置顶：</label>
-                                </div>
-                                <div class="public-detail col-lg-10 col-md-10">
-                                    <input type="checkbox" data-for="noticeTop" />
-                                </div>
-                            </div>
-                            <div class="public-item">
-                                <div class="public-label col-lg-2 col-md-2">
-                                    <label>* 标题：</label>
-                                </div>
-                                <div class="public-detail col-lg-10 col-md-10">
-                                    <input type="text" class="col-lg-5 col-md-5" data-for="noticeTitle" />
-                                </div>
-                            </div>
-                            <div class="public-item">
-                                <div class="public-label col-lg-2 col-md-2">
-                                    <label>关键字：</label>
-                                </div>
-                                <div class="public-detail col-lg-10 col-md-10">
-                                    <input type="text" class="col-lg-5 col-md-5" data-for="noticeKeywords" />
-                                </div>
-                            </div>
-                            <div class="public-item">
-                                <div class="public-label col-lg-2 col-md-2">
-                                    <label>* 内容：</label>
-                                </div>
-                                <div class="public-detail col-lg-10 col-md-10" data-for="noticeContent">
-                                    <div id="editor">
-                                        <!--<p>请填写公告内容...</p>-->
-                                    </div>
+                            <div class="public-detail col-lg-10 col-md-10">
+                                <div id="notice_type" class="col-lg-5 col-md-5">
+                                    <select style="display:none" placeholder="--请选择类型--">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="public-tool">
-                            <div>
-                                <button type="button" class="btn btn-outline btn-primary" id="announcement_post">发布</button>
-                                <button type="button" class="btn btn-outline btn-info" onclick="openPreview()">预览</button>
+                        <div class="public-item">
+                            <div class="public-label col-lg-2 col-md-2">
+                                <label>置顶：</label>
                             </div>
+                            <div class="public-detail col-lg-10 col-md-10">
+                                <input type="checkbox" data-for="noticeTop" />
+                            </div>
+                        </div>
+                        <div class="public-item">
+                            <div class="public-label col-lg-2 col-md-2">
+                                <label>* 标题：</label>
+                            </div>
+                            <div class="public-detail col-lg-10 col-md-10">
+                                <input type="text" class="col-lg-5 col-md-5" data-for="noticeTitle" />
+                            </div>
+                        </div>
+                        <div class="public-item">
+                            <div class="public-label col-lg-2 col-md-2">
+                                <label>关键字：</label>
+                            </div>
+                            <div class="public-detail col-lg-10 col-md-10">
+                                <input type="text" class="col-lg-5 col-md-5" data-for="noticeKeywords" />
+                            </div>
+                        </div>
+                        <div class="public-item">
+                            <div class="public-label col-lg-2 col-md-2">
+                                <label>* 内容：</label>
+                            </div>
+                            <div class="public-detail col-lg-10 col-md-10" data-for="noticeContent">
+                                <div id="editor">
+                                    <!--<p>请填写公告内容...</p>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="public-tool">
+                        <div>
+                            <button type="button" class="btn btn-outline btn-primary" id="announcement_post">发布</button>
+                            <button type="button" class="btn btn-outline btn-info" onclick="openPreview()">预览</button>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
 
     <!-- 弹出层 -->
