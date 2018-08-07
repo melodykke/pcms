@@ -131,6 +131,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             baseInfoRt.setBaseInfoImgs(baseInfoImgs);
             baseInfoRt = baseInfoRepository.save(baseInfoRt);
         }
+
         // 把通知提醒也一并存入数据库
         Notification notification = new Notification();
         notification.setCreateTime(new Date());
@@ -151,11 +152,15 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (thisUser.getChildren() != null && thisUser.getChildren().size()==0 && roles.size() == 1 && "reporter".equals(roles.get(0).getRole())) { // 如果是reporter账号...
             if (thisUser.getParent() != null && thisUser.getParent().getUserId() != "" && thisUser.getParent().getUserId() != null ) {
                 List<UserInfo> children = thisUser.getParent().getChildren();
-                children.add(thisUser.getParent()); // 儿子们加粑粑
+                List<UserInfo> parentAndChildren = new ArrayList<UserInfo>();
                 for (UserInfo child : children) {
-                    child.setBaseInfo(baseInfoRt);
+                    parentAndChildren.add(child);
                 }
-                baseInfoRt.setUserInfoList(children);
+                parentAndChildren.add(thisUser.getParent()); // 儿子们加粑粑
+                for (UserInfo eachUser : parentAndChildren) {
+                    eachUser.setBaseInfo(baseInfoRt);
+                }
+                baseInfoRt.setUserInfoList(parentAndChildren);
             }
         } else {
             for (SysRole role : roles) {

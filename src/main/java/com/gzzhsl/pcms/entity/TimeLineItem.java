@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,9 +18,9 @@ public class TimeLineItem {
     private Integer timeLineItemId;
     private String type;
     private String msg;
-    @OneToOne(mappedBy = "timeLineItem")
+    @OneToMany(mappedBy = "timeLineItem")
     @JsonBackReference
-    private ProjectStatus projectStatus;
+    private List<ProjectStatus> projectStatuses;
     private Date createTime;
     private Date updateTime;
 

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>创建账号</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+    <link th:href="@{/css/custom/create_account.css}" rel="stylesheet">
+</head>
+
+<body class="md-skin fixed-nav no-skin-config">
+    <!-- <body> -->
+    <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-sm-4">
+                    <h2 class="create">创建账号</h2>
+                    <h2 class="modify">修改账号</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="manage_account.html">账号管理</a>
+                        </li>
+                        <li class="active">
+                            <strong class="create">创建账号</strong>
+                            <strong class="modify">修改账号</strong>
+                        </li>
+                    </ol>
+                </div>
+                <!-- <div class="col-sm-8">
+                    <div class="title-action">
+                        <a href="" class="btn btn-primary">This is action area</a>
+                    </div>
+                </div> -->
+            </div>     
+    <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row create-row">
+                    <div class="create-account animated">
+                        <div class="create-title">
+                            <span class="create">创建业主账号</span>
+                            <span class="modify">修改业主账号</span>
+                        </div>
+                        <div class="account-name">
+                            <label>账号名：</label>
+                            <div>
+                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                <input type="text" placeholder="  请填写账号名称" id="account_name">
+                            </div>
+                        </div>
+                        <div class="reservoir-name">
+                            <label>水库名：</label>
+                            <div>
+                                <i class="fa fa-adjust"></i>
+                                <input type="text" placeholder="  请填写水库名称" id="reservoir_name">
+                            </div>
+                        </div>
+                        <div class="create-tools">
+                            <button type="button" class="btn btn-w-m btn-primary create" id="create_account_btn">创建</button>
+                            <button type="button" class="btn btn-w-m btn-info modify" id="modify_account_btn">修改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+     
+  
+    
+    <!-- Mainly scripts -->
+    <script th:src="@{/js/custom/create_account.js}"></script>
+
+</body>
+
+
+</html>

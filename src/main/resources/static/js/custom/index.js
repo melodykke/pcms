@@ -63,22 +63,72 @@ $(function () {
         contentDiv.load('operationlog/tooperationlog');
     });
     $('#annual_investment_plan_new_entry').click(function () {
-        contentDiv.load('annualinvestment/tonewannualinvestment');
+        if (hasProject == true) {
+            contentDiv.load('annualinvestment/tonewannualinvestment');
+        } else {
+            swal({
+                title: "未查到项目信息",
+                text: "请先填写项目概况!",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "好确定!",
+            })
+        }
+
     });
     $('#annual_investment_plan_manage_entry').click(function () {
-        contentDiv.load('annualinvestment/toannualinvestmentshow');
+        if (hasProject == true) {
+            contentDiv.load('annualinvestment/toannualinvestmentshow');
+        } else {
+            swal({
+                title: "未查到项目信息",
+                text: "请先填写项目概况!",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "好确定!",
+            })
+        }
+
     });
     $('#tender_new_entry').click(function () {
-        contentDiv.load('tender/tonewtender');
+        if (hasProject == true) {
+            contentDiv.load('tender/tonewtender');
+        } else {
+            swal({
+                title: "未查到项目信息",
+                text: "请先填写项目概况!",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "好确定!",
+            })
+        }
+
     });
     $('#tender_manage_entry').click(function () {
-        contentDiv.load('tender/totendershow');
+        if (hasProject == true) {
+            contentDiv.load('tender/totendershow');
+        } else {
+            swal({
+                title: "未查到项目信息",
+                text: "请先填写项目概况!",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "好确定!",
+            })
+        }
+
     });
     $('#announcement_a').click(function () {
         $('#content').load('announcement/toannouncement');
     });
     $('#announcement_management').click(function () {
         $('#content').load('announcement/toannouncementmanagement');
+    });
+    $('#account_a').click(function () {
+        $('#content').load('account/toaccount');
+    });
+    $('#account_management').click(function () {
+        $('#content').load('account/toaccountmanagement');
     });
     $('#project_status_a').click(function () {
         if (hasProject == true) {
@@ -99,15 +149,15 @@ $(function () {
     }
     if ($('#notification_entrance').length > 0) {
         getOverallNotification(getoverallnotificationUrl);
-        setInterval(function () {
+      /*  setInterval(function () {
             getOverallNotification(getoverallnotificationUrl);
-        }, 30000);
+        }, 30000);*/
     }
     if ($('#feedback_entrance').length > 0) {
     getOverallFeedback(getoverallfeedbackUrl);
-        setInterval(function () {
+    /*    setInterval(function () {
             getOverallFeedback(getoverallfeedbackUrl);
-        }, 30000);
+        }, 30000);*/
     }
     if ($('#self_card').length > 0) {
         getThisCard(getThisCardUrl);
@@ -163,7 +213,7 @@ $(function () {
                     '                        </div>';
                 $('#self_card').html(cardHtml);
             } else {
-
+                $('#self_card').html("<h3>账号设置顺序</h3><p>1.完善个人信息</p></br><p>2.配置资料保送子账号</p><p>3.完善项目概况等信息</p>");
             }
         });
     }
@@ -180,9 +230,9 @@ $(function () {
     // 拿到所有未审批的项目
     function getOverallNotification(url) {
         $.getJSON(url, function (data) {
+            var htmlTemp = "";
             if (data.code == 1002) {
                 $('#countUnread').text(data.data.allUncheckedNum);
-                var htmlTemp = "";
                 $('#notification_entrance').html('');
                 for (var key in data.data.article) {
                     htmlTemp += ' <li>\n' +
@@ -195,14 +245,14 @@ $(function () {
                         '                            </li>\n' +
                         '                            <li class="divider"></li>'
                 }
-                htmlTemp += ' <li>\n' +
-                    '  <a href="#" data-id="/notification/tonotification">\n' +
-                    '  <i class="fa fa-envelope fa-fw"></i> 查看所有\n' +
-                    '  </a>\n' +
-                    '  </li>\n' +
-                    '  <li class="divider"></li>'
-                $('#notification_entrance').append(htmlTemp)
             }
+            htmlTemp += ' <li>\n' +
+                '  <a href="#" data-id="/notification/tonotification">\n' +
+                '  <i class="fa fa-envelope fa-fw"></i> 查看所有\n' +
+                '  </a>\n' +
+                '  </li>\n' +
+                '  <li class="divider"></li>'
+            $('#notification_entrance').append(htmlTemp)
         });
     }
 
@@ -573,7 +623,9 @@ $(function () {
             }
         }
     });
-
+    $('.person_info_modal_close_btn').click(function () {
+        $('#person_info_modal').modal('hide');
+    });
 
     /*配置向导*/
     var enjoyhint_script_data = [
@@ -949,42 +1001,52 @@ $(function () {
         $('#new_contract_time').datepicker('show');
     });
     $("#contract").click(function () {
-        $.ajax({
-            url: 'contract/hascontract',
-            type: 'GET',
-            contentType: 'application/json',
-            success: function (data) {
-                if (data.code == 1003) {
-                    // 若无数据
-                    swal({
-                            title: "未查到合同备案",
-                            text: "请先填写合同备案!",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "好的，去填写!",
-                            cancelButtonText: "取消"
-                        }, function (isConfirm) {
-                            if (isConfirm) {
-                                $('#contract_modal').modal();
+        if (hasProject == false) {
+            swal({
+                title: "未查到项目信息",
+                text: "请先填写项目概况!",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "好确定!",
+            })
+        } else {
+            $.ajax({
+                url: 'contract/hascontract',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.code == 1003) {
+                        // 若无数据
+                        swal({
+                                title: "未查到合同备案",
+                                text: "请先填写合同备案!",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "好的，去填写!",
+                                cancelButtonText: "取消"
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    $('#contract_modal').modal();
+                                }
                             }
-                        }
-                    );
-                } else if (data.code == 1002) {
-                    contentDiv.load('contract/tocontract');
-                    $('#small-chat').hide();
-                } else if (data.code == 2203) {
-                    swal({
-                        title: "出错",
-                        text: "请优先配置水库基本信息!",
-                        type: "warning",
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "确认!",
-                        closeOnConfirm: false
-                    });
+                        );
+                    } else if (data.code == 1002) {
+                        contentDiv.load('contract/tocontract');
+                        $('#small-chat').hide();
+                    } else if (data.code == 2203) {
+                        swal({
+                            title: "出错",
+                            text: "请优先配置水库基本信息!",
+                            type: "warning",
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "确认!",
+                            closeOnConfirm: false
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     });
     $('#contract_submit').click(function () {
         swal({
@@ -1082,58 +1144,67 @@ $(function () {
 
     // 历史数据填写
     $("#month_history_statistic").click(function(){
-        $.ajax({
-            url: 'monthlyreport/hashistorystatistic',
-            type: 'GET',
-            contentType: 'application/json',
-            success: function (data) {
-                if (data.code == 1002){
-                    swal({
-                            title: "已配置！",
-                            text: "已设置过该水库的历史统计数据，无法重复设置!",
-                            type: "success",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "查看",
-                            cancelButtonText:"取消"
-                        }, function () {
-                            contentDiv.load('monthlyreport/tomonthshistoryshow');
-                        }
-                    );
-                } else if (data.code == 1004) {
-                    swal({
-                            title:"正在审核!",
-                            text:"历史数据正在审核中，您可以选择查看目前状态或重新提交!",
-                            type:"warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "查看",
-                            cancelButtonText:"取消"
-                        },function () {
-                            $("#pre_progress_modal").modal('hide');
-                            contentDiv.load('monthlyreport/tomonthshistoryshow');
-                        }
-                    );
-                }else if (data.code == 1005) {
-                    swal({
-                            title: "审核未通过!",
-                            text: "历史数据审核未通过，您可以选择查看详情或重新提交!",
-                            type: "error",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "查看",
-                            cancelButtonText: "取消"
-                        }, function () {
-                            $("#pre_progress_modal").modal('hide');
-                            contentDiv.load('monthlyreport/tomonthshistoryshow');
-                        }
-                    );
-                } else {
-                    contentDiv.load('monthlyreport/tomonthshistory');
+        if (hasProject == false) {
+            swal({
+                title: "未查到项目信息",
+                text: "请先填写项目概况!",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "好确定!",
+            })
+        } else {
+            $.ajax({
+                url: 'monthlyreport/hashistorystatistic',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.code == 1002){
+                        swal({
+                                title: "已配置！",
+                                text: "已设置过该水库的历史统计数据，无法重复设置!",
+                                type: "success",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "查看",
+                                cancelButtonText:"取消"
+                            }, function () {
+                                contentDiv.load('monthlyreport/tomonthshistoryshow');
+                            }
+                        );
+                    } else if (data.code == 1004) {
+                        swal({
+                                title:"正在审核!",
+                                text:"历史数据正在审核中，您可以选择查看目前状态或重新提交!",
+                                type:"warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "查看",
+                                cancelButtonText:"取消"
+                            },function () {
+                                $("#pre_progress_modal").modal('hide');
+                                contentDiv.load('monthlyreport/tomonthshistoryshow');
+                            }
+                        );
+                    }else if (data.code == 1005) {
+                        swal({
+                                title: "审核未通过!",
+                                text: "历史数据审核未通过，您可以选择查看详情或重新提交!",
+                                type: "error",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "查看",
+                                cancelButtonText: "取消"
+                            }, function () {
+                                $("#pre_progress_modal").modal('hide');
+                                contentDiv.load('monthlyreport/tomonthshistoryshow');
+                            }
+                        );
+                    } else {
+                        contentDiv.load('monthlyreport/tomonthshistory');
+                    }
                 }
-            }
-        });
-
+            });
+        }
     });
 
     $('#bind_wechat_btn').click(function () {

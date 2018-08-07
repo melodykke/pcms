@@ -21,7 +21,7 @@ public class ProjectStatus {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String projectStatusId;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "time_line_item_id")
     private TimeLineItem timeLineItem;
 

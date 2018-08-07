@@ -20,7 +20,7 @@ public class Tender {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String tenderId;
     private String tenderFilingUnit; // 招标备案单位
-    private BigDecimal nameOfLots; // 标段名称
+    private String nameOfLots; // 标段名称
     private Date bidPlanDate;
     private Date bidCompleteDate;
     private String bidAgent;

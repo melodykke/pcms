@@ -33,13 +33,13 @@ public class AnnouncementController {
 
     @GetMapping("/toannouncement")
     @RequiresRoles(value = "manager")
-    public String toAnnouncement(String announcementId) {
+    public synchronized String toAnnouncement(String announcementId) {
         this.announcementId = announcementId;
         return "announcement";
     }
     @GetMapping("/isedit")
     @ResponseBody
-    public ResultVO isEdit() {
+    public synchronized ResultVO isEdit() {
         if (announcementId != null && announcementId != "") {
             Announcement announcement = announcementService.getById(announcementId);
             announcementId = null;

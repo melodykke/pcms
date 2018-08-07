@@ -17,6 +17,9 @@ public enum SysEnum {
     USER_INFO_DUPLICATED(1006, "存在重复的用户名"),
     PERSON_INFO_ERROR(1007, "提交个人信息错误"),
     LOGIN_INACTIVE_ERROR(1008, "登陆账号未激活！"),
+    CREATE_USER_ACCOUNT_ERROR(1009, "开通账户失败，参数错误！"),
+    SUPERIOR_ACCOUNT_NO_EXIST_ERROR(1010, "开通账户失败，上级账号不存在！"),
+    SUBACCOUNT_NOT_EXIST_ERROR(1011, "请优先设置资料保送子账号！"),
 
     WECHAT_BINDING_ERROR(1010, "微信绑定出错，请联系管理员！"),
 

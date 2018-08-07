@@ -21,4 +21,14 @@ public interface UserRepository extends JpaRepository<UserInfo, String> {
     @Query("update UserInfo userInfo set userInfo.openId = :openId where userInfo.userId = :userId")
     Integer updateUserOpenId(@Param(value = "openId") String openId, @Param(value = "userId") String userId);
     UserInfo findByOpenId(String openId);
+    @Transactional
+    @Modifying
+    @Query("update UserInfo userInfo set userInfo.active = :active where userInfo.userId = :userId")
+    Integer toggleActivate(@Param(value = "active") byte active, @Param(value = "userId") String userId);
+    @Transactional
+    @Modifying
+    @Query("update UserInfo userInfo set userInfo.password = :password where userInfo.userId = :userId")
+    Integer modifyPassword(@Param(value = "password") String password, @Param(value = "userId") String userId);
+
+
 }

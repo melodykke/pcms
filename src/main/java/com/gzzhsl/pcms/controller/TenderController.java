@@ -104,13 +104,13 @@ public class TenderController {
         Integer size = pageSize;
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        Page<Tender> tenders = tenderService.findByState(pageRequest, state);
+        Page<TenderVO> tenderVOs = tenderService.findByState(pageRequest, state);
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         List<String> roles = thisUser.getSysRoleList().stream().map(e -> e.getRole()).collect(Collectors.toList());
         if (roles.contains("checker")) {
-            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "checker", tenders);
+            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "checker", tenderVOs);
         } else {
-            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "数据返回成功", tenders);
+            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "数据返回成功", tenderVOs);
         }
     }
 

@@ -15,7 +15,7 @@ public class TenderVO {
     private String rtFileTempPath;
     private String tenderId;
     private String tenderFilingUnit; // 招标备案单位
-    private BigDecimal nameOfLots; // 标段名称
+    private String nameOfLots; // 标段名称
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date bidPlanDate;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")

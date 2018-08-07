@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.converter.BaseInfo2ManagerIndexVO;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.ProjectStatus;
@@ -36,6 +37,10 @@ public class IndexController {
     private BaseInfoService baseInfoService;
     @Autowired
     private ProjectStatusService projectStatusService;
+/*    @Autowired
+    private JedisUtil.Keys jedisKeys;
+    @Autowired
+    private JedisUtil.Strings jedisStrings;*/
 
     @RequestMapping("getallbaseinfo")
     @ResponseBody

@@ -1,6 +1,8 @@
 package com.gzzhsl.pcms.controller;
 
 import com.gzzhsl.pcms.entity.*;
+import com.gzzhsl.pcms.enums.SysEnum;
+import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.service.MonthlyReportExcelService;
 import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
 import com.gzzhsl.pcms.service.TimeLineItemService;
@@ -85,6 +87,9 @@ public class ReporterController {
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject != null) {
+            if (!thisProject.getState().equals((byte) 1)) {
+                throw new SysException(SysEnum.NO_PROJECT_IN_THISUSER);
+            }
             CardVO cardVO = new CardVO();
             cardVO.setPlantName(thisProject.getPlantName());
             cardVO.setLegalPersonName(thisProject.getLegalPersonName());

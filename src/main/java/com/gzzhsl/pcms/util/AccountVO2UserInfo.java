@@ -19,10 +19,10 @@ public class AccountVO2UserInfo {
         subUserInfo.setSalt("salt");
         subUserInfo.setActive((byte) 0);
         BaseInfo project = thisUser.getBaseInfo();
-        if (project == null) {
+/*        if (project == null) {
             log.error("【账户错误】配置子账户错误，该账号没有优先配置水库工程");
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);
-        }
+        }*/
         subUserInfo.setBaseInfo(project);
         subUserInfo.setCreateTime(new Date());
         subUserInfo.setUpdateTime(new Date());

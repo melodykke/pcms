@@ -32,6 +32,7 @@
 
     <link th:href="@{/css/plugins/jqGrid/ui.jqgrid.css}" rel="stylesheet">
     <link th:href="@{/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css}" rel="stylesheet">
+    <link th:href="@{/css/custom/new_owner_overview.css}" rel="stylesheet">
     <!-- 百度地图 -->
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=kZmpkejBXwfYBNQp4Rzz38DRNMhUqsHj"></script>
     <script type="text/javascript"
@@ -148,9 +149,6 @@
                                 class="nav-label">系统设置 </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                <a href="#">前期进度</a>
-                            </li>
-                            <li>
                                 <a href="#" id="operation_log">操作日志</a>
                             </li>
                         </ul>
@@ -169,9 +167,17 @@
                             </li>
                         </ul>
                     </li>
-
                     <li>
-                        <a href="#"><i class="fa fa-star"></i> <span class="nav-label">账户开通 </span></a>
+                        <a href="#"><i class="fa fa-star"></i> <span
+                                class="nav-label">用户账户</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="#" id="account_a"><i class="fa fa-magic"></i> <span class="nav-label">开通账户</span></a>
+                            </li>
+                            <li>
+                                <a href="#" id="account_management"><i class="fa fa-magic"></i> <span class="nav-label">账户管理</span></a>
+                            </li>
+                        </ul>
                     </li>
                 </shiro:hasAnyRoles>
             </ul>
@@ -764,56 +770,17 @@
                                     <span>公告</span>
                                 </div>
                                 <div class="ibox-content no-padding">
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <a>国家重大建设项目库网络培训服务开通啦</a>
-                                            <div>
-                                                <div class="public-depart">
-                                                    <span>贵州水利厅</span>
-                                                </div>
-                                                <div class="public-time">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    <span>2017-07-11</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <a>国家重大建设项目库网络培训服务开通啦</a>
-                                            <div>
-                                                <div class="public-depart">
-                                                    <span>贵州水利厅</span>
-                                                </div>
-                                                <div class="public-time">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    <span>2017-07-11</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <a>国家重大建设项目库网络培训服务开通啦</a>
-                                            <div>
-                                                <div class="public-depart">
-                                                    <span>贵州水利厅</span>
-                                                </div>
-                                                <div class="public-time">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    <span>2017-07-11</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item ">
-                                            <a>国家重大建设项目库网络培训服务开通啦</a>
-                                            <div>
-                                                <div class="public-depart">
-                                                    <span>贵州水利厅</span>
-                                                </div>
-                                                <div class="public-time">
-                                                    <i class="fa fa-clock-o"></i>
-                                                    <span>2017-07-11</span>
-                                                </div>
-                                            </div>
-                                        </li>
+                                    <ul class="list-group notice-list">
+
                                     </ul>
+                                    <div class="notice-pager">
+                                        <a class="page-pre" onclick="noticePre()">
+                                            <</a>
+                                        <span class="current-page">1</span>
+                                        <span>/</span>
+                                        <span class="total-pages">5</span>
+                                        <a class="page-next" onclick="noticeNext()">></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1262,8 +1229,8 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <a href="index.html">
-                    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span>
+                <a href="#">
+                    <button type="button" class="person_info_modal_close_btn close" aria-label="Close"><span aria-hidden="true">&times;</span>
                     </button>
                 </a>
                 <h4>用户个人信息
@@ -1325,7 +1292,7 @@
             </div>
             <div class="modal-footer">
                 <a href="index.html">
-                    <button type="button" class="btn btn-info">关闭</button>
+                    <button type="button" class="btn btn-info person_info_modal_close_btn">关闭</button>
                 </a>
             </div>
         </div>
@@ -1662,5 +1629,6 @@
 <!-- jqGrid -->
 <script th:src="@{/js/plugins/jqGrid/i18n/grid.locale-en.js}"></script>
 <script th:src="@{/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+<script th:src="@{/js/custom/new_owner_overview.js}"></script>
 </body>
 </html>

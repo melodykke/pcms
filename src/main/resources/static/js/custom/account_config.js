@@ -73,6 +73,13 @@ $(function () {
                             $('#mymodal').html(getModal(modal_title, sub_title, modal_content));
                             $('#myModal2').modal('show');
                             $('#modify_password_form')[0].reset();
+                        } else {
+                            var modal_title = '出错！';
+                            var sub_title = '密码修改出错！';
+                            var modal_content = '<p> 错误信息： ' + data.msg + '</p>';
+                            $('#mymodal').html(getModal(modal_title, sub_title, modal_content));
+                            $('#myModal2').modal('show');
+                            $('#modify_password_form')[0].reset();
                         }
                     }
                 });

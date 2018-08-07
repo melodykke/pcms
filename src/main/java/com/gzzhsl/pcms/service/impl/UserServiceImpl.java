@@ -1,18 +1,24 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.gzzhsl.pcms.converter.UserInfo2VO;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.UserRepository;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -66,6 +72,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfo findByOpenId(String openId) {
         return userRepository.findByOpenId(openId);
+    }
+
+    @Override
+    public Page<UserInfoVO> findAll(Pageable pageable) {
+        Page<UserInfo> pageUserInfos = userRepository.findAll(pageable);
+        List<UserInfo> userInfos = pageUserInfos.getContent();
+        List<UserInfoVO> userInfoVOs = userInfos.stream().map(e -> UserInfo2VO.convert(e)).collect(Collectors.toList());
+        Page<UserInfoVO> userInfoVOPage = new PageImpl<UserInfoVO>(userInfoVOs, pageable, pageUserInfos.getTotalElements());
+        return userInfoVOPage;
+    }
+
+    @Override
+    public Integer toggleActivate(UserInfo userInfo) {
+        return userRepository.toggleActivate(userInfo.getActive(), userInfo.getUserId());
+    }
+
+    @Override
+    public Integer modifyPassword(String password, UserInfo userInfo) {
+        return userRepository.modifyPassword(password, userInfo.getUserId());
     }
 
 }

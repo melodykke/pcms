@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.gzzhsl.pcms.converter.Tender2VO;
 import com.gzzhsl.pcms.converter.TenderImg2VO;
 import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
@@ -21,6 +22,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -120,7 +122,7 @@ public class TenderServiceImpl implements TenderService {
     }
 
     @Override
-    public Page<Tender> findByState(Pageable pageable, byte state) {
+    public Page<TenderVO> findByState(Pageable pageable, byte state) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null) {
@@ -139,7 +141,11 @@ public class TenderServiceImpl implements TenderService {
             }
         };
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return tenderRepository.findAll(querySpecification, pageable);
+        Page<Tender> tenderPage = tenderRepository.findAll(querySpecification, pageable);
+        List<Tender> tenders = tenderPage.getContent();
+        List<TenderVO> tenderVOs = tenders.stream().map(e -> Tender2VO.convert(e)).collect(Collectors.toList());
+        Page<TenderVO> tenderVOpage = new PageImpl<TenderVO>(tenderVOs, pageable, tenderPage.getTotalElements());
+        return tenderVOpage;
     }
 
     @Override

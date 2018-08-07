@@ -13,14 +13,24 @@ $(function () {
                 }
                 projectStatus.map(function (item, index) {
 
-                    if (index == projectStatus.length-1){
+                    if (index == projectStatus.length - 1) {
                         $('#vertical-timeline').prepend(buildHtml(item.timeLineItem.type, item.timeLineItem.msg, item.timeLineItem.timeLineItemId))
                     } else {
                         $('#vertical-timeline').prepend(buildHtmlWithoutBtn(item.timeLineItem.type, item.timeLineItem.msg, item.timeLineItem.timeLineItemId))
                     }
 
                 });
+            } else if (data.code == 1003) {
 
+            } else {
+                swal({
+                    title: "提示",
+                    text: data.msg,
+                    type: "warning",
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确认",
+                    closeOnConfirm: true
+                })
             }
         }
     });
@@ -63,10 +73,19 @@ $(function () {
                             text: "您的此项操作未被授权，请联系上一级账号使用人员!",
                             type: "error",
                             confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "已确认,提交!",
+                            confirmButtonText: "确认!",
                             closeOnConfirm: true
                         }, function () {
                             
+                        })
+                    } else {
+                        swal({
+                            title: "提示",
+                            text: data.msg,
+                            type: "error",
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "确认!",
+                            closeOnConfirm: true
                         })
                     }
                 }

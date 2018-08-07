@@ -1,0 +1,110 @@
+.create-account, .to-proprietor {
+    width: 400px;
+    background: #fff;
+    height: 350px;    
+    margin: 50px auto;
+    border-left: 3px solid #18a689;
+    /* top: 100px; */
+    /* position: relative; */
+    /* border-top: 5px solid #58b495; */
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.to-proprietor {
+    height: 280px;
+    display: none;
+}
+.create-title {
+    padding: 20px 10px;
+    color: #18a689;
+    font-size: 16px;
+}
+.create-account>div:nth-child(n+2),.to-proprietor>div:nth-child(n+2) {
+    height: 60px;
+    line-height: 60px;
+}
+.create-account>div>label,.to-proprietor>div>label {
+    width: 80px;
+    text-align: right;
+}
+.create-account>div>input,.to-proprietor>div>input {
+    height: 32px;
+    margin: 0 auto;
+    width: 280px;
+    margin: 0;
+    display: inline-block;
+}
+.create-account>.create-tools {
+    margin-top: 75px;
+}
+.create-account>.create-tools>button {
+    margin-left: 73px;
+    width: 280px;
+}
+.to-proprietor>.create-tools {
+    margin-top: 55px;
+}
+.to-proprietor>.create-tools>button {
+    width: 140px;
+    margin: 0 5px;
+}
+.to-proprietor>.create-tools>button:first-child {
+    margin-left: 55px;
+}
+.create-row {
+    /* height: 500px; */
+    height: 450px;
+    background-color: #fff;
+    margin: 0 -26px;
+}
+.account-name>div,.reservoir-name>div {
+    display: inline-block;
+    height: 34px;
+    line-height: 32px;
+    border-radius: 15px;
+    width: 280px;
+}
+.account-name>div>i,.reservoir-name>div>i {
+    font-size: 20px;
+    position: relative;
+    top: 35px;
+    margin: 0 10px;
+    display: inline-block;
+}
+.reservoir-name>div>i {
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+}
+.account-name>div>input,.reservoir-name>div>input {
+    height: 32px;
+    width: 280px;
+    border: 1px solid #e0e0e0;
+    padding-left: 35px;
+    border-radius: 15px;
+}
+.account-name>div>input:focus,.reservoir-name>div>input:focus {
+    outline: none;
+    /* border-color: rgba(77, 144, 254,.5)!important;
+    box-shadow: 0 1px 1px 0px rgba(77, 144, 254,.5); */
+    border-color: rgba(26, 179, 148,.5)!important;
+    box-shadow: 0 1px 1px 0px rgba(26, 179, 148,.5);
+}
+/* 新增账号新增和修改的切换样式 */
+.modify {
+    display: none;
+}
+.modify-block .modify {
+    /* display: inherit; */
+    display: inline-block;
+}
+.modify-block .create {
+    display: none;
+}
+.modify-block .create-title {
+    color: #23c6c8;
+}
+.modify-block .create-account,.modify-block .to-proprietor {
+    border-left-color: #23c6c8;
+}

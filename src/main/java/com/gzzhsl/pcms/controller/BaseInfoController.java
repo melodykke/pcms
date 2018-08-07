@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.xml.transform.Result;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -53,6 +54,9 @@ public class BaseInfoController {
     public ResultVO hasBaseInfo() {
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        if (thisUser.getSysRoleList() == null || thisUser.getSysRoleList().size() == 0) {
+            return ResultUtil.failed(SysEnum.SUBACCOUNT_NOT_EXIST_ERROR);
+        }
         if (thisUser.getBaseInfo() == null) {
             return ResultUtil.failed();
         } else if (thisUser.getBaseInfo().getState().equals((byte) -1)) {

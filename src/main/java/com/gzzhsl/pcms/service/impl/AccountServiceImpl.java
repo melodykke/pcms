@@ -1,5 +1,7 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.gzzhsl.pcms.converter.UserInfoDTO2;
+import com.gzzhsl.pcms.dto.UserInfoDTO;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.RoleRepository;
@@ -19,10 +21,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Slf4j
+@Transactional
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserService userService;
@@ -31,10 +35,11 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private RoleRepository roleRepository;
 
+
     @Override
-    @Transactional
     public Boolean modifyPassword(AccountPasswordVO accountPasswordVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         // 1、判断原密码是否与本账号密码匹配
         String encriNewPassword = UserUtil.getEncriPwd(accountPasswordVO.getNewPassword());
         if (encriNewPassword.equals(thisUser.getPassword())) {
@@ -42,8 +47,7 @@ public class AccountServiceImpl implements AccountService {
             throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
         }
         // 2、修改密码
-        thisUser.setPassword(encriNewPassword);
-        userService.save(thisUser);
+        userService.modifyPassword(encriNewPassword, thisUser);
         return true;
     }
 
@@ -66,5 +70,30 @@ public class AccountServiceImpl implements AccountService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public UserInfo createUserAccount(UserInfoDTO userInfoDTO) {
+        UserInfo userInfo = UserInfoDTO2.convert(userInfoDTO);
+
+        if (userInfoDTO.getUserId() == null || "".equals(userInfoDTO.getUserId())) { // 新增
+            userInfo.setCreateTime(new Date());
+            userInfo.setUpdateTime(new Date());
+            List<SysRole> sysRoles = new ArrayList<>();
+            sysRoles.add(roleRepository.findByRole("checker"));
+            userInfo.setSysRoleList(sysRoles);
+        } else { // 修改
+            UserInfo originalUserInfo = userService.findByUserId(userInfoDTO.getUserId());
+            userInfo.setUpdateTime(new Date());
+            userInfo.setBaseInfo(originalUserInfo.getBaseInfo());
+            userInfo.setParent(originalUserInfo.getParent());
+        }
+
+        UserInfo userInfoRt = userService.save(userInfo);
+        if (userInfoRt != null && userInfoRt.getUserId() != null) {
+            return userInfoRt;
+        } else {
+            return null;
+        }
     }
 }
