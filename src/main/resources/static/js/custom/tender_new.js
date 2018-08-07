@@ -1,7 +1,6 @@
 $(function () {
-    var tenderId = '';
     $.ajax({
-        url: "tender/isedit",
+        url: "tender/isedit?tenderId="+tenderId,
         type: "GET",
         dataType: "json",
         success: function (data) {

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,20 +36,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequestMapping("/annualinvestment")
 public class AnnualInvestmentController {
-    private String annualInvestmentId;
     @Autowired
     private AnnualInvestmentService annualInvestmentService;
     @Autowired
     private UserService userService;
 
     @GetMapping("/tonewannualinvestment")
-    public String toNewAnnualInvestment(String annualInvestmentId) {
-        this.annualInvestmentId = annualInvestmentId;
+    public String toNewAnnualInvestment(String annualInvestmentId, Model model) {
+        if (annualInvestmentId != null || !"".equals(annualInvestmentId)) {
+            model.addAttribute("annualInvestmentId", annualInvestmentId);
+        }
         return "annual_investment_plan_new";
     }
     @GetMapping("/isedit")
     @ResponseBody
-    public ResultVO isEdit() {
+    public ResultVO isEdit(String annualInvestmentId) {
         if (annualInvestmentId != null && annualInvestmentId != "") {
             AnnualInvestmentVO annualInvestmentVO = annualInvestmentService.getById(annualInvestmentId);
             return ResultUtil.success(annualInvestmentVO);

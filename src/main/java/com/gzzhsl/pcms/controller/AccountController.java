@@ -35,8 +35,6 @@ import java.util.Map;
 @Slf4j
 public class AccountController {
 
-    private String userId;
-
     @Autowired
     private AccountService accountService;
     @Autowired

@@ -17,4 +17,5 @@ public interface AnnouncementService {
     Page<Announcement> getNormalLatests(Pageable pageable);
     Page<Announcement> getHotLatests(Pageable pageable);
     Page<Announcement> findAll(Pageable pageable);
+    AnnouncementVO getAnnouncementById(String announcementId);
 }

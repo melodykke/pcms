@@ -1,8 +1,6 @@
 $(function () {
-
-    var annualInvestmentId = '';
     $.ajax({
-        url: "annualinvestment/isedit",
+        url: "annualinvestment/isedit?annualInvestmentId="+annualInvestmentId,
         type: "GET",
         dataType: "json",
         success: function (data) {
@@ -14,8 +12,6 @@ $(function () {
         }
 
     });
-
-
 
     var rtFileTempPath = '';
     var uploadFileFlag = true;

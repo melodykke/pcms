@@ -7,7 +7,7 @@ $(function () {
         document.getElementById('main_loading').style.display = "block";
     }
 
-    var getprojectmonthlyreportbyprojectmonthlyreportidurl = "monthlyreport/getprojectmonthlyreportbyprojectmonthlyreportid"; // 依靠内部pId获取月报
+    var getprojectmonthlyreportbyprojectmonthlyreportidurl = "monthlyreport/getprojectmonthlyreportbyprojectmonthlyreportid?projectMonthlyReportId="+projectMonthlyReportId;
     var getprojectmonthlyreportshowbytimeUrl = '/monthlyreport/getprojectmonthlyreportshowbytime'; // 根据时间区间获取月报
 
     getProjectMonthlyReport();

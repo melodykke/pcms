@@ -16,6 +16,7 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,7 +43,6 @@ public class MonthlyReportController {
     private UserService userService;
     @Autowired
     private AnnualInvestmentService annualInvestmentService;
-    String projectMonthlyReportId = "";
 
 
     @PostMapping("/addfiles")
@@ -125,16 +125,17 @@ public class MonthlyReportController {
 
     // 进入某一个月报展示页面（projectMonthlyReportId）
     @GetMapping("/projectmonthlyreportshow")
-    public String projectMonthlyReportShow(String projectMonthlyReportId){
-        this.projectMonthlyReportId = projectMonthlyReportId;
+    public String projectMonthlyReportShow(String projectMonthlyReportId, Model model){
+        if (projectMonthlyReportId != null || !"".equals(projectMonthlyReportId)) {
+            model.addAttribute("projectMonthlyReportId", projectMonthlyReportId);
+        }
         return "project_monthly_report_show";
     }
 
     @PostMapping("/getprojectmonthlyreportbyprojectmonthlyreportid")
     @ResponseBody
-    public ResultVO getProjectMonthlyReportByInternalProjectMonthlyReportId(){
-        String projectMonthlyReportId = this.projectMonthlyReportId;
-        if (this.projectMonthlyReportId == "" || this.projectMonthlyReportId == null) {
+    public ResultVO getProjectMonthlyReportProjectMonthlyReportId(String projectMonthlyReportId){
+        if (projectMonthlyReportId == "" || projectMonthlyReportId == null) {
             log.error("【月报错误】内部projectMonthlyReportId错误");
             throw new SysException(SysEnum.Sys_INNER_ERROR);
         }
@@ -142,7 +143,6 @@ public class MonthlyReportController {
         ProjectMonthlyReportShowVO projectMonthlyReportShowVO = MonthReport2MonthReportShowVO.convert(projectMonthlyReport);
         List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList = projectMonthlyReport.getProjectMonthlyReportImgList().stream().map(e -> ProjectMonthlyReportImg2VO.convert(e)).collect(Collectors.toList());
         projectMonthlyReportShowVO.setProjectMonthlyReportImgVOList(projectMonthlyReportImgVOList);
-        this.projectMonthlyReportId = "";
         return ResultUtil.success(projectMonthlyReportShowVO);
     }
 

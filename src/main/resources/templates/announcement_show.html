@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var announcementId = [[${announcementId}]];
+        /*]]>*/
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>公告</title>
+
+    <!-- 自定义 -->
+    <link th:href="@{/css/custom/self-theme.css}" rel="stylesheet">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+
+</head>
+
+    <div class="notice-detail animated fadeInRight">
+        <div class="notice-title">
+            <div name="noticeTitle"></div>
+            <div class="notice-time">
+                <span>发布时间：</span>
+                <span name="noticeTime">(空)</span>
+            </div>
+            <div class="public-underline"></div>
+        </div>
+        <div class="notice-content" name="noticeContent">
+            (无内容)
+        </div>
+    </div>
+
+    <!-- 弹出层 -->
+    <div id="dialog" class="dialog-hide" style="height: 400px; width: 600px;"></div>
+    <!-- 遮罩层 -->
+    <div id="mask" class="mask-position" onclick="closeDialog()"></div>
+    <!-- 全屏层 -->
+    <div id="fullscreen_map" style="display: none;">test</div>
+
+<script th:src="@{/js/custom/announcement_show.js}"></script>
+
+</body>
+
+</html>

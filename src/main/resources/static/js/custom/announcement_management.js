@@ -87,8 +87,6 @@ function toPublishNotice() {
 function modifyNotice() {
     var rowData = getSelectedRowData();
     if (rowData) {
-        // var param = parseParam(rowData),
-        //     urlParam = encodeURIComponent(param);
         $('#content').load('/announcement/toannouncement?announcementId=' + rowData.announcementId);
     }
 }

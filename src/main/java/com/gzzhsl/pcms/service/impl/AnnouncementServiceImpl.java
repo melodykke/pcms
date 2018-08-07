@@ -6,6 +6,7 @@ import com.gzzhsl.pcms.repository.AnnouncementRepository;
 import com.gzzhsl.pcms.service.AnnouncementService;
 import com.gzzhsl.pcms.vo.AnnouncementVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -81,5 +82,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public Page<Announcement> findAll(Pageable pageable) {
         Page<Announcement> announcements = announcementRepository.findAll(pageable);
         return announcements;
+    }
+
+    @Override
+    public AnnouncementVO getAnnouncementById(String announcementId) {
+        Announcement announcement = announcementRepository.findOne(announcementId);
+        AnnouncementVO announcementVO = new AnnouncementVO();
+        BeanUtils.copyProperties(announcement, announcementVO);
+        return announcementVO;
     }
 }

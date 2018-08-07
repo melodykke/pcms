@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,16 +44,16 @@ public class TenderController {
     @Autowired
     private UserService userService;
 
-    private String tenderId;
-
     @GetMapping("/tonewtender")
-    public String toNewTender(String tenderId) {
-        this.tenderId = tenderId;
+    public String toNewTender(String tenderId, Model model) {
+        if (tenderId != null || !"".equals(tenderId)) {
+            model.addAttribute("tenderId", tenderId);
+        }
         return "tender_new";
     }
     @GetMapping("/isedit")
     @ResponseBody
-    public ResultVO isEdit() {
+    public ResultVO isEdit(String tenderId) {
         if (tenderId != null && tenderId != "") {
             TenderVO tenderVO = tenderService.getById(tenderId);
             return ResultUtil.success(tenderVO);

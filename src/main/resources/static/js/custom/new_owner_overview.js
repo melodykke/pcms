@@ -65,7 +65,7 @@
                 $.each(data, function (i, n) {
                     setTimeout(function () {
                         var noticeStr = [
-                            '<li class="list-group-item animated fadeInRight"><a class="notice-page" notice-id=' + n.id + '>' + n.title + '</a><div>',
+                            '<li class="list-group-item animated fadeInRight"><a class="notice-page" announcement-id=' + n.announcementId + '>' + n.title + '</a><div>',
                             '<div class="public-depart"><span>' + n.keyword + '</span></div>',
                             '<div class="public-time"><i class="fa fa-clock-o"></i><span>' + n.updateTime + '</span></div></div></li>'
                         ]
@@ -82,7 +82,7 @@
         $(function () {
             requestNotice(pagerOp);
             $(".list-group").on("click", 'li>.notice-page', function () {
-                var id = $(this).attr("notice-id");
-                location.href = "notice.html?id=" + id;
+                var announcementId = $(this).attr("announcement-id");
+                $("#main_content").load("announcement/toannouncementshow?announcementId="+announcementId)
             });
         });

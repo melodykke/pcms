@@ -1,9 +1,8 @@
 $(function () {
-    var announcementId = '';
     initThisPage();
     function initThisPage() {
         $.ajax({
-            url: "announcement/isedit",
+            url: "announcement/isedit?announcementId="+announcementId,
             type: "GET",
             dataType: "json",
             success: function (data) {

@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -17,7 +18,8 @@ public class AnnouncementVO {
     private String keyword;
     @NotBlank(message = "公告内容不能为空！")
     private String content;
-
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")
     private Date createTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH-mm-ss")
     private Date updateTime;
 }

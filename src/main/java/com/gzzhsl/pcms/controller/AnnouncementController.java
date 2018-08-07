@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,17 +30,17 @@ public class AnnouncementController {
     @Autowired
     private AnnouncementService announcementService;
 
-    private String announcementId;
-
     @GetMapping("/toannouncement")
     @RequiresRoles(value = "manager")
-    public synchronized String toAnnouncement(String announcementId) {
-        this.announcementId = announcementId;
+    public String toAnnouncement(String announcementId, Model model) {
+        if (announcementId != null || !"".equals(announcementId)) {
+            model.addAttribute("announcementId", announcementId);
+        }
         return "announcement";
     }
     @GetMapping("/isedit")
     @ResponseBody
-    public synchronized ResultVO isEdit() {
+    public ResultVO isEdit(String announcementId) {
         if (announcementId != null && announcementId != "") {
             Announcement announcement = announcementService.getById(announcementId);
             announcementId = null;
@@ -69,6 +70,18 @@ public class AnnouncementController {
             return ResultUtil.success();
         }
         return ResultUtil.failed();
+    }
+
+    @GetMapping("toannouncementshow")
+    public String toAnnouncementShow(String announcementId, Model model) {
+        model.addAttribute("announcementId", announcementId);
+        return "announcement_show";
+    }
+    @GetMapping("getannouncement")
+    @ResponseBody
+    public ResultVO getAnnouncement(String announcementId) {
+        AnnouncementVO announcementVO = announcementService.getAnnouncementById(announcementId);
+        return ResultUtil.success(announcementVO);
     }
 
     @GetMapping("/getallannouncement")
@@ -117,4 +130,6 @@ public class AnnouncementController {
             return ResultUtil.failed();
         }
     }
+
+
 }
