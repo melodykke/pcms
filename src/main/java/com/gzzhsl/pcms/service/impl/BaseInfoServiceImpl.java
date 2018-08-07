@@ -1,9 +1,8 @@
 package com.gzzhsl.pcms.service.impl;
 
-import com.gzzhsl.pcms.converter.BaseInfo2VO;
-import com.gzzhsl.pcms.converter.BaseInfoImg2VO;
-import com.gzzhsl.pcms.converter.BaseInfoVO2BaseInfo;
-import com.gzzhsl.pcms.converter.MonthlyReportVO2MonthlyReport;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gzzhsl.pcms.converter.*;
 import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
@@ -16,6 +15,7 @@ import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.BaseInfoImgVO;
+import com.gzzhsl.pcms.vo.BaseInfoManagerIndexVO;
 import com.gzzhsl.pcms.vo.BaseInfoVO;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +54,8 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     private BaseInfoImgService baseInfoImgService;
     @Autowired
     private WebSocket webSocket;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public List<BaseInfo> getAllProject() {
@@ -165,7 +168,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         } else {
             for (SysRole role : roles) {
                 if ("checker".equals(role.getRole())) { // 如果是checker账号...
-                    if (thisUser.getChildren() != null && thisUser.getChildren().size() > 0) {
+                    if (thisUser.getChildren() != null) {
                         List<UserInfo> children = thisUser.getChildren();
                         List<UserInfo> childrenAndI = new ArrayList<>();
                         for (UserInfo child : children) {
@@ -183,6 +186,17 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         baseInfoRt = baseInfoRepository.save(baseInfoRt);
         // 创建webSocket消息
         WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "项目基础信息", "新的项目基础信息消息");
+        // 将更新后的所有水库信息重新同步至redis
+        List<BaseInfo> baseInfos = this.getAllProject();
+        List<BaseInfoManagerIndexVO> baseInfoManagerIndexVOs = baseInfos.stream().map(e -> BaseInfo2ManagerIndexVO.convert(e)).collect(Collectors.toList());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = null;
+        try {
+            jsonString = objectMapper.writeValueAsString(baseInfoManagerIndexVOs);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        stringRedisTemplate.opsForValue().set("allBaseInfo", jsonString);
         return baseInfoRt;
     }
 

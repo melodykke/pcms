@@ -8,6 +8,7 @@ import com.gzzhsl.pcms.vo.BaseInfoVO;
 import java.util.List;
 
 public interface BaseInfoService {
+    static final String ALLBASEINFO = "allBaseInfo";
 
     /*Boolean connectBaseInfoAndUserInfo();*/
     List<BaseInfo> getAllProject();

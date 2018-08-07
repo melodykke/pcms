@@ -447,11 +447,12 @@ $(function () {
                 swal({
                     title: "确认提交吗?",
                     text: "请检查数据是否填写正确后再提交!",
-                    type: "warning",
+                    type: "info",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "已确认,提交!",
-                    closeOnConfirm: false
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true
                 }, function () {
                     $.ajax({
                         url: saveBaseInfoUrl,
@@ -881,7 +882,8 @@ $(function () {
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "已确认,提交!",
                 cancelButtonText: "取消",
-                closeOnConfirm: false
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
             }, function () {
                 var preProgressEntries = [];
                 var serialNumberEntries = $('[id^="serialNumber_"]');
@@ -1057,7 +1059,8 @@ $(function () {
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "已确认,提交!",
             cancelButtonText: "取消",
-            closeOnConfirm: false
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
         }, function () {
             var contract = {};
             contract.name = $('#new_contract_name').val();
@@ -2126,6 +2129,7 @@ $(function () {
         });
         $('#loopNotice').html(announcementHtml)
     })
+
 });
 
 function closeDetail() {
@@ -2137,3 +2141,5 @@ function closeDetail() {
         $(".overview-grid").html('<table id="table_list_1"></table><div id="pager_list_1"></div>');
     }, 300);
 }
+
+

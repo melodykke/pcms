@@ -2,6 +2,7 @@ package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.converter.UserInfoDTO2;
 import com.gzzhsl.pcms.dto.UserInfoDTO;
+import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.repository.RoleRepository;
@@ -60,6 +61,11 @@ public class AccountServiceImpl implements AccountService {
             throw new SysException(SysEnum.ACCOUNT_DUPLICATED);
         }
         UserInfo subUser = AccountVO2UserInfo.convert(accountVO, thisUser);
+        // 如果本账号有水库概况了，就把项目概况加给子账号
+        BaseInfo baseInfo = thisUser.getBaseInfo();
+        if (baseInfo != null) {
+            subUser.setBaseInfo(baseInfo);
+        }
         subUser.setParent(thisUser);
         List<SysRole> sysRoles = new ArrayList<>();
         sysRoles.add(roleRepository.findByRole("reporter"));

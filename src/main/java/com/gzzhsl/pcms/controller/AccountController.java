@@ -122,7 +122,8 @@ public class AccountController {
             log.error("【账户错误】参数验证错误， 密码和确认密码不一致 accountVO = {}", accountVO);
             throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
         }
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
         // 目前允许一个账号有一个子账号
         if (children == null || children.size() > 0) {
