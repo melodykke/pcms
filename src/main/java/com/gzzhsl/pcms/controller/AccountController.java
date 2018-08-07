@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.Account;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,7 +43,7 @@ public class AccountController {
     private UserService userService;
 
     @GetMapping("/accountconfig")
-    @RequiresRoles(value = "checker")
+    @RequiresRoles(value = {"checker", "reporter"}, logical = Logical.OR)
     public String accountConfig(){
         return "account_config";
     }
