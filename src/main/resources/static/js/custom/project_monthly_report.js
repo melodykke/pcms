@@ -108,7 +108,8 @@ $(document).ready(function(){
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "已确认,提交!",
-                    closeOnConfirm: false
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true
                 }, function () {
                     $.ajax({
                         url: saveReportUrl,
@@ -299,7 +300,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#civil_engineering').val() == '' ? '0' : parseFloat($('#civil_engineering').val());
+            var value = $('#civil_engineering').val() == '' ? '' : parseFloat($('#civil_engineering').val());
             $('#year_civil_engineering').html(parseFloat(cont.yearCivilEngineering)+value);
             $('#sofar_civil_engineering').html(parseFloat(cont.sofarCivilEngineering)+value);
         }
@@ -308,7 +309,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#metal_mechanism').val() == '' ? '0' : parseFloat($('#metal_mechanism').val());
+            var value = $('#metal_mechanism').val() == '' ? '' : parseFloat($('#metal_mechanism').val());
             $('#year_metal_mechanism').html(parseFloat(cont.yearMetalMechanism)+value);
             $('#sofar_metal_mechanism').html(parseFloat(cont.sofarMetalMechanism)+value);
         }
@@ -317,7 +318,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#independent_cost').val() == '' ? '0' : parseFloat($('#independent_cost').val());
+            var value = $('#independent_cost').val() == '' ? '' : parseFloat($('#independent_cost').val());
             $('#year_independent_cost').html(parseFloat(cont.yearIndependentCost)+value);
             $('#sofar_independent_cost').html(parseFloat(cont.sofarIndependentCost)+value);
         }
@@ -326,7 +327,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#electromechanical_equipment').val() == '' ? '0' : parseFloat($('#electromechanical_equipment').val());
+            var value = $('#electromechanical_equipment').val() == '' ? '' : parseFloat($('#electromechanical_equipment').val());
             $('#year_electromechanical_equipment').html(parseFloat(cont.yearElectromechanicalEquipment)+value);
             $('#sofar_electromechanical_equipment').html(parseFloat(cont.sofarElectromechanicalEquipment)+value);
         }
@@ -335,7 +336,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#temporary_work').val() == '' ? '0' : parseFloat($('#temporary_work').val());
+            var value = $('#temporary_work').val() == '' ? '' : parseFloat($('#temporary_work').val());
             $('#year_temporary_work').html(parseFloat(cont.yearTemporaryWork)+value);
             $('#sofar_temporary_work').html(parseFloat(cont.sofarTemporaryWork)+value);
         }
@@ -344,7 +345,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#resettlement_arrangement').val() == '' ? '0' : parseFloat($('#resettlement_arrangement').val());
+            var value = $('#resettlement_arrangement').val() == '' ? '' : parseFloat($('#resettlement_arrangement').val());
             $('#year_resettlement_arrangement').html(parseFloat(cont.yearResettlementArrangement)+value);
             $('#sofar_resettlement_arrangement').html(parseFloat(cont.sofarResettlementArrangement)+value);
         }
@@ -353,7 +354,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#environmental_protection').val() == '' ? '0' : parseFloat($('#environmental_protection').val());
+            var value = $('#environmental_protection').val() == '' ? '' : parseFloat($('#environmental_protection').val());
             $('#year_environmental_protection').html(parseFloat(cont.yearEnvironmentalProtection)+value);
             $('#sofar_environmental_protection').html(parseFloat(cont.sofarEnvironmentalProtection)+value);
         }
@@ -362,7 +363,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#water_conservation').val() == '' ? '0' : parseFloat($('#water_conservation').val());
+            var value = $('#water_conservation').val() == '' ? '' : parseFloat($('#water_conservation').val());
             $('#year_water_conservation').html(parseFloat(cont.yearWaterConservation)+value);
             $('#sofar_water_conservation').html(parseFloat(cont.sofarWaterConservation)+value);
         }
@@ -371,7 +372,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#other_cost').val() == '' ? '0' : parseFloat($('#other_cost').val());
+            var value = $('#other_cost').val() == '' ? '' : parseFloat($('#other_cost').val());
             $('#year_other_cost').html(parseFloat(cont.yearOtherCost)+value);
             $('#sofar_other_cost').html(parseFloat(cont.sofarOtherCost)+value);
         }
@@ -380,7 +381,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#source_central_investment').val() == '' ? '0' : parseFloat($('#source_central_investment').val());
+            var value = $('#source_central_investment').val() == '' ? '' : parseFloat($('#source_central_investment').val());
             $('#year_source_central_investment').html(parseFloat(cont.yearSourceCentralInvestment)+value);
             $('#sofar_source_central_investment').html(parseFloat(cont.sofarSourceCentralInvestment)+value);
         }
@@ -389,7 +390,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#source_provincial_investment').val() == '' ? '0' : parseFloat($('#source_provincial_investment').val());
+            var value = $('#source_provincial_investment').val() == '' ? '' : parseFloat($('#source_provincial_investment').val());
             $('#year_source_provincial_investment').html(parseFloat(cont.yearSourceProvincialInvestment)+value);
             $('#sofar_source_provincial_investment').html(parseFloat(cont.sofarSourceProvincialInvestment)+value);
         }
@@ -398,7 +399,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#source_local_investment').val() == '' ? '0' : parseFloat($('#source_local_investment').val());
+            var value = $('#source_local_investment').val() == '' ? '' : parseFloat($('#source_local_investment').val());
             $('#year_source_local_investment').html(parseFloat(cont.yearSourceLocalInvestment)+value);
             $('#sofar_source_local_investment').html(parseFloat(cont.sofarSourceLocalInvestment)+value);
         }
@@ -407,7 +408,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#available_central_investment').val() == '' ? '0' : parseFloat($('#available_central_investment').val());
+            var value = $('#available_central_investment').val() == '' ? '' : parseFloat($('#available_central_investment').val());
             $('#year_available_central_investment').html(parseFloat(cont.yearAvailableCentralInvestment)+value);
             $('#sofar_available_central_investment').html(parseFloat(cont.sofarAvailableCentralInvestment)+value);
         }
@@ -416,7 +417,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#available_provincial_investment').val() == '' ? '0' : parseFloat($('#available_provincial_investment').val());
+            var value = $('#available_provincial_investment').val() == '' ? '' : parseFloat($('#available_provincial_investment').val());
             $('#year_available_provincial_investment').html(parseFloat(cont.yearAvailableProvincialInvestment)+value);
             $('#sofar_available_provincial_investment').html(parseFloat(cont.sofarAvailableProvincialInvestment)+value);
         }
@@ -425,7 +426,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#available_local_investment').val() == '' ? '0' : parseFloat($('#available_local_investment').val());
+            var value = $('#available_local_investment').val() == '' ? '' : parseFloat($('#available_local_investment').val());
             $('#year_available_local_investment').html(parseFloat(cont.yearAvailableLocalInvestment)+value);
             $('#sofar_available_local_investment').html(parseFloat(cont.sofarAvailableLocalInvestment)+value);
         }
@@ -434,7 +435,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#open_dug').val() == '' ? '0' : parseFloat($('#open_dug').val());
+            var value = $('#open_dug').val() == '' ? '' : parseFloat($('#open_dug').val());
             $('#year_open_dug').html(parseFloat(cont.yearOpenDug)+value);
             $('#sofar_open_dug').html(parseFloat(cont.sofarOpenDug)+value);
         }
@@ -443,7 +444,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#backfill').val() == '' ? '0' : parseFloat($('#backfill').val());
+            var value = $('#backfill').val() == '' ? '' : parseFloat($('#backfill').val());
             $('#year_backfill').html(parseFloat(cont.yearBackfill)+value);
             $('#sofar_backfill').html(parseFloat(cont.sofarBackfill)+value);
         }
@@ -452,7 +453,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#concrete').val() == '' ? '0' : parseFloat($('#concrete').val());
+            var value = $('#concrete').val() == '' ? '' : parseFloat($('#concrete').val());
             $('#year_concrete').html(parseFloat(cont.yearConcrete)+value);
             $('#sofar_concrete').html(parseFloat(cont.sofarConcrete)+value);
         }
@@ -461,7 +462,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#grout').val() == '' ? '0' : parseFloat($('#grout').val());
+            var value = $('#grout').val() == '' ? '' : parseFloat($('#grout').val());
             $('#year_grout').html(parseFloat(cont.yearGrout)+value);
             $('#sofar_grout').html(parseFloat(cont.sofarGrout)+value);
         }
@@ -470,7 +471,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#hole_dug').val() == '' ? '0' : parseFloat($('#hole_dug').val());
+            var value = $('#hole_dug').val() == '' ? '' : parseFloat($('#hole_dug').val());
             $('#year_hole_dug').html(parseFloat(cont.yearHoleDug)+value);
             $('#sofar_hole_dug').html(parseFloat(cont.sofarHoleDug)+value);
         }
@@ -479,7 +480,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#masonry').val() == '' ? '0' : parseFloat($('#masonry').val());
+            var value = $('#masonry').val() == '' ? '' : parseFloat($('#masonry').val());
             $('#year_masonry').html(parseFloat(cont.yearMasonry)+value);
             $('#sofar_masonry').html(parseFloat(cont.sofarMasonry)+value);
         }
@@ -488,7 +489,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#rebar').val() == '' ? '0' : parseFloat($('#rebar').val());
+            var value = $('#rebar').val() == '' ? '' : parseFloat($('#rebar').val());
             $('#year_rebar').html(parseFloat(cont.yearRebar)+value);
             $('#sofar_rebar').html(parseFloat(cont.sofarRebar)+value);
         }
@@ -497,7 +498,7 @@ $(document).ready(function(){
         if(cont === null) {
             errorNoteFunc();
         } else {
-            var value = $('#labour_force').val() == '' ? '0' : parseFloat($('#labour_force').val());
+            var value = $('#labour_force').val() == '' ? '' : parseFloat($('#labour_force').val());
             $('#year_labour_force').html(parseFloat(cont.yearLabourForce)+value);
             $('#sofar_labour_force').html(parseFloat(cont.sofarLabourForce)+value);
         }

@@ -89,7 +89,8 @@ $(function () {
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "已确认,提交!",
                     cancelButtonText:"取消",
-                    closeOnConfirm: false
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true
                 }, function (){
                     var annualInvestmentVO = {};
                     if (annualInvestmentId != '') {

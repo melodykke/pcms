@@ -33,7 +33,8 @@ $(function () {
             cancelButtonText: "取消",
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "发布!",
-            closeOnConfirm: false
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
         }, function () {
 
             var announcement = getNoticeData();
