@@ -60,6 +60,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/fonts/**","anon");
 		filterChainDefinitionMap.put("/img/**","anon");
 		filterChainDefinitionMap.put("/favicon.ico", "anon");
+		filterChainDefinitionMap.put("/img/11.ico", "anon");
         filterChainDefinitionMap.put("/register", "anon");
 		filterChainDefinitionMap.put("/wechat", "anon"); // 配置wechat的token验证路径
 		filterChainDefinitionMap.put("/wechatlogin/**", "anon"); // 配置wechat的验证验证路径

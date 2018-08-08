@@ -32,6 +32,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -237,6 +238,25 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "年度投融资计划", "新的年度投融资计划审批消息");
         return feedbackRt;
+    }
+
+    // 获得总的审批后的总投资核准额
+    @Override
+    public BigDecimal getAllApprovedFigure() {
+        BigDecimal allApprovedFigure = new BigDecimal(0);
+        List<AnnualInvestment> annualInvestments = null;
+        Specification querySpecification = new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                return cb.equal(root.get("state").as(Byte.class), (byte) 1);
+            }
+        };
+        annualInvestments = annualInvestmentRepository.findAll(querySpecification);
+        List<BigDecimal> approvedFigures = annualInvestments.stream().map(e -> e.getApprovedFigure()).collect(Collectors.toList());
+        for (BigDecimal approvedFigure : approvedFigures) {
+            allApprovedFigure = allApprovedFigure.add(approvedFigure);
+        }
+        return allApprovedFigure;
     }
 
     @Override

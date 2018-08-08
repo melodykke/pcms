@@ -15,7 +15,6 @@ $(function () {
         })
     }, 3000);*/
     var websocket = null;
-    console.log(111111)
     if ('WebSocket' in window) {
         websocket = new WebSocket('ws://pcms.natapp1.cc/wechatloginwebsocket')
     } else {

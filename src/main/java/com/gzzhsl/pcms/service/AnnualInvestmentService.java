@@ -8,6 +8,7 @@ import com.gzzhsl.pcms.vo.AnnualInvestmentVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface AnnualInvestmentService {
@@ -19,4 +20,5 @@ public interface AnnualInvestmentService {
     List<AnnualInvestment> getByYearAndProject(String year, BaseInfo baseInfo);
     AnnualInvestment findById(String id);
     Feedback approveAnnualInvestment(UserInfo thisUser, Boolean switchState, String checkinfo, AnnualInvestment thisAnnualInvestment);
+    BigDecimal getAllApprovedFigure();
 }
