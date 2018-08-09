@@ -20,5 +20,6 @@ public interface AnnualInvestmentService {
     List<AnnualInvestment> getByYearAndProject(String year, BaseInfo baseInfo);
     AnnualInvestment findById(String id);
     Feedback approveAnnualInvestment(UserInfo thisUser, Boolean switchState, String checkinfo, AnnualInvestment thisAnnualInvestment);
-    BigDecimal getAllApprovedFigure();
+
+    List<AnnualInvestmentVO> getAllApprovedAnnualInvestment();
 }

@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.gzzhsl.pcms.converter.AnnualInvestment2VO;
 import com.gzzhsl.pcms.converter.AnnualInvestmentImg2VO;
 import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
@@ -242,8 +243,7 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
 
     // 获得总的审批后的总投资核准额
     @Override
-    public BigDecimal getAllApprovedFigure() {
-        BigDecimal allApprovedFigure = new BigDecimal(0);
+    public List<AnnualInvestmentVO> getAllApprovedAnnualInvestment() {
         List<AnnualInvestment> annualInvestments = null;
         Specification querySpecification = new Specification() {
             @Override
@@ -252,11 +252,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
             }
         };
         annualInvestments = annualInvestmentRepository.findAll(querySpecification);
-        List<BigDecimal> approvedFigures = annualInvestments.stream().map(e -> e.getApprovedFigure()).collect(Collectors.toList());
-        for (BigDecimal approvedFigure : approvedFigures) {
-            allApprovedFigure = allApprovedFigure.add(approvedFigure);
-        }
-        return allApprovedFigure;
+        List<AnnualInvestmentVO> allApprovedAnnualInvestmentVO = annualInvestments.stream().map(e -> AnnualInvestment2VO.convert(e)).collect(Collectors.toList());
+        return allApprovedAnnualInvestmentVO;
     }
 
     @Override

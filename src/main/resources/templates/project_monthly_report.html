@@ -16,7 +16,7 @@
     <link th:href="@{/css/plugins/datapicker/datepicker3.css}" rel="stylesheet">
     <link th:href="@{/css/plugins/daterangepicker/daterangepicker-bs3.css}" rel="stylesheet">
     <link th:href="@{/css/plugins/cropper/cropper.min.css}" rel="stylesheet">
-    <link th:href="@{/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+    <link th:href="@{/css/plugins/sweetalert/sweetalert2.css}" rel="stylesheet">
     <link th:href="@{/css/plugins/jasny/jasny-bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/custom/fileinput.css}"  rel="stylesheet" type="text/css">
 </head>
@@ -473,31 +473,31 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>主要建设内容</label>
-                                        <textarea id="construction_content" class="form-control required required" maxlength="250"></textarea>
+                                        <textarea id="construction_content" class="form-control required required" maxlength="1000"></textarea>
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group">
                                         <label>存在困难及问题</label>
-                                        <textarea id="difficulty" class="form-control " maxlength="250"></textarea>
+                                        <textarea id="difficulty" class="form-control " maxlength="1000"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>下一步建议</label>
-                                        <textarea id="suggestion" class="form-control " maxlength="250"></textarea>
+                                        <textarea id="suggestion" class="form-control " maxlength="1000"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                 	<div class="form-group">
                                         <label>工程形象进度及节点工期</label>
-                                        <textarea id="visual_progress" class="form-control required" maxlength="250"></textarea>
+                                        <textarea id="visual_progress" class="form-control required" maxlength="1000"></textarea>
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group">
                                         <label>采取的主要措施</label>
-                                        <textarea id="measure" class="form-control " maxlength="250"></textarea>
+                                        <textarea id="measure" class="form-control " maxlength="1000"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>备注</label>
-                                        <textarea id="remark" class="form-control " maxlength="250"></textarea>
+                                        <textarea id="remark" class="form-control " maxlength="1000"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -543,7 +543,7 @@
 <!-- Tags Input -->
 <script th:src="@{/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js}"></script>
 
-<script th:src="@{/js/plugins/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/js/plugins/sweetalert/sweetalert2.min.js}"></script>
 
 <script th:src="@{/js/custom/project_monthly_report.js}"></script>
 

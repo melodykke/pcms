@@ -1,24 +1,17 @@
 package com.gzzhsl.pcms.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.converter.BaseInfo2ManagerIndexVO;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.ProjectStatus;
-import com.gzzhsl.pcms.entity.TimeLineItem;
-import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.enums.RedisKeyEnum;
 import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.ProjectStatusService;
-import com.gzzhsl.pcms.service.TimeLineItemService;
-import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
-import com.gzzhsl.pcms.util.RedisUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.BaseInfoManagerIndexVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,15 +19,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.gzzhsl.pcms.service.BaseInfoService.ALLBASEINFO;
-import static javafx.scene.input.KeyCode.R;
 
 @Controller
 @Slf4j
@@ -52,15 +41,15 @@ public class IndexController {
     @ResponseBody
     @RequiresRoles(value = "manager")
     public ResultVO getAllBaseInfo() {
-        String key = ALLBASEINFO;
+
         List<BaseInfoManagerIndexVO> baseInfoManagerIndexVOs = null;
-        if (!stringRedisTemplate.hasKey(key)) {
+        if (!stringRedisTemplate.hasKey(RedisKeyEnum.ALLBASEINFO.getKey())) {
             List<BaseInfo> baseInfos = baseInfoService.getAllProject();
             baseInfoManagerIndexVOs = baseInfos.stream().map(e -> BaseInfo2ManagerIndexVO.convert(e)).collect(Collectors.toList());
         } else {
             ObjectMapper objectMapper = new ObjectMapper();
             JavaType javaType = objectMapper.getTypeFactory().constructParametricType(ArrayList.class, BaseInfoManagerIndexVO.class);
-            String jsonString = stringRedisTemplate.opsForValue().get(key);
+            String jsonString = stringRedisTemplate.opsForValue().get(RedisKeyEnum.ALLBASEINFO.getKey());
             try {
                 baseInfoManagerIndexVOs = objectMapper.readValue(jsonString, javaType);
             } catch (IOException e) {

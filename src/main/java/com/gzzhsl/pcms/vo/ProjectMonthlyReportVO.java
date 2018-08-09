@@ -93,17 +93,17 @@ public class ProjectMonthlyReportVO {
     @NotNull(message = "必填项空缺")
     @DecimalMax(value = "999999999999", message = "数据太长！")
     private BigDecimal labourForce; // 劳动力投入（万工日） *
-    @Size(min = 0, max = 250, message = "篇幅过长！")
+    @Size(min = 0, max = 1000, message = "篇幅过长！")
     private String constructionContent; // 主要建设内容
-    @Size(min = 0, max = 250, message = "篇幅过长！")
+    @Size(min = 0, max = 1000, message = "篇幅过长！")
     private String visualProgress; // 工程形象进度及节点工期
-    @Size(min = 0, max = 250, message = "篇幅过长！")
+    @Size(min = 0, max = 1000, message = "篇幅过长！")
     private String difficulty; // 存在困难及问题
-    @Size(min = 0, max = 250, message = "篇幅过长！")
+    @Size(min = 0, max = 1000, message = "篇幅过长！")
     private String measure; // 采取的主要措施
-    @Size(min = 0, max = 250, message = "篇幅过长！")
+    @Size(min = 0, max = 1000, message = "篇幅过长！")
     private String suggestion; // 下一步建议
-    @Size(min = 0, max = 250, message = "篇幅过长！")
+    @Size(min = 0, max = 1000, message = "篇幅过长！")
     private String remark; // 备注
 
 }

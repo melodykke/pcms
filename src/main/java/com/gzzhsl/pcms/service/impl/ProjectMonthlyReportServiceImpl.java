@@ -1,6 +1,7 @@
 package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.converter.MonthlyReportVO2MonthlyReport;
+import com.gzzhsl.pcms.converter.ProjectMonthlyReport2VO;
 import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -322,6 +324,20 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "月报历史数据", "新的审批消息");
         return feedbackRt;
+    }
+
+    // 获取所有审批通过的月报
+    @Override
+    public List<ProjectMonthlyReportVO> getAllApprovedMonthlyReport() {
+        Specification querySpecification = new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                return cb.equal(root.get("state"), (byte) 1);
+            }
+        };
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportRepository.findAll(querySpecification);
+        List<ProjectMonthlyReportVO> projectMonthlyReportVOs = projectMonthlyReports.stream().map(e -> ProjectMonthlyReport2VO.convert(e)).collect(Collectors.toList());
+        return projectMonthlyReportVOs;
     }
 
 

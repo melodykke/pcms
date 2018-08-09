@@ -21,4 +21,5 @@ public interface ProjectMonthlyReportService {
     HistoryMonthlyReportExcelStatistics saveHistoryStatistic(HistoryMonthlyReportStatisticVO historyMonthlyReportStatisticVO);
     HistoryMonthlyReportExcelStatistics getHistoryStatistic();
     Feedback approveHistoryMonthlyStatistic(Boolean switchState, String checkinfo, HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics);
+    List<ProjectMonthlyReportVO> getAllApprovedMonthlyReport();
 }

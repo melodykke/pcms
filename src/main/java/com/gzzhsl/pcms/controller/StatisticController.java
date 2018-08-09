@@ -3,6 +3,7 @@ package com.gzzhsl.pcms.controller;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.entity.BaseInfo;
+import com.gzzhsl.pcms.enums.RedisKeyEnum;
 import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.BaseInfoManagerIndexVO;
@@ -24,7 +25,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/statistic")
 public class StatisticController {
-    private static final String ALLBASEINFO = "allBaseInfo";
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -38,11 +38,11 @@ public class StatisticController {
     @RequiresRoles("manager")
     public ResultVO getAllTotalInvestment() {
         BigDecimal allTotalInvestment = new BigDecimal(0);
-        if (stringRedisTemplate.hasKey(ALLBASEINFO)) {
+        if (stringRedisTemplate.hasKey(RedisKeyEnum.ALLBASEINFO.getKey())) {
             List<BaseInfoManagerIndexVO> baseInfoManagerIndexVOs = null;
             ObjectMapper objectMapper = new ObjectMapper();
             JavaType javaType = objectMapper.getTypeFactory().constructParametricType(ArrayList.class, BaseInfoManagerIndexVO.class);
-            String jsonString = stringRedisTemplate.opsForValue().get(ALLBASEINFO);
+            String jsonString = stringRedisTemplate.opsForValue().get(RedisKeyEnum.ALLBASEINFO.getKey());
             try {
                 baseInfoManagerIndexVOs = objectMapper.readValue(jsonString, javaType);
             } catch (IOException e) {
