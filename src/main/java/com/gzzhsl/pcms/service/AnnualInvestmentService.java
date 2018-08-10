@@ -20,6 +20,6 @@ public interface AnnualInvestmentService {
     List<AnnualInvestment> getByYearAndProject(String year, BaseInfo baseInfo);
     AnnualInvestment findById(String id);
     Feedback approveAnnualInvestment(UserInfo thisUser, Boolean switchState, String checkinfo, AnnualInvestment thisAnnualInvestment);
-
+    List<AnnualInvestment> managerGetByYearAndProject(String year, BaseInfo baseInfo);
     List<AnnualInvestmentVO> getAllApprovedAnnualInvestment();
 }

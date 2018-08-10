@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class BaseInfoManagerIndexVO {
+    private String baseInfoId;
     private String plantName;
     private String parentId;
     private String remark;

@@ -130,6 +130,10 @@ $(function () {
     $('#account_management').click(function () {
         $('#content').load('account/toaccountmanagement');
     });
+    $('#reservoir_dic').click(function () {
+        $('#content').load('manage/toreservoirdic');
+    });
+
     $('#project_status_a').click(function () {
         if (hasProject == true) {
             contentDiv.load('index/toprojectstatus');
@@ -1259,6 +1263,7 @@ $(function () {
         map.addEventListener("tilesloaded", function () {
             def.resolve(map);
         })
+
         return def.promise();
     }
 
@@ -1403,7 +1408,7 @@ $(function () {
             '<span id="overview">' + data.overview + '</span></div>'
         ]
         $("#plant_name").text(data.plantName);
-        $("#item_detail").html(strHtml.join(""));
+        $(".item-detail").html(strHtml.join(""));
     }
 
     /**
@@ -2066,6 +2071,16 @@ $(function () {
                     for (var i = 0; i < allData.length; i++) {
                         createMarker(allData[i], map);
                     }
+                    // 主页面搜索
+                    $(".search-location").on("click", "i", function() {
+                        searchLocation(map, allData);
+                    });
+                    $(".search-location").on("keypress", "input", function () {
+                        var keycode = event.keyCode || event.which || event.charCode;
+                        if (keycode === 13) {
+                            searchLocation(map, allData);
+                        }
+                    });
                 }
             });
         });
@@ -2115,21 +2130,22 @@ $(function () {
         initProgramFunnel("program_funnel", programStarData, "工程进度");
 
     }
-
-    /*公告*/
-
-    $.getJSON("announcement/gethotlatests", function (data) {
-        var announcementItems = data.data.content;
-        var announcementHtml = '';
-        announcementItems.map(function (item, index) {
-           var itemHtml = '  <li>\n' +
-               '                        <a>'+ item.title +'</a>\n' +
-               '                    </li>'
-            announcementHtml += itemHtml;
+    function searchLocation(map, allData) {
+        var plantName = $(".search-location>input").val(),
+            meetConditions = [];
+        map.clearOverlays();
+        allData.map(function (item, i, allData) {
+            if (item["plantName"].indexOf(plantName) > -1) {
+                // meetConditions.push(item);
+                createMarker(item, map);
+            }
         });
-        $('#loopNotice').html(announcementHtml)
-    })
-
+    }
+    // 首页更多信息
+    $(".all-details").on("click", "a", function() {
+        var baseInfoId = $(this).attr("project-id");
+        location.href = "reservoir_index.html?baseInfoId" + baseInfoId;
+    });
 });
 
 function closeDetail() {

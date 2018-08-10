@@ -160,4 +160,11 @@ public class BaseInfoController {
         }
 
     }
+
+    @GetMapping("/getbaseinfobyid")
+    @ResponseBody
+    @RequiresRoles("manager")
+    public ResultVO getBaseInfoById(String baseInfoId) {
+        return ResultUtil.success(baseInfoService.getBaseInfoById(baseInfoId));
+    }
 }

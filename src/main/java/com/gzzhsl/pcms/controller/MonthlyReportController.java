@@ -43,6 +43,8 @@ public class MonthlyReportController {
     private UserService userService;
     @Autowired
     private AnnualInvestmentService annualInvestmentService;
+    @Autowired
+    private BaseInfoService baseInfoService;
 
 
     @PostMapping("/addfiles")
@@ -316,4 +318,75 @@ public class MonthlyReportController {
         }
         return ResultUtil.success(projectMonthlyReportService.approveHistoryMonthlyStatistic(switchState, checkinfo, historyMonthlyReportExcelStatistics));
     }
+
+    @PostMapping("/managergetmonthlyreports")
+    @ResponseBody
+    @RequiresRoles("manager")
+    public ResultVO managerGetMonthlyReports(@RequestBody Map<String, Object> params) {
+        String year = (String) params.get("year"); // 从前端取到年份
+        String baseInfoId = (String) params.get("baseInfoId"); // 从前端取到年份
+        BaseInfoVO thisProject = baseInfoService.getBaseInfoById(baseInfoId);
+        if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
+            log.error("【月报错误】 获取用户所在工程月报集出错 , thisProject = {}", thisProject);
+            throw new SysException(SysEnum.MONTHLY_REPORTS_FETCH_ERROR);
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String endTime = simpleDateFormat.format(new Date()); // 查询时间范围的截止日期应为当前
+        String endDate = new Date().toString();
+        if (year == null || year == "") { // 如果从前端没有取到查询年份，则默认当前时间年份
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            year = String.valueOf(calendar.get(Calendar.YEAR));
+        }
+        String startDate = year+"-01-01 00:00:00";
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear(thisProject.getBaseInfoId(), startDate, endDate);
+        if (projectMonthlyReports == null || projectMonthlyReports.size() == 0){
+            log.error("【月报错误】获取月报列表空，该工程指定年无月报记录");
+            throw new SysException(SysEnum.DATA_CALLBACK_FAILED);
+        }
+        List<ProjectMonthVO> projectMonthVOs = projectMonthlyReports.stream().map(e -> ProjectMonthlyReport2ProjectMonthVO.convert(e)).collect(Collectors.toList());
+        return ResultUtil.success(projectMonthVOs);
+    }
+    @GetMapping("/managergetmonthlyreportexcelbyprojectid")
+    @ResponseBody
+    @RequiresRoles("manager")
+    public ResultVO managerGetMonthlyReportExcelByProjectMonthlyReportId(String baseInfoId, String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
+        // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(baseInfoId);
+        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
+        String projectId = thisProject.getBaseInfoId();
+        Date yearEndDate = new Date(); // 当前时间
+        String historyPointTime = "2000-01-01 00:00:00";
+        String yearEndTime = currentDate+"-28 23:59:59"; // 查询时间范围的截止日期应为当前
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(yearEndDate);
+        String yearStartTime = String.valueOf(calendar.get(Calendar.YEAR))+"-01-01 00:00:00"; // 当前时间的年度头一天头一秒
+        List<ProjectMonthlyReport> yearProjectMonthlyReports = projectMonthlyReportService.
+                getMonthlyReportsByProjectIdAndYear(projectId, yearStartTime, yearEndTime); // 查询截止目前 本年的统计情况;
+        List<ProjectMonthlyReport> sofarProjectMonthlyReports = projectMonthlyReportService.
+                getMonthlyReportsByProjectIdAndYear(projectId, historyPointTime, yearEndTime); // 查询截止目前 历史的统计情况;;
+        MonthlyReportExcelModel monthlyReportExcelModel = new MonthlyReportExcelModel();
+        monthlyReportExcelModel.setTotalInvestment(thisProject.getTotalInvestment());
+        // 取得年份
+        String year = currentDate.substring(0, currentDate.lastIndexOf("-"));
+        // 查询该年份有无已审批通过的年度投资计划 如果有设置上，如果没 null
+        List<AnnualInvestment> annualInvestments = annualInvestmentService.managerGetByYearAndProject(year, thisProject);
+        if (annualInvestments.size()==1) {
+            if (annualInvestments.get(0).getState().equals((byte) 1)) {
+                monthlyReportExcelModel.setThisYearPlanInvestment(annualInvestments.get(0).getApplyFigure()); // 设置年度投融资计划
+            }
+        }
+        MonthlyReportExcelModel monthlyReportExcelModelWithMonthParams = monthlyReportExcelService.getMonthExcelModelWithMonthParams(monthlyReportExcelModel, projectMonthlyReport);
+        MonthlyReportExcelModel monthlyReportExcelModelWithMonthYearParams = monthlyReportExcelService.getMonthExcelModelWithYearParams(monthlyReportExcelModelWithMonthParams, yearProjectMonthlyReports);
+
+        MonthlyReportExcelModel monthlyReportExcelModelWithSofarParams = null;
+        if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {  // 是否存在历史数据
+            monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, thisProject.getHistoryMonthlyReportExcelStatistics());
+        } else {
+            monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, null);
+        }
+        return ResultUtil.success(MonthlyReportExcelCalcUtil.buildMonthlyReportExcel(monthlyReportExcelModelWithSofarParams));
+    }
+
 }

@@ -280,11 +280,11 @@ td a:hover {
     /* font-size: 14px; */
 }
 .item-detail div span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 66%;
-    display: inline-block;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*white-space: nowrap;*/
+    /*max-width: 66%;*/
+    /*display: inline-block;*/
 }
 .control-detail div label {
     vertical-align: top;
@@ -880,6 +880,9 @@ li.active>a> .control-tips {
 .all-reservoir .ui-jqgrid .ui-jqgrid-bdiv {
     height: calc(100vh - 350px)!important;
 }
+.reservoir-grid .ui-jqgrid .ui-jqgrid-bdiv {
+    height: calc(100vh - 400px)!important;
+}
 .all-reservoir>.tabs-container>.tab-content {
     background: #fff;
     height: calc(100vh - 215px);
@@ -965,7 +968,7 @@ li.active>a> .control-tips {
 }
 
 .grid-tools>.search-block {
-    float: right;
+    text-align: right;
 }
 .grid-tools>.search-block>input {
     width: 300px;
@@ -1069,4 +1072,84 @@ li.active>a> .control-tips {
 .loop-title>i {
     font-size: 16px;
     margin-right: 6px;
+}
+
+/* ------------------------------所有水库------------------------------------- */
+.all-reservoir {
+    margin: 0 15px;
+}
+.all-reservoir>.tabs-container>.tab-content {
+    background: #fff;
+    /* height: 510px; */
+    height: calc(100vh - 215px);
+    padding: 1px;
+}
+.reservoir-grid.tabs-container>.tab-content {
+    height: calc(100vh - 262px);
+}
+.all-reservoir .panel-body {
+    margin: 20px;
+}
+.self-grid {
+    /* min-width: 1200px; */
+    width: 100%;
+}
+.self-grid .ui-jqgrid .ui-jqgrid-htable th {
+    height: 30px;
+}
+.all-reservoir .nav.nav-tabs>li>a {
+    margin: 0px -1px;
+}
+/* ---------------表格连接样式---------------- */
+td>a.grid-link {
+    color: #18a689;
+}
+td>a.grid-link:hover {
+    text-decoration: underline;
+}
+.grid-rmb {
+    font-family: 'Lccd';
+    color:#f0ab58;
+    font-size: 15px;
+}
+
+/* ---------------------------0808------------------------------- */
+/* 首页搜索按钮 */
+.search-location {
+    position: absolute;
+    z-index: 1;
+    opacity: .8;
+    bottom: 38px;
+}
+.search-location:hover {
+    opacity: 1;
+}
+.search-location>i {
+    position: relative;
+    right: 25px;
+}
+.search-location>input {
+    width: 200px;
+    height: 30px;
+    border-radius: 16px;
+    border: 1px solid #e0e0e0;
+    padding: 0 15px;
+}
+.search-location>input:focus {
+    outline: none;
+    border-color: #1ab394;
+}
+/* 首页更多 */
+.all-details {
+    position: absolute;
+    bottom: 50px;
+    right: 20px;
+}
+.all-details>a {
+    color: #58b495;
+    text-decoration: underline;
+}
+.all-details>a:hover {
+    color: #62c7c9;
+    text-decoration: none;
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/custom/self-theme.css}" rel="stylesheet">
+</head>
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>水库字典</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#"><strong>主页</strong></a>
+            </li>
+            <li class="active">
+                <strong>水库详情</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="all-reservoir">
+            <div class="tabs-container reservoir-grid">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#tab-1">水库字典</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="grid-tools">
+                            <div class="search-block">
+                                <a>
+                                    <i class="fa fa-search"></i>
+                                </a>
+                                <input type="text"/>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="jqGrid_wrapper self-grid">
+                                <table id="reservoir_table_list"></table>
+                                <div id="reservoir_pager_list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/custom/all_reservoir.js}"></script>
+
+</html>

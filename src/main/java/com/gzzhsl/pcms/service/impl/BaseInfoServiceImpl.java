@@ -228,4 +228,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "基础信息", "新的基础信息审批消息");
         return feedbackRt;
     }
+
+    @Override
+    public BaseInfo findBaseInfoById(String baseInfoId) {
+        return baseInfoRepository.findByBaseInfoId(baseInfoId);
+    }
 }
