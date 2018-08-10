@@ -86,6 +86,12 @@ public enum SysEnum {
     TENDER_CHECKED_OTHERS_ERROR(4005, "不能审批不属于本用户所属工程的招标备案信息"),
     TENDER_CHECK_CHECKED_ERROR(4006, "当前招标备案信息已经审批过，不能重复审批"),
 
+    FAIL_TO_FETCH_STATION_INFO_ERROR(9900, "无测站信息！"),
+    PLANTNAME_NO_EXIST_ERROR(9901, "系统不存在查询的水库名称！"),
+    FAIL_TO_FETCH_RAINFALL_ERROR(9902, "无测雨量站信息！"),
+    FAIL_TO_FETCH_WATERLEVEL_ERROR(9903, "无测水位站信息！"),
+    FAIL_TO_FETCH_MONITOR_STATION_ERROR(9904, "无测水位站信息！"),
+
     ANNOUNCEMENT_VO_ERROR(5000, "公告参数错误，请重试！"),
 
     NO_AUTHORIZATION_ERROR(403, "当前操作未授权！"),
