@@ -33,6 +33,7 @@ import java.util.Map;
 @Slf4j
 public class CommonController {
 
+
     @GetMapping("/login")
     private String login(){
         return "login";
@@ -80,7 +81,7 @@ public class CommonController {
     }
 
 
-    @GetMapping("/index")
+    @GetMapping(value = {"/index", "/"})
     private String index(){
         return "index";
     }

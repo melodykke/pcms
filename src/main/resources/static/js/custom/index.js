@@ -1299,7 +1299,8 @@ $(function () {
             if(!$("#container1").hasClass("active")) {
                 $("#toggle1").click();
             }
-
+            $(".overview-video").addClass("video-show");
+            initItemVideo();
         });
 
         // 设置鼠标hover事件
@@ -1333,6 +1334,44 @@ $(function () {
             marker.setTop(false);
         });
 
+    }
+    /**
+     *  监控展开并初始化
+     */
+    function initItemVideo() {
+        var obj = document.getElementById("DPSDK_OCX");
+        // 初始化
+        var gWndId = obj.DPSDK_CreateSmartWnd(0, 0, 100, 100);
+        obj.DPSDK_SetWndCount(gWndId, 1);
+        obj.DPSDK_SetSelWnd(gWndId, 0);
+        for (var i = 1; i <= 4; i++)
+            obj.DPSDK_SetToolBtnVisible(i, false);
+        obj.DPSDK_SetToolBtnVisible(7, false);
+        obj.DPSDK_SetToolBtnVisible(9, false);
+        obj.DPSDK_SetControlButtonShowMode(1, 0);
+        obj.DPSDK_SetControlButtonShowMode(2, 0);
+
+        // 登录
+        var nRet1 = obj.DPSDK_Login("58.16.188.145", "9000", "向敬光", "123456");
+        // 加载组织结构
+        obj.DPSDK_LoadDGroupInfo();
+        // 获取组织结构
+        var videoXML = obj.DPSDK_GetDGroupStr();
+        // 根据通道ID连接DMS
+        var nRet2 = obj.DPSDK_ConnectDmsByChnlId("1000063$1$0$1");
+        // 播放视频
+        var szCameraId = "1000063$1$0$1";            // 视频通道
+        var nStreamType = "1";       // 主码流
+        var nMediaType = "1";       //视频
+        var nTransType = "1";       //视频
+
+        var nWndNo = obj.DPSDK_GetSelWnd(gWndId);
+        var nRet = obj.DPSDK_StartRealplayByWndNo(gWndId, nWndNo, szCameraId, nStreamType, nMediaType, nTransType);
+        if (nRet == 0) {
+            obj.DPSDK_SetIvsShowFlagByWndNo(gWndId, nWndNo, 1, 1);
+            obj.DPSDK_SetIvsShowFlagByWndNo(gWndId, nWndNo, 2, 1);
+            obj.DPSDK_SetIvsShowFlagByWndNo(gWndId, nWndNo, 3, 1);
+        }
     }
 
     /**
@@ -2145,6 +2184,11 @@ $(function () {
     $(".all-details").on("click", "a", function() {
         var baseInfoId = $(this).attr("project-id");
         location.href = "reservoir_index.html?baseInfoId" + baseInfoId;
+    });
+
+    // 关闭监控
+    $(".video-close").on("click", function() {
+        $(".overview-video").removeClass("video-show");
     });
 });
 

@@ -569,6 +569,51 @@
             </div>
         </div>
     </div>
+    <div class="row reservoir-row col-lg-12 col-md-12">
+        <div class="ibox reservoir-item reservoir-rain collapsed">
+            <div class="ibox-title">
+                <h5>当天雨情</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="scroll_content">
+                    <div class="col-lg-12 col-md-12 rain-detail">
+                        <div class="col-lg-4 col-md-4">
+                            <label>总降雨量：</label>
+                            <div>
+                                <span id="total_rain">50mm</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <label>时间：</label>
+                            <div>
+                                <span id="the_day">2018-08-13</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <label>周期：</label>
+                            <div>
+                                <span id="time_cycle">1天</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rain-situation">
+                        <div id="rain_situation" style="width: 100%;height: 200px;"></div>
+                    </div>
+                    <div class="water-height">
+                        <div id="water_height" style="width: 100%;height: 200px;"></div>
+                    </div>
+                    <div class="water-flow">
+                        <div id="water_flow" style="width: 100%;height: 200px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- 弹出层 -->
@@ -699,7 +744,154 @@
         });
         return def.promise();
     }
-
+    function initRainSituation(plantName) {
+        $("#rain_situation").remove();
+        $(".rain-situation").append('<div id="rain_situation" style="width: 100%;height: 300px;"></div>');
+        $("#water_height").remove();
+        $(".water-height").append('<div id="water_height" style="width: 100%;height: 300px;"></div>');
+        $("#water_flow").remove();
+        $(".water-flow").append('<div id="water_flow" style="width: 100%;height: 300px;"></div>');
+        var initEchart = function (data, id, chartName, yName) {
+            var rainEchart = echarts.init(document.getElementById(id));
+            var option = {
+                title: {
+                    text: chartName
+                },
+                legend: {
+                    data: data.legendData
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    position: function (pt) {
+                        return [pt[0], '10%'];
+                    }
+                },
+                grid: {
+                    left: '4%',
+                    right: '5%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    name: "时段",
+                    type: 'category',
+                    boundaryGap: false,
+                    data: data.xAxisData
+                },
+                yAxis: {
+                    type: 'value',
+                    name: yName
+                },
+                series: data.seriesData
+            };
+            rainEchart.setOption(option);
+        }
+        // 处理雨情数据
+        var rainSituationDataFun = function (data, xAxisKey, seriesKey) {
+            var xAxisData = [],
+                seriesData = [],
+                legendData = [];
+            $.each(data, function (i, n) {
+                if (n.data && n.data.length > 0) {
+                    legendData.push(n.name);
+                    var seriesItem = [],
+                        xAxisItem = [];
+                    $.each(n.data, function (index, itemData) {
+                        seriesItem.push(itemData.drp);
+                        xAxisItem.push(itemData.tm);
+                    });
+                    seriesData.push({
+                        name: n.name,
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        data: seriesItem
+                    });
+                    if (xAxisData.length === 0) {
+                        xAxisData = xAxisItem
+                    }
+                }
+            });
+            return { legendData: legendData, xAxisData: xAxisData, seriesData: seriesData }
+        };
+        var otherDataFun = function (data) {
+            var xAxisData = [],
+                seriesHeightData = [],
+                serierFlowData = [],
+                legendData = [];
+            $.each(data, function (i, n) {
+                if (n.data && n.data.length > 0) {
+                    legendData.push(n.name);
+                    var seriesHeightItem = [],
+                        serierFlowItem = [],
+                        xAxisItem = [];
+                    $.each(n.data, function (index, itemData) {
+                        seriesHeightItem.push(itemData.z);
+                        serierFlowItem.push(itemData.q);
+                        var thisDate = new Date(parseInt(itemData.tm)),
+                            thisDataStr = thisDate.toISOString().substr(0, 10) + " " + thisDate.toLocaleTimeString().substr(0, 8);
+                        xAxisItem.push(thisDataStr);
+                    });
+                    seriesHeightData.push({
+                        name: n.name,
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        data: seriesHeightItem
+                    });
+                    serierFlowData.push({
+                        name: n.name,
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        data: serierFlowItem
+                    });
+                    if (xAxisData.length === 0) {
+                        xAxisData = xAxisItem;
+                    }
+                }
+            });
+            var waterHeightData = { legendData: legendData, xAxisData: xAxisData, seriesData: seriesHeightData },
+                waterFlowData = { legendData: legendData, xAxisData: xAxisData, seriesData: serierFlowData };
+            return { waterHeightData: waterHeightData, waterFlowData: waterFlowData }
+        }
+        // 参数
+        var nowDate = new Date(),
+            nowDateStr = nowDate.toISOString().substr(0, 10) + " " + nowDate.toTimeString().substr(0, 8),
+            lastDate = nowDate.getFullYear() + "-" + (nowDate.getMonth()+1) + "-" + (nowDate.getDate()-1) + " " + nowDate.toTimeString().substr(0, 8);
+        var param = {
+            plantName: plantName,
+            startTime: lastDate,
+            endTime : nowDateStr
+        }
+        // 降雨量
+        $.ajax({
+             url: 'communication/getallrainfalldata',
+//            url: 'json/rain_situation.json',
+            type: 'GET',
+            data: param,
+            dataType: 'json',
+            success: function (data) {
+                var rainData = data.data;
+                var thisRainData = rainSituationDataFun(rainData, 'tm', 'drp');
+                initEchart(thisRainData, "rain_situation", "降雨量", "雨量值(mm)");
+            }
+        });
+        // 流量及水位
+        $.ajax({
+             url: 'communication/getallwaterleveldata',
+//            url: 'json/rain.json',
+            type: 'GET',
+            data: param,
+            dataType: 'json',
+            success: function (data) {
+                var waterData = data.data;
+                var thisWaterData = otherDataFun(waterData);
+                initEchart(thisWaterData.waterHeightData, "water_height", "水位", "水位(m)");
+                initEchart(thisWaterData.waterFlowData, "water_flow", "流量", "流量(m3/s)");
+            }
+        });
+    }
     // 定义两个定时器
     var monthCircle = {
         fadeOutIndex: 0,
@@ -1025,6 +1217,12 @@
         $(".attach-content>div").on("click", "i", function () {
             var imgAddr = $(this).attr("url");
             location.href = "/download/monthlyreportfile?fileId=" + imgAddr;
+        });
+        // 下拉面板点击事件
+        $(".reservoir-row").on("click", ".border-bottom .ibox-tools>.collapse-link>i", function () {
+            if (!$(".reservoir-rain .ibox-content").is(":hidden")) {
+                initRainSituation(reservoirData.plantName);
+            }
         });
     });
 </script>

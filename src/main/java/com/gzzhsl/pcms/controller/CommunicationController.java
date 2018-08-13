@@ -64,7 +64,7 @@ public class CommunicationController {
      */
     @GetMapping("/getallrainfalldata")
     @ResponseBody
-    public ResultVO getAllRainfallData(String plantName) {
+    public ResultVO getAllRainfallData(String plantName, String startTime, String endTime) {
         List<StationVO> stationVOs = getMyStaionVO(plantName); // 获取所有的监测站点
         if (stationVOs == null || stationVOs.size()==0) {
             log.error("【雨量信息】 获取监测站点失败！ stationVOs={}", stationVOs);
@@ -80,16 +80,16 @@ public class CommunicationController {
             return ResultUtil.failed(SysEnum.FAIL_TO_FETCH_RAINFALL_ERROR);
         }
 
-        Calendar cal=Calendar.getInstance();
+        /*Calendar cal=Calendar.getInstance();
         cal.add(Calendar.DATE,-1);
         Date time=cal.getTime();
         String startTimeStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(time); // 当前时间的前一天
 
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 当前时间
-        String endTimeStr = formatter.format(currentTime);
+        String endTimeStr = formatter.format(currentTime);*/
 
-        List<StationVOWithMonitorData> stationVOWithMonitorDatas = getAllRainFallData(rainfallMonitorStations, startTimeStr, endTimeStr);
+        List<StationVOWithMonitorData> stationVOWithMonitorDatas = getAllRainFallData(rainfallMonitorStations, startTime, endTime);
         return ResultUtil.success(stationVOWithMonitorDatas);
     }
 
@@ -101,7 +101,7 @@ public class CommunicationController {
      */
     @GetMapping("/getallwaterleveldata")
     @ResponseBody
-    public ResultVO getAllWaterLevelData(String plantName) {
+    public ResultVO getAllWaterLevelData(String plantName, String startTime, String endTime) {
         List<StationVO> stationVOs = getMyStaionVO(plantName); // 获取所有的监测站点
         if (stationVOs == null || stationVOs.size()==0) {
             log.error("【水位信息】 获取监测站点失败！ stationVOs={}", stationVOs);
@@ -117,16 +117,16 @@ public class CommunicationController {
             return ResultUtil.failed(SysEnum.FAIL_TO_FETCH_WATERLEVEL_ERROR);
         }
 
-        Calendar cal=Calendar.getInstance();
+        /*Calendar cal=Calendar.getInstance();
         cal.add(Calendar.DATE,-1);
         Date time=cal.getTime();
         String startTimeStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(time); // 当前时间的前一天
 
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 当前时间
-        String endTimeStr = formatter.format(currentTime);
+        String endTimeStr = formatter.format(currentTime);*/
 
-        List<StationVOWithMonitorData> stationVOWithMonitorDatas = getAllWaterLevelData(waterlevelMonitorStations, startTimeStr, endTimeStr);
+        List<StationVOWithMonitorData> stationVOWithMonitorDatas = getAllWaterLevelData(waterlevelMonitorStations, startTime, endTime);
         return ResultUtil.success(stationVOWithMonitorDatas);
     }
 

@@ -1153,3 +1153,67 @@ td>a.grid-link:hover {
     color: #62c7c9;
     text-decoration: none;
 }
+/*监控*/
+.overview-video {
+    width: 300px;
+    position: absolute;
+    z-index: 1;
+    margin-left: 75px;
+    transition: top 1s;
+    -webkit-transition: top 1s;
+    top: -101%;
+}
+#DPSDK_OCX {
+    background-color: #000;
+}
+.overview-video.video-show {
+    top: 30px;
+}
+.video-outter {
+    padding: 5px;
+    position: relative;
+}
+.video-outter::before, .video-outter::after {
+    position: absolute;
+    content: '';
+    height: 20px;
+    width: 20px;
+}
+.video-outter::before {
+    right: 0;
+    top: 0;
+    border-right: 2px solid rgba(20, 45, 37, 0.8);
+    border-top: 2px solid rgba(20, 45, 37, 0.8);
+}
+.video-outter::after {
+    left: 0;
+    bottom: 0;
+    border-left: 2px solid rgba(20, 45, 37, 0.8);
+    border-bottom: 2px solid rgba(20, 45, 37, 0.8);
+}
+.video-content {
+    height: 200px;
+}
+.video-content::before, .video-content::after {
+    position: absolute;
+    content: '';
+    height: 20px;
+    width: 20px;
+}
+.video-content::before {
+    left: 0;
+    top: 0;
+    border-left: 2px solid rgba(20, 45, 37, 0.8);
+    border-top: 2px solid rgba(20, 45, 37, 0.8);
+}
+.video-content::after {
+    right: 0;
+    bottom: 0;
+    border-right: 2px solid rgba(20, 45, 37, 0.8);
+    border-bottom: 2px solid rgba(20, 45, 37, 0.8);
+}
+.video-close {
+    position: absolute;
+    right: 10px;
+    color: #fff;
+}

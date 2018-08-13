@@ -208,3 +208,28 @@
 .attach-content>div>i {
     cursor: pointer;
 }
+.reservoir-rain>.ibox-title {
+    background-color: #55adec;
+}
+.reservoir-rain>.ibox-content {
+    border-color: #55adec;
+}
+.rain-detail {
+    font-size: 14px;
+}
+.rain-detail>div>label {
+    border-left: 3px solid #55adec;
+    padding-left: 5px;
+    height: 15px;
+    line-height: 15px;
+    margin: 0;
+}
+.rain-detail>div>div {
+    display: inline-block;
+}
+.rain-situation, .water-height, .water-flow {
+    margin: 20px 0;
+    clear: both;
+    float: left;
+    width: 100%;
+}
