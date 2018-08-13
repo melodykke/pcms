@@ -761,10 +761,7 @@
                     data: data.legendData
                 },
                 tooltip: {
-                    trigger: 'axis',
-                    position: function (pt) {
-                        return [pt[0], '10%'];
-                    }
+                    trigger: 'axis'
                 },
                 grid: {
                     left: '4%',
@@ -780,7 +777,10 @@
                 },
                 yAxis: {
                     type: 'value',
-                    name: yName
+                    name: yName,
+                    min: function (value) {
+                        return (value.min - 10 > 0) ? value.min - 10 : 0;
+                    }
                 },
                 series: data.seriesData
             };

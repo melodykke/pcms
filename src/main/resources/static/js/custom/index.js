@@ -1,4 +1,18 @@
 $(function () {
+
+    $.ajaxSetup({
+        complete:function(XMLHttpRequest,textStatus){
+            if(textStatus=="parsererror"){
+                $.messager.alert('提示信息', "登陆超时！请重新登陆！", 'info',function(){
+                    window.location.href = 'login';
+                });
+            } else if(textStatus=="error"){
+                $.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
+            }
+        }
+    })
+
+
     var hasProject = false;
     var getThisUserUrl = "/user/getthisuser"; //拿到当前用户信息的url
     var getThisProjectUrl = "/user/getthisproject";
@@ -131,7 +145,11 @@ $(function () {
         $('#content').load('account/toaccountmanagement');
     });
     $('#reservoir_dic').click(function () {
-        $('#content').load('manage/toreservoirdic');
+        $('#content').load('manage/toreservoirdic', function(html) {
+            if(html.indexOf('<img alt="logo" height="56" width="300" src="/img/logo.png" />')>0) {
+                location.reload();
+            }
+        });
     });
 
     $('#project_status_a').click(function () {
@@ -1352,15 +1370,15 @@ $(function () {
         obj.DPSDK_SetControlButtonShowMode(2, 0);
 
         // 登录
-        var nRet1 = obj.DPSDK_Login("58.16.188.145", "9000", "向敬光", "123456");
+        var nRet1 = obj.DPSDK_Login("111.85.91.84", "9000", "system", "admin123");
         // 加载组织结构
         obj.DPSDK_LoadDGroupInfo();
         // 获取组织结构
         var videoXML = obj.DPSDK_GetDGroupStr();
         // 根据通道ID连接DMS
-        var nRet2 = obj.DPSDK_ConnectDmsByChnlId("1000063$1$0$1");
+        var nRet2 = obj.DPSDK_ConnectDmsByChnlId("1000009$1$0$0");
         // 播放视频
-        var szCameraId = "1000063$1$0$1";            // 视频通道
+        var szCameraId = "1000009$1$0$0";            // 视频通道
         var nStreamType = "1";       // 主码流
         var nMediaType = "1";       //视频
         var nTransType = "1";       //视频

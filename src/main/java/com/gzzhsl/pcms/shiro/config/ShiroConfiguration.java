@@ -5,16 +5,21 @@ import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.gzzhsl.pcms.cors.MyFormAuthenticationFilter;
 import com.gzzhsl.pcms.cors.MyHashedCredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -71,7 +76,7 @@ public class ShiroConfiguration {
 		//<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
 		filterChainDefinitionMap.put("/**", "authc");
 		Map map = new LinkedHashMap();
-		map.put("authc", new MyFormAuthenticationFilter());
+        map.put("authc", new MyFormAuthenticationFilter());
 		shiroFilterFactoryBean.setFilters(map);
 		// 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
 		shiroFilterFactoryBean.setLoginUrl("/login");       // 在拦截器中不设置对login路径的anon，由shiro去拦截，自动将请求
@@ -90,26 +95,29 @@ public class ShiroConfiguration {
 /****************************************shiro核心 SecurityManager ***********************************************************/
 
 	@Bean //注入： securityManager
-	public SecurityManager securityManager(){
+	public SecurityManager securityManager(@Qualifier("myShiroRealm") AuthorizingRealm authorizingRealm,
+										   @Qualifier("shiroCacheManager") MemoryConstrainedCacheManager shiroCacheManager,
+										   @Qualifier("sessionManager") DefaultWebSessionManager sessionManager){
 
 		/**
 		 * 定义shiro的安全管理器
 		 * 用shiro自带Web安全管理器
 		 */
 
-		DefaultSecurityManager securityManager = new DefaultWebSecurityManager();
+		DefaultWebSecurityManager securityManager=new DefaultWebSecurityManager();
 		//设置自定义realm
-		securityManager.setRealm(myShiroRealm());
+		securityManager.setRealm(authorizingRealm);
 		//设置ehcache缓存管理器
-		//securityManager.setCacheManager(ehCacheManager());
+		securityManager.setCacheManager(shiroCacheManager);
 		//设置rememberMe cookie
 		//securityManager.setRememberMeManager(cookieRememberMeManager());
+		securityManager.setSessionManager(sessionManager);
 		return securityManager;
 	}
 
 /****************************************加密算法注入自定义realm***********************************************************/
 
-	@Bean //注入自定义realm
+	@Bean(name = "myShiroRealm") //注入自定义realm
 	public MyShiroRealm myShiroRealm(){
 		System.out.println("ShiroConfiguration.myShiroRealm() initiating...");
 		MyShiroRealm myShiroRealm = new MyShiroRealm();
@@ -180,21 +188,40 @@ public class ShiroConfiguration {
 	}
 
 /****************************************cookie***********************************************************/
-
-	@Bean //配置cookie对象
+	@Bean(name="sessionDAO")
+	public MemorySessionDAO getMemorySessionDAO()
+	{
+		return new MemorySessionDAO();
+	}
+	@Bean(name = "simpleCookie") //配置cookie对象
 	public SimpleCookie rememberMeCookie(){
 		//new一个SimpleCookie，名称为前端checkbox的name属性值（='rememberMe'）
-		SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+		SimpleCookie simpleCookie = new SimpleCookie("SHRIOSESSIONID");
 		//可选；配置cookie的生效时间。单位时秒，下面时1天；
 		simpleCookie.setMaxAge(24*60*60);
 		return simpleCookie;
 	}
-
-	@Bean //cookie管理器
+	//配置shiro session 的一个管理器
+	@Bean(name = "sessionManager")
+	public DefaultWebSessionManager getDefaultWebSessionManager(@Qualifier("sessionDAO") MemorySessionDAO sessionDAO,
+																@Qualifier("simpleCookie") SimpleCookie simpleCookie)
+	{
+		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+		sessionManager.setSessionDAO(sessionDAO);
+		sessionManager.setSessionIdCookie(simpleCookie);
+		return sessionManager;
+	}
+	//配置session的缓存管理器
+	@Bean(name= "shiroCacheManager")
+	public MemoryConstrainedCacheManager getMemoryConstrainedCacheManager()
+	{
+		return new MemoryConstrainedCacheManager();
+	}
+	/*@Bean //cookie管理器
 	public CookieRememberMeManager cookieRememberMeManager(){
 		CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
 		cookieRememberMeManager.setCookie(rememberMeCookie());
 		return cookieRememberMeManager;
-	}
+	}*/
 }
 

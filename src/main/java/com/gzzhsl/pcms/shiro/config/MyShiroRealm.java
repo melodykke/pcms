@@ -15,17 +15,21 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collection;
 
 public class MyShiroRealm extends AuthorizingRealm{
 
 	@Autowired
 	private UserService userService;
-
-
-
+    @Autowired
+    private SessionDAO sessionDAO;
 /**
 	 * 身份认证  --- 登陆
 	 * @param token
@@ -48,6 +52,29 @@ public class MyShiroRealm extends AuthorizingRealm{
 		MyUsernamePasswordToken myToken = (MyUsernamePasswordToken) token;
 		// 1. 获取用户输入的账号
 		String username = (String)myToken.getPrincipal();
+
+
+
+        //以下为只允许同一账户单个登录
+        Collection<Session> sessions = sessionDAO.getActiveSessions();
+        if(sessions.size()>0) {
+            for (Session session : sessions) {
+                System.out.println("::::::::::::::::" + session);
+                //获得session中已经登录用户的名字
+                if(null!=session.getAttribute("username")) {
+                   /* String loginUsername = ((UserInfo)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)).getUsername();*/
+                    String loginUsername = (String)session.getAttribute("username");
+                    System.out.println("::::::::::::::::" + loginUsername);
+                    if (username.equals(loginUsername)) {  //这里的username也就是当前登录的username
+                        session.stop();  //这里就把session清除，
+                        System.out.println("重复登录 弹出了之前的用户"+username);
+                    }
+                }
+            }
+        }
+
+
+
         System.out.println(username);
         System.out.println("token.getCredentials:"+myToken.getCredentials());
         System.out.println(new String((char[])myToken.getCredentials()));
@@ -78,6 +105,7 @@ public class MyShiroRealm extends AuthorizingRealm{
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		//如果打印信息只执行一次的话，说明缓存生效了，否则不生效. --- 配置缓存成功之后，只会执行1次/每个用户，因为每个用户的权限是不一样的. ehcache起作用就只有一次
 		System.out.println("MyShiroRealm.doGetAuthorizationInfo()");
+
 		//使用shiro提供的类
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 		//获取用户的权限信息
@@ -90,6 +118,8 @@ public class MyShiroRealm extends AuthorizingRealm{
 				simpleAuthorizationInfo.addStringPermission(sysPermission.getPermission());
 			}
 		}
+
+        SecurityUtils.getSubject().getSession().setAttribute("username", userInfo.getUsername());
 		return simpleAuthorizationInfo;
 	}
 
