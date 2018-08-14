@@ -23,7 +23,7 @@
 
     <link th:href="@{/css/plugins/dataTables/datatables.min.css}" rel="stylesheet">
     <link th:href="@{/css/plugins/datapicker/datepicker3.css}" rel="stylesheet">
-
+    <link th:href="@{/css/custom/jquery.dropdown1.min.css}" rel="stylesheet">
     <link th:href="@{/css/animate.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
     <link th:href="@{/css/custom/index.css}" rel="stylesheet">
@@ -966,11 +966,19 @@
                                                         <option>Ⅴ</option>
                                                     </select>
                                                 </div>
-                                                <div class="form-group">
+                                               <!-- <div class="form-group">
                                                     <label>所在县</label><span style="color:red;"> *</span>
                                                     <input id="county" type="text" name="county"
                                                            class="form-control required " maxlength="10">
+                                                </div>-->
+                                                <div class="form-group">
+                                                    <label>所在县</label><span style="color:red;"> *</span>
+                                                    <div class="region-dropdown">
+                                                        <select class="form-control m-b required" id="regionId" name="regionId" style="display:none" placeholder="请选择">
+                                                        </select>
+                                                    </div>
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label>经度</label><span style="color:red;"> *</span>
                                                     <input id="longitude" type="text" name="longitude"
@@ -1680,6 +1688,7 @@
 <script th:src="@{/js/custom/echarts.min.js}"></script>
 <script th:src="@{/js/custom/bmap.min.js}"></script>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script th:src="@{/js/custom/jquery.dropdown.min.js}"></script>
 
 <!-- jqGrid -->
 <script th:src="@{/js/plugins/jqGrid/i18n/grid.locale-en.js}"></script>

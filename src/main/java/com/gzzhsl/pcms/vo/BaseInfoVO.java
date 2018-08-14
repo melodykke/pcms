@@ -59,7 +59,7 @@ public class BaseInfoVO {
     private BigDecimal ruralHumanWater; // 农村人饮（万人）
     private BigDecimal livestock; // 大牲畜（万头）
     private BigDecimal waterSupplyPopulation; // 城镇供水人口（万人)
-
+    private Integer regionId;
     private List<BaseInfoImgVO> baseInfoImgVOs;
 
     private String owner; // 上报人

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -18,7 +20,13 @@ public class RegionServiceImpl implements RegionService {
     private RegionRepository regionRepository;
 
     @Override
-    public List<Region> getChildrenRegion(String parentId) {
+    public List<Region> getAllRootRegion() {
+        List<Integer> notInList = Arrays.asList(1);
+        return regionRepository.findByParentIdNotIn(notInList);
+    }
+
+    @Override
+    public List<Region> getChildrenRegion(Integer parentId) {
         return regionRepository.findByParentId(parentId);
     }
 }

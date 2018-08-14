@@ -17,5 +17,5 @@ public class Region {
     private Integer regionId;
     private String regionCode;
     private String regionName;
-    private String parentId;
+    private Integer parentId;
 }

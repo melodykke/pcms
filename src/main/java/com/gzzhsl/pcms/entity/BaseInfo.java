@@ -81,6 +81,7 @@ public class BaseInfo {
     private BigDecimal provincialAccumulativePayment; // 省级累计拨付（万元）
     private BigDecimal localAccumulativePayment; // 市县累计拨付（万元）
     private BigDecimal provincialLoan; // 省级配套融资贷款（万元）
+    private Integer regionId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "baseInfo")
     @JsonManagedReference

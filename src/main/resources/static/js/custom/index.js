@@ -356,6 +356,34 @@ $(function () {
             }
         });
     }
+    
+    $("#base_info").on("click", function() {
+        setTimeout(function() {
+            if(!$(".base_info_modal").is(":hidden")) {
+                var regionHtml = '<option selected="selected" disabled="disabled"\n' +
+                    'style="display: none"></option>';
+                var def = $.Deferred();
+                $.getJSON("region/getallrootregion", function (data) {
+                    var allRootRegion = data.data;
+                    allRootRegion.map(function (item, index) {
+                        var regionOptionHtml = ' <option value="'+ item.regionId +'">'+ item.regionName +'</option>';
+                        regionHtml += regionOptionHtml;
+                    });
+                    $('#regionId').html(regionHtml);
+                    def.resolve();
+                });
+                $.when(def.promise()).done(function(){
+                    $('.region-dropdown').dropdown({
+                        readOnly: true,
+                        input: '<input id="region_input" type="text" maxLength="20" placeholder="请输入搜索">',
+                        choice: function() {
+                            console.log(arguments, this);
+                        }
+                    });
+                });
+            }
+        }, 300);
+    });
 
 
     <!--水库基本信息填报js-->
@@ -506,7 +534,7 @@ $(function () {
             baseInfoVO.branchProjectOverview = $('#branchProjectOverview').val();
             baseInfoVO.remark = $('#remark').val();
             baseInfoVO.constructionLand = $('#constructionLand').val();
-            baseInfoVO.county = $('#county').val();
+            baseInfoVO.regionId = $('#regionId').val();
             baseInfoVO.landReclamationPlan = $('#landReclamationPlan').val();
             baseInfoVO.overview = $('#overview').val();
             baseInfoVO.projectSource = $('#projectSource').val();

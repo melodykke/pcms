@@ -5,5 +5,6 @@ import com.gzzhsl.pcms.entity.Region;
 import java.util.List;
 
 public interface RegionService {
-    List<Region> getChildrenRegion(String parentId);
+    List<Region> getAllRootRegion();
+    List<Region> getChildrenRegion(Integer parentId);
 }

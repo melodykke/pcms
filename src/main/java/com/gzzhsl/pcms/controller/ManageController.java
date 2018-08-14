@@ -38,7 +38,7 @@ public class ManageController {
 
     @GetMapping("/getregionchildren")
     @ResponseBody
-    public ResultVO getRegionChildren(@RequestParam(required = false, name = "regionId", defaultValue = "1") String regionId) {
+    public ResultVO getRegionChildren(@RequestParam(required = false, name = "regionId", defaultValue = "1") int regionId) {
         List<Region> regionList = regionService.getChildrenRegion(regionId);
         if (regionList != null || regionList.size() != 0) {
             return ResultUtil.success(regionList);
