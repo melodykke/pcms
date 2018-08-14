@@ -16,4 +16,5 @@ public interface BaseInfoService {
     BaseInfo save(BaseInfoVO baseInfoVO);
     Feedback approveBaseInfo(UserInfo thisUser, Boolean switchState, String checkinfo, String baseInfoId);
     BaseInfo findBaseInfoById(String baseInfoId);
+    List<BaseInfoVO> findByRegionId(Integer regionId);
 }

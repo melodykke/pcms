@@ -1,8 +1,10 @@
 package com.gzzhsl.pcms.controller;
 
 import com.gzzhsl.pcms.entity.Region;
+import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.RegionService;
 import com.gzzhsl.pcms.util.ResultUtil;
+import com.gzzhsl.pcms.vo.BaseInfoVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -25,6 +27,8 @@ public class ManageController {
 
     @Autowired
     private RegionService regionService;
+    @Autowired
+    private BaseInfoService baseInfoService;
 
     @GetMapping("/toreservoirdic")
     public String toReservoirDic() {
@@ -45,5 +49,12 @@ public class ManageController {
         } else {
             return ResultUtil.failed();
         }
+    }
+
+    @GetMapping("/getbaseinfobyregion")
+    @ResponseBody
+    public ResultVO getBaseInfoByRegionId(int regionId) {
+        List<BaseInfoVO> baseInfoVOs = baseInfoService.findByRegionId(regionId);
+        return ResultUtil.success(baseInfoVOs);
     }
 }

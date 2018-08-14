@@ -233,4 +233,11 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     public BaseInfo findBaseInfoById(String baseInfoId) {
         return baseInfoRepository.findByBaseInfoId(baseInfoId);
     }
+
+    @Override
+    public List<BaseInfoVO> findByRegionId(Integer regionId) {
+        List<BaseInfo> baseInfos = baseInfoRepository.findByRegionId(regionId);
+        List<BaseInfoVO> baseInfoVOs = baseInfos.stream().map(e -> BaseInfo2VO.convert(e)).collect(Collectors.toList());
+        return baseInfoVOs;
+    }
 }
