@@ -7,4 +7,5 @@ import java.util.List;
 public interface ReservoirCodeService {
     List<ReservoirCode> getAll();
     ReservoirCode getByName(String name);
+    ReservoirCode getByBaseInfoId(String baseInfoId);
 }

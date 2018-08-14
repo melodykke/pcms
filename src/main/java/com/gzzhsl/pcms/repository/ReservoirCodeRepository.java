@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReservoirCodeRepository extends JpaRepository<ReservoirCode, Integer> {
     ReservoirCode findByReservoirName(String reservoirName);
+    ReservoirCode findByBaseInfoId(String baseInfoId);
 }

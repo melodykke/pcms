@@ -1,17 +1,61 @@
-$(function () {
+// 重写的jequeryload
+var _old_load = jQuery.fn.load;
+jQuery.fn.load = function( url, params, callback ) {
+    //update for HANZO, 2016/12/22
+    if (typeof url !== "string" && _old_load) {
+        return _old_load.apply( this, arguments );
+    }
 
-    $.ajaxSetup({
-        complete:function(XMLHttpRequest,textStatus){
-            if(textStatus=="parsererror"){
-                $.messager.alert('提示信息', "登陆超时！请重新登陆！", 'info',function(){
-                    window.location.href = 'login';
-                });
-            } else if(textStatus=="error"){
-                $.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
+    var selector, type, response,
+        self = this,
+        off = url.indexOf( " " );
+    if ( off > -1 ) {
+        selector = jQuery.trim( url.slice( off ) );
+        url = url.slice( 0, off );
+    }
+    if ( jQuery.isFunction( params ) ) {
+        callback = params;
+        params = undefined;
+    } else if ( params && typeof params === "object" ) {
+        type = "POST";
+    }
+    if ( self.length > 0 ) {
+        jQuery.ajax( {
+            url: url,
+            beforeSend: function( xhr ) {
+                xhr.setRequestHeader('X-Requested-With', {toString: function(){ return ''; }});
+            },
+            type: type || "GET",
+            dataType: "html",
+            data: params
+        } ).done( function( responseText ) {
+            //console.log(responseText);
+            response = arguments;
+            //页面超时跳转到首页
+            // if(responseText.startWith("<!--login_page_identity-->")){
+            //     window.location.href=basePath+"/";
+            // }else{
+            //     self.html(selector ?
+            //         jQuery("<div>").append(jQuery.parseHTML( responseText )).find(selector) :
+            //         responseText);
+            // }
+            if(responseText.indexOf('<img alt="logo" height="56" width="300" src="/img/logo.png" />')>0){
+                window.location.reload();
+            } else {
+                self.html(selector ?
+                    jQuery("<div>").append(jQuery.parseHTML( responseText )).find(selector) :
+                    responseText);
             }
-        }
-    })
+        } ).always( callback && function( jqXHR, status ) {
+            self.each( function() {
+                callback.apply( this, response || [ jqXHR.responseText, status, jqXHR ] );
+            } );
+        } );
+    }
 
+    return this;
+};
+$(function () {
 
     var hasProject = false;
     var getThisUserUrl = "/user/getthisuser"; //拿到当前用户信息的url
@@ -131,6 +175,12 @@ $(function () {
             })
         }
 
+    });
+    $('#druid').click(function () {
+        var a = $("<a href='/druid/' target='_blank'>druid</a>").get(0);
+        var e = document.createEvent('MouseEvents');
+        e.initEvent( 'click', true, true );
+        a.dispatchEvent(e);
     });
     $('#announcement_a').click(function () {
         $('#content').load('announcement/toannouncement');

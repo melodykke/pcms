@@ -26,4 +26,9 @@ public class ReservoirCodeServiceImpl implements ReservoirCodeService {
     public ReservoirCode getByName(String name) {
         return reservoirCodeRepository.findByReservoirName(name);
     }
+
+    @Override
+    public ReservoirCode getByBaseInfoId(String baseInfoId) {
+        return reservoirCodeRepository.findByBaseInfoId(baseInfoId);
+    }
 }

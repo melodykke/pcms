@@ -21,12 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-
-import static com.sun.deploy.config.JREInfo.getAll;
-import static com.sun.deploy.config.JREInfo.printJREs;
 
 @Controller
 @RequestMapping("/communication")
@@ -64,8 +60,8 @@ public class CommunicationController {
      */
     @GetMapping("/getallrainfalldata")
     @ResponseBody
-    public ResultVO getAllRainfallData(String plantName, String startTime, String endTime) {
-        List<StationVO> stationVOs = getMyStaionVO(plantName); // 获取所有的监测站点
+    public ResultVO getAllRainfallData(String baseInfoId, String startTime, String endTime) {
+        List<StationVO> stationVOs = getMyStaionVO(baseInfoId); // 获取所有的监测站点
         if (stationVOs == null || stationVOs.size()==0) {
             log.error("【雨量信息】 获取监测站点失败！ stationVOs={}", stationVOs);
             throw new SysException(SysEnum.FAIL_TO_FETCH_MONITOR_STATION_ERROR);
@@ -101,8 +97,8 @@ public class CommunicationController {
      */
     @GetMapping("/getallwaterleveldata")
     @ResponseBody
-    public ResultVO getAllWaterLevelData(String plantName, String startTime, String endTime) {
-        List<StationVO> stationVOs = getMyStaionVO(plantName); // 获取所有的监测站点
+    public ResultVO getAllWaterLevelData(String baseInfoId, String startTime, String endTime) {
+        List<StationVO> stationVOs = getMyStaionVO(baseInfoId); // 获取所有的监测站点
         if (stationVOs == null || stationVOs.size()==0) {
             log.error("【水位信息】 获取监测站点失败！ stationVOs={}", stationVOs);
             throw new SysException(SysEnum.FAIL_TO_FETCH_MONITOR_STATION_ERROR);
@@ -170,11 +166,11 @@ public class CommunicationController {
      * @param plantName
      * @return
      */
-    public List<StationVO> getMyStaionVO(String plantName) {
+    public List<StationVO> getMyStaionVO(String baseInfoId) {
         List<String> proIds = new ArrayList<>();
-        ReservoirCode reservoirCode = reservoirCodeService.getByName(plantName);
+        ReservoirCode reservoirCode = reservoirCodeService.getByBaseInfoId(baseInfoId);
         if (reservoirCode == null) {
-            log.error("【监测站点】系统不存在查询的水库名称， plantName={}", plantName);
+            log.error("【监测站点】系统不存在查询的水库名称， reservoirCode={}", reservoirCode);
             ResultUtil.failed(SysEnum.PLANTNAME_NO_EXIST_ERROR);
         }
         proIds.add(reservoirCode.getReservoirCode());

@@ -11,9 +11,6 @@
 
     <meta charset="utf-8">
 
-    <link rel="shortcut icon" href="icon/new.ico" type="image/x-icon"/>
-    <!-- 自定义 -->
-
     <link th:href="@{/css/custom/reservoir_detail.css}" rel="stylesheet">
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -860,7 +857,7 @@
             nowDateStr = nowDate.toISOString().substr(0, 10) + " " + nowDate.toTimeString().substr(0, 8),
             lastDate = nowDate.getFullYear() + "-" + (nowDate.getMonth()+1) + "-" + (nowDate.getDate()-1) + " " + nowDate.toTimeString().substr(0, 8);
         var param = {
-            plantName: plantName,
+            baseInfoId: baseInfoId,
             startTime: lastDate,
             endTime : nowDateStr
         }
