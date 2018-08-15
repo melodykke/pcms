@@ -1217,3 +1217,30 @@ td>a.grid-link:hover {
     right: 10px;
     color: #fff;
 }
+
+#region_select {
+    position: absolute;
+    top: 205px;
+    z-index: 2002;
+    left: 25px;
+    display: none;
+}
+#region_select>div>ul, .second-region>ul, .third-region>ul  {
+    padding: 0;
+    float: left;
+}
+.second-region, .third-region {
+    float: left;
+    position: relative;
+    display: none;
+}
+#region_select>div>ul>li, .second-region>ul>li, .third-region>ul>li {
+    list-style-type: none;
+    padding: 10px 0;
+    background-color: #fff;
+    width: 100px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-top: 0;
+    height: 50px;
+}

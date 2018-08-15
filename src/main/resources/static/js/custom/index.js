@@ -2195,8 +2195,9 @@ $(function () {
             hidegrid: false
         });
     }
+    var mapObj = initMap();
     if ($("#allmap") && $("#allmap").length > 0) {
-        $.when(initMap()).done(function (map) {
+        $.when(mapObj).done(function (map) {
             $.ajax({
                 url: "index/getallbaseinfo",
                 type: "GET",
@@ -2276,6 +2277,94 @@ $(function () {
             }
         });
     }
+    // 一级菜单事件
+    function initFirstSelect() {
+        $.ajax({
+            url: 'manage/getregionchildren',
+            type: 'GET',
+            data:{regionId: 1},
+            dataType: 'json',
+            success: function (data) {
+                var regionStr = [];
+                $.each(data.data, function (i, n) {
+                    var liStr = '<li><a id="' + n.regionId + '">' + n.regionName + '</a></li>';
+                    regionStr.push(liStr);
+                });
+                $(".first-region>ul").html(regionStr.join(""));
+                $("#region_select").show();
+                // 一级菜单     区域选择
+                $("#region_select>.first-region>ul>li").on('click', function () {
+                    var id = $(this).find("a").attr('id'),
+                        index = $(this).index();
+                    initSecondSelect(id, index);
+                });
+            }
+        });
+    }
+    // 二级菜单事件
+    function initSecondSelect(id, index) {
+        $.ajax({
+            url: 'manage/getregionchildren',
+            type: 'GET',
+            data:{regionId: id},
+            dataType: 'json',
+            success: function (data) {
+                var regionStr = [];
+                $.each(data.data, function (i, n) {
+                    var liStr = '<li><a id="' + n.regionId + '">' + n.regionName + '</a></li>';
+                    regionStr.push(liStr);
+                });
+                $(".second-region>ul").html(regionStr.join(""));
+                // 调整位置，dom操作
+                $(".second-region").css("top", index * 37 + 'px');
+                $(".second-region").show();
+                $(".third-region").hide();
+                // 二级菜单     区域选择
+                $(".second-region>ul>li").on('click', function () {
+                    var id = $(this).find("a").attr('id'),
+                        index = $(this).index();
+                    initThirdSelect(id, index);
+                });
+            }
+        });
+    }
+    // 三级菜单事件
+    function initThirdSelect(id, index) {
+        $.ajax({
+            url: 'manage/getbaseinfobyregion',
+            type: 'GET',
+            data:{regionId: id},
+            dataType: 'json',
+            success: function (data) {
+                var regionStr = [];
+                $.when(mapObj).done(function(map) {
+                    map.clearOverlays();
+                    $.each(data.data, function (i, n) {
+                        var liStr = '<li><a id="' + n.baseInfoId + '">' + n.plantName + '</a></li>';
+                        regionStr.push(liStr);
+                        // 过滤数据地图打点
+                        createMarker(n, map);
+                    });
+                    $(".third-region>ul").html(regionStr.join(""));
+                    // 调整位置，dom操作
+                    $(".third-region").css("top", index * 37 + 'px');
+                    $(".third-region").show();
+                    // 三级菜单     水库选择
+                    $(".third-region>ul>li").on('click', function () {
+                        var id = $(this).find("a").attr('id'),
+                            name = $(this).find("a").text();
+                        $(".text-muted.text-xs.block").text(name);
+                        // 隐藏所有
+                        $("#region_select").hide();
+                        $(".second-region").hide();
+                        $(".third-region").hide();
+                        $('#content').load("manage/toreservoirindex?baseInfoId=" + id);
+                        /*location.href = "reservior_index?baseInfoId=" + id;*/
+                    });
+                });
+            }
+        });
+    }
     // 首页更多信息
     $(".all-details").on("click", "a", function() {
         var baseInfoId = $(this).attr("project-id");
@@ -2285,6 +2374,16 @@ $(function () {
     // 关闭监控
     $(".video-close").on("click", function() {
         $(".overview-video").removeClass("video-show");
+    });
+    $(".text-muted.text-xs.block").on("click", function () {
+        initFirstSelect();
+    });
+    $(document).on('click', function() {
+        if($(event.target).parents("#region_select").length===0) {
+            $("#region_select").hide();
+            $(".second-region").hide();
+            $(".third-region").hide();
+        }
     });
 });
 

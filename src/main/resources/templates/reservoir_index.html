@@ -611,6 +611,46 @@
             </div>
         </div>
     </div>
+    <div class="row video-row col-lg-12 col-md-12">
+        <div class="ibox reservoir-item reservoir-monitor collapsed">
+            <div class="ibox-title">
+                <h5>视频监控</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="scroll_content">
+                    <div class="video-operation col-lg-7 col-md-7">
+                        <div class="video-title">
+                            视频源：
+                        </div>
+                        <div class="col-lg-12 col-md-12 video-wrapper">
+                            <div>
+                                <label>ABC:</label>
+                                <div>
+                                    <a>视频1</a>
+                                    <a>视频2</a>
+                                </div>
+                            </div>
+                            <div>
+                                <label>ABC:</label>
+                                <div>
+                                    <a>视频1</a>
+                                    <a>视频2</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="video-play col-lg-5 col-md-5">
+                        <object id="DPSDK_OCX" classid="CLSID:D3E383B6-765D-448D-9476-DFD8B499926D" style="width: 100%; height: 500px" codebase="DpsdkOcx.cab#version=1.0.0.0"></object>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- 弹出层 -->
@@ -1132,6 +1172,128 @@
             ]
         });
     }
+    /**
+     * 初始化监控视频操作板
+     */
+    function initVideoOperation(data) {
+        var operationContent = '';
+        // var data = [{ "coding": "001003", "name": "水源一标", "channel": ["1000063$1$0$0", "1000063$1$0$1", "1000064$1$0$0", "1000066$1$0$0", "1000072$1$0$0", "1000064$1$0$1", "1000073$1$0$0", "1000063$1$0$2", "1000063$1$0$3"] }, { "coding": "001004", "name": "水源二标", "channel": ["1000068$1$0$0"] }];
+        data.map(function (item) {
+            if (item.channel && item.channel.length > 0) {
+                operationContent += '<div><label>' + item.name + '：</label><div>';
+                $.each(item.channel, function (i, n) {
+                    operationContent += '<a channel_id="' + n + '">视频' + i + '</a>';
+                });
+                operationContent += '</div></div>';
+            }
+        });
+        $(".video-wrapper").html(operationContent);
+        // 初始化，播放视频
+        var obj = document.getElementById("DPSDK_OCX");
+        $(".video-wrapper").on('click', 'a', function () {
+            var channelId = $(this).attr("channel_id");
+            playVideo(channelId, obj);
+        });
+    }
+    /**
+     *  解析xml文件
+     */
+    function releaseXML(xmlFile, plantName) {
+        var loadXML = function (xmlFile) {
+            var xmlDoc = null;
+            var agent = navigator.userAgent.toLowerCase();
+
+            //判断浏览器的类型
+            //支持IE浏览器
+            if (agent.indexOf("msie") > 0) {
+                // xmlDoc = new ActiveXObject('Microsoft.XMLDOM');//IE浏览器
+                var xmlDomVersions = ['MSXML.2.DOMDocument.6.0', 'MSXML.2.DOMDocument.3.0', 'Microsoft.XMLDOM'];
+                for (var i = 0; i < xmlDomVersions.length; i++) {
+                    try {
+                        xmlDoc = new ActiveXObject(xmlDomVersions[i]);
+                        break;
+                    } catch (e) {
+                    }
+                }
+                xmlDoc.async = false;
+                xmlDoc.load(xmlFile);
+            } else {
+                xmlDoc = jQuery.parseXML(xmlFile);
+            }
+            return xmlDoc;
+        }
+
+        var xmlDoc = loadXML(xmlFile);
+        if (xmlDoc == null) {
+            alert("没有数据!");
+        }
+        // 处理数据
+        var childList = [];
+        $(xmlDoc).find("Department>Department").each(function (index, itemDom) {
+            // if (plantName.indexOf(name) > -1) {
+            var itemData = {
+                    name: $(itemDom).attr("name"),
+                    coding: $(itemDom).attr("coding")
+                },
+                channel = [];
+            $(itemDom).find("Channel").each(function (i, childDom) {
+                channel.push($(childDom).attr('id'));
+            });
+            itemData.channel = channel;
+            // }
+            childList.push(itemData);
+        });
+        return childList;
+    }
+    /**
+     * 初始化监控视频监控
+     */
+    var gWndIdAll;
+    function initVideoPlayer() {
+        var obj = document.getElementById("DPSDK_OCX");
+        // 初始化
+        var gWndId = obj.DPSDK_CreateSmartWnd(0, 0, 100, 100);
+        gWndIdAll = gWndId;
+        obj.DPSDK_SetWndCount(gWndId, 1);
+        obj.DPSDK_SetSelWnd(gWndId, 0);
+        for (var i = 1; i <= 4; i++)
+            obj.DPSDK_SetToolBtnVisible(i, false);
+        obj.DPSDK_SetToolBtnVisible(7, false);
+        obj.DPSDK_SetToolBtnVisible(9, false);
+        obj.DPSDK_SetControlButtonShowMode(1, 0);
+        obj.DPSDK_SetControlButtonShowMode(2, 0);
+
+        // 登录
+        var nRet1 = obj.DPSDK_Login("58.16.188.145", "9000", "向敬光", "123456");
+        // var nRet1 = obj.DPSDK_Login("111.85.91.84", "9000", "system", "admin123");
+
+        // 加载组织结构
+        obj.DPSDK_LoadDGroupInfo();
+        // 获取组织结构
+        var videoXML = obj.DPSDK_GetDGroupStr();
+        var videoList = releaseXML(videoXML);
+        initVideoOperation(videoList);
+        // document.getElementById("xml").innerText = videoXML;
+        return obj;
+    }
+    // 播放监控
+    function playVideo(channelId, obj) {
+        // 根据通道ID连接DMS
+        var nRet2 = obj.DPSDK_ConnectDmsByChnlId(channelId);
+        // 播放视频
+        var szCameraId = channelId;            // 视频通道
+        var nStreamType = "1";       // 主码流
+        var nMediaType = "1";       //视频
+        var nTransType = "1";       //视频
+        var gWndId = gWndIdAll;
+        var nWndNo = obj.DPSDK_GetSelWnd(gWndId);
+        var nRet = obj.DPSDK_StartRealplayByWndNo(gWndId, nWndNo, szCameraId, nStreamType, nMediaType, nTransType);
+        if (nRet == 0) {
+            obj.DPSDK_SetIvsShowFlagByWndNo(gWndId, nWndNo, 1, 1);
+            obj.DPSDK_SetIvsShowFlagByWndNo(gWndId, nWndNo, 2, 1);
+            obj.DPSDK_SetIvsShowFlagByWndNo(gWndId, nWndNo, 3, 1);
+        }
+    }
 
     $(function () {
         var param = getUrlParam(),
@@ -1220,6 +1382,10 @@
             if (!$(".reservoir-rain .ibox-content").is(":hidden")) {
                 initRainSituation(reservoirData.plantName);
             }
+        });
+        // 视频监控下拉面板初始化监听
+        $(".video-row").on("click", ".border-bottom .ibox-tools>.collapse-link", function () {
+            setTimeout(initVideoPlayer, 300);
         });
     });
 </script>

@@ -65,12 +65,12 @@
                                     </span>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li id="person_info"><a>个人设置</a></li>
-                                <li><a href="#" id="account_config">账号设置</a></li>
-                                <li class="divider"></li>
-                                <li><a th:href="@{/logout}">安全退出</a></li>
-                            </ul>
+                            <!--<ul class="dropdown-menu animated fadeInRight m-t-xs">-->
+                                <!--<li id="person_info"><a>个人设置</a></li>-->
+                                <!--<li><a href="#" id="account_config">账号设置</a></li>-->
+                                <!--<li class="divider"></li>-->
+                                <!--<li><a th:href="@{/logout}">安全退出</a></li>-->
+                            <!--</ul>-->
                         </div>
                     </shiro:hasAnyRoles>
                     <shiro:hasAnyRoles name="manager, admin">
@@ -89,12 +89,12 @@
                                     </span>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li id="person_info"><a>个人设置</a></li>
-                                <li><a href="#" id="account_config">账号设置</a></li>
-                                <li class="divider"></li>
-                                <li><a th:href="@{/logout}">安全退出</a></li>
-                            </ul>
+                            <!--<ul class="dropdown-menu animated fadeInRight m-t-xs">-->
+                                <!--<li id="person_info"><a>个人设置</a></li>-->
+                                <!--<li><a href="#" id="account_config">账号设置</a></li>-->
+                                <!--<li class="divider"></li>-->
+                                <!--<li><a th:href="@{/logout}">安全退出</a></li>-->
+                            <!--</ul>-->
                         </div>
                     </shiro:hasAnyRoles>
                     <div class="logo-element">
@@ -1610,6 +1610,54 @@
 <div id="mask" class="mask-position" onclick="closeDialog()"></div>
 <!-- 全屏层 -->
 <div id="fullscreen_map" style="display: none;">test</div>
+<!-- 菜单选择层 -->
+<div id="region_select" class="animated fadeInRight">
+    <div class="first-region">
+        <ul>
+            <li>
+                <a href="#">test1</a>
+            </li>
+            <li>
+                <a href="#">test1</a>
+            </li>
+            <li>
+                <a href="#">test1</a>
+            </li>
+            <li>
+                <a href="#">test1</a>
+            </li>
+            <li>
+                <a href="#">test1</a>
+            </li>
+        </ul>
+        <div class="second-region">
+            <ul>
+                <li>
+                    <a href="#">二级</a>
+                </li>
+                <li>
+                    <a href="#">二级</a>
+                </li>
+                <li>
+                    <a href="#">二级</a>
+                </li>
+            </ul>
+            <div class="third-region">
+                <ul>
+                    <li>
+                        <a href="#">三级</a>
+                    </li>
+                    <li>
+                        <a href="#">三级</a>
+                    </li>
+                    <li>
+                        <a href="#">三级</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="application/javascript">
     document.onreadystatechange = completeLoading;

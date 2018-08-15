@@ -233,3 +233,29 @@
     float: left;
     width: 100%;
 }
+/* -----详情页视频监控----- */
+.video-operation >.video-title {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px 0;
+}
+.video-wrapper {
+    font-size: 14px;
+}
+.video-wrapper>div{
+    padding: 10px 0;
+}
+.video-wrapper>div>div{
+    display: inline-block;
+    width: 85%;
+    vertical-align: top;
+}
+.video-wrapper>div>div>a {
+    padding: 0 8px;
+}
+.video-row .ibox> .ibox-title{
+    background-color: #353d63;
+}
+.video-row .ibox> .ibox-content {
+    border-color: #353d63;
+}
