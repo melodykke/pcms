@@ -4,6 +4,7 @@ package com.gzzhsl.pcms.shiro.config;
 import com.gzzhsl.pcms.cors.MyUsernamePasswordToken;
 import com.gzzhsl.pcms.exception.InactivatedException;
 import com.gzzhsl.pcms.service.UserService;
+import com.gzzhsl.pcms.service.impl.WebSocket;
 import com.gzzhsl.pcms.shiro.bean.SysPermission;
 import com.gzzhsl.pcms.shiro.bean.SysRole;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
@@ -30,6 +31,8 @@ public class MyShiroRealm extends AuthorizingRealm{
 	private UserService userService;
     @Autowired
     private SessionDAO sessionDAO;
+    @Autowired
+	private WebSocket webSocket;
 /**
 	 * 身份认证  --- 登陆
 	 * @param token
@@ -53,7 +56,7 @@ public class MyShiroRealm extends AuthorizingRealm{
 		// 1. 获取用户输入的账号
 		String username = (String)myToken.getPrincipal();
 
-
+		UserInfo userInfo = userService.getUserByUsername(username); //这里取到以后，自动放进principals里，下面认证直接取。
 
         //以下为只允许同一账户单个登录
         Collection<Session> sessions = sessionDAO.getActiveSessions();
@@ -66,6 +69,7 @@ public class MyShiroRealm extends AuthorizingRealm{
                     String loginUsername = (String)session.getAttribute("username");
                     System.out.println("::::::::::::::::" + loginUsername);
                     if (username.equals(loginUsername)) {  //这里的username也就是当前登录的username
+						webSocket.sendMsg("session提示信息", "session超时或用户异地登录，您已被迫下线！", "/login", userInfo);
                         session.stop();  //这里就把session清除，
                         System.out.println("重复登录 弹出了之前的用户"+username);
                     }
@@ -73,13 +77,7 @@ public class MyShiroRealm extends AuthorizingRealm{
             }
         }
 
-
-
-        System.out.println(username);
-        System.out.println("token.getCredentials:"+myToken.getCredentials());
-        System.out.println(new String((char[])myToken.getCredentials()));
         // 2. 通过accountName 从数据库中查找，获取userInfo对象
-		UserInfo userInfo = userService.getUserByUsername(username); //这里取到以后，自动放进principals里，下面认证直接取。
 		// 判断是否有userInfo
 		if(userInfo == null){
 			return null;

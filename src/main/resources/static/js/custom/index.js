@@ -29,16 +29,6 @@ jQuery.fn.load = function( url, params, callback ) {
             dataType: "html",
             data: params
         } ).done( function( responseText ) {
-            //console.log(responseText);
-            response = arguments;
-            //页面超时跳转到首页
-            // if(responseText.startWith("<!--login_page_identity-->")){
-            //     window.location.href=basePath+"/";
-            // }else{
-            //     self.html(selector ?
-            //         jQuery("<div>").append(jQuery.parseHTML( responseText )).find(selector) :
-            //         responseText);
-            // }
             if(responseText.indexOf('<img alt="logo" height="56" width="300" src="/img/logo.png" />')>0){
                 window.location.reload();
             } else {
@@ -260,7 +250,6 @@ $(function () {
     function getThisCard(url) {
         $.getJSON(url, function (data) {
             if (data.code == 1002) {
-                console.log(data)
                 var card = data.data;
                 var cardHtml = '<div class="item-name">\n' +
                     '                            '+ card.plantName +'\n' +
@@ -495,8 +484,6 @@ $(function () {
         onFinished: function (event, currentIndex) {
             var baseInfoVO = {};
             var form = $(this);
-            console.log($('#plantName'))
-            console.log($('#plantName').val())
             baseInfoVO.plantName = $('#plantName').val();
             baseInfoVO.totalInvestment = $('#totalInvestment').val();
             baseInfoVO.projectType = $('#projectType').val();
@@ -539,7 +526,6 @@ $(function () {
             baseInfoVO.overview = $('#overview').val();
             baseInfoVO.projectSource = $('#projectSource').val();
             baseInfoVO.projectTask = $('#projectTask').val();
-            console.log(baseInfoVO);
             if (rtFileTempPath) {
                 baseInfoVO.rtFileTempPath = rtFileTempPath;
             }
@@ -842,9 +828,13 @@ $(function () {
                 heartCheck.reset();
             } else {
                 var wsMessage = eval("(" + event.data + ")");
-                showNotification(wsMessage.title, wsMessage.msg, wsMessage.url);
+                if (wsMessage.title.startsWith('session')) {
+                    showSessionTip(wsMessage.title, wsMessage.msg, wsMessage.url)
+                } else {
+                    var wsMessage = eval("(" + event.data + ")");
+                    showNotification(wsMessage.title, wsMessage.msg, wsMessage.url);
+                }
             }
-
         }
         websocket.onerror = function (event) {
             reconnect(username);
@@ -852,6 +842,33 @@ $(function () {
         websocket.onbeforeunload = function () {
             websocket.close();
         }
+    }
+    function showSessionTip(title, msg, url) {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": false,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-center",
+            "onclick": null,
+            "showDuration": "0",
+            "hideDuration": "0",
+            "timeOut": "0",
+            "extendedTimeOut": "0",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr.options.onclick = function () {
+            if ($('#content').length>0) {
+                window.location.reload()
+            } else {
+                contentDiv.load(url);
+            }
+
+        };
+        var $toast = toastr['info'](msg, title); // Wire up an event handler to a button in the toast, if it exists
     }
 
     function showNotification(title, msg, url) {
@@ -862,9 +879,9 @@ $(function () {
             "preventDuplicates": false,
             "positionClass": "toast-top-right",
             "onclick": null,
-            "showDuration": "400",
+            "showDuration": "800",
             "hideDuration": "1000",
-            "timeOut": "7000",
+            "timeOut": "20000",
             "extendedTimeOut": "1000",
             "showEasing": "swing",
             "hideEasing": "linear",
@@ -872,7 +889,12 @@ $(function () {
             "hideMethod": "fadeOut"
         };
         toastr.options.onclick = function () {
-            contentDiv.load(url);
+            if ($('#content').length>0) {
+                window.location.reload()
+            } else {
+                contentDiv.load(url);
+            }
+
         };
         var $toast = toastr['info'](msg, title); // Wire up an event handler to a button in the toast, if it exists
     }
@@ -997,7 +1019,6 @@ $(function () {
                     var preProgressEntry = {};
                     preProgressEntry.serialNumber = parseInt(serialNumberEntries.eq(i).text());
                     preProgressEntry.planProject = planProjectEntries.eq(i).text();
-                    console.log(planProjectEntries.eq(i))
                     preProgressEntry.approvalStatus = approvalStatusEntries.eq(i).find('option').not(
                         function () {
                             return !this.selected;
@@ -1008,7 +1029,6 @@ $(function () {
                     preProgressEntry.referenceNumber = referenceNumberEntries.eq(i).val();
                     preProgressEntries.push(preProgressEntry);
                 }
-                console.log(preProgressEntries);
                 $.ajax({
                     url: 'preprogress/save',
                     type: 'POST',
@@ -1029,7 +1049,6 @@ $(function () {
                                 top.location.reload();
                             })
                         } else {
-                            console.log(data)
                             swal("失败!", data.msg, "error");
                         }
                     }
@@ -1193,7 +1212,6 @@ $(function () {
                             $('#main_content').load('contract/tocontract');
                         })
                     } else {
-                        console.log(data)
                         swal("失败!", data.msg, "error");
                     }
                 }
@@ -1653,7 +1671,6 @@ $(function () {
         };
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
-        console.log('success, done');
     }
     // 柱状图
     function initBarChart(id) {
@@ -1758,7 +1775,6 @@ $(function () {
         };
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
-        console.log('success, done');
     }
     function createEchartData(data) {
         var paymentData = [],
