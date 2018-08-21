@@ -1366,7 +1366,7 @@ $(function () {
         map.setMinZoom(8);
         //map.setMaxZoom(18);
 
-        var b = new BMap.Bounds(new BMap.Point(102.795069, 24.879701), new BMap.Point(111.69936, 29.04118)); // 范围 左下角，右上角的点位置
+        var b = new BMap.Bounds(new BMap.Point(100.971724,22.841621), new BMap.Point(112.240069,30.343001)); // 范围 左下角，右上角的点位置
         try {    // js中尽然还有try catch方法，可以避免bug引起的错误
             BMapLib.AreaRestriction.setBounds(map, b); // 已map为中心，已b为范围的地图
         } catch (e) {
@@ -1390,6 +1390,7 @@ $(function () {
 
         var point_item = new BMap.Point(data.longitude, data.latitude);
         var marker = new BMap.Marker(point_item, {icon: myIcon});
+        marker.disableMassClear();
         map.addOverlay(marker);
 
         // 定义展示数据
@@ -1447,7 +1448,22 @@ $(function () {
             label.setStyle({ border: "none", width: "0px", padding: "0px" });//设置标签边框宽度为0
             marker.setTop(false);
         });
-
+        return point_item;
+    }
+    // 行政区覆盖
+    function getBoundary(regionName) {
+        var bdary = new BMap.Boundary();
+        $.when(mapObj).done(function(map){
+            bdary.get(regionName, function (rs) {       //获取行政区域
+                map.clearOverlays();        //清除地图覆盖物
+                var count = rs.boundaries.length; //行政区域的点有多少个
+                for (var i = 0; i < count; i++) {
+                    var ply = new BMap.Polygon(rs.boundaries[i], { strokeWeight: 1, strokeColor: "#1ab394", fillColor: "#fff" }); //建立多边形覆盖物
+                    map.addOverlay(ply);  //添加覆盖物
+                    map.setViewport(ply.getPath());    //调整视野
+                }
+            });
+        });
     }
     /**
      *  监控展开并初始化
@@ -2220,9 +2236,11 @@ $(function () {
                 dataType: "json",
                 success: function (data) {
                     allData = data.data;
+                    var points = [];
                     for (var i = 0; i < allData.length; i++) {
-                        createMarker(allData[i], map);
+                        points.push(createMarker(allData[i], map));
                     }
+                    map.setViewport(points);
                     // 主页面搜索
                     $(".search-location").on("click", "i", function() {
                         searchLocation(map, allData);
@@ -2285,13 +2303,37 @@ $(function () {
     function searchLocation(map, allData) {
         var plantName = $(".search-location>input").val(),
             meetConditions = [];
+        var allOverlays = map.getOverlays();
+        $.each(allOverlays, function(i, n) {
+            n.enableMassClear();
+        });
         map.clearOverlays();
+        var points = [];
         allData.map(function (item, i, allData) {
             if (item["plantName"].indexOf(plantName) > -1) {
                 // meetConditions.push(item);
-                createMarker(item, map);
+                points.push(createMarker(item, map));
             }
         });
+        if(points.length === 1) {
+            map.setViewport(points, {zoomFactor: -5});
+        }else if(points.length>1) {
+            map.setViewport(points);
+        }
+
+    }
+    // 选中事件的样式修改
+    function onSelected(e) {
+        var $dom = $(e.target).is("li") ? $(e.target) : $(e.target).parents("li");
+        $dom.addClass("dom-selected");
+        $dom.siblings("li").removeClass("dom-selected");
+    }
+    // 移动距离计算
+    function moveDistance(e) {
+        var $dom = $(e.target).is("li") ? $(e.target) : $(e.target).parents("li");
+        var childTop = $dom.offset().top,
+            parentTop = $dom.parent("ul").offset().top;
+        return childTop - parentTop;
     }
     // 一级菜单事件
     function initFirstSelect() {
@@ -2303,7 +2345,7 @@ $(function () {
             success: function (data) {
                 var regionStr = [];
                 $.each(data.data, function (i, n) {
-                    var liStr = '<li><a id="' + n.regionId + '">' + n.regionName + '</a></li>';
+                    var liStr = '<li><a id="' + n.regionId + '">' + n.regionName + '</a><span><i class="fa fa-angle-right"></i></span></li>';
                     regionStr.push(liStr);
                 });
                 $(".first-region>ul").html(regionStr.join(""));
@@ -2311,14 +2353,17 @@ $(function () {
                 // 一级菜单     区域选择
                 $("#region_select>.first-region>ul>li").on('click', function () {
                     var id = $(this).find("a").attr('id'),
-                        index = $(this).index();
-                    initSecondSelect(id, index);
+                        index = $(this).index(),
+                        regionName = $(this).text();
+                    initSecondSelect(id, index, event);
+                    onSelected(event);
+                    getBoundary(regionName);
                 });
             }
         });
     }
     // 二级菜单事件
-    function initSecondSelect(id, index) {
+    function initSecondSelect(id, index, e) {
         $.ajax({
             url: 'manage/getregionchildren',
             type: 'GET',
@@ -2327,25 +2372,33 @@ $(function () {
             success: function (data) {
                 var regionStr = [];
                 $.each(data.data, function (i, n) {
-                    var liStr = '<li><a id="' + n.regionId + '">' + n.regionName + '</a></li>';
+                    var liStr = '<li><a id="' + n.regionId + '">' + n.regionName + '</a><span><i class="fa fa-angle-right"></i></span></li>';
                     regionStr.push(liStr);
                 });
                 $(".second-region>ul").html(regionStr.join(""));
+                // 隐藏，为了动画做准备
+                $(".second-region").hide();
                 // 调整位置，dom操作
-                $(".second-region").css("top", index * 37 + 'px');
-                $(".second-region").show();
+                $(".second-region").css("top", moveDistance(e) + 'px');
+                setTimeout(function () {
+                    // 动画效果
+                    $(".second-region").show();
+                }, 200);
                 $(".third-region").hide();
                 // 二级菜单     区域选择
                 $(".second-region>ul>li").on('click', function () {
                     var id = $(this).find("a").attr('id'),
-                        index = $(this).index();
-                    initThirdSelect(id, index);
+                        index = $(this).index(),
+                        regionName = $(this).text();
+                    initThirdSelect(id, index, event);
+                    onSelected(event);
+                    getBoundary(regionName);
                 });
             }
         });
     }
     // 三级菜单事件
-    function initThirdSelect(id, index) {
+    function initThirdSelect(id, index, e) {
         $.ajax({
             url: 'manage/getbaseinfobyregion',
             type: 'GET',
@@ -2362,9 +2415,13 @@ $(function () {
                         createMarker(n, map);
                     });
                     $(".third-region>ul").html(regionStr.join(""));
+                    // 隐藏三级菜单，为后面动画做准备
+                    $(".third-region").hide();
                     // 调整位置，dom操作
-                    $(".third-region").css("top", index * 37 + 'px');
-                    $(".third-region").show();
+                    $(".third-region").css("top", moveDistance(e) + 'px');
+                    setTimeout(function () {
+                        $(".third-region").show();
+                    }, 200);
                     // 三级菜单     水库选择
                     $(".third-region>ul>li").on('click', function () {
                         var id = $(this).find("a").attr('id'),
