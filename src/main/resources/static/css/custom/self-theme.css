@@ -1236,11 +1236,11 @@ td>a.grid-link:hover {
 }
 #region_select>div>ul>li, .second-region>ul>li, .third-region>ul>li {
     list-style-type: none;
-    padding: 10px 0;
+    padding: 8px 0;
     background-color: #fff;
     width: 100px;
     text-align: center;
-    border: 1px solid #e0e0e0;
+    /*border: 1px solid #e0e0e0;*/
     border-top: 0;
     height: 50px;
 }

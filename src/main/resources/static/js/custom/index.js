@@ -1457,11 +1457,13 @@ $(function () {
             bdary.get(regionName, function (rs) {       //获取行政区域
                 map.clearOverlays();        //清除地图覆盖物
                 var count = rs.boundaries.length; //行政区域的点有多少个
+                var path = [];
                 for (var i = 0; i < count; i++) {
                     var ply = new BMap.Polygon(rs.boundaries[i], { strokeWeight: 1, strokeColor: "#1ab394", fillColor: "#fff" }); //建立多边形覆盖物
                     map.addOverlay(ply);  //添加覆盖物
-                    map.setViewport(ply.getPath());    //调整视野
+                    path = path.concat(ply.getPath());
                 }
+                map.setViewport(path);    //调整视野
             });
         });
     }
@@ -1578,6 +1580,7 @@ $(function () {
         ]
         $("#plant_name").text(data.plantName);
         $(".item-detail").html(strHtml.join(""));
+        $(".all-details>a").attr("project-id", data.baseInfoId);
     }
 
     /**
@@ -2316,11 +2319,10 @@ $(function () {
             }
         });
         if(points.length === 1) {
-            map.setViewport(points, {zoomFactor: -5});
+            map.setViewport(points, { zoomFactor:  -6});
         }else if(points.length>1) {
             map.setViewport(points);
         }
-
     }
     // 选中事件的样式修改
     function onSelected(e) {
@@ -2441,7 +2443,7 @@ $(function () {
     // 首页更多信息
     $(".all-details").on("click", "a", function() {
         var baseInfoId = $(this).attr("project-id");
-        location.href = "reservoir_index.html?baseInfoId" + baseInfoId;
+        $('#content').load("manage/toreservoirindex?baseInfoId=" + baseInfoId);
     });
 
     // 关闭监控
