@@ -81,7 +81,7 @@ public class CommonController {
     }
 
 
-    @GetMapping(value = {"/index", "/"})
+    @GetMapping(value = {"/index", "/", ""})
     private String index(){
         return "index";
     }
