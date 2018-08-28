@@ -244,6 +244,19 @@ $(function () {
                 } else {
                     $('#name').html(data.data.nickname + ' <b class="caret"></b>');
                 }
+            } else {
+                swal({
+                        title: "错误",
+                        text: "本应用不存在您的账号!",
+                        type: "error",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确定",
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            window.location.href="/logout";
+                        }
+                    }
+                );
             }
         });
     }

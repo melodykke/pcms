@@ -83,8 +83,8 @@ public class ReporterController {
     @GetMapping("getthiscard")
     @ResponseBody
     public ResultVO getThisCard() {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject != null) {
             if (!thisProject.getState().equals((byte) 1)) {

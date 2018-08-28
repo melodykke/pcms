@@ -70,7 +70,8 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
 
     @Override
     public List<ProjectStatus> getProjectStatus() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || !thisProject.getState().equals((byte) 1)) {
             log.error("【项目状态】 项目状态错误，请优先配置项目概况，并等待审批通过！");

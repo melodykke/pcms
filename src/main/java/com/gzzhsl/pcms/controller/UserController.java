@@ -50,9 +50,13 @@ public class UserController {
     @GetMapping("/getthisuser")
     @RequiresUser
     @ResponseBody
-    public ResultVO getSubject(){
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+    public ResultVO getSubject(HttpServletRequest request, HttpServletResponse response){
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        if (thisUser == null) {
+            return ResultUtil.failed("不存在的用户，请重试！");
+        }
+        request.getSession().setAttribute("thisUser", thisUser); // 得到的合法用户存入session
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(thisUser, userInfoVO);
         PersonInfo thisPerson = thisUser.getPersonInfo();
@@ -71,7 +75,8 @@ public class UserController {
     @RequiresRoles(value = {"reporter", "checker"}, logical = Logical.OR)
     @ResponseBody
     public ResultVO getThisProject(HttpServletRequest request, HttpServletResponse response){
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null) {
             return ResultUtil.failed(SysEnum.NO_PROJECT_IN_THISUSER);

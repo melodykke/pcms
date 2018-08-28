@@ -47,7 +47,8 @@ public class NotificationController {
     @GetMapping("/getoverallnotification")
     @ResponseBody
     public ResultVO getOverallNotification() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisUser == null || thisUser.getUserId() == null || thisUser.getUserId() == "") {
             log.error("【通知错误】未读取到用户信息");

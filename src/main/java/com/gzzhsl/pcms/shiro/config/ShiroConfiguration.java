@@ -113,10 +113,9 @@ public class ShiroConfiguration {
 
     @Bean(name = "securityManager") //注入： securityManager
     public DefaultWebSecurityManager securityManager(/*@Qualifier("myShiroRealm") AuthorizingRealm authorizingRealm,*/
-                                                     @Qualifier("shiroCacheManager") MemoryConstrainedCacheManager shiroCacheManager,
-                                                     @Qualifier("sessionManager") DefaultWebSessionManager sessionManager,
-                                                     @Value("${shiro.cas}") String casServerUrlPrefix,
-                                                     @Value("${shiro.server}") String shiroServerUrlPrefix){
+                                                     @Qualifier("myShiroCasRealm") MyShiroCasRealm myShiroCasRealm,
+                                                     @Qualifier("ehCacheManager") EhCacheManager ehCacheManager,
+                                                     @Qualifier("sessionManager") DefaultWebSessionManager sessionManager){
 
         /**
          * 定义shiro的安全管理器
@@ -125,14 +124,10 @@ public class ShiroConfiguration {
 
         DefaultWebSecurityManager securityManager=new DefaultWebSecurityManager();
 
-        CasRealm casRealm = new CasRealm();
-        casRealm.setDefaultRoles("reporter");
-        casRealm.setCasServerUrlPrefix(casServerUrlPrefix);
-        casRealm.setCasService(shiroServerUrlPrefix + casFilterUrlPattern);
         //设置自定义realm
-        securityManager.setRealm(casRealm);
+        securityManager.setRealm(myShiroCasRealm);
         //设置ehcache缓存管理器
-        securityManager.setCacheManager(shiroCacheManager);
+        securityManager.setCacheManager(ehCacheManager);
         securityManager.setSubjectFactory(new CasSubjectFactory());
         //设置rememberMe cookie
         //securityManager.setRememberMeManager(cookieRememberMeManager());
@@ -169,7 +164,15 @@ public class ShiroConfiguration {
 		myShiroRealm.setCredentialsMatcher(myHashedCredentialsMatcher());
 		return myShiroRealm;
 	}*/
-
+    @Bean(name = "myShiroCasRealm") //注入自定义realm
+    public MyShiroCasRealm myShiroCasRealm(@Value("${shiro.cas}") String casServerUrlPrefix,
+                                           @Value("${shiro.server}") String shiroServerUrlPrefix){
+        System.out.println("ShiroConfiguration.myShiroCasRealm() initiating...");
+        MyShiroCasRealm myShiroCasRealm = new MyShiroCasRealm();
+        myShiroCasRealm.setCasServerUrlPrefix(casServerUrlPrefix);
+        myShiroCasRealm.setCasService(shiroServerUrlPrefix + casFilterUrlPattern);
+        return myShiroCasRealm;
+    }
     @Bean //注入加密算法
     public MyHashedCredentialsMatcher myHashedCredentialsMatcher(){
         MyHashedCredentialsMatcher myHashedCredentialsMatcher = new MyHashedCredentialsMatcher();
@@ -223,7 +226,7 @@ public class ShiroConfiguration {
 
     /****************************************ehcache***********************************************************/
 
-    @Bean //注入ehcache
+    @Bean(name = "ehCacheManager") //注入ehcache
     public EhCacheManager ehCacheManager(){
         EhCacheManager ehCacheManager = new EhCacheManager();
         //配置缓存文件
