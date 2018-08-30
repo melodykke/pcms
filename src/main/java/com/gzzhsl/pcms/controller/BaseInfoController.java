@@ -52,8 +52,8 @@ public class BaseInfoController {
     @GetMapping("/hasbaseinfo")
     @ResponseBody
     public ResultVO hasBaseInfo() {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         if (thisUser.getSysRoleList() == null || thisUser.getSysRoleList().size() == 0) {
             return ResultUtil.failed(SysEnum.SUBACCOUNT_NOT_EXIST_ERROR);
         }
@@ -74,8 +74,8 @@ public class BaseInfoController {
     @GetMapping("/getbaseinfo")
     @ResponseBody
     public ResultVO getBaseInfo() {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         if (userService.getUserByUsername(thisUser.getUsername()).getBaseInfo() == null){
             log.error("【基本信息】没有配置该用户的项目基本信息");
             throw new SysException(SysEnum.BASE_INFO_NO_RECORD_ERROR);
@@ -90,7 +90,8 @@ public class BaseInfoController {
     public ResultVO saveFiles(HttpServletRequest request) {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("uploadfile");
         if (files == null || files.size() < 1) { return ResultUtil.failed(); }
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         String midPath = thisUser.getUserId()+ "/" + UUIDUtils.getUUIDString()+"/";
         for (MultipartFile file : files) {
             String oriFileName = file.getOriginalFilename();
@@ -130,8 +131,8 @@ public class BaseInfoController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveBaseInfo(@RequestBody Map<String, Object> params) {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");
         String baseInfoId = (String) params.get("baseInfoId");

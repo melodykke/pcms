@@ -65,12 +65,12 @@
                                     </span>
                                 </span>
                             </a>
-                            <!--<ul class="dropdown-menu animated fadeInRight m-t-xs">-->
-                                <!--<li id="person_info"><a>个人设置</a></li>-->
-                                <!--<li><a href="#" id="account_config">账号设置</a></li>-->
-                                <!--<li class="divider"></li>-->
-                                <!--<li><a th:href="@{/logout}">安全退出</a></li>-->
-                            <!--</ul>-->
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li id="person_info"><a>个人设置</a></li>
+                                <li><a href="#" id="account_config">账号设置</a></li>
+                                <li class="divider"></li>
+                                <li><a th:href="@{/logout}">安全退出</a></li>
+                            </ul>
                         </div>
                     </shiro:hasAnyRoles>
                     <shiro:hasAnyRoles name="manager, admin">

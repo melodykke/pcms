@@ -86,9 +86,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
     @Override
     public BaseInfo save(BaseInfoVO baseInfoVO) {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         String origId = null;
         if (thisProject != null && thisProject.getState().equals((byte) 1)) {
             log.error("【基本信息错误】 该账户已经存在配置过的项目基本信息，无需重新配置 ");

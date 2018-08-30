@@ -2,6 +2,7 @@ package com.gzzhsl.pcms.controller;
 
 import com.gzzhsl.pcms.entity.OperationLog;
 import com.gzzhsl.pcms.service.OperationLogService;
+import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.ResultVO;
@@ -24,6 +25,8 @@ public class OperationLogController {
 
     @Autowired
     private OperationLogService operationLogService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/tooperationlog")
     public String toOperationLog(){
@@ -36,7 +39,8 @@ public class OperationLogController {
                                        @RequestParam(required = false, name = "startIndex") Integer startIndex,
                                        @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                        @RequestParam(required = false, name = "searchParam", defaultValue = "") String searchParam){
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         Integer page = pageIndex;
         Integer size = pageSize;
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");

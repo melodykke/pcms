@@ -95,6 +95,10 @@ public enum SysEnum {
     ANNOUNCEMENT_VO_ERROR(5000, "公告参数错误，请重试！"),
 
     NO_AUTHORIZATION_ERROR(403, "当前操作未授权！"),
+
+
+    NO_ACCOUNT_ERROR(90001, "本应用不存在当前账号，请确认后进入！"),
+    NO_USERINFO_IN_CACHE_ERROR(90000, "用户身份出错，请退出后尝试重新登录！"),
     ;
 
     private Integer code;

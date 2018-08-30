@@ -72,7 +72,8 @@ public class TenderController {
         if (files == null || files.size() < 1) {
             return ResultUtil.failed();
         }
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         return ResultUtil.success(FileUtil.saveFile(thisUser, files));
     }
 
@@ -106,7 +107,8 @@ public class TenderController {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         Page<TenderVO> tenderVOs = tenderService.findByState(pageRequest, state);
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         List<String> roles = thisUser.getSysRoleList().stream().map(e -> e.getRole()).collect(Collectors.toList());
         if (roles.contains("checker")) {
             return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "checker", tenderVOs);
@@ -126,8 +128,9 @@ public class TenderController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveTender(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         List<Tender> tenders = thisProject.getTenders();
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");

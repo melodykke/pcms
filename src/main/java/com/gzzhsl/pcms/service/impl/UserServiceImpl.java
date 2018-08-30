@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.converter.UserInfo2VO;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.enums.SysEnum;
@@ -15,9 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

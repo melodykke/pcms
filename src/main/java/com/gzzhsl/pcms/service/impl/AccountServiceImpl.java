@@ -39,8 +39,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean modifyPassword(AccountPasswordVO accountPasswordVO) {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         // 1、判断原密码是否与本账号密码匹配
         String encriNewPassword = UserUtil.getEncriPwd(accountPasswordVO.getNewPassword());
         if (encriNewPassword.equals(thisUser.getPassword())) {

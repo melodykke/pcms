@@ -63,8 +63,9 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
     @Override
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         // 如果用户对应的Project不存在，则报错
         if (thisProject == null) {
             log.error("【月报错误】 用户对应Project为空，需首先绑定对应的水库工程");
@@ -253,8 +254,9 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
     @Override
     public HistoryMonthlyReportExcelStatistics saveHistoryStatistic(HistoryMonthlyReportStatisticVO historyMonthlyReportStatisticVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = thisProject.getHistoryMonthlyReportExcelStatistics();
         if (historyMonthlyReportExcelStatistics != null) { // 之前就报过历史数据或未审批或审批未通过
             if (historyMonthlyReportExcelStatistics.getState().equals((byte) 1)) {
@@ -295,16 +297,17 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
     @Override
     public HistoryMonthlyReportExcelStatistics getHistoryStatistic() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = historyMonthlyReportExcelStatisticsRepository.findByBaseInfo(thisProject);
         return historyMonthlyReportExcelStatistics;
     }
 
     @Override
     public Feedback approveHistoryMonthlyStatistic(Boolean switchState, String checkinfo, HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         Feedback feedbackRt = null;
         if (switchState == false) {
             historyMonthlyReportExcelStatistics.setState((byte) 1); // 审批通过

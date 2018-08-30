@@ -1,10 +1,13 @@
 package com.gzzhsl.pcms.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.cors.MyUsernamePasswordToken;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.InactivatedException;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.form.UserSigninForm;
+import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.ResultVO;
@@ -17,7 +20,10 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Map;
 
 @Controller
@@ -33,6 +41,10 @@ import java.util.Map;
 @Slf4j
 public class CommonController {
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @GetMapping("/login")
     private String login(){
@@ -82,7 +94,19 @@ public class CommonController {
 
 
     @GetMapping(value = {"/index", "/", ""})
-    private String index(){
+    private String index(HttpServletResponse response){
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        try {
+            if (username == null) {
+                response.sendRedirect("/logout");
+            }
+            UserInfo thisUser = userService.getUserByUsername(username);
+            if (thisUser == null) {
+                response.sendRedirect("/logout");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return "index";
     }
 

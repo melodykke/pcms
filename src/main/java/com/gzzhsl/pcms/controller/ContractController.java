@@ -54,10 +54,11 @@ public class ContractController {
     @GetMapping("/hascontract")
     @ResponseBody
     public ResultVO hasContract() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         List<Contract> contracts = thisProject.getContracts();
-        if (thisProject.getContracts().size() > 0) {
+        if (contracts.size() > 0) {
             return ResultUtil.success();
         }
         return ResultUtil.failed();
@@ -88,7 +89,8 @@ public class ContractController {
         if (files == null || files.size() < 1) {
             return ResultUtil.failed();
         }
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         return ResultUtil.success(FileUtil.saveFile(thisUser, files));
     }
 
@@ -103,7 +105,8 @@ public class ContractController {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         Page<Contract> contracts = contractService.findByState(pageRequest, state);
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         List<String> roles = thisUser.getSysRoleList().stream().map(e -> e.getRole()).collect(Collectors.toList());
         if (roles.contains("checker")) {
             return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "checker", contracts);
@@ -126,8 +129,9 @@ public class ContractController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveContract(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         List<Contract> contracts = thisProject.getContracts();
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");

@@ -124,7 +124,6 @@ public class WechatLoginController {
     @RequestMapping(value = "/generateqrcode4login", method = RequestMethod.GET)
     @ResponseBody
     private void generateQRCode4Login(HttpServletRequest request, HttpServletResponse response) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         long timeStamp = System.currentTimeMillis();
       /*  String content = "{aaauserIdaaa:" + thisUser.getUserId()+",aaacreateTimeaaa:"+timeStamp+"}";*/
         try {

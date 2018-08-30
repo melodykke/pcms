@@ -53,10 +53,6 @@ public class UserController {
     public ResultVO getSubject(HttpServletRequest request, HttpServletResponse response){
         String username = (String) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.getUserByUsername(username);
-        if (thisUser == null) {
-            return ResultUtil.failed("不存在的用户，请重试！");
-        }
-        request.getSession().setAttribute("thisUser", thisUser); // 得到的合法用户存入session
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(thisUser, userInfoVO);
         PersonInfo thisPerson = thisUser.getPersonInfo();
@@ -89,8 +85,8 @@ public class UserController {
     @GetMapping("/getaccountinfo")
     @ResponseBody
     public ResultVO getAccountInfo() {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         AccountInfoVO accountInfoVO = new AccountInfoVO();
         List<SysRole> roles = thisUser.getSysRoleList();
         if (roles != null && roles.size() > 0) {
@@ -123,7 +119,8 @@ public class UserController {
     @GetMapping("/doesthisuserhaspersoninfo")
     @ResponseBody
     public ResultVO doesThisUserHasPersonInfo(){
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         PersonInfo personInfo = personService.getByUserInfo(thisUser);
         if (personInfo == null) {
             return ResultUtil.failed(SysEnum.BOOLEAN_RESULT_FAIL);
@@ -135,7 +132,8 @@ public class UserController {
     @GetMapping("/haspersoninfo")
     @ResponseBody
     public ResultVO hasPersonInfo(){
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         PersonInfo personInfo = personService.getByUserInfo(thisUser);
         if (personInfo == null) {
             return ResultUtil.failed();
@@ -156,8 +154,8 @@ public class UserController {
             log.error("【个人信息】参数验证错误， 参数不正确 personInfoVO = {}， 错误：{}", personInfoVO, bindingResult.getFieldError().getDefaultMessage());
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
 
         PersonInfo thisPerson = thisUser.getPersonInfo();
         if (thisPerson != null) {

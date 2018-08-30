@@ -57,8 +57,9 @@ public class ReporterController {
     @ResponseBody
     public ResultVO getMonthlyReportPostHistory(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
         // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         Date yearEndDate = new Date(); // 当前时间
         String historyPointTime = "2000-01-01 00:00:00";
         String yearEndTime = currentDate+"-28 23:59:59"; // 查询时间范围的截止日期应为当前

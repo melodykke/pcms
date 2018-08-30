@@ -122,8 +122,8 @@ public class AccountController {
             log.error("【账户错误】参数验证错误， 密码和确认密码不一致 accountVO = {}", accountVO);
             throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
         }
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
         // 目前允许一个账号有一个子账号
         if (children == null || children.size() > 0) {
@@ -140,8 +140,9 @@ public class AccountController {
     @GetMapping("/getsubaccountinfo")
     @ResponseBody
     public ResultVO getSubAccountInfo() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        List<UserInfo> children = thisUser.getChildren();
         if (children == null || children.size() == 0) {
             return ResultUtil.failed("没有对应的子账号");
         } else if (children.size() == 1){
@@ -159,8 +160,9 @@ public class AccountController {
     @PostMapping("/activate")
     @ResponseBody
     public ResultVO activate() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        List<UserInfo> children = thisUser.getChildren();
         if (children == null) {
             return ResultUtil.failed();
         } else if (children.size() == 1){

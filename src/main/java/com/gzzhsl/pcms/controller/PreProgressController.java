@@ -55,8 +55,9 @@ public class PreProgressController {
     @GetMapping("/haspreprogress")
     @ResponseBody
     public ResultVO hasPreProgress() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【项目前期错误】 获取用户所在工程基本信息出错 , thisProject = {}", thisProject);
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);
@@ -94,7 +95,8 @@ public class PreProgressController {
     @GetMapping("/getpreprogress")
     @ResponseBody
     public ResultVO getPreProgress() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【项目前期错误】 获取用户所在工程基本信息出错 , thisProject = {}", thisProject);
@@ -115,7 +117,8 @@ public class PreProgressController {
         if (files == null || files.size() < 1) {
             return ResultUtil.failed();
         }
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         return ResultUtil.success(FileUtil.saveFile(thisUser, files));
     }
 
@@ -123,7 +126,8 @@ public class PreProgressController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveBaseInfo(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         BaseInfo thisProject = thisUser.getBaseInfo();
         PreProgress thisPreProgress = preProgressService.findByBaseInfo(thisProject);
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过

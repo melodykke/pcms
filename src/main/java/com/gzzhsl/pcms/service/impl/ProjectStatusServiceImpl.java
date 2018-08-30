@@ -45,8 +45,9 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
 
     @Override
     public ResultVO updateProjectStatus(int id) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject == null) {
             log.error("【项目状态】 项目状态错误，请优先配置项目概况！");
             throw new SysException(9996, "项目状态错误，请优先配置项目概况！");
@@ -72,7 +73,7 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
     public List<ProjectStatus> getProjectStatus() {
         String username = (String) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.getUserByUsername(username);
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject == null || !thisProject.getState().equals((byte) 1)) {
             log.error("【项目状态】 项目状态错误，请优先配置项目概况，并等待审批通过！");
             throw new SysException(9996, "项目状态错误，请优先配置项目概况,并等待审批通过！");

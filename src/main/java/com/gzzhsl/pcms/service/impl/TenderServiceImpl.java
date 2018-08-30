@@ -61,8 +61,9 @@ public class TenderServiceImpl implements TenderService {
 
     @Override
     public Tender save(TenderVO tenderVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         Tender tender = new Tender();
         tenderVO.setCreateTime(new Date());
         tenderVO.setUpdateTime(new Date());
@@ -123,8 +124,9 @@ public class TenderServiceImpl implements TenderService {
 
     @Override
     public Page<TenderVO> findByState(Pageable pageable, byte state) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject == null) {
             log.error("【招标备案】 获取年度招标备案列表错误， 账号无对应的水库项目");
             throw new SysException(SysEnum.TENDER_NO_PROJECT_ERROR);
@@ -150,8 +152,9 @@ public class TenderServiceImpl implements TenderService {
 
     @Override
     public TenderVO getById(String id) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         //获取该用户所有年度投融资计划
         List<Tender> tenders = tenderRepository.findAllByBaseInfo(thisProject);
         List<String> tenderIds = tenders.stream().map(e -> e.getTenderId()).collect(Collectors.toList());

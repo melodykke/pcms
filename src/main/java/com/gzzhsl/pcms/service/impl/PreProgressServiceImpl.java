@@ -51,8 +51,9 @@ public class PreProgressServiceImpl implements PreProgressService {
     private WebSocket webSocket;
     @Override
     public PreProgress save(List<PreProgressEntry> preProgressEntries, String rtFileTempPath) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         PreProgress preProgress =  preProgressRepository.findByBaseInfo(thisProject);
         if (preProgress != null && preProgress.getPreProgressId() != null && !preProgress.getState().equals((byte) 1)) {
             // 如果是重新提交，即存在之前的preProgress 则沿用ID，并且将该preProgress下的img和entries删除

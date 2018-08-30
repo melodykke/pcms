@@ -45,8 +45,9 @@ public class FeedbackController {
     @GetMapping("/getoverallfeedback")
     @ResponseBody
     public ResultVO getOverallFeedback() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisUser == null || thisUser.getUserId() == null || thisUser.getUserId() == "") {
             log.error("【消息错误】未读取到用户信息");
             throw new SysException(SysEnum.SIGNIN_PARAM_ERROR);
@@ -106,8 +107,9 @@ public class FeedbackController {
                                        @RequestParam(required = false, name = "startIndex") Integer startIndex,
                                        @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                        @RequestParam(required = false, name = "type", defaultValue = "") String type){
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null || thisProject.getBaseInfoId() == "") {
             log.error("【通知错误】未读取到该账户下的水库信息");
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);

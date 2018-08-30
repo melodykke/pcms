@@ -52,7 +52,8 @@ public class MonthlyReportController {
     public ResultVO saveFiles(HttpServletRequest request) {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("uploadfile");
         if (files == null || files.size() < 1) { return ResultUtil.failed(); }
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisUser == null || thisProject.getPlantName() == null || thisProject.getPlantName() == "") {
             log.error("【月报错误】 所登录账号不具备月报图片上传功能 , thisUser = {}, thisProject = {}"
@@ -100,7 +101,8 @@ public class MonthlyReportController {
     @PostMapping("/getmonthlyreports")
     @ResponseBody
     public ResultVO getMonthlyReports(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【月报错误】 获取用户所在工程月报集出错 , thisProject = {}", thisProject);
@@ -156,7 +158,8 @@ public class MonthlyReportController {
         String time = (String) params.get("time");
         String startDate = time + "-01 00:00:00";
         String endDate = time + "-28 23:59:59";
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         String projectId = thisUser.getBaseInfo().getBaseInfoId();
         List<ProjectMonthlyReport> projectMonthlyReportList = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear(projectId, startDate, endDate);
         if (projectMonthlyReportList == null || projectMonthlyReportList.size() == 0) {
@@ -178,8 +181,9 @@ public class MonthlyReportController {
     @ResponseBody
     public ResultVO getMonthlyReportExcelByProjectMonthlyReportId(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
         // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
         String projectId = ((BaseInfo) request.getSession().getAttribute("thisProject")).getBaseInfoId();
         Date yearEndDate = new Date(); // 当前时间
@@ -219,7 +223,8 @@ public class MonthlyReportController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveMonthlyReport(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");
         String projectMonthlyReportId = (String) params.get("projectMonthlyReportId");
@@ -251,8 +256,9 @@ public class MonthlyReportController {
     @GetMapping("/hashistorystatistic")
     @ResponseBody
     public ResultVO hasHistoryStatistic() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.getUserByUsername(username);
+        BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) 1)) {
             return ResultUtil.success();
         } else if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) 0)) {
