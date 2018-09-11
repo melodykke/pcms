@@ -29,7 +29,7 @@ public class SysServiceImpl implements SysService {
      */
     @Override
     public void projectidToUserinfoFKprojectid() {
-        List<UserInfo> allUserInfos = userService.getAllUser();
+      /*  List<UserInfo> allUserInfos = userService.getAllUser();
         List<BaseInfo> allProjects = baseInfoService.getAllProject();
 
         for (UserInfo userInfo : allUserInfos) {
@@ -39,19 +39,20 @@ public class SysServiceImpl implements SysService {
                     userService.save(userInfo);
                 }
             }
-        }
+        }*/
+
     }
 
     @Override
     public void setAllUserRole() {
-        List<UserInfo> allUserInfos = userService.getAllUser();
+    /*    List<UserInfo> allUserInfos = userService.getAllUser();
         SysRole checker = roleRepository.findByRoleId("0169A85A-8E9D-47AZ-43A5-4B651137AC32");
         for (UserInfo userInfo : allUserInfos) {
             List<SysRole> sysRoles = new ArrayList<>();
             sysRoles.add(checker);
             userInfo.setSysRoleList(sysRoles);
             userService.save(userInfo);
-        }
+        }*/
     }
 
 }

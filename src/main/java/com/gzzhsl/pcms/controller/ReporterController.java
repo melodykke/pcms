@@ -57,7 +57,7 @@ public class ReporterController {
     @ResponseBody
     public ResultVO getMonthlyReportPostHistory(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
         // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+     /*   UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
         Date yearEndDate = new Date(); // 当前时间
         String historyPointTime = "2000-01-01 00:00:00";
@@ -77,13 +77,14 @@ public class ReporterController {
         } else {
             monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithYearParams, sofarProjectMonthlyReports, null);
         }
-        return ResultUtil.success(monthlyReportExcelModelWithSofarParams);
+        return ResultUtil.success(monthlyReportExcelModelWithSofarParams);*/
+     return null;
     }
 
     @GetMapping("getthiscard")
     @ResponseBody
     public ResultVO getThisCard() {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         BaseInfo thisProject = thisUser.getBaseInfo();
         if (thisProject != null) {
@@ -104,7 +105,8 @@ public class ReporterController {
             return ResultUtil.success(cardVO);
         } else {
             return ResultUtil.failed();
-        }
+        }*/
+       return null;
     }
 
 }

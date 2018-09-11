@@ -128,7 +128,7 @@ public class AnnualInvestmentController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveAnnualInvestment(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         List<AnnualInvestment> annualInvestments = thisProject.getAnnualInvestments();
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
@@ -165,6 +165,7 @@ public class AnnualInvestmentController {
             return ResultUtil.success(feedback);
         } else {
             return ResultUtil.failed(feedback);
-        }
+        }*/
+      return null;
     }
 }

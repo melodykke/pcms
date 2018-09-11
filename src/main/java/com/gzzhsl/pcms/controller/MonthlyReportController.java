@@ -178,7 +178,7 @@ public class MonthlyReportController {
     @ResponseBody
     public ResultVO getMonthlyReportExcelByProjectMonthlyReportId(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
         // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        /*UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
         ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
         String projectId = ((BaseInfo) request.getSession().getAttribute("thisProject")).getBaseInfoId();
@@ -212,7 +212,8 @@ public class MonthlyReportController {
         } else {
             monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, null);
         }
-        return ResultUtil.success(MonthlyReportExcelCalcUtil.buildMonthlyReportExcel(monthlyReportExcelModelWithSofarParams));
+        return ResultUtil.success(MonthlyReportExcelCalcUtil.buildMonthlyReportExcel(monthlyReportExcelModelWithSofarParams));*/
+        return  null;
     }
 
     @PostMapping("/approvemonthlyreport")
@@ -251,7 +252,7 @@ public class MonthlyReportController {
     @GetMapping("/hashistorystatistic")
     @ResponseBody
     public ResultVO hasHistoryStatistic() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) 1)) {
             return ResultUtil.success();
@@ -261,7 +262,8 @@ public class MonthlyReportController {
             return ResultUtil.failed(1005, "历史数据审批未通过！");
         } else {
             return ResultUtil.failed();
-        }
+        }*/
+       return null;
     }
 
     @PostMapping("/savehistorystatistic")

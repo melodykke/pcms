@@ -75,7 +75,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
     @Override
     public AnnualInvestment save(AnnualInvestmentVO annualInvestmentVO) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        // BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        BaseInfo thisProject = null;
         String year = annualInvestmentVO.getYear();
         List<AnnualInvestment> annualInvestments = this.getMyAnnualInvestmentsByYear(year);
         if (annualInvestments.size() > 1) {
@@ -98,7 +99,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
         BeanUtils.copyProperties(annualInvestmentVO, annualInvestment);
         AnnualInvestment annualInvestmentRt = annualInvestmentRepository.save(annualInvestment);
         if (annualInvestmentVO.getAnnualInvestmentId() != null) {
-            AnnualInvestment annualInvestmentItem = annualInvestmentRepository.findOne(annualInvestmentVO.getAnnualInvestmentId());
+            //AnnualInvestment annualInvestmentItem = annualInvestmentRepository.findOne(annualInvestmentVO.getAnnualInvestmentId());
+            AnnualInvestment annualInvestmentItem = null;
             annualInvestmentVO.setCreateTime(annualInvestmentItem.getCreateTime());
             // 如果存在记录 就把该记录下的所有文档全部删除
             annualInvestmentImgRepository.deleteByAnnualInvestment(annualInvestmentRt);
@@ -150,7 +152,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
     @Override
     public Page<AnnualInvestment> findByState(Pageable pageable, byte state) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        //BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        BaseInfo thisProject = null;
         if (thisProject == null) {
             log.error("【年度投资计划】 获取年度投资计划列表错误， 账号无对应的水库项目");
             throw new SysException(SysEnum.ANNUAL_INVESTMENT_NO_PROJECT_ERROR);
@@ -173,28 +176,32 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
     @Override
     public AnnualInvestmentVO getById(String id) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        // BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        return null;
         //获取该用户所有年度投融资计划
-        List<AnnualInvestment> annualInvestments = annualInvestmentRepository.findAllByBaseInfo(thisProject);
-        List<String> annualInvestmentIds = annualInvestments.stream().map(e -> e.getAnnualInvestmentId()).collect(Collectors.toList());
+       // List<AnnualInvestment> annualInvestments = annualInvestmentRepository.findAllByBaseInfo(thisProject);
+        //List<AnnualInvestment> annualInvestments = null;
+       //         List<String> annualInvestmentIds = annualInvestments.stream().map(e -> e.getAnnualInvestmentId()).collect(Collectors.toList());
         //判断查询ID是否在其中   //如果不在抛异常（不能查询别人的） 如果在返回结果
-        if (!annualInvestmentIds.contains(id)) {
+       /* if (!annualInvestmentIds.contains(id)) {
             log.error("【年度投融资计划】 不能查询不属于自己的年度投融资计划");
             throw new SysException(SysEnum.ANNUAL_INVESTMENT_QUERY_OTHERS_ERROR);
         }
-        AnnualInvestment annualInvestment = annualInvestmentRepository.findOne(id); //下面转化为VO
-        AnnualInvestmentVO annualInvestmentVO = new AnnualInvestmentVO();
+        //AnnualInvestment annualInvestment = annualInvestmentRepository.findOne(id); //下面转化为VO
+        AnnualInvestment annualInvestment = null;
+                AnnualInvestmentVO annualInvestmentVO = new AnnualInvestmentVO();
         BeanUtils.copyProperties(annualInvestment, annualInvestmentVO);
         List<AnnualInvestmentImg> annualInvestmentImgs = annualInvestment.getAnnualInvestmentImgs();
         List<AnnualInvestmentImgVO> annualInvestmentImgVOs = annualInvestmentImgs.stream().map(e -> AnnualInvestmentImg2VO.convert(e)).collect(Collectors.toList());
         annualInvestmentVO.setAnnualInvestmentImgVOs(annualInvestmentImgVOs);
-        return annualInvestmentVO;
+        return annualInvestmentVO;*/
     }
 
     @Override
     public List<AnnualInvestment> getByYearAndProject(String year, BaseInfo baseInfo) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        //BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        BaseInfo thisProject = null;
         if (thisProject == null) {
             log.error("【年度投资计划】 获取年度投资计划列表错误， 账号无对应的水库项目");
             throw new SysException(SysEnum.ANNUAL_INVESTMENT_NO_PROJECT_ERROR);
@@ -264,7 +271,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
 
     private List<AnnualInvestment> getMyPassedAnnualInvestments() {  // 获得本用户水库下的所有审批通过的年计划投资
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        // BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        BaseInfo thisProject = null;
         List<AnnualInvestment> annualInvestments = null;
         Specification querySpecification = new Specification() {
             List<Predicate> predicates = new ArrayList<>();
@@ -281,7 +289,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
 
     private List<AnnualInvestment> getMyAnnualInvestmentsByYear(String year) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        //BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        BaseInfo thisProject = null;
         Specification querySpecification = new Specification() {
             List<Predicate> predicates = new ArrayList<>();
             @Override

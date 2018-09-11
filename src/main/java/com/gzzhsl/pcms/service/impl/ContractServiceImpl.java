@@ -57,25 +57,26 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public Contract findById(String id) {
-        return contractRepository.findById(id);
+        // return contractRepository.findById(id);
+        return null;
     }
 
     @Override
     public Boolean hasInnerContract() { // 点击新增的前提条件
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         List<Contract> contracts = thisProject.getContracts();
         for (Contract contract : contracts) {
             if (contract.getLabel().equals((byte) 1) && contract.getState().equals((byte) 1)) { // 有合同内，并审批通过
                 return true;
             }
-        }
+        }*/
         return false;
     }
 
     @Override
     public Contract save(ContractVO contractVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         Contract innerContract = null;
         // 判断是否是第一个合同（合同内）
@@ -150,13 +151,13 @@ public class ContractServiceImpl implements ContractService {
                 contractRt.getUpdateTime(),
                 "提交了ID:"+ contractRt.getId() +"的合同备案信息"));
         // 创建webSocket消息
-        WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "合同备案信息", "新的合同备案消息待查收");
-        return contractRt;
+        WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "合同备案信息", "新的合同备案消息待查收");*/
+        return null;
     }
 
     @Override
     public Page<Contract> findByState(Pageable pageable, byte state) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null) {
             log.error("【合同错误】 获取合同列表错误， 账号无对应的水库项目");
@@ -174,7 +175,8 @@ public class ContractServiceImpl implements ContractService {
             }
         };
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return contractRepository.findAll(querySpecification, pageable);
+        return contractRepository.findAll(querySpecification, pageable);*/
+      return null;
     }
 
     @Override

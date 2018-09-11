@@ -58,7 +58,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public Feedback getById(String feedbackId) {
-        return feedbackRepository.findOne(feedbackId);
+        return null;
     }
 
     @Override

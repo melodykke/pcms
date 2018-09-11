@@ -1,0 +1,63 @@
+server:
+  port: 8080
+
+
+spring:
+    datasource:
+        name: mysql_test
+        type: com.alibaba.druid.pool.DruidDataSource
+        #druid相关配置
+        druid:
+          #监控统计拦截的filters
+          filters: stat
+          driver-class-name: com.mysql.jdbc.Driver
+          #基本属性
+          url: jdbc:mysql://192.168.100.239:3306/pcmsmb?useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: ENC(XxW4AwHspoUt4NlBE2jCCg==)
+          password: ENC(W9MuakWcot4fG2lEiNaHPRGY/3WRFRMP)
+          #配置初始化大小/最小/最大
+          initial-size: 1
+          min-idle: 1
+          max-active: 20
+          #获取连接等待超时时间
+          max-wait: 60000
+          #间隔多久进行一次检测，检测需要关闭的空闲连接
+          time-between-eviction-runs-millis: 60000
+          #一个连接在池中最小生存的时间
+          min-evictable-idle-time-millis: 300000
+          validation-query: SELECT 'x'
+          test-while-idle: true
+          test-on-borrow: false
+          test-on-return: false
+          #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+          pool-prepared-statements: false
+          max-pool-prepared-statement-per-connection-size: 20
+          connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+          useGlobalDataSourceStat: true
+          logSlowSql: true
+#开启驼峰命名转换:Table{create_time} -> Entity{createTime}
+#使用列标签替换列别名 默认:true
+#使用jdbc的getGeneratedKeys获取数据库自增主键值
+#关联对象的加载方式：eager or lazy  全局影响 默认为false;
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.gzzhsl.pcms.model
+  configuration:
+    map-underscore-to-camel-case: true
+    use-column-label: true
+    use-generated-keys: true
+    aggressive-lazy-loading: false
+
+#pagehelper
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+    returnPageInfo: check
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+logging:
+  config: classpath:log/logback-spring.xml
+

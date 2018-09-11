@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.AnnouncementMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.Announcement">
+    <id column="announcement_id" jdbcType="VARCHAR" property="announcementId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="hot" jdbcType="BIT" property="hot" />
+    <result column="keyword" jdbcType="VARCHAR" property="keyword" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from announcement
+    where announcement_id = #{announcementId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.Announcement">
+    insert into announcement (announcement_id, create_time, hot, 
+      keyword, title, `type`, 
+      update_time, content)
+    values (#{announcementId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{hot,jdbcType=BIT}, 
+      #{keyword,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.Announcement">
+    update announcement
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      hot = #{hot,jdbcType=BIT},
+      keyword = #{keyword,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where announcement_id = #{announcementId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select announcement_id, create_time, hot, keyword, title, `type`, update_time, content
+    from announcement
+    where announcement_id = #{announcementId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select announcement_id, create_time, hot, keyword, title, `type`, update_time, content
+    from announcement
+  </select>
+</mapper>

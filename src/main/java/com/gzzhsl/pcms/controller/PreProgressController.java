@@ -55,7 +55,7 @@ public class PreProgressController {
     @GetMapping("/haspreprogress")
     @ResponseBody
     public ResultVO hasPreProgress() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【项目前期错误】 获取用户所在工程基本信息出错 , thisProject = {}", thisProject);
@@ -65,7 +65,8 @@ public class PreProgressController {
         if (preProgress != null) {
             return ResultUtil.success();
         }
-        return ResultUtil.failed();
+        return ResultUtil.failed();*/
+      return null;
     }
     @PostMapping("/save")
     @ResponseBody

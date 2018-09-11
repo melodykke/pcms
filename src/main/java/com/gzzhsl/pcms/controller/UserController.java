@@ -51,7 +51,7 @@ public class UserController {
     @RequiresUser
     @ResponseBody
     public ResultVO getSubject(){
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(thisUser, userInfoVO);
@@ -64,27 +64,29 @@ public class UserController {
                 userInfoVO.setNickname(thisPerson.getNickName());
             }
         }
-        return ResultUtil.success(userInfoVO);
+        return ResultUtil.success(userInfoVO);*/
+       return null;
     }
 
     @GetMapping("/getthisproject")
     @RequiresRoles(value = {"reporter", "checker"}, logical = Logical.OR)
     @ResponseBody
     public ResultVO getThisProject(HttpServletRequest request, HttpServletResponse response){
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null) {
             return ResultUtil.failed(SysEnum.NO_PROJECT_IN_THISUSER);
         }else {
             request.getSession().setAttribute("thisProject", thisProject);
             return ResultUtil.success();
-        }
+        }*/
+      return null;
     }
 
     @GetMapping("/getaccountinfo")
     @ResponseBody
     public ResultVO getAccountInfo() {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         AccountInfoVO accountInfoVO = new AccountInfoVO();
         List<SysRole> roles = thisUser.getSysRoleList();
@@ -112,7 +114,8 @@ public class UserController {
         }
         accountInfoVO.setUsername(thisUser.getUsername());
         accountInfoVO.setActive(thisUser.getActive());
-        return ResultUtil.success(accountInfoVO);
+        return ResultUtil.success(accountInfoVO);*/
+      return null;
     }
 
     @GetMapping("/doesthisuserhaspersoninfo")
@@ -142,7 +145,7 @@ public class UserController {
     @PostMapping("/personinfosubmit")
     @ResponseBody
     public ResultVO personInfoSubmit(@RequestBody @Valid PersonInfoVO personInfoVO, BindingResult bindingResult){
-        if (personInfoVO == null) {
+     /*   if (personInfoVO == null) {
             log.error("【个人信息】 个人信息错误，没有收到有效的personInfoVO , " +
                     "实际personInfoVO = {}", personInfoVO);
             throw new SysException(SysEnum.PERSON_INFO_ERROR);
@@ -175,7 +178,8 @@ public class UserController {
             log.error("【个人信息】 个人信息持久化错误， 参数不正确");
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED);
         }
-        return ResultUtil.success();
+        return ResultUtil.success();*/
+     return null;
     }
 
 }

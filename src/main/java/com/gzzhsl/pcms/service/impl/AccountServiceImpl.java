@@ -39,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean modifyPassword(AccountPasswordVO accountPasswordVO) {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+     /*   UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         // 1、判断原密码是否与本账号密码匹配
         String encriNewPassword = UserUtil.getEncriPwd(accountPasswordVO.getNewPassword());
@@ -48,13 +48,13 @@ public class AccountServiceImpl implements AccountService {
             throw new SysException(SysEnum.ACCOUNT_PASSWORD_INCONSISTENCY);
         }
         // 2、修改密码
-        userService.modifyPassword(encriNewPassword, thisUser);
+        userService.modifyPassword(encriNewPassword, thisUser);*/
         return true;
     }
 
     @Override
     public Boolean createSubAccount(AccountVO accountVO, UserInfo thisUser) {
-        UserInfo otherUser = userService.getUserByUsername(accountVO.getUsername());
+      /*  UserInfo otherUser = userService.getUserByUsername(accountVO.getUsername());
         // 判断子账号名是否重复
         if (otherUser != null) {
             log.error("【账户错误】账户名错误，已存在相同的账号 accountVO = {}, 相同账号为 otherUser: {}", accountVO, otherUser);
@@ -74,13 +74,13 @@ public class AccountServiceImpl implements AccountService {
             userService.save(subUser);
         } catch (Exception e) {
             return false;
-        }
+        }*/
         return true;
     }
 
     @Override
     public UserInfo createUserAccount(UserInfoDTO userInfoDTO) {
-        UserInfo userInfo = UserInfoDTO2.convert(userInfoDTO);
+       /* UserInfo userInfo = UserInfoDTO2.convert(userInfoDTO);
 
         if (userInfoDTO.getUserId() == null || "".equals(userInfoDTO.getUserId())) { // 新增
             userInfo.setCreateTime(new Date());
@@ -100,6 +100,7 @@ public class AccountServiceImpl implements AccountService {
             return userInfoRt;
         } else {
             return null;
-        }
+        }*/
+        return null;
     }
 }

@@ -54,13 +54,14 @@ public class ContractController {
     @GetMapping("/hascontract")
     @ResponseBody
     public ResultVO hasContract() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         List<Contract> contracts = thisProject.getContracts();
         if (thisProject.getContracts().size() > 0) {
             return ResultUtil.success();
         }
-        return ResultUtil.failed();
+        return ResultUtil.failed();*/
+       return null;
     }
 
     @PostMapping("/save")
@@ -126,7 +127,7 @@ public class ContractController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveContract(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         List<Contract> contracts = thisProject.getContracts();
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
@@ -163,7 +164,8 @@ public class ContractController {
             return ResultUtil.success(feedback);
         } else {
             return ResultUtil.failed(feedback);
-        }
+        }*/
+       return null;
     }
 
     @GetMapping("/addouttercontract")

@@ -17,55 +17,55 @@ import java.util.Map;
 
 @Configuration
 public class DruidConfiguration {
-   @Value("${spring.datasource.url}")
+   @Value("${spring.datasource.druid.url}")
    private String dbUrl;
 
-   @Value("${spring.datasource.username}")
+   @Value("${spring.datasource.druid.username}")
    private String username;
 
-   @Value("${spring.datasource.password}")
+   @Value("${spring.datasource.druid.password}")
    private String password;
 
-   @Value("${spring.datasource.driverClassName}")
+   @Value("${spring.datasource.druid.driver-class-name}")
    private String driverClassName;
 
-   @Value("${spring.datasource.initial-size}")
+   @Value("${spring.datasource.druid.initial-size}")
    private int initialSize;
 
-   @Value("${spring.datasource.min-idle}")
+   @Value("${spring.datasource.druid.min-idle}")
    private int minIdle;
 
-   @Value("${spring.datasource.max-active}")
+   @Value("${spring.datasource.druid.max-active}")
    private int maxActive;
 
-   @Value("${spring.datasource.maxWait}")
+   @Value("${spring.datasource.druid.max-wait}")
    private int maxWait;
 
-   @Value("${spring.datasource.timeBetweenEvictionRunsMillis}")
+   @Value("${spring.datasource.druid.time-between-eviction-runs-millis}")
    private int timeBetweenEvictionRunsMillis;
 
-   @Value("${spring.datasource.minEvictableIdleTimeMillis}")
+   @Value("${spring.datasource.druid.min-evictable-idle-time-millis}")
    private int minEvictableIdleTimeMillis;
 
-   @Value("${spring.datasource.validationQuery}")
+   @Value("${spring.datasource.druid.validation-query}")
    private String validationQuery;
 
-   @Value("${spring.datasource.testWhileIdle}")
+   @Value("${spring.datasource.druid.test-while-idle}")
    private boolean testWhileIdle;
 
-   @Value("${spring.datasource.testOnBorrow}")
+   @Value("${spring.datasource.druid.test-on-borrow}")
    private boolean testOnBorrow;
 
-   @Value("${spring.datasource.testOnReturn}")
+   @Value("${spring.datasource.druid.test-on-return}")
    private boolean testOnReturn;
 
-   @Value("${spring.datasource.poolPreparedStatements}")
+   @Value("${spring.datasource.druid.pool-prepared-statements}")
    private boolean poolPreparedStatements;
 
-   @Value("${spring.datasource.filters}")
+   @Value("${spring.datasource.druid.filters}")
    private String filters;
 
-   @Value("${spring.datasource.logSlowSql}")
+   @Value("${spring.datasource.druid.logSlowSql}")
    private String logSlowSql;
    @Bean
    @Primary

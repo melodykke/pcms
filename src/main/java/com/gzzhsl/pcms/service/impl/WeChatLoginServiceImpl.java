@@ -31,7 +31,7 @@ public class WeChatLoginServiceImpl implements WeChatLoginService {
 
     @Override
     public ResultVO doWeChatBinding(String openId, String username, String password) {
-        UserInfo userInfo = userService.getUserByUsername(username);
+      /*  UserInfo userInfo = userService.getUserByUsername(username);
         if (userInfo == null) {
             return ResultUtil.failed("查无此用户！！");
         } else {
@@ -62,6 +62,7 @@ public class WeChatLoginServiceImpl implements WeChatLoginService {
                 }
                 return ResultUtil.success();
             }
-        }
+        }*/
+      return null;
     }
 }

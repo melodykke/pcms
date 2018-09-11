@@ -34,7 +34,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public Announcement getById(String announcementId) {
-        return announcementRepository.findOne(announcementId);
+        return null;
     }
 
     @Override
@@ -86,9 +86,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public AnnouncementVO getAnnouncementById(String announcementId) {
-        Announcement announcement = announcementRepository.findOne(announcementId);
+        //Announcement announcement = announcementRepository.findOne(announcementId);
         AnnouncementVO announcementVO = new AnnouncementVO();
-        BeanUtils.copyProperties(announcement, announcementVO);
-        return announcementVO;
+        //BeanUtils.copyProperties(announcement, announcementVO);
+        return null;
     }
 }

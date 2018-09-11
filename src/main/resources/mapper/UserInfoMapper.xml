@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.UserInfoMapper">
+    <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.UserInfo">
+        <id column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="active" jdbcType="TINYINT" property="active"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+    </resultMap>
+    <resultMap id="WithRolesResultMap" type="com.gzzhsl.pcms.model.UserInfo" extends="BaseResultMap">
+        <collection property="roles" columnPrefix="role_" resultMap="com.gzzhsl.pcms.mapper.SysRoleMapper.WithPrivilegesResultMap"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user_info
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.gzzhsl.pcms.model.UserInfo">
+    insert into user_info (user_id, active, create_time,
+      `name`, `password`, salt,
+      update_time, username, base_info_id,
+      parent_id, open_id)
+    values (#{userId,jdbcType=VARCHAR}, #{active,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP}, #{username,jdbcType=VARCHAR}, #{baseInfoId,jdbcType=VARCHAR},
+      #{parentId,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.UserInfo">
+    update user_info
+    set active = #{active,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `name` = #{name,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      username = #{username,jdbcType=VARCHAR},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select user_id, active, create_time, `name`, `password`, salt, update_time, username,
+    base_info_id, parent_id, open_id
+    from user_info
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select user_id, active, create_time, `name`, `password`, salt, update_time, username,
+    base_info_id, parent_id, open_id
+    from user_info
+  </select>
+
+
+    <select id="findByUsername" resultMap="BaseResultMap">
+    SELECT user_id, active, create_time, `name`, `password`, salt, update_time, username,
+    base_info_id, parent_id, open_id
+    FROM user_info
+    WHERE username = #{_parameter}
+  </select>
+    <select id="findOneWithRolesByUsernameOrId" resultMap="WithRolesResultMap">
+      SELECT u.user_id, u.active, u.create_time, u.name, u.password, u.salt, u.update_time, u.username,
+        u.base_info_id, u.parent_id, u.open_id,
+        r.role_id role_role_id, r.available role_available, r.description role_description, r.role role_role
+      FROM
+        user_info u
+        LEFT JOIN sys_user_role ur on u.user_id = ur.user_id
+        LEFT JOIN sys_role r on ur.role_id = r.role_id
+      <where>
+          <choose>
+              <when test="username != null and username != ''">
+                  AND u.username = #{username}
+              </when>
+              <when test="userId != null and userId != ''">
+                  AND u.user_id = #{userId}
+              </when>
+              <otherwise>
+                  AND 1=2
+              </otherwise>
+          </choose>
+      </where>
+    </select>
+    <select id="findOneWithRolesAndPrivilegesByUsernameOrId" resultMap="WithRolesResultMap">
+        SELECT u.user_id, u.active, u.create_time, u.name, u.password, u.salt, u.update_time, u.username,
+        u.base_info_id, u.parent_id, u.open_id,
+        r.role_id role_role_id, r.available role_available, r.description role_description, r.role role_role,
+        p.permission_id role_permission_permission_id, p.available role_permission_available, p.name role_permission_name,
+        p.parent_id role_permission_parent_id, p.parent_ids role_permission_parent_ids, p.permission role_permission_permission,
+        p.resource_type role_permission_resource_type, p.url role_permission_url
+        FROM
+        user_info u
+        LEFT JOIN sys_user_role ur on u.user_id = ur.user_id
+        LEFT JOIN sys_role r on ur.role_id = r.role_id
+        LEFT JOIN sys_role_permission rp on r.role_id = rp.role_id
+        LEFT JOIN sys_permission p on rp.permission_id = p.permission_id
+        <where>
+            <choose>
+                <when test="username != null and username != ''">
+                    AND u.username = #{username}
+                </when>
+                <when test="userId != null and userId != ''">
+                    AND u.user_id = #{userId}
+                </when>
+                <otherwise>
+                    AND 1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+</mapper>

@@ -69,7 +69,7 @@ public class WechatLoginController {
 
 	@RequestMapping(value = "/logincheck", method = { RequestMethod.GET })
 	public String doGet(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("weixin login get...");
+     /*   log.debug("weixin login get...");
 		// 获取微信公众号传输过来的code,通过code可获取access_token,进而获取用户信息
 		String code = request.getParameter("code");
 		// 这个state可以用来传我们自定义的信息，方便程序调用，这里也可以不用
@@ -115,7 +115,8 @@ public class WechatLoginController {
         } else {
             wechatLoginWebSocket.sendMsg(ResultUtil.success(user));
             return "mobileLoginNote";
-        }
+        }*/
+     return null;
 	}
 
     /**
@@ -145,7 +146,7 @@ public class WechatLoginController {
     @PostMapping("/wechatauthlogin")
     @ResponseBody
     public ResultVO wechatAuthLogin(@RequestBody Map<String, Object> map) {
-        System.out.println("wechatauthlogin");
+    /*    System.out.println("wechatauthlogin");
         String openId = (String) map.get("openId");
         System.out.println(openId);
         UserInfo userInfo = userService.findByOpenId(openId);
@@ -160,7 +161,8 @@ public class WechatLoginController {
             }
             return ResultUtil.success();
         }
-        return ResultUtil.failed();
+        return ResultUtil.failed();*/
+    return null;
     }
 
     @GetMapping("/wechatbinding")

@@ -52,7 +52,7 @@ public class BaseInfoController {
     @GetMapping("/hasbaseinfo")
     @ResponseBody
     public ResultVO hasBaseInfo() {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         if (thisUser.getSysRoleList() == null || thisUser.getSysRoleList().size() == 0) {
             return ResultUtil.failed(SysEnum.SUBACCOUNT_NOT_EXIST_ERROR);
@@ -63,7 +63,8 @@ public class BaseInfoController {
                 return ResultUtil.success(1310, "审批未通过");
         } else {
             return ResultUtil.success();
-        }
+        }*/
+      return null;
     }
 
     @GetMapping("/getinbaseinfo")
@@ -74,7 +75,7 @@ public class BaseInfoController {
     @GetMapping("/getbaseinfo")
     @ResponseBody
     public ResultVO getBaseInfo() {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         if (userService.getUserByUsername(thisUser.getUsername()).getBaseInfo() == null){
             log.error("【基本信息】没有配置该用户的项目基本信息");
@@ -82,7 +83,8 @@ public class BaseInfoController {
         }
         BaseInfoVO baseInfoVO = baseInfoService.getBaseInfoById(thisUser.getBaseInfo().getBaseInfoId());
         return ResultUtil.success(baseInfoVO);
-
+*/
+       return null;
     }
 
     @PostMapping("/addfiles")
@@ -130,7 +132,7 @@ public class BaseInfoController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveBaseInfo(@RequestBody Map<String, Object> params) {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");
@@ -157,8 +159,8 @@ public class BaseInfoController {
             return ResultUtil.success(feedback);
         } else {
             return ResultUtil.failed(feedback);
-        }
-
+        }*/
+        return null;
     }
 
     @GetMapping("/getbaseinfobyid")

@@ -61,7 +61,7 @@ public class TenderServiceImpl implements TenderService {
 
     @Override
     public Tender save(TenderVO tenderVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         Tender tender = new Tender();
         tenderVO.setCreateTime(new Date());
@@ -72,8 +72,9 @@ public class TenderServiceImpl implements TenderService {
         BeanUtils.copyProperties(tenderVO, tender);
         Tender tenderRt = tenderRepository.save(tender);
         if (tenderVO.getTenderId() != null) {
-            Tender tenderItem = tenderRepository.findOne(tenderVO.getTenderId());
-            tenderVO.setCreateTime(tenderItem.getCreateTime());
+            // Tender tenderItem = tenderRepository.findOne(tenderVO.getTenderId());
+            Tender tenderItem = null;
+                    tenderVO.setCreateTime(tenderItem.getCreateTime());
             // 如果存在记录 就把该记录下的所有文档全部删除
             tenderImgRepository.deleteByTender(tenderRt);
         }
@@ -118,12 +119,13 @@ public class TenderServiceImpl implements TenderService {
                 "提交了ID:"+ tenderRt.getTenderId() +"的招标项目备案"));
         // 创建webSocket消息
         WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "招标项目备案", "消息待查收");
-        return tenderRt;
+        return tenderRt;*/
+      return  null;
     }
 
     @Override
     public Page<TenderVO> findByState(Pageable pageable, byte state) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null) {
             log.error("【招标备案】 获取年度招标备案列表错误， 账号无对应的水库项目");
@@ -145,12 +147,13 @@ public class TenderServiceImpl implements TenderService {
         List<Tender> tenders = tenderPage.getContent();
         List<TenderVO> tenderVOs = tenders.stream().map(e -> Tender2VO.convert(e)).collect(Collectors.toList());
         Page<TenderVO> tenderVOpage = new PageImpl<TenderVO>(tenderVOs, pageable, tenderPage.getTotalElements());
-        return tenderVOpage;
+        return tenderVOpage;*/
+      return null;
     }
 
     @Override
     public TenderVO getById(String id) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         //获取该用户所有年度投融资计划
         List<Tender> tenders = tenderRepository.findAllByBaseInfo(thisProject);
@@ -160,13 +163,15 @@ public class TenderServiceImpl implements TenderService {
             log.error("【招标管理】 不能查询不属于自己的招标项目");
             throw new SysException(SysEnum.TENDER_QUERY_OTHERS_ERROR);
         }
-        Tender tender = tenderRepository.findOne(id); //下面转化为VO
+        //Tender tender = tenderRepository.findOne(id); //下面转化为VO
+        Tender tender = null;
         TenderVO tenderVO = new TenderVO();
         BeanUtils.copyProperties(tender, tenderVO);
         List<TenderImg> tenderImgs = tender.getTenderImgs();
         List<TenderImgVO> tenderImgVOs = tenderImgs.stream().map(e -> TenderImg2VO.convert(e)).collect(Collectors.toList());
         tenderVO.setTenderImgVOs(tenderImgVOs);
-        return tenderVO;
+        return tenderVO;*/
+      return null;
     }
 
     @Override

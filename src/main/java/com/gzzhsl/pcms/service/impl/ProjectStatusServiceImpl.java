@@ -45,7 +45,7 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
 
     @Override
     public ResultVO updateProjectStatus(int id) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+     /*   UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null) {
             log.error("【项目状态】 项目状态错误，请优先配置项目概况！");
@@ -65,12 +65,13 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
         projectStatus.setCreateTime(new Date());
         projectStatus.setTimeLineItem(timeLineItem);
         projectStatusRepository.save(projectStatus);
-        return ResultUtil.success(timeLineItem);
+        return ResultUtil.success(timeLineItem);*/
+     return null;
     }
 
     @Override
     public List<ProjectStatus> getProjectStatus() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || !thisProject.getState().equals((byte) 1)) {
             log.error("【项目状态】 项目状态错误，请优先配置项目概况，并等待审批通过！");
@@ -86,7 +87,8 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
         Sort sort = new Sort(Sort.Direction.ASC, "createTime");
 
         return projectStatuses = projectStatusRepository.findAll(querySpecification, sort);
-
+*/
+      return null;
     }
 
 

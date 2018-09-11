@@ -10,7 +10,6 @@ import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.ResultVO;
 import com.gzzhsl.pcms.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;

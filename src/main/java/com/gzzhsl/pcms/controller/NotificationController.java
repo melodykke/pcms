@@ -47,7 +47,7 @@ public class NotificationController {
     @GetMapping("/getoverallnotification")
     @ResponseBody
     public ResultVO getOverallNotification() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisUser == null || thisUser.getUserId() == null || thisUser.getUserId() == "") {
             log.error("【通知错误】未读取到用户信息");
@@ -62,7 +62,7 @@ public class NotificationController {
         List<Notification> projectBasicInfoNotifications = new ArrayList<>(); // 项目基础信息的提醒
         List<Notification> projectPreProgressNotifications = new ArrayList<>(); // 项目基础信息的提醒
         List<Notification> contractsNotifications = new ArrayList<>(); // 合同备案的提醒
-        /*如果有其他，继续往这儿加*/
+        *//*如果有其他，继续往这儿加*//*
         for (Notification notification : notifications) {
             if ("月报".equals(notification.getType())) {
                 monthlyReportNotifications.add(notification);
@@ -72,7 +72,7 @@ public class NotificationController {
                 projectPreProgressNotifications.add(notification);
             } else if ("合同备案信息".equals(notification.getType())) {
                 contractsNotifications.add(notification);
-            }/*如果有其他，继续往这儿加*/
+            }*//*如果有其他，继续往这儿加*//*
         }
 
         OverallNotificationVO overallNotificationVO = new OverallNotificationVO();
@@ -89,9 +89,10 @@ public class NotificationController {
         }
         if (contractsNotifications.size() > 0) {
             article.put("合同备案信息新消息", TimeUtil.getDatePoor(new Date(), contractsNotifications.get(0).getCreateTime()));
-        }/*如果有其他，继续往这儿加*/
+        }*//*如果有其他，继续往这儿加*//*
         overallNotificationVO.setArticle(article);
-        return ResultUtil.success(overallNotificationVO);
+        return ResultUtil.success(overallNotificationVO);*/
+        return null;
     }
 
     @GetMapping("/changetochecked")
@@ -109,7 +110,7 @@ public class NotificationController {
                                        @RequestParam(required = false, name = "startIndex") Integer startIndex,
                                        @RequestParam(required = false, name = "pageIndex", defaultValue = "0") Integer pageIndex,
                                        @RequestParam(required = false, name = "type", defaultValue = "") String type){
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null || thisProject.getBaseInfoId() == "") {
             log.error("【通知错误】未读取到该账户下的水库信息");
@@ -120,6 +121,7 @@ public class NotificationController {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         Page<Notification> notifications = notificationService.findAllByType(pageRequest, thisProject.getBaseInfoId(), type);
-        return notifications;
+        return notifications;*/
+      return null;
     }
 }

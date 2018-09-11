@@ -45,7 +45,7 @@ public class FeedbackController {
     @GetMapping("/getoverallfeedback")
     @ResponseBody
     public ResultVO getOverallFeedback() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+     /*   UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisUser == null || thisUser.getUserId() == null || thisUser.getUserId() == "") {
             log.error("【消息错误】未读取到用户信息");
@@ -60,7 +60,7 @@ public class FeedbackController {
         List<Feedback> projectBasicInfoFeedbacks = new ArrayList<>(); // 项目基础信息的消息
         List<Feedback> projectPreProgressFeedbacks = new ArrayList<>(); // 项目基础信息的消息
         List<Feedback> contractFeedbacks = new ArrayList<>(); // 项目基础信息的消息
-        /*如果有其他，继续往这儿加*/
+        *//*如果有其他，继续往这儿加*//*
         for (Feedback feedback : feedbacks) {
             if ("月报".equals(feedback.getType())) {
                 monthlyReportFeedbacks.add(feedback);
@@ -70,7 +70,7 @@ public class FeedbackController {
                 projectPreProgressFeedbacks.add(feedback);
             } else if ("合同备案信息".equals(feedback.getType())) {
                 contractFeedbacks.add(feedback);
-            }/*如果有其他，继续往这儿加*/
+            }*//*如果有其他，继续往这儿加*//*
         }
         OverallFeedbackVO overallFeedbackVO = new OverallFeedbackVO();
         Map<String, String> article = new HashMap<>();
@@ -86,9 +86,10 @@ public class FeedbackController {
         }
         if (contractFeedbacks.size() > 0) {
             article.put("合同备案信息", TimeUtil.getDatePoor(new Date(), contractFeedbacks.get(0).getCreateTime()));
-        }/*如果有其他，继续往这儿加*/
+        }*//*如果有其他，继续往这儿加*//*
         overallFeedbackVO.setArticle(article);
-        return ResultUtil.success(overallFeedbackVO);
+        return ResultUtil.success(overallFeedbackVO);*/
+        return null;
     }
 
     @GetMapping("/changetochecked")
@@ -103,10 +104,10 @@ public class FeedbackController {
     @GetMapping("/queryfeedback")
     @ResponseBody
     public Page<Feedback> queryFeedback(@RequestParam(required = false, name = "pageSize", defaultValue = "15") Integer pageSize,
-                                       @RequestParam(required = false, name = "startIndex") Integer startIndex,
+                                     @RequestParam(required = false, name = "startIndex") Integer startIndex,
                                        @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageIndex,
                                        @RequestParam(required = false, name = "type", defaultValue = "") String type){
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*    UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         if (thisProject == null || thisProject.getBaseInfoId() == null || thisProject.getBaseInfoId() == "") {
             log.error("【通知错误】未读取到该账户下的水库信息");
@@ -117,6 +118,8 @@ public class FeedbackController {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         Page<Feedback> feedbacks = feedbackService.findAllByType(pageRequest, thisProject.getBaseInfoId(), type);
-        return feedbacks;
+        return feedbacks;*/
+       return null;
     }
+
 }

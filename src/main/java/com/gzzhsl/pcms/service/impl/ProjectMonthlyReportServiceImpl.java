@@ -63,7 +63,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
     @Override
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         // 如果用户对应的Project不存在，则报错
         if (thisProject == null) {
@@ -164,7 +164,9 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             // 创建webSocket消息
             WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "月报", "新的月报消息");
             return projectMonthlyReportRtWithImg;
-        }
+
+        }*/
+         return null;
     }
 
     @Override
@@ -253,7 +255,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
     @Override
     public HistoryMonthlyReportExcelStatistics saveHistoryStatistic(HistoryMonthlyReportStatisticVO historyMonthlyReportStatisticVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = thisProject.getHistoryMonthlyReportExcelStatistics();
         if (historyMonthlyReportExcelStatistics != null) { // 之前就报过历史数据或未审批或审批未通过
@@ -290,20 +292,22 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                         getHId()));
         // 创建webSocket消息
         WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "月报", "历史数据消息");
-        return historyMonthlyReportExcelStatisticsRepository.save(historyMonthlyReportExcelStatistics);
+        return historyMonthlyReportExcelStatisticsRepository.save(historyMonthlyReportExcelStatistics);*/
+       return null;
     }
 
     @Override
     public HistoryMonthlyReportExcelStatistics getHistoryStatistic() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = historyMonthlyReportExcelStatisticsRepository.findByBaseInfo(thisProject);
-        return historyMonthlyReportExcelStatistics;
+        return historyMonthlyReportExcelStatistics;*/
+       return null;
     }
 
     @Override
     public Feedback approveHistoryMonthlyStatistic(Boolean switchState, String checkinfo, HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        /*UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         Feedback feedbackRt = null;
         if (switchState == false) {
@@ -323,7 +327,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         }
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "月报历史数据", "新的审批消息");
-        return feedbackRt;
+        return feedbackRt;*/
+        return  null;
     }
 
     // 获取所有审批通过的月报

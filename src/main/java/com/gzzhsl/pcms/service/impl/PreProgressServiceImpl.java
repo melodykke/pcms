@@ -51,7 +51,7 @@ public class PreProgressServiceImpl implements PreProgressService {
     private WebSocket webSocket;
     @Override
     public PreProgress save(List<PreProgressEntry> preProgressEntries, String rtFileTempPath) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        /*UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         PreProgress preProgress =  preProgressRepository.findByBaseInfo(thisProject);
         if (preProgress != null && preProgress.getPreProgressId() != null && !preProgress.getState().equals((byte) 1)) {
@@ -118,7 +118,8 @@ public class PreProgressServiceImpl implements PreProgressService {
                 "提交了ID:"+ preProgressRtRt.getPreProgressId() +"的水库项目前期信息"));
         // 创建webSocket消息
         WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "项目前期信息", "新的项目前期消息待查收");
-        return preProgressRtRt;
+        return preProgressRtRt;*/
+        return null;
     }
 
     @Override

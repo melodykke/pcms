@@ -113,7 +113,7 @@ public class AccountController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO addSubAccount(@Valid @RequestBody AccountVO accountVO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+     /*   if (bindingResult.hasErrors()) {
             log.error("【账户错误】参数验证错误， 参数不正确 accountVO = {}， 错误：{}", accountVO, bindingResult.getFieldError().getDefaultMessage());
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
@@ -134,13 +134,14 @@ public class AccountController {
             return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), accountVO.getUsername());
         } else {
             return ResultUtil.failed();
-        }
+        }*/
+     return null;
     }
 
     @GetMapping("/getsubaccountinfo")
     @ResponseBody
     public ResultVO getSubAccountInfo() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
         if (children == null || children.size() == 0) {
             return ResultUtil.failed("没有对应的子账号");
@@ -153,13 +154,14 @@ public class AccountController {
         } else {
             log.error("【账户错误】 获取子账号出错");
             throw new SysException(SysEnum.Sys_INNER_ERROR);
-        }
+        }*/
+      return null;
     }
 
     @PostMapping("/activate")
     @ResponseBody
     public ResultVO activate() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+     /*   UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         List<UserInfo> children = userService.findByUserId(thisUser.getUserId()).getChildren();
         if (children == null) {
             return ResultUtil.failed();
@@ -175,7 +177,8 @@ public class AccountController {
         } else {
             log.error("【账户错误】 获取子账号出错，系统错误");
             throw new SysException(SysEnum.Sys_INNER_ERROR);
-        }
+        }*/
+     return null;
     }
 
 

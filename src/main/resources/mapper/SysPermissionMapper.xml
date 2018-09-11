@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.SysPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.SysPermission">
+    <id column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+    <result column="available" jdbcType="BIT" property="available" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="parent_ids" jdbcType="VARCHAR" property="parentIds" />
+    <result column="permission" jdbcType="VARCHAR" property="permission" />
+    <result column="resource_type" jdbcType="CHAR" property="resourceType" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_permission
+    where permission_id = #{permissionId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.SysPermission">
+    insert into sys_permission (permission_id, available, `name`, 
+      parent_id, parent_ids, permission, 
+      resource_type, url)
+    values (#{permissionId,jdbcType=VARCHAR}, #{available,jdbcType=BIT}, #{name,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=INTEGER}, #{parentIds,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, 
+      #{resourceType,jdbcType=CHAR}, #{url,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.SysPermission">
+    update sys_permission
+    set available = #{available,jdbcType=BIT},
+      `name` = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      parent_ids = #{parentIds,jdbcType=VARCHAR},
+      permission = #{permission,jdbcType=VARCHAR},
+      resource_type = #{resourceType,jdbcType=CHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where permission_id = #{permissionId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select permission_id, available, `name`, parent_id, parent_ids, permission, resource_type, 
+    url
+    from sys_permission
+    where permission_id = #{permissionId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select permission_id, available, `name`, parent_id, parent_ids, permission, resource_type, 
+    url
+    from sys_permission
+  </select>
+</mapper>

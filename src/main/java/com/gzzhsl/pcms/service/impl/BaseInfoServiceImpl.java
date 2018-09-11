@@ -86,7 +86,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
     @Override
     public BaseInfo save(BaseInfoVO baseInfoVO) {
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+      /*  UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         String origId = null;
@@ -196,8 +196,8 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        stringRedisTemplate.opsForValue().set("allBaseInfo", jsonString);
-        return baseInfoRt;
+        stringRedisTemplate.opsForValue().set("allBaseInfo", jsonString);*/
+        return null;
     }
 
     @Override

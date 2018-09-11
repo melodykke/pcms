@@ -8,7 +8,6 @@ import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.BaseInfoManagerIndexVO;
 import com.gzzhsl.pcms.vo.ResultVO;
-import com.sun.xml.internal.rngom.parse.host.Base;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

@@ -44,7 +44,7 @@ function requestNotice(requestData) {
             }
         },
         error: function (err) {
-            debugger;
+            console.log(err);
         }
     })
 }
