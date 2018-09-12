@@ -2,16 +2,13 @@ package com.gzzhsl.pcms.controller;
 
 
 import com.gzzhsl.pcms.converter.PersonInfo2VO;
-import com.gzzhsl.pcms.entity.BaseInfo;
-import com.gzzhsl.pcms.entity.PersonInfo;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.PersonInfo;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.service.PersonService;
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.SysRole;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
-import com.gzzhsl.pcms.vo.AccountInfoVO;
 import com.gzzhsl.pcms.vo.PersonInfoVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import com.gzzhsl.pcms.vo.UserInfoVO;
@@ -37,9 +34,9 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private PersonService personService;
-    @Autowired
     private UserService userService;
+    @Autowired
+    private PersonService personService;
 
     @GetMapping("/personinfo")
     public String personInfo() {
@@ -51,11 +48,11 @@ public class UserController {
     @RequiresUser
     @ResponseBody
     public ResultVO getSubject(){
-       /* UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(thisUser, userInfoVO);
-        PersonInfo thisPerson = thisUser.getPersonInfo();
+        PersonInfo thisPerson = userService.findPersonInfoByUserId(thisUser.getUserId());
         if (thisPerson != null) {
             if (thisPerson.getProfileImg() != null || "".equals(thisPerson.getProfileImg())) {
                 userInfoVO.setProfileImg(thisPerson.getProfileImg());
@@ -64,8 +61,7 @@ public class UserController {
                 userInfoVO.setNickname(thisPerson.getNickName());
             }
         }
-        return ResultUtil.success(userInfoVO);*/
-       return null;
+        return ResultUtil.success(userInfoVO);
     }
 
     @GetMapping("/getthisproject")
@@ -122,7 +118,7 @@ public class UserController {
     @ResponseBody
     public ResultVO doesThisUserHasPersonInfo(){
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        PersonInfo personInfo = personService.getByUserInfo(thisUser);
+        PersonInfo personInfo = userService.findPersonInfoByUserId(thisUser.getUserId());
         if (personInfo == null) {
             return ResultUtil.failed(SysEnum.BOOLEAN_RESULT_FAIL);
         } else {
@@ -134,7 +130,7 @@ public class UserController {
     @ResponseBody
     public ResultVO hasPersonInfo(){
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        PersonInfo personInfo = personService.getByUserInfo(thisUser);
+        PersonInfo personInfo = userService.findPersonInfoByUserId(thisUser.getUserId());
         if (personInfo == null) {
             return ResultUtil.failed();
         } else {
@@ -145,7 +141,7 @@ public class UserController {
     @PostMapping("/personinfosubmit")
     @ResponseBody
     public ResultVO personInfoSubmit(@RequestBody @Valid PersonInfoVO personInfoVO, BindingResult bindingResult){
-     /*   if (personInfoVO == null) {
+        if (personInfoVO == null) {
             log.error("【个人信息】 个人信息错误，没有收到有效的personInfoVO , " +
                     "实际personInfoVO = {}", personInfoVO);
             throw new SysException(SysEnum.PERSON_INFO_ERROR);
@@ -156,14 +152,13 @@ public class UserController {
         }
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
-
-        PersonInfo thisPerson = thisUser.getPersonInfo();
+        PersonInfo thisPerson = userService.findPersonInfoByUserId(thisUser.getUserId());
         if (thisPerson != null) {
             thisPerson.setName(personInfoVO.getName());
             thisPerson.setTel(personInfoVO.getTel());
             thisPerson.setQq(personInfoVO.getQq());
             thisPerson.setEmail(personInfoVO.getEmail());
-            thisPerson.setId_num(personInfoVO.getId_num());
+            thisPerson.setIdNum(personInfoVO.getIdNum());
             thisPerson.setTitle(personInfoVO.getTitle());
             thisPerson.setAddress(personInfoVO.getAddress());
         } else {
@@ -171,15 +166,14 @@ public class UserController {
             BeanUtils.copyProperties(personInfoVO, thisPerson);
             thisPerson.setCreateTime(new Date());
         }
-        thisPerson.setUserInfo(thisUser);
+        thisPerson.setUserId(thisUser.getUserId());
         thisPerson.setUpdateTime(new Date());
-        PersonInfo personInfoRt = personService.save(thisPerson);
-        if (personInfoRt == null || personInfoRt.getPersonId() == null) {
+        Integer resultInt = personService.save(thisPerson);
+        if (resultInt != 1) {
             log.error("【个人信息】 个人信息持久化错误， 参数不正确");
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED);
         }
-        return ResultUtil.success();*/
-     return null;
+        return ResultUtil.success();
     }
 
 }

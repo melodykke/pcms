@@ -35,6 +35,22 @@ spring:
           connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
           useGlobalDataSourceStat: true
           logSlowSql: true
+    redis:
+          database: 0
+          host: 192.168.100.239
+          port: 6379
+          password: ENC(W9MuakWcot4fG2lEiNaHPRGY/3WRFRMP)
+          jedis:
+            pool:
+              #最大连接数
+              max-active: 8
+              #最大阻塞等待时间(负数表示没限制)
+              max-wait: -1
+              #最大空闲
+              max-idle: 8
+              #最小空闲
+              min-idle: 0
+          timeout: 10000
 #开启驼峰命名转换:Table{create_time} -> Entity{createTime}
 #使用列标签替换列别名 默认:true
 #使用jdbc的getGeneratedKeys获取数据库自增主键值
@@ -47,17 +63,14 @@ mybatis:
     use-column-label: true
     use-generated-keys: true
     aggressive-lazy-loading: false
-
-#pagehelper
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+logging:
+  config: classpath:log/logback-spring.xml
 pagehelper:
     helperDialect: mysql
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
     returnPageInfo: check
-jasypt:
-  encryptor:
-    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
-logging:
-  config: classpath:log/logback-spring.xml
-

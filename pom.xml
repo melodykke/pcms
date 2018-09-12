@@ -154,6 +154,13 @@
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>1.14</version>
         </dependency>
+        <!-- 分页插件 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>

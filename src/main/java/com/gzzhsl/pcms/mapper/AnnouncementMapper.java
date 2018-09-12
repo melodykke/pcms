@@ -13,4 +13,6 @@ public interface AnnouncementMapper {
     List<Announcement> selectAll();
 
     int updateByPrimaryKey(Announcement record);
+
+    List<Announcement> findHotLatests();
 }

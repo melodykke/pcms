@@ -43,4 +43,11 @@
     select announcement_id, create_time, hot, keyword, title, `type`, update_time, content
     from announcement
   </select>
+
+  <select id="findHotLatests" resultMap="BaseResultMap">
+    SELECT announcement_id, create_time, hot, keyword, title, `type`, update_time, content
+    FROM announcement
+    WHERE hot = 1
+    ORDER BY update_time DESC
+  </select>
 </mapper>

@@ -12,8 +12,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import javax.validation.Valid;
-
 @Configuration
 @PropertySource("classpath:redis-config/redis.properties")
 public class RedisConfig {
@@ -48,16 +46,15 @@ public class RedisConfig {
     private boolean testWhileIdle;
 
 
-  */
-/*  @Value("${spring.redis.cluster.nodes}")
+  @Value("${spring.redis.cluster.nodes}")
     private String clusterNodes;
 
     @Value("${spring.redis.cluster.max-redirects}")
     private Integer mmaxRedirectsac;
-*//*
+
 
     */
-/**
+/*
      * JedisPoolConfig 连接池
      *
      * @return
@@ -86,9 +83,8 @@ public class RedisConfig {
     }
 
     */
-/**
+/*
      * 单机版配置
-     *
      * @param @param  jedisPoolConfig
      * @param @return
      * @return JedisConnectionFactory
@@ -115,9 +111,8 @@ public class RedisConfig {
     }
 
     */
-/**
+/*
      * 实例化 RedisTemplate 对象
-     *
      * @return
      *//*
 
@@ -129,7 +124,7 @@ public class RedisConfig {
     }
 
     */
-/**
+/*
      * 设置数据存入 redis 的序列化方式,并开启事务
      *
      * @param redisTemplate
@@ -148,7 +143,7 @@ public class RedisConfig {
     }
 
     */
-/**
+/*
      * 注入封装RedisTemplate
      *
      * @return RedisUtil
@@ -164,4 +159,5 @@ public class RedisConfig {
         redisUtil.setRedisTemplate(redisTemplate);
         return redisUtil;
     }
-}*/
+}
+*/

@@ -1,6 +1,7 @@
 package com.gzzhsl.pcms.service;
 
 import com.gzzhsl.pcms.entity.BaseInfo;
+import com.gzzhsl.pcms.model.PersonInfo;
 import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.vo.UserInfoVO;
 import org.springframework.data.domain.Page;
@@ -55,4 +56,11 @@ public interface UserService {
      * @return
      */
     UserInfo findOneWithRolesAndPrivilegesByUsernameOrId(String username, String userId);
+
+    /**
+     * 通过用户ID查找用户个人信息
+     * @param userId
+     * @return
+     */
+    PersonInfo findPersonInfoByUserId(String userId);
 }

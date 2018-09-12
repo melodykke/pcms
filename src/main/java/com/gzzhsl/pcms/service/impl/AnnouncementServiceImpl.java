@@ -1,16 +1,17 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzzhsl.pcms.converter.announcementVO2;
-import com.gzzhsl.pcms.entity.Announcement;
+import com.gzzhsl.pcms.mapper.AnnouncementMapper;
+import com.gzzhsl.pcms.model.Announcement;
 import com.gzzhsl.pcms.repository.AnnouncementRepository;
 import com.gzzhsl.pcms.service.AnnouncementService;
 import com.gzzhsl.pcms.vo.AnnouncementVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +29,32 @@ import java.util.List;
 public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Autowired
+    private AnnouncementMapper announcementMapper;
+
+    @Autowired
     private AnnouncementRepository announcementRepository;
+
+
+    @Override
+    public PageInfo<Announcement> findAnnouncementByPage(int pageNum, int pageSize) {
+        //设置分页信息，分别是当前页数和每页显示的总记录数【记住：必须在mapper接口中的方法执行之前设置该分页信息】
+        PageHelper.startPage(pageNum, pageSize);
+        List<Announcement> announcements = announcementMapper.selectAll();        //全部商品
+        PageInfo result = new PageInfo(announcements);
+        return result;
+    }
+    @Override
+    public PageInfo<Announcement> getHotLatests(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Announcement> announcements = announcementMapper.findHotLatests();
+        PageInfo result = new PageInfo(announcements);
+        return result;
+    }
+
+
+
+
+
 
 
     @Override
@@ -38,13 +63,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public Announcement save(AnnouncementVO announcementVO) {
+    public Integer save(AnnouncementVO announcementVO) {
         Announcement announcement = announcementVO2.convert(announcementVO);
         if (announcement.getAnnouncementId() == null || "".equals(announcement.getAnnouncementId())) { // 新增
             announcement.setCreateTime(new Date());
         }
         announcement.setUpdateTime(new Date());
-        return announcementRepository.save(announcement);
+        return announcementMapper.insert(announcement);
     }
 
     @Override
@@ -54,34 +79,20 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public List<Announcement> getAll() {
-        return announcementRepository.findAll();
+        return announcementMapper.selectAll();
     }
 
     @Override
     public Page<Announcement> getNormalLatests(Pageable pageable) {
         Page<Announcement> announcements = null;
-        announcements = announcementRepository.findAll(pageable);
-        return announcements;
-    }
-
-
-    @Override
-    public Page<Announcement> getHotLatests(Pageable pageable) {
-        Page<Announcement> announcements = null;
-        Specification querySpecification = new Specification() {
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                return cb.equal(root.get("hot").as(Boolean.class), (byte) 1);
-            }
-        };
-        announcements = announcementRepository.findAll(querySpecification, pageable);
+        //announcements = announcementMapper.s(pageable);
         return announcements;
     }
 
     @Override
     public Page<Announcement> findAll(Pageable pageable) {
-        Page<Announcement> announcements = announcementRepository.findAll(pageable);
-        return announcements;
+        //Page<Announcement> announcements = announcementRepository.findAll(pageable);
+        return null;
     }
 
     @Override

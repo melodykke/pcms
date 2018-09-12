@@ -1,6 +1,6 @@
 package com.gzzhsl.pcms.converter;
 
-import com.gzzhsl.pcms.entity.Announcement;
+import com.gzzhsl.pcms.model.Announcement;
 import com.gzzhsl.pcms.vo.AnnouncementVO;
 import org.springframework.beans.BeanUtils;
 

@@ -1,7 +1,8 @@
 package com.gzzhsl.pcms.vo;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class PersonInfoVO {
@@ -18,7 +19,7 @@ public class PersonInfoVO {
     @NotBlank(message = "邮件地址不能为空")
     private String email;
     @NotBlank(message = "身份证号不能为空")
-    private String id_num;
+    private String idNum;
     @NotBlank(message = "职位不能为空")
     private String title;
     @NotBlank(message = "通讯地址不能为空")

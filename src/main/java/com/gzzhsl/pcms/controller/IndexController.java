@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.converter.BaseInfo2ManagerIndexVO;
@@ -43,11 +44,17 @@ public class IndexController {
     public ResultVO getAllBaseInfo() {
 
         List<BaseInfoManagerIndexVO> baseInfoManagerIndexVOs = null;
+        ObjectMapper objectMapper = new ObjectMapper();
         if (!stringRedisTemplate.hasKey(RedisKeyEnum.ALLBASEINFO.getKey())) {
             List<BaseInfo> baseInfos = baseInfoService.getAllProject();
             baseInfoManagerIndexVOs = baseInfos.stream().map(e -> BaseInfo2ManagerIndexVO.convert(e)).collect(Collectors.toList());
+            try {
+                String jsonString = objectMapper.writeValueAsString(baseInfoManagerIndexVOs);
+                stringRedisTemplate.opsForValue().set(RedisKeyEnum.ALLBASEINFO.getKey(), jsonString);
+            } catch (JsonProcessingException e) {
+                log.error("【json转换】 allBaseInfo 实体转json字符串出错 e:{}", e);
+            }
         } else {
-            ObjectMapper objectMapper = new ObjectMapper();
             JavaType javaType = objectMapper.getTypeFactory().constructParametricType(ArrayList.class, BaseInfoManagerIndexVO.class);
             String jsonString = stringRedisTemplate.opsForValue().get(RedisKeyEnum.ALLBASEINFO.getKey());
             try {

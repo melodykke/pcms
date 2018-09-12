@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.PersonInfoMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.PersonInfo">
+    <id column="person_id" jdbcType="VARCHAR" property="personId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="enable_status" jdbcType="INTEGER" property="enableStatus" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="id_num" jdbcType="VARCHAR" property="idNum" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="profile_img" jdbcType="VARCHAR" property="profileImg" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="wechat_auth_id" jdbcType="VARCHAR" property="wechatAuthId" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from person_info
+    where person_id = #{personId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.PersonInfo">
+    insert into person_info (person_id, address, create_time, 
+      email, enable_status, gender, 
+      id_num, `name`, nick_name, 
+      profile_img, qq, tel, 
+      title, update_time, user_id, 
+      wechat_auth_id, city, country, 
+      province)
+    values (#{personId,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{email,jdbcType=VARCHAR}, #{enableStatus,jdbcType=INTEGER}, #{gender,jdbcType=VARCHAR}, 
+      #{idNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
+      #{profileImg,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}, 
+      #{wechatAuthId,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.PersonInfo">
+    update person_info
+    set address = #{address,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      email = #{email,jdbcType=VARCHAR},
+      enable_status = #{enableStatus,jdbcType=INTEGER},
+      gender = #{gender,jdbcType=VARCHAR},
+      id_num = #{idNum,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      profile_img = #{profileImg,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=VARCHAR},
+      wechat_auth_id = #{wechatAuthId,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR}
+    where person_id = #{personId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select person_id, address, create_time, email, enable_status, gender, id_num, `name`, 
+    nick_name, profile_img, qq, tel, title, update_time, user_id, wechat_auth_id, city, 
+    country, province
+    from person_info
+    where person_id = #{personId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select person_id, address, create_time, email, enable_status, gender, id_num, `name`, 
+    nick_name, profile_img, qq, tel, title, update_time, user_id, wechat_auth_id, city, 
+    country, province
+    from person_info
+  </select>
+  
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    SELECT person_id, address, create_time, email, enable_status, gender, id_num, `name`,
+    nick_name, profile_img, qq, tel, title, update_time, user_id, wechat_auth_id, city,
+    country, province
+    FROM person_info
+    WHERE user_id = #{userId}
+  </select>
+</mapper>
