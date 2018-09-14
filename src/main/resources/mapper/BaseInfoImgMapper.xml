@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.BaseInfoImgMapper">
+    <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.BaseInfoImg">
+        <id column="base_info_img_id" jdbcType="VARCHAR" property="baseInfoImgId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="img_addr" jdbcType="VARCHAR" property="imgAddr"/>
+        <result column="img_desc" jdbcType="VARCHAR" property="imgDesc"/>
+        <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_info_img
+    where base_info_img_id = #{baseInfoImgId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.gzzhsl.pcms.model.BaseInfoImg">
+    insert into base_info_img (base_info_img_id, create_time, img_addr, 
+      img_desc, base_info_id)
+    values (#{baseInfoImgId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{imgAddr,jdbcType=VARCHAR}, 
+      #{imgDesc,jdbcType=VARCHAR}, #{baseInfoId,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.BaseInfoImg">
+    update base_info_img
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      img_addr = #{imgAddr,jdbcType=VARCHAR},
+      img_desc = #{imgDesc,jdbcType=VARCHAR},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR}
+    where base_info_img_id = #{baseInfoImgId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select base_info_img_id, create_time, img_addr, img_desc, base_info_id
+    from base_info_img
+    where base_info_img_id = #{baseInfoImgId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select base_info_img_id, create_time, img_addr, img_desc, base_info_id
+    from base_info_img
+  </select>
+
+    <delete id="batchDeleteByBaseInfoId">
+      delete from base_info_img
+    where base_info_id = #{baseInfoId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="batchInsertBaseInfoImgs">
+      insert into base_info_img (base_info_img_id, create_time, img_addr, img_desc, base_info_id)
+      values
+        <foreach collection="list" item="baseInfoImg" open="(" close=")" separator="," index="index">
+            #{baseInfoImg.baseInfoImgId}, #{baseInfoImg.createTime}, #{baseInfoImg.imgAddr}, #{baseInfoImg.imgDesc},
+            #{baseInfoImg.baseInfoId}
+        </foreach>
+    </insert>
+    <select id="findBaseInfoImgsByBaseInfoId" resultMap="BaseResultMap">
+      SELECT base_info_img_id, create_time, img_addr, img_desc, base_info_id
+      FROM base_info_img
+      WHERE base_info_id = #{baseInfoId}
+    </select>
+</mapper>

@@ -1,10 +1,7 @@
 package com.gzzhsl.pcms.util;
 
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
-import org.apache.shiro.SecurityUtils;
+import com.gzzhsl.pcms.model.UserInfo;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

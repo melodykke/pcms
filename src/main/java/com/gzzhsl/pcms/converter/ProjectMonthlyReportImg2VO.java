@@ -1,6 +1,6 @@
 package com.gzzhsl.pcms.converter;
 
-import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
+import com.gzzhsl.pcms.model.ProjectMonthlyReportImg;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportImgVO;
 import org.springframework.beans.BeanUtils;
 

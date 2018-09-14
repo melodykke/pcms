@@ -1,10 +1,9 @@
 package com.gzzhsl.pcms.util;
 
-import com.gzzhsl.pcms.entity.HistoryMonthlyReportExcelStatistics;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
+import com.gzzhsl.pcms.model.HistoryMonthlyReportExcelStatistics;
+import com.gzzhsl.pcms.model.ProjectMonthlyReport;
 import com.gzzhsl.pcms.vo.MonthlyReportExcelModel;
 import org.springframework.beans.BeanUtils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,33 +27,27 @@ public class MonthlyReportExcelCalcUtil {
         BigDecimal yearWaterConservation = new BigDecimal(0);
         BigDecimal yearOtherCost = new BigDecimal(0);
         BigDecimal yearSourceCentralInvestment = new BigDecimal(0);
-        ;
         BigDecimal yearSourceProvincialInvestment = new BigDecimal(0);
-        ;
         BigDecimal yearSourceLocalInvestment = new BigDecimal(0);
-        ;
         BigDecimal yearAvailableCentralInvestment = new BigDecimal(0);
-        ;
         BigDecimal yearAvailableProvincialInvestment = new BigDecimal(0);
-        ;
         BigDecimal yearAvailableLocalInvestment = new BigDecimal(0);
-        ;
         BigDecimal yearOpenDug = new BigDecimal(0);
-        ; // 土石方明挖（万/m³） *
+         // 土石方明挖（万/m³） *
         BigDecimal yearBackfill = new BigDecimal(0);
-        ; // 土石方回填（万/m³） *
+         // 土石方回填（万/m³） *
         BigDecimal yearConcrete = new BigDecimal(0);
-        ; // 混泥土（万/m³） *
+         // 混泥土（万/m³） *
         BigDecimal yearGrout = new BigDecimal(0);
-        ; // 灌浆（m或m³） *
+         // 灌浆（m或m³） *
         BigDecimal yearHoleDug = new BigDecimal(0);
-        ; // 土石方洞挖 *
+         // 土石方洞挖 *
         BigDecimal yearMasonry = new BigDecimal(0);
-        ; // 砌石（万/m³） *
+         // 砌石（万/m³） *
         BigDecimal yearRebar = new BigDecimal(0);
-        ; // 钢筋（t） *
+         // 钢筋（t） *
         BigDecimal yearLabourForce = new BigDecimal(0);
-        ; // 劳动力投入（万工日） *
+         // 劳动力投入（万工日） *
         for (ProjectMonthlyReport eachReport : yearProjectMonthlyReports) {
             yearCivilEngineering = yearCivilEngineering.add(eachReport.getCivilEngineering());
             yearElectromechanicalEquipment = yearElectromechanicalEquipment.add(eachReport.getElectromechanicalEquipment());

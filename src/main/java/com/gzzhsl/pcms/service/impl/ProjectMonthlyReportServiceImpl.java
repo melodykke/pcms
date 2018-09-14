@@ -1,22 +1,24 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.gzzhsl.pcms.converter.MonthReport2MonthReportShowVO;
 import com.gzzhsl.pcms.converter.MonthlyReportVO2MonthlyReport;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReport2VO;
-import com.gzzhsl.pcms.entity.*;
+import com.gzzhsl.pcms.converter.ProjectMonthlyReportImg2VO;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.mapper.HistoryMonthlyReportExcelStatisticsMapper;
+import com.gzzhsl.pcms.mapper.ProjectMonthlyReportMapper;
+import com.gzzhsl.pcms.model.*;
 import com.gzzhsl.pcms.repository.HistoryMonthlyReportExcelStatisticsRepository;
 import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportImgRepository;
 import com.gzzhsl.pcms.repository.ProjectMonthlyReportRepository;
-import com.gzzhsl.pcms.service.FeedbackService;
-import com.gzzhsl.pcms.service.OperationLogService;
-import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
-import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.service.*;
 import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.HistoryMonthlyReportStatisticVO;
+import com.gzzhsl.pcms.vo.ProjectMonthlyReportImgVO;
+import com.gzzhsl.pcms.vo.ProjectMonthlyReportShowVO;
 import com.gzzhsl.pcms.vo.ProjectMonthlyReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +47,16 @@ import java.util.stream.Collectors;
 @Transactional
 @Slf4j
 public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportService{
+    @Autowired
+    private ProjectMonthlyReportMapper projectMonthlyReportMapper;
+    @Autowired
+    private HistoryMonthlyReportExcelStatisticsMapper historyMonthlyReportExcelStatisticsMapper;
+    @Autowired
+    private BaseInfoService baseInfoService;
+
+
+
+
 
     @Autowired
     private ProjectMonthlyReportRepository projectMonthlyReportRepository;
@@ -60,6 +72,23 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     private UserService userService;
     @Autowired
     private WebSocket webSocket;
+
+
+
+    @Override
+    public ProjectMonthlyReportShowVO buildShowVO(String projectMonthlyReportId) {
+        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportMapper.findWithImgById(projectMonthlyReportId);
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(projectMonthlyReport.getBaseInfoId());
+        if (thisProject == null) {
+            return null;
+        }
+        ProjectMonthlyReportShowVO projectMonthlyReportShowVO = MonthReport2MonthReportShowVO.convert(projectMonthlyReport, thisProject.getPlantName());
+        List<ProjectMonthlyReportImgVO> projectMonthlyReportImgVOList = projectMonthlyReport.getProjectMonthlyReportImgs().stream().map(e -> ProjectMonthlyReportImg2VO.convert(e)).collect(Collectors.toList());
+        projectMonthlyReportShowVO.setProjectMonthlyReportImgVOList(projectMonthlyReportImgVOList);
+        return projectMonthlyReportShowVO;
+    }
+
+
 
     @Override
     public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
@@ -171,52 +200,45 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
     @Override
     public ProjectMonthlyReport save(ProjectMonthlyReport projectMonthlyReport) {
-        return projectMonthlyReportRepository.save(projectMonthlyReport);
+     /*   return projectMonthlyReportRepository.save(projectMonthlyReport);*/
+     return null;
     }
 
     /**
      * 获取某时段内特定工程的月报
-     * @param projectId
+     * @param baseInfoId
      * @param startDate
      * @param endDate
      * @return
      */
     @Override
-    public List<ProjectMonthlyReport> getMonthlyReportsByProjectIdAndYear(String baseInfoId, String startDate, String endDate) {
-        List<ProjectMonthlyReport> projectMonthlyReports = null;
-        Specification<ProjectMonthlyReport> querySpecification = new Specification<ProjectMonthlyReport>() {
-            @Override
-            public Predicate toPredicate(Root<ProjectMonthlyReport> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<>();
-                predicates.add(cb.notEqual(root.get("state").as(Byte.class), (byte) -1));
-                if (StringUtils.isNotBlank(startDate)) {
-                    //大于等于传入开始时间
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("submitDate").as(String.class), startDate));
-                }
-                if (StringUtils.isNotBlank(endDate)) {
-                    //小于或等于传入时间
-                    predicates.add(cb.lessThanOrEqualTo(root.get("submitDate").as(String.class), endDate));
-                }
-                if (StringUtils.isNotBlank(baseInfoId)) {
-                    predicates.add(cb.equal(root.join("baseInfo").get("baseInfoId").as(String.class), baseInfoId));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-        Sort sort = new Sort(Sort.Direction.DESC,"submitDate");
-        projectMonthlyReports = projectMonthlyReportRepository.findAll(querySpecification, sort);
+    public List<ProjectMonthlyReport> findMonthlyReportsByProjectIdAndPeriod(String baseInfoId, String startDate, String endDate) {
+        if (baseInfoId == null || "".equals(baseInfoId) || startDate == null || "".equals(startDate) || endDate == null || "".equals(endDate)) {
+            return new ArrayList<ProjectMonthlyReport>();
+        }
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportMapper
+                .findMonthlyReportsByProjectIdAndPeriod(baseInfoId, startDate, endDate);
+
         return projectMonthlyReports;
     }
 
     @Override
-    @Transactional
-    public ProjectMonthlyReport getByProjectMonthlyReportId(String projectMonthlyReportId) {
-        return projectMonthlyReportRepository.findByProjectMonthlyReportId(projectMonthlyReportId);
+    public ProjectMonthlyReport findByProjectMonthlyReportId(String projectMonthlyReportId) {
+        return projectMonthlyReportMapper.selectByPrimaryKey(projectMonthlyReportId);
     }
 
     @Override
+    public HistoryMonthlyReportExcelStatistics findByBaseInfoId(String baseInfoId) {
+        if (baseInfoId == null || "".equals(baseInfoId)) {
+            return null;
+        }
+        return historyMonthlyReportExcelStatisticsMapper.findByBaseInfoId(baseInfoId) ;
+    }
+
+
+    @Override
     public List<ProjectMonthlyReport> findByProjectIdAndState(String projectId, byte state) {
-        List<ProjectMonthlyReport> projectMonthlyReports = null;
+      /*  List<ProjectMonthlyReport> projectMonthlyReports = null;
         Specification<ProjectMonthlyReport> querySpecification = new Specification<ProjectMonthlyReport>() {
             @Override
             public Predicate toPredicate(Root<ProjectMonthlyReport> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -227,12 +249,13 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
             }
         };
         Sort sort = new Sort(Sort.Direction.DESC, "submitDate");
-        return projectMonthlyReportRepository.findAll(querySpecification, sort);
+        return projectMonthlyReportRepository.findAll(querySpecification, sort);*/
+      return null;
     }
 
     @Override
     public Feedback approveMonthlyReport(UserInfo thisUser, Boolean switchState, String checkinfo, String projectMonthlyReportId, ProjectMonthlyReport projectMonthlyReportRt) {
-        Feedback feedbackRt = null;
+     /*   Feedback feedbackRt = null;
         if (switchState == false) {
             projectMonthlyReportRt.setState((byte) 1); // 审批通过
             ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
@@ -250,7 +273,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         }
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "月报", "新的审批消息");
-        return feedbackRt;
+        return feedbackRt;*/
+     return null;
     }
 
     @Override
@@ -334,7 +358,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     // 获取所有审批通过的月报
     @Override
     public List<ProjectMonthlyReportVO> getAllApprovedMonthlyReport() {
-        Specification querySpecification = new Specification() {
+       /* Specification querySpecification = new Specification() {
             @Override
             public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
                 return cb.equal(root.get("state"), (byte) 1);
@@ -342,7 +366,8 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         };
         List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportRepository.findAll(querySpecification);
         List<ProjectMonthlyReportVO> projectMonthlyReportVOs = projectMonthlyReports.stream().map(e -> ProjectMonthlyReport2VO.convert(e)).collect(Collectors.toList());
-        return projectMonthlyReportVOs;
+        return projectMonthlyReportVOs;*/
+       return null;
     }
 
 

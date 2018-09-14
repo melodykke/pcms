@@ -1,12 +1,13 @@
 package com.gzzhsl.pcms.util;
 
-import com.gzzhsl.pcms.entity.Feedback;
+import com.gzzhsl.pcms.model.Feedback;
 
 import java.util.Date;
 
 public class FeedbackUtil {
-    public static Feedback buildFeedback(String baseInfoId, String checker,String type, String targetReportId, Date time, String msg, byte state, String url) {
+    public static Feedback buildFeedback(String baseInfoId, String checker, String type, String targetReportId, Date time, String msg, byte state, String url) {
         Feedback feedback = new Feedback();
+        feedback.setFeedbackId(UUIDUtils.getUUIDString());
         feedback.setType(type);
         feedback.setTargetId(targetReportId);
         feedback.setCreateTime(time);

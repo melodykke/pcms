@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.AnnualInvestmentMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.AnnualInvestment">
+    <id column="annual_investment_id" jdbcType="VARCHAR" property="annualInvestmentId" />
+    <result column="apply_figure" jdbcType="DECIMAL" property="applyFigure" />
+    <result column="approved_figure" jdbcType="DECIMAL" property="approvedFigure" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="year" jdbcType="VARCHAR" property="year" />
+    <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+    <result column="submitter" jdbcType="VARCHAR" property="submitter" />
+  </resultMap>
+    <resultMap id="WithImgResultMap" type="com.gzzhsl.pcms.model.AnnualInvestment" extends="BaseResultMap">
+        <collection property="annualInvestmentImgs" columnPrefix="aii_" resultMap="com.gzzhsl.pcms.mapper.AnnualInvestmentImgMapper.BaseResultMap" />
+    </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from annual_investment
+    where annual_investment_id = #{annualInvestmentId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.AnnualInvestment">
+    insert into annual_investment (annual_investment_id, apply_figure, 
+      approved_figure, create_time, `state`, 
+      update_time, `year`, base_info_id, 
+      submitter)
+    values (#{annualInvestmentId,jdbcType=VARCHAR}, #{applyFigure,jdbcType=DECIMAL}, 
+      #{approvedFigure,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=TINYINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{year,jdbcType=VARCHAR}, #{baseInfoId,jdbcType=VARCHAR}, 
+      #{submitter,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.AnnualInvestment">
+    update annual_investment
+    set apply_figure = #{applyFigure,jdbcType=DECIMAL},
+      approved_figure = #{approvedFigure,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `state` = #{state,jdbcType=TINYINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      `year` = #{year,jdbcType=VARCHAR},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR},
+      submitter = #{submitter,jdbcType=VARCHAR}
+    where annual_investment_id = #{annualInvestmentId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select annual_investment_id, apply_figure, approved_figure, create_time, `state`, 
+    update_time, `year`, base_info_id, submitter
+    from annual_investment
+    where annual_investment_id = #{annualInvestmentId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select annual_investment_id, apply_figure, approved_figure, create_time, `state`, 
+    update_time, `year`, base_info_id, submitter
+    from annual_investment
+  </select>
+  
+  <select id="findByBaseInfoIdAndYear" resultMap="WithImgResultMap">
+      SELECT ai.annual_investment_id, ai.apply_figure, ai.approved_figure, ai.create_time, ai.`state`,
+      ai.update_time, ai.`year`, ai.base_info_id, ai.submitter,
+      aii.annual_investment_img_id aii_annual_investment_img_id,
+      aii.create_time aii_create_time,
+      aii.img_addr aii_img_addr,
+      aii.img_desc aii_img_desc,
+      aii.annual_investment_id aii_annual_investment_id
+      FROM annual_investment ai
+      LEFT JOIN annual_investment_img aii ON ai.annual_investment_id = aii.annual_investment_id
+      <where>
+          <if test="baseInfoId != null and baseInfoId !=''" >
+              AND base_info_id = #{baseInfoId}
+          </if>
+          <if test="year != null and year !=''" >
+              AND `year` = #{year}
+          </if>
+      </where>
+  </select>
+    <select id="findAllByBaseInfoId" resultMap="WithImgResultMap">
+        SELECT ai.annual_investment_id, ai.apply_figure, ai.approved_figure, ai.create_time, ai.`state`,
+        ai.update_time, ai.`year`, ai.base_info_id, ai.submitter,
+        aii.annual_investment_img_id aii_annual_investment_img_id,
+        aii.create_time aii_create_time,
+        aii.img_addr aii_img_addr,
+        aii.img_desc aii_img_desc,
+        aii.annual_investment_id aii_annual_investment_id
+        FROM annual_investment ai
+        LEFT JOIN annual_investment_img aii ON ai.annual_investment_id = aii.annual_investment_id
+        <where>
+            <if test="baseInfoId != null and baseInfoId !=''" >
+                AND base_info_id = #{baseInfoId}
+            </if>
+        </where>
+        ORDER BY update_time DESC
+    </select>
+    <select id="findPageByBaseInfoIdAndState" resultMap="WithImgResultMap">
+        SELECT ai.annual_investment_id, ai.apply_figure, ai.approved_figure, ai.create_time, ai.`state`,
+        ai.update_time, ai.`year`, ai.base_info_id, ai.submitter,
+        aii.annual_investment_img_id aii_annual_investment_img_id,
+        aii.create_time aii_create_time,
+        aii.img_addr aii_img_addr,
+        aii.img_desc aii_img_desc,
+        aii.annual_investment_id aii_annual_investment_id
+        FROM annual_investment ai
+        LEFT JOIN annual_investment_img aii ON ai.annual_investment_id = aii.annual_investment_id
+        <where>
+            <if test="baseInfoId != null and baseInfoId !=''" >
+                AND base_info_id = #{baseInfoId}
+            </if>
+            <if test="state != null">
+                AND state = state
+            </if>
+        </where>
+        ORDER BY update_time DESC
+    </select>
+</mapper>

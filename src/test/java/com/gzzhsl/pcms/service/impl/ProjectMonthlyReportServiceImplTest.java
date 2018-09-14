@@ -17,20 +17,13 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class ProjectMonthlyReportServiceImplTest {
 
+
     @Autowired
     private ProjectMonthlyReportService projectMonthlyReportService;
 
     @Test
-    public void getMonthlyReportsByProjectIdAndYear() throws Exception {
-        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear("747d74c5-a7be-442a-903c-72277118eec6",
-                "2018-01-01 00:00:00", new Date().toString());
-        System.out.println(projectMonthlyReports);
+    public void findMonthlyReportsByProjectIdAndPeriod() throws Exception {
+        projectMonthlyReportService.findMonthlyReportsByProjectIdAndPeriod("8a8082816458ab31016458ab49d40091",
+                "2018-04-01 00:00:00", new Date().toString());
     }
-
-    @Test
-    public void findByProjectIdAndState() throws Exception {
-        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.findByProjectIdAndState("747d74c5-a7be-442a-903c-72277118eec6", (byte) 0);
-        System.out.println(projectMonthlyReports);
-    }
-
 }

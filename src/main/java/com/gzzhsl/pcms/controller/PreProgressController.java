@@ -112,12 +112,13 @@ public class PreProgressController {
     @PostMapping("/addfiles")
     @ResponseBody
     public ResultVO saveFiles(HttpServletRequest request) {
-        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("pre_progress_file");
+      /*  List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("pre_progress_file");
         if (files == null || files.size() < 1) {
             return ResultUtil.failed();
         }
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        return ResultUtil.success(FileUtil.saveFile(thisUser, files));
+        return ResultUtil.success(FileUtil.saveFile(thisUser, files));*/
+      return null;
     }
 
     @PostMapping("/approvepreprogress")

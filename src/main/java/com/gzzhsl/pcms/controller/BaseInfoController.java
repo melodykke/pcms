@@ -114,7 +114,6 @@ public class BaseInfoController {
     @PostMapping("/savebaseinfo")
     @ResponseBody
     public ResultVO saveReport(@Valid @RequestBody BaseInfoVO baseInfoVO, BindingResult bindingResult) {
-
         if (baseInfoVO == null) {
             log.error("【基本信息错误】 没有收到有效的baseInfoVO , " +
                     "实际baseInfoVO = {}", baseInfoVO);
@@ -124,8 +123,11 @@ public class BaseInfoController {
             log.error("【基本信息错误】参数验证错误， 参数不正确 baseInfoVO = {}， 错误：{}", baseInfoVO, bindingResult.getFieldError().getDefaultMessage());
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
-        BaseInfo baseInfoRt = baseInfoService.save(baseInfoVO);
-        return ResultUtil.success();
+        Integer resultInt = baseInfoService.save(baseInfoVO);
+        if (resultInt == 1) {
+            return ResultUtil.success();
+        }
+        return ResultUtil.failed();
     }
 
     @PostMapping("/approvebaseinfo")
@@ -167,6 +169,6 @@ public class BaseInfoController {
     @ResponseBody
     @RequiresRoles("manager")
     public ResultVO getBaseInfoById(String baseInfoId) {
-        return ResultUtil.success(baseInfoService.getBaseInfoById(baseInfoId));
+        return ResultUtil.success(baseInfoService.findBaseInfoById(baseInfoId));
     }
 }

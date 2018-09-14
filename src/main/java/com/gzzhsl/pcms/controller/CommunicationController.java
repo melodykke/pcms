@@ -1,6 +1,5 @@
 package com.gzzhsl.pcms.controller;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.entity.ReservoirCode;
 import com.gzzhsl.pcms.enums.StationTypeEnum;

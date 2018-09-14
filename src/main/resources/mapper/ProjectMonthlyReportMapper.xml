@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.ProjectMonthlyReportMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.ProjectMonthlyReport">
+    <id column="project_monthly_report_id" jdbcType="VARCHAR" property="projectMonthlyReportId" />
+    <result column="available_central_investment" jdbcType="DECIMAL" property="availableCentralInvestment" />
+    <result column="available_local_investment" jdbcType="DECIMAL" property="availableLocalInvestment" />
+    <result column="available_provincial_investment" jdbcType="DECIMAL" property="availableProvincialInvestment" />
+    <result column="backfill" jdbcType="DECIMAL" property="backfill" />
+    <result column="civil_engineering" jdbcType="DECIMAL" property="civilEngineering" />
+    <result column="concrete" jdbcType="DECIMAL" property="concrete" />
+    <result column="construction_content" jdbcType="VARCHAR" property="constructionContent" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="difficulty" jdbcType="VARCHAR" property="difficulty" />
+    <result column="electromechanical_equipment" jdbcType="DECIMAL" property="electromechanicalEquipment" />
+    <result column="environmental_protection" jdbcType="DECIMAL" property="environmentalProtection" />
+    <result column="grout" jdbcType="DECIMAL" property="grout" />
+    <result column="hole_dug" jdbcType="DECIMAL" property="holeDug" />
+    <result column="independent_cost" jdbcType="DECIMAL" property="independentCost" />
+    <result column="labour_force" jdbcType="DECIMAL" property="labourForce" />
+    <result column="masonry" jdbcType="DECIMAL" property="masonry" />
+    <result column="measure" jdbcType="VARCHAR" property="measure" />
+    <result column="metal_mechanism" jdbcType="DECIMAL" property="metalMechanism" />
+    <result column="open_dug" jdbcType="DECIMAL" property="openDug" />
+    <result column="other_cost" jdbcType="DECIMAL" property="otherCost" />
+    <result column="rebar" jdbcType="DECIMAL" property="rebar" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="reserve_funds" jdbcType="DECIMAL" property="reserveFunds" />
+    <result column="resettlement_arrangement" jdbcType="DECIMAL" property="resettlementArrangement" />
+    <result column="source_central_investment" jdbcType="DECIMAL" property="sourceCentralInvestment" />
+    <result column="source_local_investment" jdbcType="DECIMAL" property="sourceLocalInvestment" />
+    <result column="source_provincial_investment" jdbcType="DECIMAL" property="sourceProvincialInvestment" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="submit_date" jdbcType="TIMESTAMP" property="submitDate" />
+    <result column="submitter" jdbcType="VARCHAR" property="submitter" />
+    <result column="suggestion" jdbcType="VARCHAR" property="suggestion" />
+    <result column="temporary_work" jdbcType="DECIMAL" property="temporaryWork" />
+    <result column="visual_progress" jdbcType="VARCHAR" property="visualProgress" />
+    <result column="water_conservation" jdbcType="DECIMAL" property="waterConservation" />
+    <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+    <result column="statistical_leader" jdbcType="VARCHAR" property="statisticalLeader" />
+  </resultMap>
+    <resultMap id="WithImgsResultMap" extends="BaseResultMap" type="com.gzzhsl.pcms.model.ProjectMonthlyReport">
+        <collection property="projectMonthlyReportImgs" resultMap="com.gzzhsl.pcms.mapper.ProjectMonthlyReportImgMapper.BaseResultMap"
+                    columnPrefix="pmri_" />
+    </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from project_monthly_report
+    where project_monthly_report_id = #{projectMonthlyReportId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.ProjectMonthlyReport">
+    insert into project_monthly_report (project_monthly_report_id, available_central_investment, 
+      available_local_investment, available_provincial_investment, 
+      backfill, civil_engineering, concrete, 
+      construction_content, create_time, difficulty, 
+      electromechanical_equipment, environmental_protection, 
+      grout, hole_dug, independent_cost, 
+      labour_force, masonry, measure, 
+      metal_mechanism, open_dug, other_cost, 
+      rebar, remark, reserve_funds, 
+      resettlement_arrangement, source_central_investment, 
+      source_local_investment, source_provincial_investment, 
+      `state`, submit_date, submitter, 
+      suggestion, temporary_work, visual_progress, 
+      water_conservation, base_info_id, statistical_leader
+      )
+    values (#{projectMonthlyReportId,jdbcType=VARCHAR}, #{availableCentralInvestment,jdbcType=DECIMAL}, 
+      #{availableLocalInvestment,jdbcType=DECIMAL}, #{availableProvincialInvestment,jdbcType=DECIMAL}, 
+      #{backfill,jdbcType=DECIMAL}, #{civilEngineering,jdbcType=DECIMAL}, #{concrete,jdbcType=DECIMAL}, 
+      #{constructionContent,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{difficulty,jdbcType=VARCHAR}, 
+      #{electromechanicalEquipment,jdbcType=DECIMAL}, #{environmentalProtection,jdbcType=DECIMAL}, 
+      #{grout,jdbcType=DECIMAL}, #{holeDug,jdbcType=DECIMAL}, #{independentCost,jdbcType=DECIMAL}, 
+      #{labourForce,jdbcType=DECIMAL}, #{masonry,jdbcType=DECIMAL}, #{measure,jdbcType=VARCHAR}, 
+      #{metalMechanism,jdbcType=DECIMAL}, #{openDug,jdbcType=DECIMAL}, #{otherCost,jdbcType=DECIMAL}, 
+      #{rebar,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{reserveFunds,jdbcType=DECIMAL}, 
+      #{resettlementArrangement,jdbcType=DECIMAL}, #{sourceCentralInvestment,jdbcType=DECIMAL}, 
+      #{sourceLocalInvestment,jdbcType=DECIMAL}, #{sourceProvincialInvestment,jdbcType=DECIMAL}, 
+      #{state,jdbcType=TINYINT}, #{submitDate,jdbcType=TIMESTAMP}, #{submitter,jdbcType=VARCHAR}, 
+      #{suggestion,jdbcType=VARCHAR}, #{temporaryWork,jdbcType=DECIMAL}, #{visualProgress,jdbcType=VARCHAR}, 
+      #{waterConservation,jdbcType=DECIMAL}, #{baseInfoId,jdbcType=VARCHAR}, #{statisticalLeader,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.ProjectMonthlyReport">
+    update project_monthly_report
+    set available_central_investment = #{availableCentralInvestment,jdbcType=DECIMAL},
+      available_local_investment = #{availableLocalInvestment,jdbcType=DECIMAL},
+      available_provincial_investment = #{availableProvincialInvestment,jdbcType=DECIMAL},
+      backfill = #{backfill,jdbcType=DECIMAL},
+      civil_engineering = #{civilEngineering,jdbcType=DECIMAL},
+      concrete = #{concrete,jdbcType=DECIMAL},
+      construction_content = #{constructionContent,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      difficulty = #{difficulty,jdbcType=VARCHAR},
+      electromechanical_equipment = #{electromechanicalEquipment,jdbcType=DECIMAL},
+      environmental_protection = #{environmentalProtection,jdbcType=DECIMAL},
+      grout = #{grout,jdbcType=DECIMAL},
+      hole_dug = #{holeDug,jdbcType=DECIMAL},
+      independent_cost = #{independentCost,jdbcType=DECIMAL},
+      labour_force = #{labourForce,jdbcType=DECIMAL},
+      masonry = #{masonry,jdbcType=DECIMAL},
+      measure = #{measure,jdbcType=VARCHAR},
+      metal_mechanism = #{metalMechanism,jdbcType=DECIMAL},
+      open_dug = #{openDug,jdbcType=DECIMAL},
+      other_cost = #{otherCost,jdbcType=DECIMAL},
+      rebar = #{rebar,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      reserve_funds = #{reserveFunds,jdbcType=DECIMAL},
+      resettlement_arrangement = #{resettlementArrangement,jdbcType=DECIMAL},
+      source_central_investment = #{sourceCentralInvestment,jdbcType=DECIMAL},
+      source_local_investment = #{sourceLocalInvestment,jdbcType=DECIMAL},
+      source_provincial_investment = #{sourceProvincialInvestment,jdbcType=DECIMAL},
+      `state` = #{state,jdbcType=TINYINT},
+      submit_date = #{submitDate,jdbcType=TIMESTAMP},
+      submitter = #{submitter,jdbcType=VARCHAR},
+      suggestion = #{suggestion,jdbcType=VARCHAR},
+      temporary_work = #{temporaryWork,jdbcType=DECIMAL},
+      visual_progress = #{visualProgress,jdbcType=VARCHAR},
+      water_conservation = #{waterConservation,jdbcType=DECIMAL},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR},
+      statistical_leader = #{statisticalLeader,jdbcType=VARCHAR}
+    where project_monthly_report_id = #{projectMonthlyReportId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select project_monthly_report_id, available_central_investment, available_local_investment, 
+    available_provincial_investment, backfill, civil_engineering, concrete, construction_content, 
+    create_time, difficulty, electromechanical_equipment, environmental_protection, grout, 
+    hole_dug, independent_cost, labour_force, masonry, measure, metal_mechanism, open_dug, 
+    other_cost, rebar, remark, reserve_funds, resettlement_arrangement, source_central_investment, 
+    source_local_investment, source_provincial_investment, `state`, submit_date, submitter, 
+    suggestion, temporary_work, visual_progress, water_conservation, base_info_id, statistical_leader
+    from project_monthly_report
+    where project_monthly_report_id = #{projectMonthlyReportId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select project_monthly_report_id, available_central_investment, available_local_investment, 
+    available_provincial_investment, backfill, civil_engineering, concrete, construction_content, 
+    create_time, difficulty, electromechanical_equipment, environmental_protection, grout, 
+    hole_dug, independent_cost, labour_force, masonry, measure, metal_mechanism, open_dug, 
+    other_cost, rebar, remark, reserve_funds, resettlement_arrangement, source_central_investment, 
+    source_local_investment, source_provincial_investment, `state`, submit_date, submitter, 
+    suggestion, temporary_work, visual_progress, water_conservation, base_info_id, statistical_leader
+    from project_monthly_report
+  </select>
+
+  <select id="findMonthlyReportsByProjectIdAndPeriod" resultMap="WithImgsResultMap">
+    SELECT pmr.project_monthly_report_id, pmr.available_central_investment, pmr.available_local_investment,
+    pmr.available_provincial_investment, pmr.backfill, pmr.civil_engineering, pmr.concrete, pmr.construction_content,
+    pmr.create_time, pmr.difficulty, pmr.electromechanical_equipment, pmr.environmental_protection, pmr.grout,
+    pmr.hole_dug, pmr.independent_cost, pmr.labour_force, pmr.masonry, pmr.measure, pmr.metal_mechanism, pmr.open_dug,
+    pmr.other_cost, pmr.rebar, pmr.remark, pmr.reserve_funds, pmr.resettlement_arrangement, pmr.source_central_investment,
+    pmr.source_local_investment, pmr.source_provincial_investment, pmr.`state`, pmr.submit_date, pmr.submitter,
+    pmr.suggestion, pmr.temporary_work, pmr.visual_progress, pmr.water_conservation, pmr.base_info_id, pmr.statistical_leader,
+    pmri.project_monthly_report_img_id pmri_project_monthly_report_img_id,
+    pmri.create_time pmri_create_time,
+    pmri.img_addr pmri_img_addr,
+    pmri.img_desc pmri_img_desc,
+    pmri.project_monthly_report_id pmri_project_monthly_report_id
+    from project_monthly_report pmr
+    LEFT JOIN project_monthly_report_img pmri ON pmr.project_monthly_report_id = pmri.project_monthly_report_id
+    <where>
+        AND state != -1
+        <if test="baseInfoId != null and baseInfoId != ''">
+            AND base_info_id = #{baseInfoId}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND submit_date >= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND submit_date <![CDATA[<=]]> #{endDate}
+        </if>
+    </where>
+  </select>
+    <select id="findWithImgById" resultMap="WithImgsResultMap">
+        SELECT pmr.project_monthly_report_id, pmr.available_central_investment, pmr.available_local_investment,
+        pmr.available_provincial_investment, pmr.backfill, pmr.civil_engineering, pmr.concrete, pmr.construction_content,
+        pmr.create_time, pmr.difficulty, pmr.electromechanical_equipment, pmr.environmental_protection, pmr.grout,
+        pmr.hole_dug, pmr.independent_cost, pmr.labour_force, pmr.masonry, pmr.measure, pmr.metal_mechanism, pmr.open_dug,
+        pmr.other_cost, pmr.rebar, pmr.remark, pmr.reserve_funds, pmr.resettlement_arrangement, pmr.source_central_investment,
+        pmr.source_local_investment, pmr.source_provincial_investment, pmr.`state`, pmr.submit_date, pmr.submitter,
+        pmr.suggestion, pmr.temporary_work, pmr.visual_progress, pmr.water_conservation, pmr.base_info_id, pmr.statistical_leader,
+        pmri.project_monthly_report_img_id pmri_project_monthly_report_img_id,
+        pmri.create_time pmri_create_time,
+        pmri.img_addr pmri_img_addr,
+        pmri.img_desc pmri_img_desc,
+        pmri.project_monthly_report_id pmri_project_monthly_report_id
+        from project_monthly_report pmr
+        LEFT JOIN project_monthly_report_img pmri ON pmr.project_monthly_report_id = pmri.project_monthly_report_id
+        <where>
+            <if test="projectMonthlyReportId != null and projectMonthlyReportId != ''">
+                AND pmr.project_monthly_report_id = #{projectMonthlyReportId}
+            </if>
+        </where>
+    </select>
+</mapper>

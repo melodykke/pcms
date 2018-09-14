@@ -80,18 +80,38 @@ public class UserServiceImpl implements UserService {
         return personInfo;
     }
 
-
-
-
+    @Override
+    public UserInfo findParent(UserInfo thisUser) {
+        String parentId = thisUser.getParentId();
+        if (parentId == null || "".equals(parentId)) {
+            return null;
+        }
+        return userInfoMapper.findParentByParentId(parentId);
+    }
 
     @Override
-    @Transactional
+    public List<UserInfo> findChildren(UserInfo thisUser) {
+        String userId = thisUser.getUserId();
+        if (userId == null || "".equals(userId)) {
+            return null;
+        }
+        return userInfoMapper.findChildrenByUserId(userId);
+    }
+
+    @Override
+    public Integer batchUpdateBaseInfoId(List<UserInfo> userInfos, String baseInfoId) {
+        if (userInfos == null || userInfos.size() == 0 || baseInfoId == null || "".equals(baseInfoId)) {
+            return 0;
+        }
+        return userInfoMapper.batchUpdateBaseInfoId(userInfos, baseInfoId);
+    }
+
+    @Override
     public UserInfo findByUserId(String uid) {
         return userInfoMapper.selectByPrimaryKey(uid);
     }
 
     @Override
-    @Transactional
     public UserInfo getUserByUsername(String username) {
         return userInfoMapper.findByUsername(username);
     }
@@ -100,6 +120,17 @@ public class UserServiceImpl implements UserService {
     public List<UserInfo> getAllUser() {
         return userInfoMapper.selectAll();
     }
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public UserInfo save(UserInfo userInfo) {

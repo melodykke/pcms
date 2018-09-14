@@ -1,7 +1,7 @@
 package com.gzzhsl.pcms.service;
 
-import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
+import com.gzzhsl.pcms.model.ProjectMonthlyReportImg;
 
 public interface ProjectMonthlyReportImgService {
-    ProjectMonthlyReportImg getById(String id);
+    ProjectMonthlyReportImg findById(String id);
 }

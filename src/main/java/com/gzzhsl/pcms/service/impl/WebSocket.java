@@ -1,14 +1,13 @@
 package com.gzzhsl.pcms.service.impl;
 
 import com.google.gson.Gson;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.vo.WSMessageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -17,7 +16,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
+
 
 @Component
 @ServerEndpoint("/websocket/{username}")

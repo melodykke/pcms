@@ -1,6 +1,7 @@
 package com.gzzhsl.pcms.service.impl;
 
-import com.gzzhsl.pcms.entity.Feedback;
+import com.gzzhsl.pcms.mapper.FeedbackMapper;
+import com.gzzhsl.pcms.model.Feedback;
 import com.gzzhsl.pcms.repository.FeedbackRepository;
 import com.gzzhsl.pcms.service.FeedbackService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +26,21 @@ import java.util.List;
 @Transactional
 public class FeedbackServiceImpl implements FeedbackService {
     @Autowired
+    private FeedbackMapper feedbackMapper;
+
+
+
+
+
+
+
+
+    @Autowired
     private FeedbackRepository feedbackRepository;
 
     @Override
-    public Feedback save(Feedback feedback) {
-        return feedbackRepository.save(feedback);
+    public int save(Feedback feedback) {
+        return feedbackMapper.insert(feedback);
     }
 
     @Override

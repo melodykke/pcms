@@ -1,11 +1,10 @@
 package com.gzzhsl.pcms.service.impl;
 
-import com.gzzhsl.pcms.entity.HistoryMonthlyReportExcelStatistics;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
+import com.gzzhsl.pcms.model.HistoryMonthlyReportExcelStatistics;
+import com.gzzhsl.pcms.model.ProjectMonthlyReport;
 import com.gzzhsl.pcms.service.MonthlyReportExcelService;
 import com.gzzhsl.pcms.util.MonthlyReportExcelCalcUtil;
 import com.gzzhsl.pcms.vo.MonthlyReportExcelModel;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

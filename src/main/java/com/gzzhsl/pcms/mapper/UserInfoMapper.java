@@ -33,4 +33,26 @@ public interface UserInfoMapper {
      * @return
      */
     UserInfo findOneWithRolesAndPrivilegesByUsernameOrId(@Param("username") String username, @Param("userId") String userId);
+
+    /**
+     * 根据parentId查找父账号
+     * @param parentId
+     * @return
+     */
+    UserInfo findParentByParentId(String parentId);
+
+    /**
+     * 根据userId找到当前账号的子账号
+     * @param userId
+     * @return
+     */
+    List<UserInfo> findChildrenByUserId(String userId);
+
+    /**
+     * 更新用户集合里用户的baseInfoId值
+     * @param userInfos
+     * @param baseInfoId
+     * @return
+     */
+    Integer batchUpdateBaseInfoId(@Param("userInfos") List<UserInfo> userInfos, @Param("baseInfoId") String baseInfoId);
 }

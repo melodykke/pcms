@@ -10,24 +10,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface UserService {
-    UserInfo findByUserId(String uid);
-    UserInfo getUserByUsername(String username);
-    List<UserInfo> getAllUser();
-    UserInfo save(UserInfo userInfo);
-    UserInfo findParentByUsername(String username);
-    Integer updateUserBaseInfo(BaseInfo baseInfo, String userId);
-    Integer updateUserOpenId(String openId, String userId);
-    UserInfo findByOpenId(String openId);
-    Page<UserInfoVO> findAll(Pageable pageable);
-    Integer toggleActivate(UserInfo userInfo);
-    Integer modifyPassword(String password, UserInfo userInfo);
-
-
-
-
-
-
-
 
     int deleteByPrimaryKey(String userId);
 
@@ -63,4 +45,53 @@ public interface UserService {
      * @return
      */
     PersonInfo findPersonInfoByUserId(String userId);
+
+    /**
+     * 找到当前账号的上级用户
+     * @param thisUser
+     * @return
+     */
+    UserInfo findParent(UserInfo thisUser);
+
+    /**
+     * 找到当前账号的子账号
+     * @param thisUser
+     * @return
+     */
+    List<UserInfo> findChildren(UserInfo thisUser);
+
+    /**
+     * 更新用户集合里用户的baseInfoId值
+     * @param userInfos
+     * @param baseInfoId
+     * @return
+     */
+    Integer batchUpdateBaseInfoId(List<UserInfo> userInfos, String baseInfoId);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    UserInfo findByUserId(String uid);
+    UserInfo getUserByUsername(String username);
+    List<UserInfo> getAllUser();
+    UserInfo save(UserInfo userInfo);
+    UserInfo findParentByUsername(String username);
+    Integer updateUserBaseInfo(BaseInfo baseInfo, String userId);
+    Integer updateUserOpenId(String openId, String userId);
+    UserInfo findByOpenId(String openId);
+    Page<UserInfoVO> findAll(Pageable pageable);
+    Integer toggleActivate(UserInfo userInfo);
+    Integer modifyPassword(String password, UserInfo userInfo);
+
+
 }

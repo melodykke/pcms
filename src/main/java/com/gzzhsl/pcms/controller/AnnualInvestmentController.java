@@ -1,13 +1,14 @@
 package com.gzzhsl.pcms.controller;
 
-import com.gzzhsl.pcms.entity.AnnualInvestment;
+import com.github.pagehelper.PageInfo;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.Feedback;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.AnnualInvestment;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.service.AnnualInvestmentService;
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.FileUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.AnnualInvestmentVO;
@@ -101,19 +102,16 @@ public class AnnualInvestmentController {
     @ResponseBody
     public ResultVO getAnnualInvestment(@RequestParam(required = false, name = "pageSize", defaultValue = "10") Integer pageSize,
                                         @RequestParam(required = false, name = "startIndex") Integer startIndex,
-                                        @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                        @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageNum,
                                         @RequestParam(required = false, name = "state", defaultValue = "1") byte state) {
-        Integer page = pageIndex;
-        Integer size = pageSize;
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        PageRequest pageRequest = new PageRequest(page, size, sort);
-        Page<AnnualInvestment> annualInvestments = annualInvestmentService.findByState(pageRequest, state);
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        List<String> roles = thisUser.getSysRoleList().stream().map(e -> e.getRole()).collect(Collectors.toList());
+        PageInfo pageInfo = annualInvestmentService.findPageByState(state, pageNum, pageSize);
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(null, userInfo.getUserId());
+        List<String> roles = thisUser.getRoles().stream().map(e -> e.getRole()).collect(Collectors.toList());
         if (roles.contains("checker")) {
-            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "checker", annualInvestments);
+            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "checker", pageInfo);
         } else {
-            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "数据返回成功", annualInvestments);
+            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "数据返回成功", pageInfo);
         }
     }
 

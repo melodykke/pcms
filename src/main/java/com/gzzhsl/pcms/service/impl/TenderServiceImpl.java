@@ -182,7 +182,7 @@ public class TenderServiceImpl implements TenderService {
 
     @Override
     public Feedback approveTender(UserInfo thisUser, boolean switchState, String checkInfo, Tender tender) {
-        Feedback feedbackRt = null;
+      /*  Feedback feedbackRt = null;
         if (switchState == false) {
             tender.setState((byte) 1); // 审批通过
             Tender thisTenderRt = tenderRepository.save(tender);
@@ -200,6 +200,7 @@ public class TenderServiceImpl implements TenderService {
         }
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "招标备案", "新的招标备案审批消息");
-        return feedbackRt;
+        return feedbackRt;*/
+      return null;
     }
 }

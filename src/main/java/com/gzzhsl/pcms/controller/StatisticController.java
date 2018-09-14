@@ -53,10 +53,10 @@ public class StatisticController {
                 }
             }
         } else {
-            List<BaseInfo> baseInfoList = baseInfoService.getAllProject();
+           /* List<BaseInfo> baseInfoList = baseInfoService.getAllProject();
             for (BaseInfo baseInfo : baseInfoList) {
                 allTotalInvestment = allTotalInvestment.add(baseInfo.getTotalInvestment());
-            }
+            }*/
         }
         return ResultUtil.success(allTotalInvestment);
     }

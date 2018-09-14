@@ -1,6 +1,11 @@
 package com.gzzhsl.pcms.service.impl;
 
-import com.gzzhsl.pcms.entity.Notification;
+
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.gzzhsl.pcms.mapper.NotificationMapper;
+import com.gzzhsl.pcms.model.Notification;
 import com.gzzhsl.pcms.repository.NotificationRepository;
 import com.gzzhsl.pcms.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,76 +31,62 @@ import java.util.List;
 public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
-    private NotificationRepository notificationRepository;
+    private NotificationMapper notificationMapper;
 
     @Override
-    public Notification save(Notification notification) {
-        return notificationRepository.save(notification);
+    public Notification findById(String notificationId) {
+        return notificationMapper.selectByPrimaryKey(notificationId);
+    }
+
+    @Override
+    public PageInfo<Notification> findPageByType(String type, String baseInfoId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Notification> notifications = notificationMapper.findAllByTypeAndBaseInfoId(type, baseInfoId);
+        PageInfo<Notification> pageInfo = new PageInfo<>(notifications);
+        return pageInfo;
+    }
+
+    @Override
+    public Integer save(Notification notification) {
+        if (notification == null) {
+            return 0;
+        }
+        return notificationMapper.insert(notification);
     }
 
     @Override
     public List<Notification> getByTypeId(String typeId) {
-        return notificationRepository.findByTypeId(typeId);
+        return notificationMapper.findByTypeId(typeId);
     }
 
     @Override
     public List<Notification> getAll() {
-        return notificationRepository.findAll();
+        return notificationMapper.selectAll();
     }
 
     @Override
     public List<Notification> getByBaseInfoId(String baseInfoId) {
-        List<Notification> notifications = null;
-        Specification querySpecification = new Specification() {
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                Predicate predicate = cb.equal(root.get("baseInfoId"), baseInfoId);
-                return predicate;
-            }
-        };
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return notificationRepository.findAll(querySpecification, sort);
+        List<Notification> notifications = notificationMapper.findByBaseInfoId(baseInfoId);
+        return notifications;
     }
 
     @Override
-    public Notification getById(String notificationId) {
-       // return notificationRepository.findOne(notificationId);
-       return null;
+    public List<Notification> getAllUncheckedByBaseInfoId(String baseInfoId) {
+        if (baseInfoId == null || "".equals(baseInfoId)) {
+            return null;
+        }
+        List<Notification> notifications = notificationMapper.findAllUncheckedByBaseInfoId(baseInfoId);
+        return notifications;
     }
 
     @Override
-    public List<Notification> getAllUnchecked(String baseInfoId) {
-        Boolean checked = false;
-        Specification querySpecification = new Specification() {
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<>();
-                if (StringUtils.isNotBlank(baseInfoId)) {
-                    predicates.add(cb.equal(root.get("baseInfoId"), baseInfoId));
-                }
-                predicates.add(cb.equal(root.get("checked"), checked));
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return notificationRepository.findAll(querySpecification, sort);
+    public List<Notification> findAllByType(String baseInfoId, String type) {
+        if (baseInfoId == null || "".equals(baseInfoId) || type == null || "".equals(type)) {
+            return null;
+        }
+        List<Notification> notifications = notificationMapper.findAllByTypeAndBaseInfoId(type, baseInfoId);
+        return notifications;
     }
 
-    @Override
-    public Page<Notification> findAllByType(Pageable pageable, String baseInfoId, String type) {
-        Specification querySpecification = new Specification() {
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<>();
-                if (StringUtils.isNotBlank(baseInfoId)) {
-                    predicates.add(cb.equal(root.get("baseInfoId"), baseInfoId));
-                }
-                if (StringUtils.isNotBlank(type)) {
-                    predicates.add(cb.equal(root.get("type"), type));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-        return notificationRepository.findAll(querySpecification, pageable);
-    }
+
 }

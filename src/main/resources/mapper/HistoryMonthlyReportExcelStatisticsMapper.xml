@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.HistoryMonthlyReportExcelStatisticsMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.HistoryMonthlyReportExcelStatistics">
+    <id column="h_id" jdbcType="VARCHAR" property="hId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="history_available_central_investment" jdbcType="DECIMAL" property="historyAvailableCentralInvestment" />
+    <result column="history_available_local_investment" jdbcType="DECIMAL" property="historyAvailableLocalInvestment" />
+    <result column="history_available_provincial_investment" jdbcType="DECIMAL" property="historyAvailableProvincialInvestment" />
+    <result column="history_backfill" jdbcType="DECIMAL" property="historyBackfill" />
+    <result column="history_civil_engineering" jdbcType="DECIMAL" property="historyCivilEngineering" />
+    <result column="history_concrete" jdbcType="DECIMAL" property="historyConcrete" />
+    <result column="history_electromechanical_equipment" jdbcType="DECIMAL" property="historyElectromechanicalEquipment" />
+    <result column="history_environmental_protection" jdbcType="DECIMAL" property="historyEnvironmentalProtection" />
+    <result column="history_grout" jdbcType="DECIMAL" property="historyGrout" />
+    <result column="history_hole_dug" jdbcType="DECIMAL" property="historyHoleDug" />
+    <result column="history_independent_cost" jdbcType="DECIMAL" property="historyIndependentCost" />
+    <result column="history_labour_force" jdbcType="DECIMAL" property="historyLabourForce" />
+    <result column="history_masonry" jdbcType="DECIMAL" property="historyMasonry" />
+    <result column="history_metal_mechanism" jdbcType="DECIMAL" property="historyMetalMechanism" />
+    <result column="history_open_dug" jdbcType="DECIMAL" property="historyOpenDug" />
+    <result column="history_other_cost" jdbcType="DECIMAL" property="historyOtherCost" />
+    <result column="history_rebar" jdbcType="DECIMAL" property="historyRebar" />
+    <result column="history_resettlement_arrangement" jdbcType="DECIMAL" property="historyResettlementArrangement" />
+    <result column="history_source_central_investment" jdbcType="DECIMAL" property="historySourceCentralInvestment" />
+    <result column="history_source_local_investment" jdbcType="DECIMAL" property="historySourceLocalInvestment" />
+    <result column="history_source_provincial_investment" jdbcType="DECIMAL" property="historySourceProvincialInvestment" />
+    <result column="history_temporary_work" jdbcType="DECIMAL" property="historyTemporaryWork" />
+    <result column="history_water_conservation" jdbcType="DECIMAL" property="historyWaterConservation" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from history_monthly_report_excel_statistics
+    where h_id = #{hId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.HistoryMonthlyReportExcelStatistics">
+    insert into history_monthly_report_excel_statistics (h_id, create_time, history_available_central_investment, 
+      history_available_local_investment, history_available_provincial_investment, 
+      history_backfill, history_civil_engineering, 
+      history_concrete, history_electromechanical_equipment, 
+      history_environmental_protection, history_grout, 
+      history_hole_dug, history_independent_cost, 
+      history_labour_force, history_masonry, history_metal_mechanism, 
+      history_open_dug, history_other_cost, history_rebar, 
+      history_resettlement_arrangement, history_source_central_investment, 
+      history_source_local_investment, history_source_provincial_investment, 
+      history_temporary_work, history_water_conservation, 
+      `state`, update_time, base_info_id
+      )
+    values (#{hId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{historyAvailableCentralInvestment,jdbcType=DECIMAL}, 
+      #{historyAvailableLocalInvestment,jdbcType=DECIMAL}, #{historyAvailableProvincialInvestment,jdbcType=DECIMAL}, 
+      #{historyBackfill,jdbcType=DECIMAL}, #{historyCivilEngineering,jdbcType=DECIMAL}, 
+      #{historyConcrete,jdbcType=DECIMAL}, #{historyElectromechanicalEquipment,jdbcType=DECIMAL}, 
+      #{historyEnvironmentalProtection,jdbcType=DECIMAL}, #{historyGrout,jdbcType=DECIMAL}, 
+      #{historyHoleDug,jdbcType=DECIMAL}, #{historyIndependentCost,jdbcType=DECIMAL}, 
+      #{historyLabourForce,jdbcType=DECIMAL}, #{historyMasonry,jdbcType=DECIMAL}, #{historyMetalMechanism,jdbcType=DECIMAL}, 
+      #{historyOpenDug,jdbcType=DECIMAL}, #{historyOtherCost,jdbcType=DECIMAL}, #{historyRebar,jdbcType=DECIMAL}, 
+      #{historyResettlementArrangement,jdbcType=DECIMAL}, #{historySourceCentralInvestment,jdbcType=DECIMAL}, 
+      #{historySourceLocalInvestment,jdbcType=DECIMAL}, #{historySourceProvincialInvestment,jdbcType=DECIMAL}, 
+      #{historyTemporaryWork,jdbcType=DECIMAL}, #{historyWaterConservation,jdbcType=DECIMAL}, 
+      #{state,jdbcType=TINYINT}, #{updateTime,jdbcType=TIMESTAMP}, #{baseInfoId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.HistoryMonthlyReportExcelStatistics">
+    update history_monthly_report_excel_statistics
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      history_available_central_investment = #{historyAvailableCentralInvestment,jdbcType=DECIMAL},
+      history_available_local_investment = #{historyAvailableLocalInvestment,jdbcType=DECIMAL},
+      history_available_provincial_investment = #{historyAvailableProvincialInvestment,jdbcType=DECIMAL},
+      history_backfill = #{historyBackfill,jdbcType=DECIMAL},
+      history_civil_engineering = #{historyCivilEngineering,jdbcType=DECIMAL},
+      history_concrete = #{historyConcrete,jdbcType=DECIMAL},
+      history_electromechanical_equipment = #{historyElectromechanicalEquipment,jdbcType=DECIMAL},
+      history_environmental_protection = #{historyEnvironmentalProtection,jdbcType=DECIMAL},
+      history_grout = #{historyGrout,jdbcType=DECIMAL},
+      history_hole_dug = #{historyHoleDug,jdbcType=DECIMAL},
+      history_independent_cost = #{historyIndependentCost,jdbcType=DECIMAL},
+      history_labour_force = #{historyLabourForce,jdbcType=DECIMAL},
+      history_masonry = #{historyMasonry,jdbcType=DECIMAL},
+      history_metal_mechanism = #{historyMetalMechanism,jdbcType=DECIMAL},
+      history_open_dug = #{historyOpenDug,jdbcType=DECIMAL},
+      history_other_cost = #{historyOtherCost,jdbcType=DECIMAL},
+      history_rebar = #{historyRebar,jdbcType=DECIMAL},
+      history_resettlement_arrangement = #{historyResettlementArrangement,jdbcType=DECIMAL},
+      history_source_central_investment = #{historySourceCentralInvestment,jdbcType=DECIMAL},
+      history_source_local_investment = #{historySourceLocalInvestment,jdbcType=DECIMAL},
+      history_source_provincial_investment = #{historySourceProvincialInvestment,jdbcType=DECIMAL},
+      history_temporary_work = #{historyTemporaryWork,jdbcType=DECIMAL},
+      history_water_conservation = #{historyWaterConservation,jdbcType=DECIMAL},
+      `state` = #{state,jdbcType=TINYINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR}
+    where h_id = #{hId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select h_id, create_time, history_available_central_investment, history_available_local_investment, 
+    history_available_provincial_investment, history_backfill, history_civil_engineering, 
+    history_concrete, history_electromechanical_equipment, history_environmental_protection, 
+    history_grout, history_hole_dug, history_independent_cost, history_labour_force, 
+    history_masonry, history_metal_mechanism, history_open_dug, history_other_cost, history_rebar, 
+    history_resettlement_arrangement, history_source_central_investment, history_source_local_investment, 
+    history_source_provincial_investment, history_temporary_work, history_water_conservation, 
+    `state`, update_time, base_info_id
+    from history_monthly_report_excel_statistics
+    where h_id = #{hId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select h_id, create_time, history_available_central_investment, history_available_local_investment, 
+    history_available_provincial_investment, history_backfill, history_civil_engineering, 
+    history_concrete, history_electromechanical_equipment, history_environmental_protection, 
+    history_grout, history_hole_dug, history_independent_cost, history_labour_force, 
+    history_masonry, history_metal_mechanism, history_open_dug, history_other_cost, history_rebar, 
+    history_resettlement_arrangement, history_source_central_investment, history_source_local_investment, 
+    history_source_provincial_investment, history_temporary_work, history_water_conservation, 
+    `state`, update_time, base_info_id
+    from history_monthly_report_excel_statistics
+  </select>
+  
+  <select id="findByBaseInfoId" resultMap="BaseResultMap">
+    SELECT h_id, create_time, history_available_central_investment, history_available_local_investment,
+    history_available_provincial_investment, history_backfill, history_civil_engineering,
+    history_concrete, history_electromechanical_equipment, history_environmental_protection,
+    history_grout, history_hole_dug, history_independent_cost, history_labour_force,
+    history_masonry, history_metal_mechanism, history_open_dug, history_other_cost, history_rebar,
+    history_resettlement_arrangement, history_source_central_investment, history_source_local_investment,
+    history_source_provincial_investment, history_temporary_work, history_water_conservation,
+    `state`, update_time, base_info_id
+    from history_monthly_report_excel_statistics
+    WHERE base_info_id = #{baseInfoId}
+  </select>
+</mapper>

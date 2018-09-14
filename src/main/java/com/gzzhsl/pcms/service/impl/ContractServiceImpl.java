@@ -1,14 +1,19 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzzhsl.pcms.converter.ContractVO2Contract;
-import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.mapper.ContractMapper;
+import com.gzzhsl.pcms.model.BaseInfo;
+import com.gzzhsl.pcms.model.Contract;
+import com.gzzhsl.pcms.model.Feedback;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.repository.ContractImgRepository;
 import com.gzzhsl.pcms.repository.ContractRepository;
 import com.gzzhsl.pcms.service.*;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.FeedbackUtil;
 import com.gzzhsl.pcms.util.OperationUtil;
 import com.gzzhsl.pcms.util.PathUtil;
@@ -41,11 +46,25 @@ import java.util.List;
 @Transactional
 public class ContractServiceImpl implements ContractService {
     @Autowired
+    private ContractMapper contractMapper;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private BaseInfoService baseInfoService;
+
+
+
+
+
+
+
+
+
+    @Autowired
     private ContractRepository contractRepository;
     @Autowired
     private ContractImgRepository contractImgRepository;
-    @Autowired
-    private UserService userService;
+
     @Autowired
     private OperationLogService operationLogService;
     @Autowired
@@ -57,8 +76,12 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public Contract findById(String id) {
-        // return contractRepository.findById(id);
-        return null;
+        return contractMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Contract findWithImgById(String id) {
+        return contractMapper.findWithImgById(id);
     }
 
     @Override
@@ -156,39 +179,31 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Page<Contract> findByState(Pageable pageable, byte state) {
-      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+    public PageInfo<Contract> findPageByState(byte state, int pageNum, int pageSize) {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(null, userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject == null) {
             log.error("【合同错误】 获取合同列表错误， 账号无对应的水库项目");
             throw new SysException(SysEnum.CONTRACT_NO_PROJECT_ERROR);
         }
-        Specification querySpecification = new Specification() {
-            List<Predicate> predicates = new ArrayList<>();
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                if (StringUtils.isNotBlank(thisProject.getBaseInfoId())) {
-                    predicates.add(cb.equal(root.join("baseInfo").get("baseInfoId").as(String.class), thisProject.getBaseInfoId()));
-                }
-                predicates.add(cb.equal(root.get("state"), state));
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return contractRepository.findAll(querySpecification, pageable);*/
-      return null;
+        PageHelper.startPage(pageNum, pageSize);
+        List<Contract> contracts = contractMapper.findPageByBaseInfoIdAndState(thisProject.getBaseInfoId(), state);
+        PageInfo pageInfo = new PageInfo(contracts);
+        return pageInfo;
     }
+
 
     @Override
     public Feedback approveContract(UserInfo thisUser, Boolean switchState, String checkinfo, Contract thisContract) {
-        Feedback feedbackRt = null;
+      /*  List<UserInfo> children = userService.findChildren(thisUser);
         if (switchState == false) {
             thisContract.setState((byte) 1); // 审批通过
             Contract thisContractRt = contractRepository.save(thisContract);
-            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(),"合同备案信息", thisContract.getId(), new Date(),
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfoId(), thisUser.getUsername(),"合同备案信息", thisContract.getId(), new Date(),
                     "审批通过", (byte) 1, "contract/tocontract");
-            feedbackRt = feedbackService.save(feedback);
-            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的合同备案信息"));
+            int resultInt = feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedback.getTargetId()+"的合同备案信息"));
         } else {
             thisContract.setState((byte) -1); // 审批未通过
             Contract thisContractRt = contractRepository.save(thisContract);
@@ -198,7 +213,8 @@ public class ContractServiceImpl implements ContractService {
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的合同备案信息"));
         }
         // 创建webSocket消息
-        WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "合同备案", "新的合同备案审批消息");
-        return feedbackRt;
+        WebSocketUtil.sendWSFeedbackMsg(thisUser, children, webSocket, "合同备案", "新的合同备案审批消息");
+        return feedbackRt;*/
+      return null;
     }
 }

@@ -1,14 +1,12 @@
 package com.gzzhsl.pcms.controller;
 
-import com.gzzhsl.pcms.entity.BaseInfo;
-import com.gzzhsl.pcms.entity.Feedback;
 
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.Feedback;
 import com.gzzhsl.pcms.service.FeedbackService;
 
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.util.TimeUtil;
 import com.gzzhsl.pcms.vo.OverallFeedbackVO;

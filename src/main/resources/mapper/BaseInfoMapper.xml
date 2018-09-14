@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.BaseInfoMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.BaseInfo">
+    <id column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+    <result column="area_coverage" jdbcType="DECIMAL" property="areaCoverage" />
+    <result column="branch_project_amount" jdbcType="INTEGER" property="branchProjectAmount" />
+    <result column="branch_project_overview" jdbcType="VARCHAR" property="branchProjectOverview" />
+    <result column="catchment_area" jdbcType="DECIMAL" property="catchmentArea" />
+    <result column="cell_project_amount" jdbcType="INTEGER" property="cellProjectAmount" />
+    <result column="cell_project_overview" jdbcType="VARCHAR" property="cellProjectOverview" />
+    <result column="central_accumulative_payment" jdbcType="DECIMAL" property="centralAccumulativePayment" />
+    <result column="central_investment" jdbcType="DECIMAL" property="centralInvestment" />
+    <result column="construction_land" jdbcType="VARCHAR" property="constructionLand" />
+    <result column="county" jdbcType="VARCHAR" property="county" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="dam_type" jdbcType="VARCHAR" property="damType" />
+    <result column="flood_control_elevation" jdbcType="DECIMAL" property="floodControlElevation" />
+    <result column="has_accept_completion" jdbcType="VARCHAR" property="hasAcceptCompletion" />
+    <result column="has_project_completed" jdbcType="VARCHAR" property="hasProjectCompleted" />
+    <result column="has_signed_construction_contract" jdbcType="VARCHAR" property="hasSignedConstructionContract" />
+    <result column="installed_capacity" jdbcType="DECIMAL" property="installedCapacity" />
+    <result column="irrigated_area" jdbcType="DECIMAL" property="irrigatedArea" />
+    <result column="land_reclamation_plan" jdbcType="VARCHAR" property="landReclamationPlan" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="legal_person_id" jdbcType="VARCHAR" property="legalPersonId" />
+    <result column="legal_person_name" jdbcType="VARCHAR" property="legalPersonName" />
+    <result column="legal_representative_id" jdbcType="VARCHAR" property="legalRepresentativeId" />
+    <result column="legal_representative_name" jdbcType="VARCHAR" property="legalRepresentativeName" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="livestock" jdbcType="DECIMAL" property="livestock" />
+    <result column="local_accumulative_payment" jdbcType="DECIMAL" property="localAccumulativePayment" />
+    <result column="local_investment" jdbcType="DECIMAL" property="localInvestment" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="max_dam_height" jdbcType="DECIMAL" property="maxDamHeight" />
+    <result column="overview" jdbcType="VARCHAR" property="overview" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="plant_name" jdbcType="VARCHAR" property="plantName" />
+    <result column="project_source" jdbcType="VARCHAR" property="projectSource" />
+    <result column="project_task" jdbcType="VARCHAR" property="projectTask" />
+    <result column="project_type" jdbcType="VARCHAR" property="projectType" />
+    <result column="provincial_accumulative_payment" jdbcType="DECIMAL" property="provincialAccumulativePayment" />
+    <result column="provincial_investment" jdbcType="DECIMAL" property="provincialInvestment" />
+    <result column="provincial_loan" jdbcType="DECIMAL" property="provincialLoan" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="rural_human_water" jdbcType="DECIMAL" property="ruralHumanWater" />
+    <result column="scale" jdbcType="VARCHAR" property="scale" />
+    <result column="spillway" jdbcType="DECIMAL" property="spillway" />
+    <result column="storage" jdbcType="DECIMAL" property="storage" />
+    <result column="supervisor_bid" jdbcType="VARCHAR" property="supervisorBid" />
+    <result column="time_limit" jdbcType="DECIMAL" property="timeLimit" />
+    <result column="total_investment" jdbcType="DECIMAL" property="totalInvestment" />
+    <result column="unit_project_amount" jdbcType="INTEGER" property="unitProjectAmount" />
+    <result column="unit_project_overview" jdbcType="VARCHAR" property="unitProjectOverview" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="utilizabl_capacity" jdbcType="DECIMAL" property="utilizablCapacity" />
+    <result column="water_supply_population" jdbcType="DECIMAL" property="waterSupplyPopulation" />
+    <result column="watersupply" jdbcType="DECIMAL" property="watersupply" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="repeat_times" jdbcType="INTEGER" property="repeatTimes" />
+    <result column="region_id" jdbcType="INTEGER" property="regionId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_info
+    where base_info_id = #{baseInfoId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.BaseInfo">
+    insert into base_info (base_info_id, area_coverage, branch_project_amount, 
+      branch_project_overview, catchment_area, cell_project_amount, 
+      cell_project_overview, central_accumulative_payment, 
+      central_investment, construction_land, county, 
+      create_time, dam_type, flood_control_elevation, 
+      has_accept_completion, has_project_completed, 
+      has_signed_construction_contract, installed_capacity, 
+      irrigated_area, land_reclamation_plan, latitude, 
+      legal_person_id, legal_person_name, legal_representative_id, 
+      legal_representative_name, `level`, livestock, 
+      local_accumulative_payment, local_investment, 
+      `location`, longitude, max_dam_height, 
+      overview, `owner`, parent_id, 
+      plant_name, project_source, project_task, 
+      project_type, provincial_accumulative_payment, 
+      provincial_investment, provincial_loan, remark, 
+      rural_human_water, `scale`, spillway, 
+      `storage`, supervisor_bid, time_limit, 
+      total_investment, unit_project_amount, unit_project_overview, 
+      update_time, utilizabl_capacity, water_supply_population, 
+      watersupply, `state`, repeat_times, 
+      region_id)
+    values (#{baseInfoId,jdbcType=VARCHAR}, #{areaCoverage,jdbcType=DECIMAL}, #{branchProjectAmount,jdbcType=INTEGER}, 
+      #{branchProjectOverview,jdbcType=VARCHAR}, #{catchmentArea,jdbcType=DECIMAL}, #{cellProjectAmount,jdbcType=INTEGER}, 
+      #{cellProjectOverview,jdbcType=VARCHAR}, #{centralAccumulativePayment,jdbcType=DECIMAL}, 
+      #{centralInvestment,jdbcType=DECIMAL}, #{constructionLand,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{damType,jdbcType=VARCHAR}, #{floodControlElevation,jdbcType=DECIMAL}, 
+      #{hasAcceptCompletion,jdbcType=VARCHAR}, #{hasProjectCompleted,jdbcType=VARCHAR}, 
+      #{hasSignedConstructionContract,jdbcType=VARCHAR}, #{installedCapacity,jdbcType=DECIMAL}, 
+      #{irrigatedArea,jdbcType=DECIMAL}, #{landReclamationPlan,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{legalPersonId,jdbcType=VARCHAR}, #{legalPersonName,jdbcType=VARCHAR}, #{legalRepresentativeId,jdbcType=VARCHAR}, 
+      #{legalRepresentativeName,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{livestock,jdbcType=DECIMAL}, 
+      #{localAccumulativePayment,jdbcType=DECIMAL}, #{localInvestment,jdbcType=DECIMAL}, 
+      #{location,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{maxDamHeight,jdbcType=DECIMAL}, 
+      #{overview,jdbcType=VARCHAR}, #{owner,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{plantName,jdbcType=VARCHAR}, #{projectSource,jdbcType=VARCHAR}, #{projectTask,jdbcType=VARCHAR}, 
+      #{projectType,jdbcType=VARCHAR}, #{provincialAccumulativePayment,jdbcType=DECIMAL}, 
+      #{provincialInvestment,jdbcType=DECIMAL}, #{provincialLoan,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{ruralHumanWater,jdbcType=DECIMAL}, #{scale,jdbcType=VARCHAR}, #{spillway,jdbcType=DECIMAL}, 
+      #{storage,jdbcType=DECIMAL}, #{supervisorBid,jdbcType=VARCHAR}, #{timeLimit,jdbcType=DECIMAL}, 
+      #{totalInvestment,jdbcType=DECIMAL}, #{unitProjectAmount,jdbcType=INTEGER}, #{unitProjectOverview,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{utilizablCapacity,jdbcType=DECIMAL}, #{waterSupplyPopulation,jdbcType=DECIMAL}, 
+      #{watersupply,jdbcType=DECIMAL}, #{state,jdbcType=TINYINT}, #{repeatTimes,jdbcType=INTEGER}, 
+      #{regionId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.BaseInfo">
+    update base_info
+    set area_coverage = #{areaCoverage,jdbcType=DECIMAL},
+      branch_project_amount = #{branchProjectAmount,jdbcType=INTEGER},
+      branch_project_overview = #{branchProjectOverview,jdbcType=VARCHAR},
+      catchment_area = #{catchmentArea,jdbcType=DECIMAL},
+      cell_project_amount = #{cellProjectAmount,jdbcType=INTEGER},
+      cell_project_overview = #{cellProjectOverview,jdbcType=VARCHAR},
+      central_accumulative_payment = #{centralAccumulativePayment,jdbcType=DECIMAL},
+      central_investment = #{centralInvestment,jdbcType=DECIMAL},
+      construction_land = #{constructionLand,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dam_type = #{damType,jdbcType=VARCHAR},
+      flood_control_elevation = #{floodControlElevation,jdbcType=DECIMAL},
+      has_accept_completion = #{hasAcceptCompletion,jdbcType=VARCHAR},
+      has_project_completed = #{hasProjectCompleted,jdbcType=VARCHAR},
+      has_signed_construction_contract = #{hasSignedConstructionContract,jdbcType=VARCHAR},
+      installed_capacity = #{installedCapacity,jdbcType=DECIMAL},
+      irrigated_area = #{irrigatedArea,jdbcType=DECIMAL},
+      land_reclamation_plan = #{landReclamationPlan,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      legal_person_id = #{legalPersonId,jdbcType=VARCHAR},
+      legal_person_name = #{legalPersonName,jdbcType=VARCHAR},
+      legal_representative_id = #{legalRepresentativeId,jdbcType=VARCHAR},
+      legal_representative_name = #{legalRepresentativeName,jdbcType=VARCHAR},
+      `level` = #{level,jdbcType=VARCHAR},
+      livestock = #{livestock,jdbcType=DECIMAL},
+      local_accumulative_payment = #{localAccumulativePayment,jdbcType=DECIMAL},
+      local_investment = #{localInvestment,jdbcType=DECIMAL},
+      `location` = #{location,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      max_dam_height = #{maxDamHeight,jdbcType=DECIMAL},
+      overview = #{overview,jdbcType=VARCHAR},
+      `owner` = #{owner,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      plant_name = #{plantName,jdbcType=VARCHAR},
+      project_source = #{projectSource,jdbcType=VARCHAR},
+      project_task = #{projectTask,jdbcType=VARCHAR},
+      project_type = #{projectType,jdbcType=VARCHAR},
+      provincial_accumulative_payment = #{provincialAccumulativePayment,jdbcType=DECIMAL},
+      provincial_investment = #{provincialInvestment,jdbcType=DECIMAL},
+      provincial_loan = #{provincialLoan,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      rural_human_water = #{ruralHumanWater,jdbcType=DECIMAL},
+      `scale` = #{scale,jdbcType=VARCHAR},
+      spillway = #{spillway,jdbcType=DECIMAL},
+      `storage` = #{storage,jdbcType=DECIMAL},
+      supervisor_bid = #{supervisorBid,jdbcType=VARCHAR},
+      time_limit = #{timeLimit,jdbcType=DECIMAL},
+      total_investment = #{totalInvestment,jdbcType=DECIMAL},
+      unit_project_amount = #{unitProjectAmount,jdbcType=INTEGER},
+      unit_project_overview = #{unitProjectOverview,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      utilizabl_capacity = #{utilizablCapacity,jdbcType=DECIMAL},
+      water_supply_population = #{waterSupplyPopulation,jdbcType=DECIMAL},
+      watersupply = #{watersupply,jdbcType=DECIMAL},
+      `state` = #{state,jdbcType=TINYINT},
+      repeat_times = #{repeatTimes,jdbcType=INTEGER},
+      region_id = #{regionId,jdbcType=INTEGER}
+    where base_info_id = #{baseInfoId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select base_info_id, area_coverage, branch_project_amount, branch_project_overview, 
+    catchment_area, cell_project_amount, cell_project_overview, central_accumulative_payment, 
+    central_investment, construction_land, county, create_time, dam_type, flood_control_elevation, 
+    has_accept_completion, has_project_completed, has_signed_construction_contract, installed_capacity, 
+    irrigated_area, land_reclamation_plan, latitude, legal_person_id, legal_person_name, 
+    legal_representative_id, legal_representative_name, `level`, livestock, local_accumulative_payment, 
+    local_investment, `location`, longitude, max_dam_height, overview, `owner`, parent_id, 
+    plant_name, project_source, project_task, project_type, provincial_accumulative_payment, 
+    provincial_investment, provincial_loan, remark, rural_human_water, `scale`, spillway, 
+    `storage`, supervisor_bid, time_limit, total_investment, unit_project_amount, unit_project_overview, 
+    update_time, utilizabl_capacity, water_supply_population, watersupply, `state`, repeat_times, 
+    region_id
+    from base_info
+    where base_info_id = #{baseInfoId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select base_info_id, area_coverage, branch_project_amount, branch_project_overview, 
+    catchment_area, cell_project_amount, cell_project_overview, central_accumulative_payment, 
+    central_investment, construction_land, county, create_time, dam_type, flood_control_elevation, 
+    has_accept_completion, has_project_completed, has_signed_construction_contract, installed_capacity, 
+    irrigated_area, land_reclamation_plan, latitude, legal_person_id, legal_person_name, 
+    legal_representative_id, legal_representative_name, `level`, livestock, local_accumulative_payment, 
+    local_investment, `location`, longitude, max_dam_height, overview, `owner`, parent_id, 
+    plant_name, project_source, project_task, project_type, provincial_accumulative_payment, 
+    provincial_investment, provincial_loan, remark, rural_human_water, `scale`, spillway, 
+    `storage`, supervisor_bid, time_limit, total_investment, unit_project_amount, unit_project_overview, 
+    update_time, utilizabl_capacity, water_supply_population, watersupply, `state`, repeat_times, 
+    region_id
+    from base_info
+  </select>
+
+</mapper>

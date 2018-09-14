@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.NotificationMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.Notification">
+    <id column="notification_id" jdbcType="VARCHAR" property="notificationId" />
+    <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+    <result column="checked" jdbcType="BIT" property="checked" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="submitter" jdbcType="VARCHAR" property="submitter" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="type_id" jdbcType="VARCHAR" property="typeId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="yearmonth" jdbcType="VARCHAR" property="yearmonth" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from notification
+    where notification_id = #{notificationId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.Notification">
+    insert into notification (notification_id, base_info_id, `checked`, 
+      create_time, submitter, `type`, 
+      type_id, url, yearmonth
+      )
+    values (#{notificationId,jdbcType=VARCHAR}, #{baseInfoId,jdbcType=VARCHAR}, #{checked,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{submitter,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{typeId,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{yearmonth,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.Notification">
+    update notification
+    set base_info_id = #{baseInfoId,jdbcType=VARCHAR},
+      `checked` = #{checked,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      submitter = #{submitter,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      yearmonth = #{yearmonth,jdbcType=VARCHAR}
+    where notification_id = #{notificationId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select notification_id, base_info_id, `checked`, create_time, submitter, `type`, 
+    type_id, url, yearmonth
+    from notification
+    where notification_id = #{notificationId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select notification_id, base_info_id, `checked`, create_time, submitter, `type`, 
+    type_id, url, yearmonth
+    from notification
+  </select>
+  
+  <select id="findByTypeId" resultMap="BaseResultMap">
+    SELECT notification_id, base_info_id, `checked`, create_time, submitter, `type`,
+    type_id, url, yearmonth
+    FROM notification
+    WHERE type_id = #{typeId}
+  </select>
+    
+    <select id="findByBaseInfoId" resultMap="BaseResultMap">
+    SELECT notification_id, base_info_id, `checked`, create_time, submitter, `type`,
+    type_id, url, yearmonth
+    FROM notification
+    WHERE base_info_id = #{baseInfoId}
+    ORDER BY create_time DESC
+    </select>
+    
+    <select id="findAllUncheckedByBaseInfoId" resultMap="BaseResultMap">
+    SELECT notification_id, base_info_id, `checked`, create_time, submitter, `type`,
+    type_id, url, yearmonth
+    FROM notification
+    WHERE base_info_id = #{baseInfoId} AND checked = 0
+    </select>
+    
+    <select id="findAllByTypeAndBaseInfoId" resultMap="BaseResultMap">
+    SELECT notification_id, base_info_id, `checked`, create_time, submitter, `type`,
+    type_id, url, yearmonth
+    FROM notification
+    <where>
+        <if test="type != null and type !=''">
+            AND `type` = #{type}
+        </if>
+        <if test="baseInfoId != null and baseInfoId !=''">
+            AND base_info_id = #{baseInfoId}
+        </if>
+    </where> 
+    </select>
+</mapper>

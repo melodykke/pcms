@@ -1,9 +1,10 @@
 package com.gzzhsl.pcms.util;
 
-import com.gzzhsl.pcms.shiro.bean.SysRole;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
+
+import com.gzzhsl.pcms.model.SysRole;
+import com.gzzhsl.pcms.model.UserInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
-import org.springframework.beans.BeanUtils;
+
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class UserUtil {
 
     // 判断用户角色是否是checker
     public static boolean isChecker(UserInfo thisUser) {
-        List<SysRole> roles = thisUser.getSysRoleList();
+        List<SysRole> roles = thisUser.getRoles();
         for (SysRole sysRole : roles) {
             if ("checker".equals(sysRole.getRole())) {
                 return true;
@@ -43,7 +44,7 @@ public class UserUtil {
     }
     // 判断用户角色是否是reporter
     public static boolean isReporter(UserInfo thisUser) {
-        List<SysRole> roles = thisUser.getSysRoleList();
+        List<SysRole> roles = thisUser.getRoles();
         for (SysRole sysRole : roles) {
             if ("reporter".equals(sysRole.getRole())) {
                 return true;

@@ -1,16 +1,14 @@
 package com.gzzhsl.pcms.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.gzzhsl.pcms.converter.Contract2VO;
 import com.gzzhsl.pcms.converter.ContractImg2VO;
-import com.gzzhsl.pcms.entity.BaseInfo;
-import com.gzzhsl.pcms.entity.Contract;
-import com.gzzhsl.pcms.entity.Feedback;
-import com.gzzhsl.pcms.entity.PreProgress;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.Contract;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.service.ContractService;
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.FileUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.ContractImgVO;
@@ -45,6 +43,7 @@ public class ContractController {
     private ContractService contractService;
     @Autowired
     private UserService userService;
+
 
     @GetMapping("/tocontract")
     public String toContract() {
@@ -89,7 +88,8 @@ public class ContractController {
         if (files == null || files.size() < 1) {
             return ResultUtil.failed();
         }
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(null, userInfo.getUserId());
         return ResultUtil.success(FileUtil.saveFile(thisUser, files));
     }
 
@@ -97,26 +97,26 @@ public class ContractController {
     @ResponseBody
     public ResultVO getContract(@RequestParam(required = false, name = "pageSize", defaultValue = "10") Integer pageSize,
                                 @RequestParam(required = false, name = "startIndex") Integer startIndex,
-                                @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                @RequestParam(required = false, name = "pageIndex", defaultValue = "1") Integer pageNum,
                                 @RequestParam(required = false, name = "state", defaultValue = "1") byte state) {
-        Integer page = pageIndex;
-        Integer size = pageSize;
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        PageRequest pageRequest = new PageRequest(page, size, sort);
-        Page<Contract> contracts = contractService.findByState(pageRequest, state);
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        List<String> roles = thisUser.getSysRoleList().stream().map(e -> e.getRole()).collect(Collectors.toList());
+        PageInfo pageInfo = contractService.findPageByState(state, pageNum, pageSize);
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(null, userInfo.getUserId());
+        List<String> roles = thisUser.getRoles().stream().map(e -> e.getRole()).collect(Collectors.toList());
         if (roles.contains("checker")) {
-            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "checker", contracts);
+            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "checker", pageInfo);
         } else {
-            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "数据返回成功", contracts);
+            return ResultUtil.success(SysEnum.DATA_CALLBACK_SUCCESS.getCode(), "数据返回成功", pageInfo);
         }
     }
 
     @GetMapping("/getcontractbyid")
     @ResponseBody
     public ResultVO getContractById(String id) {
-        Contract contract = contractService.findById(id);
+        Contract contract = contractService.findWithImgById(id);
+        if (contract == null) {
+            ResultUtil.failed();
+        }
         List<ContractImgVO> contractImgVOList = contract.getContractImgs().stream().map(e -> ContractImg2VO.convert(e)).collect(Collectors.toList());
         ContractVO contractVO = Contract2VO.convert(contract);
         contractVO.setContractImgVOs(contractImgVOList);

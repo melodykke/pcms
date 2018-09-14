@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.FeedbackMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.Feedback">
+    <id column="feedback_id" jdbcType="VARCHAR" property="feedbackId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="target_id" jdbcType="VARCHAR" property="targetId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="checked" jdbcType="BIT" property="checked" />
+    <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+    <result column="checker" jdbcType="VARCHAR" property="checker" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from feedback
+    where feedback_id = #{feedbackId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.Feedback">
+    insert into feedback (feedback_id, create_time, msg, 
+      `state`, target_id, `type`, 
+      `checked`, base_info_id, checker, 
+      url)
+    values (#{feedbackId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{msg,jdbcType=VARCHAR}, 
+      #{state,jdbcType=TINYINT}, #{targetId,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{checked,jdbcType=BIT}, #{baseInfoId,jdbcType=VARCHAR}, #{checker,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.Feedback">
+    update feedback
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      msg = #{msg,jdbcType=VARCHAR},
+      `state` = #{state,jdbcType=TINYINT},
+      target_id = #{targetId,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      `checked` = #{checked,jdbcType=BIT},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR},
+      checker = #{checker,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where feedback_id = #{feedbackId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select feedback_id, create_time, msg, `state`, target_id, `type`, `checked`, base_info_id, 
+    checker, url
+    from feedback
+    where feedback_id = #{feedbackId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select feedback_id, create_time, msg, `state`, target_id, `type`, `checked`, base_info_id, 
+    checker, url
+    from feedback
+  </select>
+</mapper>

@@ -1,6 +1,10 @@
 package com.gzzhsl.pcms.controller;
 
-import com.gzzhsl.pcms.entity.*;
+import com.gzzhsl.pcms.entity.AnnualInvestmentImg;
+import com.gzzhsl.pcms.entity.ContractImg;
+import com.gzzhsl.pcms.entity.PreProgressImg;
+import com.gzzhsl.pcms.entity.TenderImg;
+import com.gzzhsl.pcms.model.ProjectMonthlyReportImg;
 import com.gzzhsl.pcms.service.*;
 import com.gzzhsl.pcms.util.PathUtil;
 import org.apache.commons.io.IOUtils;
@@ -38,16 +42,16 @@ public class DownLoadController {
     //fileId 就是 img_id
     @GetMapping("/monthlyreportfile")
     public void monthlyReportFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
-        ProjectMonthlyReportImg projectMonthlyReportImg = projectMonthlyReportImgService.getById(fileId);
+        ProjectMonthlyReportImg projectMonthlyReportImg = projectMonthlyReportImgService.findById(fileId);
         String downloadPath = PathUtil.getFileBasePath(false)+projectMonthlyReportImg.getImgAddr();
         this.downloadFileAction(downloadPath, request, response);
     }
 
     @GetMapping("/baseinfofile")
     public void baseInfoFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {
-        BaseInfoImg baseInfoImg = baseInfoImgService.getByBaseInfoImgId(fileId);
+        /*BaseInfoImg baseInfoImg = baseInfoImgService.getByBaseInfoImgId(fileId);
         String downloadPath = PathUtil.getFileBasePath(false)+baseInfoImg.getImgAddr();
-        this.downloadFileAction(downloadPath, request, response);
+        this.downloadFileAction(downloadPath, request, response);*/
     }
     @GetMapping("/preprogressfile")
     public void preProgressFile(@RequestParam String fileId, HttpServletRequest request, HttpServletResponse response) {

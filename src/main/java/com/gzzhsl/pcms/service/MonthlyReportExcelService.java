@@ -1,7 +1,7 @@
 package com.gzzhsl.pcms.service;
 
-import com.gzzhsl.pcms.entity.HistoryMonthlyReportExcelStatistics;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
+import com.gzzhsl.pcms.model.HistoryMonthlyReportExcelStatistics;
+import com.gzzhsl.pcms.model.ProjectMonthlyReport;
 import com.gzzhsl.pcms.vo.MonthlyReportExcelModel;
 
 import java.util.List;

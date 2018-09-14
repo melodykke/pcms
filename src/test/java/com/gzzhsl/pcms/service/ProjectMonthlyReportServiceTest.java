@@ -18,12 +18,12 @@ public class ProjectMonthlyReportServiceTest {
     @Autowired
     private ProjectMonthlyReportService projectMonthlyReportService;
 
-    @Test
+   /* @Test
     public void findByProjectIdAndState() throws Exception {
 
         List<ProjectMonthlyReport> projectMonthlyReportList = projectMonthlyReportService.findByProjectIdAndState("747d74c5-a7be-442a-903c-72277118eec6", (byte) 0);
         System.out.println(projectMonthlyReportList);
 
     }
-
+*/
 }

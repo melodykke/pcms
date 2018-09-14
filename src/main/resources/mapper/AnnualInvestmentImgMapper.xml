@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.AnnualInvestmentImgMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.AnnualInvestmentImg">
+    <id column="annual_investment_img_id" jdbcType="VARCHAR" property="annualInvestmentImgId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="img_addr" jdbcType="VARCHAR" property="imgAddr" />
+    <result column="img_desc" jdbcType="VARCHAR" property="imgDesc" />
+    <result column="annual_investment_id" jdbcType="VARCHAR" property="annualInvestmentId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from annual_investment_img
+    where annual_investment_img_id = #{annualInvestmentImgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.AnnualInvestmentImg">
+    insert into annual_investment_img (annual_investment_img_id, create_time, 
+      img_addr, img_desc, annual_investment_id
+      )
+    values (#{annualInvestmentImgId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{imgAddr,jdbcType=VARCHAR}, #{imgDesc,jdbcType=VARCHAR}, #{annualInvestmentId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.AnnualInvestmentImg">
+    update annual_investment_img
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      img_addr = #{imgAddr,jdbcType=VARCHAR},
+      img_desc = #{imgDesc,jdbcType=VARCHAR},
+      annual_investment_id = #{annualInvestmentId,jdbcType=VARCHAR}
+    where annual_investment_img_id = #{annualInvestmentImgId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select annual_investment_img_id, create_time, img_addr, img_desc, annual_investment_id
+    from annual_investment_img
+    where annual_investment_img_id = #{annualInvestmentImgId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select annual_investment_img_id, create_time, img_addr, img_desc, annual_investment_id
+    from annual_investment_img
+  </select>
+</mapper>

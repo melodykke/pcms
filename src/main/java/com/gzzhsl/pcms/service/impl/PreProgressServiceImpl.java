@@ -139,7 +139,7 @@ public class PreProgressServiceImpl implements PreProgressService {
 
     @Override
     public Feedback approvePreProgress(UserInfo thisUser, Boolean switchState, String checkinfo, String preProgressId) {
-        Feedback feedbackRt = null;
+    /*    Feedback feedbackRt = null;
         PreProgress preProgressRt = preProgressRepository.findByPreProgressId(preProgressId);
         if (preProgressRt.getState().equals((byte) 1)) {
             log.error("【项目前期审批错误】 不能审批已通过项目");
@@ -162,6 +162,7 @@ public class PreProgressServiceImpl implements PreProgressService {
         }
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "项目前期", "新的项目前期审批消息");
-        return feedbackRt;
+        return feedbackRt;*/
+    return null;
     }
 }

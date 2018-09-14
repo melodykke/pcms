@@ -1,9 +1,8 @@
 package com.gzzhsl.pcms.converter;
 
-import com.gzzhsl.pcms.entity.BaseInfoImg;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
+
+import com.gzzhsl.pcms.model.BaseInfoImg;
 import com.gzzhsl.pcms.vo.BaseInfoImgVO;
-import com.gzzhsl.pcms.vo.ProjectMonthlyReportImgVO;
 import org.springframework.beans.BeanUtils;
 
 public class BaseInfoImg2VO {

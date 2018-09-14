@@ -37,7 +37,7 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.gzzhsl.pcms.mapper"
                              targetProject="src\main\java"/>
 
-        <table tableName="announcement">
+        <table tableName="">
             <generatedKey column="id" sqlStatement="Mysql"/>
         </table>
     </context>

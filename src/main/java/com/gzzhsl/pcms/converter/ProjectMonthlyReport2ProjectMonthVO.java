@@ -1,11 +1,9 @@
 package com.gzzhsl.pcms.converter;
 
-import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
-import com.gzzhsl.pcms.entity.ProjectMonthlyReportImg;
-import com.gzzhsl.pcms.util.PathUtil;
+import com.gzzhsl.pcms.model.ProjectMonthlyReport;
+import com.gzzhsl.pcms.model.ProjectMonthlyReportImg;
 import com.gzzhsl.pcms.vo.ProjectMonthVO;
 import org.springframework.beans.BeanUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -20,7 +18,7 @@ public class ProjectMonthlyReport2ProjectMonthVO {
         calendar.setTime(projectMonthlyReport.getSubmitDate());
         projectMonthVO.setMonth(String.valueOf(calendar.get(Calendar.MONTH)+1));
         projectMonthVO.setYear(String.valueOf(calendar.get(Calendar.YEAR)));
-        List<ProjectMonthlyReportImg> projectMonthlyReportImgList = projectMonthlyReport.getProjectMonthlyReportImgList();
+        List<ProjectMonthlyReportImg> projectMonthlyReportImgList = projectMonthlyReport.getProjectMonthlyReportImgs();
         // 上面取到的不一定是图片，还包括其他一切非结构文档 所以要在前端显示月报缩略图，就必须对该工程月报下的文档格式进行判断
         // 符合JPG、 PNG的图片才能显示
         String[] acceptableExtention = {".jpg", ".png", ".jpeg", ".gif"};

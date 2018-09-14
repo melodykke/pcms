@@ -1,15 +1,21 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzzhsl.pcms.converter.AnnualInvestment2VO;
 import com.gzzhsl.pcms.converter.AnnualInvestmentImg2VO;
-import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.mapper.AnnualInvestmentMapper;
+import com.gzzhsl.pcms.mapper.BaseInfoMapper;
+import com.gzzhsl.pcms.model.AnnualInvestment;
+import com.gzzhsl.pcms.model.BaseInfo;
+import com.gzzhsl.pcms.model.Feedback;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.repository.AnnualInvestmentImgRepository;
 import com.gzzhsl.pcms.repository.AnnualInvestmentRepository;
 import com.gzzhsl.pcms.service.*;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.FeedbackUtil;
 import com.gzzhsl.pcms.util.OperationUtil;
 import com.gzzhsl.pcms.util.PathUtil;
@@ -44,6 +50,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional
 public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
+    @Autowired
+    private AnnualInvestmentMapper annualInvestmentMapper;
+    @Autowired
+    private BaseInfoService baseInfoService;
+
+
+
 
     @Autowired
     private AnnualInvestmentRepository annualInvestmentRepository;
@@ -74,7 +87,7 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
 
     @Override
     public AnnualInvestment save(AnnualInvestmentVO annualInvestmentVO) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         // BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
         BaseInfo thisProject = null;
         String year = annualInvestmentVO.getYear();
@@ -146,31 +159,22 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
                 "提交了:"+ annualInvestmentRt.getYear() +"年的年度投资计划信息"));
         // 创建webSocket消息
         WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "年度投资计划", "消息待查收");
-        return annualInvestmentRt;
+        return annualInvestmentRt;*/
+       return null;
     }
 
     @Override
-    public Page<AnnualInvestment> findByState(Pageable pageable, byte state) {
+    public PageInfo<AnnualInvestment> findPageByState(byte state, int pageNum, int pageSize) {
         UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        //BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
-        BaseInfo thisProject = null;
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject == null) {
             log.error("【年度投资计划】 获取年度投资计划列表错误， 账号无对应的水库项目");
             throw new SysException(SysEnum.ANNUAL_INVESTMENT_NO_PROJECT_ERROR);
         }
-        Specification querySpecification = new Specification() {
-            List<Predicate> predicates = new ArrayList<>();
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                if (StringUtils.isNotBlank(thisProject.getBaseInfoId())) {
-                    predicates.add(cb.equal(root.join("baseInfo").get("baseInfoId").as(String.class), thisProject.getBaseInfoId()));
-                }
-                predicates.add(cb.equal(root.get("state"), state));
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        return annualInvestmentRepository.findAll(querySpecification, pageable);
+        PageHelper.startPage(pageNum, pageSize);
+        List<AnnualInvestment> annualInvestments = annualInvestmentMapper.findPageByBaseInfoIdAndState(thisProject.getBaseInfoId(), state);
+        PageInfo<AnnualInvestment> pageInfo = new PageInfo<>(annualInvestments);
+        return pageInfo;
     }
 
     @Override
@@ -222,12 +226,12 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
 
     @Override
     public AnnualInvestment findById(String id) {
-        return annualInvestmentRepository.findByAnnualInvestmentId(id);
+        return annualInvestmentMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public Feedback approveAnnualInvestment(UserInfo thisUser, Boolean switchState, String checkinfo, AnnualInvestment thisAnnualInvestment) {
-        Feedback feedbackRt = null;
+       /* Feedback feedbackRt = null;
         if (switchState == false) {
             thisAnnualInvestment.setState((byte) 1); // 审批通过
             AnnualInvestment thisAnnualInvestmentRt = annualInvestmentRepository.save(thisAnnualInvestment);
@@ -245,7 +249,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
         }
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "年度投融资计划", "新的年度投融资计划审批消息");
-        return feedbackRt;
+        return feedbackRt;*/
+       return null;
     }
 
     // 获得总的审批后的总投资核准额
@@ -264,8 +269,8 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
     }
 
     @Override
-    public List<AnnualInvestment> getByProject(BaseInfo baseInfo) {
-        return annualInvestmentRepository.findAllByBaseInfo(baseInfo);
+    public List<AnnualInvestment> getByProjectId(String baseInfoId) {
+        return annualInvestmentMapper.findAllByBaseInfoId(baseInfoId);
     }
 
 
@@ -305,23 +310,15 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
     }
 
     @Override
-    public List<AnnualInvestment> managerGetByYearAndProject(String year, BaseInfo baseInfo) {
-        BaseInfo thisProject = baseInfo;
+    public AnnualInvestment managerFindByYearAndProject(String baseInfoId, String year) {
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(baseInfoId);
         if (thisProject == null) {
             log.error("【年度投资计划】 获取年度投资计划列表错误， 账号无对应的水库项目");
             throw new SysException(SysEnum.ANNUAL_INVESTMENT_NO_PROJECT_ERROR);
         }
-        Specification querySpecification = new Specification() {
-            List<Predicate> predicates = new ArrayList<>();
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                if (StringUtils.isNotBlank(thisProject.getBaseInfoId())) {
-                    predicates.add(cb.equal(root.join("baseInfo").get("baseInfoId").as(String.class), thisProject.getBaseInfoId()));
-                }
-                predicates.add(cb.equal(root.get("year"), year));
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-        return annualInvestmentRepository.findAll(querySpecification);
+        if (baseInfoId == null || "".equals(baseInfoId) || year == null || "".equals(year)) {
+            return null;
+        }
+        return annualInvestmentMapper.findByBaseInfoIdAndYear(baseInfoId, year);
     }
 }

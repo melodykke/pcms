@@ -114,4 +114,33 @@
             </choose>
         </where>
     </select>
+    <select id="findParentByParentId" resultMap="BaseResultMap">
+        SELECT user_id, active, create_time, `name`, `password`, salt, update_time, username,
+    base_info_id, parent_id, open_id
+        FROM user_info
+        WHERE user_id = #{parentId};
+    </select>
+    <select id="findChildrenByUserId" resultMap="BaseResultMap">
+         SELECT user_id, active, create_time, `name`, `password`, salt, update_time, username,
+    base_info_id, parent_id, open_id
+        FROM user_info
+        WHERE parent_id = #{userId};
+    </select>
+    <update id="batchUpdateBaseInfoId">
+        UPDATE user_info
+        SET base_info_id = #{baseInfoId}
+        <where>
+            user_id in
+            <choose>
+                <when test="userInfos != null and userInfos.size() > 0">
+                    <foreach collection="userInfos" open="(" close=")" separator="," index="i" item="userInfo">
+                        #{userInfo.userId}
+                    </foreach>
+                </when>
+                <otherwise>
+                    (NULL)
+                </otherwise>
+            </choose>
+        </where>
+    </update>
 </mapper>

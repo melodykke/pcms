@@ -1,6 +1,6 @@
 package com.gzzhsl.pcms.converter;
 
-import com.gzzhsl.pcms.entity.AnnualInvestment;
+import com.gzzhsl.pcms.model.AnnualInvestment;
 import com.gzzhsl.pcms.vo.AnnualInvestmentVO;
 import org.springframework.beans.BeanUtils;
 

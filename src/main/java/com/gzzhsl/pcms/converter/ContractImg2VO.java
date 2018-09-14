@@ -1,8 +1,6 @@
 package com.gzzhsl.pcms.converter;
 
-import com.gzzhsl.pcms.entity.BaseInfoImg;
-import com.gzzhsl.pcms.entity.ContractImg;
-import com.gzzhsl.pcms.vo.BaseInfoImgVO;
+import com.gzzhsl.pcms.model.ContractImg;
 import com.gzzhsl.pcms.vo.ContractImgVO;
 import org.springframework.beans.BeanUtils;
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.ProjectMonthlyReportImgMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.ProjectMonthlyReportImg">
+    <id column="project_monthly_report_img_id" jdbcType="VARCHAR" property="projectMonthlyReportImgId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="img_addr" jdbcType="VARCHAR" property="imgAddr" />
+    <result column="img_desc" jdbcType="VARCHAR" property="imgDesc" />
+    <result column="project_monthly_report_id" jdbcType="VARCHAR" property="projectMonthlyReportId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from project_monthly_report_img
+    where project_monthly_report_img_id = #{projectMonthlyReportImgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.ProjectMonthlyReportImg">
+    insert into project_monthly_report_img (project_monthly_report_img_id, create_time, 
+      img_addr, img_desc, project_monthly_report_id
+      )
+    values (#{projectMonthlyReportImgId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{imgAddr,jdbcType=VARCHAR}, #{imgDesc,jdbcType=VARCHAR}, #{projectMonthlyReportId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.ProjectMonthlyReportImg">
+    update project_monthly_report_img
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      img_addr = #{imgAddr,jdbcType=VARCHAR},
+      img_desc = #{imgDesc,jdbcType=VARCHAR},
+      project_monthly_report_id = #{projectMonthlyReportId,jdbcType=VARCHAR}
+    where project_monthly_report_img_id = #{projectMonthlyReportImgId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select project_monthly_report_img_id, create_time, img_addr, img_desc, project_monthly_report_id
+    from project_monthly_report_img
+    where project_monthly_report_img_id = #{projectMonthlyReportImgId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select project_monthly_report_img_id, create_time, img_addr, img_desc, project_monthly_report_id
+    from project_monthly_report_img
+  </select>
+</mapper>

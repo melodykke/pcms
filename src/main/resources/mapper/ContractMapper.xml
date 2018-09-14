@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.ContractMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.Contract">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="partya" jdbcType="VARCHAR" property="partya" />
+    <result column="partyb" jdbcType="VARCHAR" property="partyb" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="sign_date" jdbcType="VARCHAR" property="signDate" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+    <result column="label" jdbcType="TINYINT" property="label" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+  </resultMap>
+  <resultMap id="WithImgResultMap" type="com.gzzhsl.pcms.model.Contract" extends="BaseResultMap">
+    <collection property="contractImgs" columnPrefix="ci_" resultMap="com.gzzhsl.pcms.mapper.ContractImgMapper.BaseResultMap" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from contract
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.Contract">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into contract (id, content, create_time, 
+      `name`, `number`, partya, 
+      partyb, price, remark, 
+      sign_date, `type`, update_time, 
+      base_info_id, `label`, `state`
+      )
+    values (#{id,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{name,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{partya,jdbcType=VARCHAR}, 
+      #{partyb,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{signDate,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{baseInfoId,jdbcType=VARCHAR}, #{label,jdbcType=TINYINT}, #{state,jdbcType=TINYINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.Contract">
+    update contract
+    set content = #{content,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `name` = #{name,jdbcType=VARCHAR},
+      `number` = #{number,jdbcType=VARCHAR},
+      partya = #{partya,jdbcType=VARCHAR},
+      partyb = #{partyb,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      sign_date = #{signDate,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR},
+      `label` = #{label,jdbcType=TINYINT},
+      `state` = #{state,jdbcType=TINYINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, content, create_time, `name`, `number`, partya, partyb, price, remark, 
+    sign_date, `type`, update_time, base_info_id, `label`, `state`
+    from contract
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, content, create_time, `name`, `number`, partya, partyb, price, remark, 
+    sign_date, `type`, update_time, base_info_id, `label`, `state`
+    from contract
+  </select>
+
+  <select id="findPageByBaseInfoIdAndState" resultMap="WithImgResultMap">
+    SELECT c.id, c.content, c.create_time, c.`name`, c.`number`, c.partya, c.partyb, c.price, c.remark,
+    c.sign_date, c.`type`, c.update_time, c.base_info_id, c.`label`, c.`state`,
+    ci.contract_img_id ci_contract_img_id,
+    ci.create_time ci_create_time,
+    ci.img_addr ci_img_addr,
+    ci.img_desc ci_img_desc,
+    ci.contract_id ci_contract_id
+    FROM contract c
+    LEFT JOIN contract_img ci on c.id = ci.contract_id
+    <where>
+      <if test="baseInfoId != null and baseInfoId != ''">
+        AND base_info_id = #{baseInfoId}
+      </if>
+      <if test="state != null">
+        AND state = #{state}
+      </if>
+    </where>
+    ORDER BY update_time DESC
+  </select>
+
+  <select id="findWithImgById" resultMap="WithImgResultMap">
+    SELECT c.id, c.content, c.create_time, c.`name`, c.`number`, c.partya, c.partyb, c.price, c.remark,
+    c.sign_date, c.`type`, c.update_time, c.base_info_id, c.`label`, c.`state`,
+    ci.contract_img_id ci_contract_img_id,
+    ci.create_time ci_create_time,
+    ci.img_addr ci_img_addr,
+    ci.img_desc ci_img_desc,
+    ci.contract_id ci_contract_id
+    FROM contract c
+    LEFT JOIN contract_img ci on c.id = ci.contract_id
+    <where>
+      <if test="id != null and id != ''">
+        AND id = #{id}
+      </if>
+    </where>
+    ORDER BY update_time DESC
+  </select>
+</mapper>

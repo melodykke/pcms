@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.converter.BaseInfo2ManagerIndexVO;
-import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.ProjectStatus;
 import com.gzzhsl.pcms.enums.RedisKeyEnum;
+import com.gzzhsl.pcms.model.BaseInfo;
 import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.ProjectStatusService;
 import com.gzzhsl.pcms.util.ResultUtil;
@@ -42,11 +42,10 @@ public class IndexController {
     @ResponseBody
     @RequiresRoles(value = "manager")
     public ResultVO getAllBaseInfo() {
-
         List<BaseInfoManagerIndexVO> baseInfoManagerIndexVOs = null;
         ObjectMapper objectMapper = new ObjectMapper();
         if (!stringRedisTemplate.hasKey(RedisKeyEnum.ALLBASEINFO.getKey())) {
-            List<BaseInfo> baseInfos = baseInfoService.getAllProject();
+            List<BaseInfo> baseInfos = baseInfoService.findAllProject();
             baseInfoManagerIndexVOs = baseInfos.stream().map(e -> BaseInfo2ManagerIndexVO.convert(e)).collect(Collectors.toList());
             try {
                 String jsonString = objectMapper.writeValueAsString(baseInfoManagerIndexVOs);

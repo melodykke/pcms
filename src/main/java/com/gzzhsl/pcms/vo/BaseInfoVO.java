@@ -25,21 +25,21 @@ public class BaseInfoVO {
     private String legalPersonName;
     private String longitude;
     private String latitude;
-    private BigDecimal storage; // 库容
+    private BigDecimal storage = new BigDecimal(0); // 库容
     private String scale; // 规模
-    private BigDecimal timeLimit; // 工期
-    private BigDecimal totalInvestment; // 总投资
+    private BigDecimal timeLimit = new BigDecimal(0); // 工期
+    private BigDecimal totalInvestment = new BigDecimal(0); // 总投资
     private String overview; // 概况
     private String level; // 工程等别
-    private BigDecimal catchmentArea; // 积水面积km2
+    private BigDecimal catchmentArea = new BigDecimal(0); // 积水面积km2
     private String damType; // 坝型
-    private BigDecimal maxDamHeight; // 最大坝高m
-    private BigDecimal floodControlElevation; // 度汛高程
-    private BigDecimal spillway; // 溢洪道m
-    private BigDecimal irrigatedArea; // 灌溉面积
-    private BigDecimal watersupply; // 供水量 万m3年
-    private BigDecimal installedCapacity; // 装机容积（Kw）
-    private BigDecimal areaCoverage; // 工程占地（亩）
+    private BigDecimal maxDamHeight = new BigDecimal(0); // 最大坝高m
+    private BigDecimal floodControlElevation = new BigDecimal(0); // 度汛高程
+    private BigDecimal spillway = new BigDecimal(0); // 溢洪道m
+    private BigDecimal irrigatedArea = new BigDecimal(0); // 灌溉面积
+    private BigDecimal watersupply = new BigDecimal(0); // 供水量 万m3年
+    private BigDecimal installedCapacity = new BigDecimal(0); // 装机容积（Kw）
+    private BigDecimal areaCoverage = new BigDecimal(0); // 工程占地（亩）
     private String landReclamationPlan; // 土地复垦方案
     private String constructionLand; // 建设用地
     private int unitProjectAmount; // 单位工程数
@@ -51,14 +51,14 @@ public class BaseInfoVO {
     private String cellProjectOverview; // 单元工程概况
     private String projectSource; // 项目来源
     private String county; // 所在县
-    private BigDecimal utilizablCapacity; // 兴利库容
+    private BigDecimal utilizablCapacity = new BigDecimal(0); // 兴利库容
     private String supervisorBid; // 监理、施工招标情况
     private String hasSignedConstructionContract; // 是否签订枢纽工程施工承包合同（是/否）
     private String hasProjectCompleted; // 枢纽工程是否完工（是/否）
     private String hasAcceptCompletion; // 是否竣工验收（是/否）
-    private BigDecimal ruralHumanWater; // 农村人饮（万人）
-    private BigDecimal livestock; // 大牲畜（万头）
-    private BigDecimal waterSupplyPopulation; // 城镇供水人口（万人)
+    private BigDecimal ruralHumanWater = new BigDecimal(0); // 农村人饮（万人）
+    private BigDecimal livestock = new BigDecimal(0); // 大牲畜（万头）
+    private BigDecimal waterSupplyPopulation = new BigDecimal(0); // 城镇供水人口（万人)
     private Integer regionId;
     private List<BaseInfoImgVO> baseInfoImgVOs;
 
