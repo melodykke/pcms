@@ -110,4 +110,20 @@
     </where>
     ORDER BY update_time DESC
   </select>
+  <select id="findWithImgByBaseInfoId" resultMap="WithImgResultMap">
+    SELECT c.id, c.content, c.create_time, c.`name`, c.`number`, c.partya, c.partyb, c.price, c.remark,
+    c.sign_date, c.`type`, c.update_time, c.base_info_id, c.`label`, c.`state`,
+    ci.contract_img_id ci_contract_img_id,
+    ci.create_time ci_create_time,
+    ci.img_addr ci_img_addr,
+    ci.img_desc ci_img_desc,
+    ci.contract_id ci_contract_id
+    FROM contract c
+    LEFT JOIN contract_img ci on c.id = ci.contract_id
+    <where>
+      <if test="baseInfoId != null and baseInfoId != ''">
+        AND c.base_info_id = #{baseInfoId}
+      </if>
+    </where>
+  </select>
 </mapper>

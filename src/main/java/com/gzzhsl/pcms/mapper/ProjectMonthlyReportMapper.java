@@ -21,4 +21,8 @@ public interface ProjectMonthlyReportMapper {
                                                                       @Param("endDate") String endDate);
 
     ProjectMonthlyReport findWithImgById(@Param("projectMonthlyReportId") String projectMonthlyReportId);
+
+    List<ProjectMonthlyReport> findByBaseInfoId(@Param("baseInfoId") String baseInfoId);
+
+    int approveMonthlyReport(@Param("projectMonthlyReportId") String projectMonthlyReportId, @Param("state") byte state);
 }

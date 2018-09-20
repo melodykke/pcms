@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.OperationLogMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.OperationLog">
+    <id column="operation_log_id" jdbcType="VARCHAR" property="operationLogId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from operation_log
+    where operation_log_id = #{operationLogId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.OperationLog">
+    insert into operation_log (operation_log_id, create_time, msg, 
+      user_id)
+    values (#{operationLogId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{msg,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.OperationLog">
+    update operation_log
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      msg = #{msg,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR}
+    where operation_log_id = #{operationLogId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select operation_log_id, create_time, msg, user_id
+    from operation_log
+    where operation_log_id = #{operationLogId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select operation_log_id, create_time, msg, user_id
+    from operation_log
+  </select>
+  
+  <select id="findOperationLogsByUserId" resultMap="BaseResultMap">
+    SELECT operation_log_id, create_time, msg, user_id
+    from operation_log
+    WHERE user_id = #{userId}
+    ORDER BY create_time DESC
+  </select>
+    
+    <select id="findByUserIdAndSearchParam" resultMap="BaseResultMap">
+        SELECT operation_log_id, create_time, msg, user_id
+    from operation_log
+   <where>
+       <if test="userId != null and userId != ''">
+           AND user_id = #{userId}
+       </if>
+       <if test="searchParam != null and searchParam != ''">
+           AND msg LIKE CONCAT('%', #{searchParam}, '%')
+       </if>
+   </where>
+    ORDER BY create_time DESC
+    </select>
+</mapper>

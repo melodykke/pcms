@@ -37,4 +37,10 @@
     select role_id, available, description, `role`
     from sys_role
   </select>
+
+  <select id="findByRole" resultMap="BaseResultMap">
+ select role_id, available, description, `role`
+    from sys_role
+    WHERE `role` = #{role}
+  </select>
 </mapper>

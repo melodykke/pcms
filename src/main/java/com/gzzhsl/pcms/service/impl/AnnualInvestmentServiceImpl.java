@@ -202,26 +202,16 @@ public class AnnualInvestmentServiceImpl implements AnnualInvestmentService {
     }
 
     @Override
-    public List<AnnualInvestment> getByYearAndProject(String year, BaseInfo baseInfo) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        //BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
-        BaseInfo thisProject = null;
+    public AnnualInvestment findByBaseInfoIdAndYear(String baseInfoId, String year) {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject == null) {
             log.error("【年度投资计划】 获取年度投资计划列表错误， 账号无对应的水库项目");
             throw new SysException(SysEnum.ANNUAL_INVESTMENT_NO_PROJECT_ERROR);
         }
-        Specification querySpecification = new Specification() {
-            List<Predicate> predicates = new ArrayList<>();
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                if (StringUtils.isNotBlank(thisProject.getBaseInfoId())) {
-                    predicates.add(cb.equal(root.join("baseInfo").get("baseInfoId").as(String.class), thisProject.getBaseInfoId()));
-                }
-                predicates.add(cb.equal(root.get("year"), year));
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-        return annualInvestmentRepository.findAll(querySpecification);
+        AnnualInvestment annualInvestment = annualInvestmentMapper.findByBaseInfoIdAndYear(baseInfoId, year);
+        return annualInvestment;
     }
 
     @Override

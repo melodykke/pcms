@@ -16,16 +16,16 @@ public interface ProjectMonthlyReportService {
     ProjectMonthlyReport findByProjectMonthlyReportId(String projectMonthlyReportId);
     HistoryMonthlyReportExcelStatistics findByBaseInfoId(String baseInfoId);
     ProjectMonthlyReportShowVO buildShowVO(String projectMonthlyReportId);
+    int save(ProjectMonthlyReportVO projectMonthlyReportVO);
+    Feedback approveMonthlyReport(UserInfo thisUser, Boolean switchState, String checkinfo, ProjectMonthlyReport projectMonthlyReportRt);
 
 
 
-
-    ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO);
     ProjectMonthlyReport save(ProjectMonthlyReport projectMonthlyReport);
 
 
     List<ProjectMonthlyReport> findByProjectIdAndState(String projectId, byte state);
-    Feedback approveMonthlyReport(UserInfo thisUser, Boolean switchState, String checkinfo, String projectMonthlyReportId, ProjectMonthlyReport projectMonthlyReportRt);
+
     HistoryMonthlyReportExcelStatistics saveHistoryStatistic(HistoryMonthlyReportStatisticVO historyMonthlyReportStatisticVO);
     HistoryMonthlyReportExcelStatistics getHistoryStatistic();
     Feedback approveHistoryMonthlyStatistic(Boolean switchState, String checkinfo, HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics);

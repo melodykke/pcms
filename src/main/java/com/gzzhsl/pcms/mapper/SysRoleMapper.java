@@ -1,6 +1,8 @@
 package com.gzzhsl.pcms.mapper;
 
 import com.gzzhsl.pcms.model.SysRole;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface SysRoleMapper {
@@ -13,4 +15,7 @@ public interface SysRoleMapper {
     List<SysRole> selectAll();
 
     int updateByPrimaryKey(SysRole record);
+
+    SysRole findByRole(@Param("role") String role);
+
 }

@@ -1,5 +1,7 @@
 package com.gzzhsl.pcms.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzzhsl.pcms.converter.UserInfo2VO;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.enums.SysEnum;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,6 +74,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfo findOneWithRolesAndPrivilegesByUsernameOrId(String username, String userId) {
+        if ((username == null || "".equals(username)) && (userId == null || "".equals(userId))) {
+            return null;
+        }
         return userInfoMapper.findOneWithRolesAndPrivilegesByUsernameOrId(username, userId);
     }
 
@@ -104,6 +110,23 @@ public class UserServiceImpl implements UserService {
             return 0;
         }
         return userInfoMapper.batchUpdateBaseInfoId(userInfos, baseInfoId);
+    }
+
+    @Override
+    public List<UserInfo> findAllInferior(String userId) {
+        if (userId == null || "".equals(userId)) {
+            return new ArrayList<>();
+        }
+        return userInfoMapper.findAllInferior(userId);
+    }
+
+    @Override
+    public PageInfo<UserInfoVO> findPageWithAllInferior(int pageNum, int pageSize, String userId) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserInfo> userInfos = userInfoMapper.findAllInferior(userId);
+        List<UserInfoVO> userInfoVOs = userInfos.stream().map(e -> UserInfo2VO.convert(e)).collect(Collectors.toList());
+        PageInfo<UserInfoVO> pageInfo = new PageInfo<>(userInfoVOs);
+        return pageInfo;
     }
 
 /*    @Override
@@ -164,16 +187,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfo findByOpenId(String openId) {
         // return userRepository.findByOpenId(openId);
-        return null;
-    }
-
-    @Override
-    public Page<UserInfoVO> findAll(Pageable pageable) {
-      /*  Page<UserInfo> pageUserInfos = userInfoMapper.findAll(pageable);
-        List<UserInfo> userInfos = pageUserInfos.getContent();
-        List<UserInfoVO> userInfoVOs = userInfos.stream().map(e -> UserInfo2VO.convert(e)).collect(Collectors.toList());
-        Page<UserInfoVO> userInfoVOPage = new PageImpl<UserInfoVO>(userInfoVOs, pageable, pageUserInfos.getTotalElements());
-        return userInfoVOPage;*/
         return null;
     }
 

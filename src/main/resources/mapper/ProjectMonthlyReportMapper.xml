@@ -169,6 +169,7 @@
             AND submit_date <![CDATA[<=]]> #{endDate}
         </if>
     </where>
+      ORDER BY pmr.submit_date DESC
   </select>
     <select id="findWithImgById" resultMap="WithImgsResultMap">
         SELECT pmr.project_monthly_report_id, pmr.available_central_investment, pmr.available_local_investment,
@@ -191,4 +192,30 @@
             </if>
         </where>
     </select>
+  <select id="findByBaseInfoId" resultMap="WithImgsResultMap">
+    SELECT pmr.project_monthly_report_id, pmr.available_central_investment, pmr.available_local_investment,
+    pmr.available_provincial_investment, pmr.backfill, pmr.civil_engineering, pmr.concrete, pmr.construction_content,
+    pmr.create_time, pmr.difficulty, pmr.electromechanical_equipment, pmr.environmental_protection, pmr.grout,
+    pmr.hole_dug, pmr.independent_cost, pmr.labour_force, pmr.masonry, pmr.measure, pmr.metal_mechanism, pmr.open_dug,
+    pmr.other_cost, pmr.rebar, pmr.remark, pmr.reserve_funds, pmr.resettlement_arrangement, pmr.source_central_investment,
+    pmr.source_local_investment, pmr.source_provincial_investment, pmr.`state`, pmr.submit_date, pmr.submitter,
+    pmr.suggestion, pmr.temporary_work, pmr.visual_progress, pmr.water_conservation, pmr.base_info_id, pmr.statistical_leader,
+    pmri.project_monthly_report_img_id pmri_project_monthly_report_img_id,
+    pmri.create_time pmri_create_time,
+    pmri.img_addr pmri_img_addr,
+    pmri.img_desc pmri_img_desc,
+    pmri.project_monthly_report_id pmri_project_monthly_report_id
+    from project_monthly_report pmr
+    LEFT JOIN project_monthly_report_img pmri ON pmr.project_monthly_report_id = pmri.project_monthly_report_id
+    <where>
+      <if test="baseInfoId != null and baseInfoId != ''">
+        AND pmr.base_info_id = #{baseInfoId}
+      </if>
+    </where>
+  </select>
+    <update id="approveMonthlyReport">
+        update project_monthly_report
+        set `state` = #{state}
+        where project_monthly_report_id = #{projectMonthlyReportId,jdbcType=VARCHAR}
+    </update>
 </mapper>

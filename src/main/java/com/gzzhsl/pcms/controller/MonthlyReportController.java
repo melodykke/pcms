@@ -5,12 +5,8 @@ import com.gzzhsl.pcms.converter.ProjectMonthlyReport2ProjectMonthVO;
 import com.gzzhsl.pcms.converter.ProjectMonthlyReportImg2VO;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
-import com.gzzhsl.pcms.model.AnnualInvestment;
-import com.gzzhsl.pcms.model.BaseInfo;
-import com.gzzhsl.pcms.model.HistoryMonthlyReportExcelStatistics;
-import com.gzzhsl.pcms.model.ProjectMonthlyReport;
+import com.gzzhsl.pcms.model.*;
 import com.gzzhsl.pcms.service.*;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -53,41 +49,27 @@ public class MonthlyReportController {
     @PostMapping("/addfiles")
     @ResponseBody
     public ResultVO saveFiles(HttpServletRequest request) {
-     /*   List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("uploadfile");
-        if (files == null || files.size() < 1) { return ResultUtil.failed(); }
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("uploadfile");
+        if (files == null || files.size() < 1) {
+            return ResultUtil.failed();
+        }
         if (thisUser == null || thisProject.getPlantName() == null || thisProject.getPlantName() == "") {
             log.error("【月报错误】 所登录账号不具备月报图片上传功能 , thisUser = {}, thisProject = {}"
                     , thisUser, thisProject);
             throw new SysException(SysEnum.MONTHLY_REPORT_IMG_ERROR);
         }
-        String midPath = thisUser.getUserId()+ "/" + UUIDUtils.getUUIDString()+"/";
-        for (MultipartFile file : files) {
-            String oriFileName = file.getOriginalFilename();
-            String suffixName = ImageUtil.getFileExtension(oriFileName);
-            String destFileName = ImageUtil.getRandomFileName() + suffixName;
-
-            File dest = new File(PathUtil.getFileBasePath(true) + midPath + destFileName);
-            if (!dest.getParentFile().exists()) {
-                dest.getParentFile().mkdirs();
-            }
-            try {
-                file.transferTo(dest);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return ResultUtil.success(midPath);*/
-     return null;
+        String midPath = FileUtil.saveFile(thisUser, files);
+        return ResultUtil.success(midPath);
     }
 
 
     @PostMapping("/savereport")
     @ResponseBody
     public ResultVO saveReport(@Valid @RequestBody ProjectMonthlyReportVO projectMonthlyReportVO, BindingResult bindingResult) {
-    /*    if (projectMonthlyReportVO == null) {
+        if (projectMonthlyReportVO == null) {
             log.error("【月报错误】 存储月报错误，没有收到有效的projectMonthlyReportVO , " +
                     "实际projectMonthlyReportVO = {}", projectMonthlyReportVO);
             throw new SysException(SysEnum.MONTHLY_REPORT_ERROR);
@@ -96,17 +78,17 @@ public class MonthlyReportController {
             log.error("【月报错误】参数验证错误， 参数不正确 projectMonthlyReportVO = {}， 错误：{}", projectMonthlyReportVO, bindingResult.getFieldError().getDefaultMessage());
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
-        ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportService.save(projectMonthlyReportVO);
+        int intRt = projectMonthlyReportService.save(projectMonthlyReportVO);
 
-        return ResultUtil.success();*/
-    return  null;
+        return ResultUtil.success();
     }
 
     @PostMapping("/getmonthlyreports")
     @ResponseBody
     public ResultVO getMonthlyReports(@RequestBody Map<String, Object> params) {
-      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【月报错误】 获取用户所在工程月报集出错 , thisProject = {}", thisProject);
             throw new SysException(SysEnum.MONTHLY_REPORTS_FETCH_ERROR);
@@ -121,14 +103,13 @@ public class MonthlyReportController {
             year = String.valueOf(calendar.get(Calendar.YEAR));
         }
         String startDate = year+"-01-01 00:00:00";
-        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.getMonthlyReportsByProjectIdAndYear(thisProject.getBaseInfoId(), startDate, endDate);
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportService.findMonthlyReportsByProjectIdAndPeriod(thisProject.getBaseInfoId(), startDate, endDate);
         if (projectMonthlyReports == null || projectMonthlyReports.size() == 0){
             log.error("【月报错误】获取月报列表空，该工程指定年无月报记录");
             throw new SysException(SysEnum.DATA_CALLBACK_FAILED);
         }
         List<ProjectMonthVO> projectMonthVOs = projectMonthlyReports.stream().map(e -> ProjectMonthlyReport2ProjectMonthVO.convert(e)).collect(Collectors.toList());
-        return ResultUtil.success(projectMonthVOs);*/
-      return null;
+        return ResultUtil.success(projectMonthVOs);
     }
 
     // 进入某一个月报展示页面（projectMonthlyReportId）
@@ -182,9 +163,10 @@ public class MonthlyReportController {
     @ResponseBody
     public ResultVO getMonthlyReportExcelByProjectMonthlyReportId(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
         // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
-        /*UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
-        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
+        ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportService.findByProjectMonthlyReportId(projectMonthlyReportId);
         String projectId = ((BaseInfo) request.getSession().getAttribute("thisProject")).getBaseInfoId();
         Date yearEndDate = new Date(); // 当前时间
         String historyPointTime = "2000-01-01 00:00:00";
@@ -193,38 +175,40 @@ public class MonthlyReportController {
         calendar.setTime(yearEndDate);
         String yearStartTime = String.valueOf(calendar.get(Calendar.YEAR))+"-01-01 00:00:00"; // 当前时间的年度头一天头一秒
         List<ProjectMonthlyReport> yearProjectMonthlyReports = projectMonthlyReportService.
-                getMonthlyReportsByProjectIdAndYear(projectId, yearStartTime, yearEndTime); // 查询截止目前 本年的统计情况;
+                findMonthlyReportsByProjectIdAndPeriod(projectId, yearStartTime, yearEndTime); // 查询截止目前 本年的统计情况;
         List<ProjectMonthlyReport> sofarProjectMonthlyReports = projectMonthlyReportService.
-                getMonthlyReportsByProjectIdAndYear(projectId, historyPointTime, yearEndTime); // 查询截止目前 历史的统计情况;;
+                findMonthlyReportsByProjectIdAndPeriod(projectId, historyPointTime, yearEndTime); // 查询截止目前 历史的统计情况;;
         MonthlyReportExcelModel monthlyReportExcelModel = new MonthlyReportExcelModel();
         monthlyReportExcelModel.setTotalInvestment(thisProject.getTotalInvestment());
         // 取得年份
         String year = currentDate.substring(0, currentDate.lastIndexOf("-"));
         // 查询该年份有无已审批通过的年度投资计划 如果有设置上，如果没 null
-        List<AnnualInvestment> annualInvestments = annualInvestmentService.getByYearAndProject(year, thisProject);
-        if (annualInvestments.size()==1) {
-            if (annualInvestments.get(0).getState().equals((byte) 1)) {
-                monthlyReportExcelModel.setThisYearPlanInvestment(annualInvestments.get(0).getApplyFigure()); // 设置年度投融资计划
+        AnnualInvestment annualInvestment = annualInvestmentService.findByBaseInfoIdAndYear(thisProject.getBaseInfoId(), year);
+        if (annualInvestment != null) {
+            if (annualInvestment.getState().equals((byte) 1)) {
+                monthlyReportExcelModel.setThisYearPlanInvestment(annualInvestment.getApplyFigure()); // 设置年度投融资计划
             }
         }
         MonthlyReportExcelModel monthlyReportExcelModelWithMonthParams = monthlyReportExcelService.getMonthExcelModelWithMonthParams(monthlyReportExcelModel, projectMonthlyReport);
         MonthlyReportExcelModel monthlyReportExcelModelWithMonthYearParams = monthlyReportExcelService.getMonthExcelModelWithYearParams(monthlyReportExcelModelWithMonthParams, yearProjectMonthlyReports);
 
         MonthlyReportExcelModel monthlyReportExcelModelWithSofarParams = null;
-        if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {  // 是否存在历史数据
-            monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, thisProject.getHistoryMonthlyReportExcelStatistics());
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.getHistoryStatistic();
+        if (historyMonthlyReportExcelStatistics != null) {  // 是否存在历史数据
+            monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, historyMonthlyReportExcelStatistics);
         } else {
             monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithMonthYearParams, sofarProjectMonthlyReports, null);
         }
-        return ResultUtil.success(MonthlyReportExcelCalcUtil.buildMonthlyReportExcel(monthlyReportExcelModelWithSofarParams));*/
-        return  null;
+        return ResultUtil.success(MonthlyReportExcelCalcUtil.buildMonthlyReportExcel(monthlyReportExcelModelWithSofarParams));
     }
 
     @PostMapping("/approvemonthlyreport")
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveMonthlyReport(@RequestBody Map<String, Object> params) {
-        /*UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(userInfo.getUsername(), null);
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");
         String projectMonthlyReportId = (String) params.get("projectMonthlyReportId");
@@ -232,21 +216,16 @@ public class MonthlyReportController {
             log.error("【月报错误】审批月报错误 月报ID projectMonthlyReportId为空");
             throw new SysException(SysEnum.MONTHLY_REPORTS_APPROVEAL_ERROR);
         }
-        ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportService.getByProjectMonthlyReportId(projectMonthlyReportId);
+        ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportService.findByProjectMonthlyReportId(projectMonthlyReportId);
         if (projectMonthlyReportRt == null) {
             log.error("【月报错误】审批月报错误，无月报实体对应月报ID");
             throw new SysException(SysEnum.MONTHLY_REPORTS_NO_CORRESPOND_REPORT_ERROR);
-        }
-        if (!thisUser.getBaseInfo().getBaseInfoId().equals(projectMonthlyReportRt.getBaseInfo().getBaseInfoId())) {
-            log.error("【月报错误】月报错误，不能审批不属于本用户所属工程的月报");
-            throw new SysException(SysEnum.MONTHLY_REPORTS_CHECKED_OTHERS_ERROR);
         }
         if (projectMonthlyReportRt.getState() != (byte) 0) {
             log.error("【月报错误】当前审批月报已经审批过，不能重复审批");
             throw new SysException(SysEnum.MONTHLY_REPORTS_CHECK_CHECKED_ERROR);
         }
-        return ResultUtil.success(projectMonthlyReportService.approveMonthlyReport(thisUser, switchState, checkinfo, projectMonthlyReportId, projectMonthlyReportRt));*/
-        return null;
+        return ResultUtil.success(projectMonthlyReportService.approveMonthlyReport(thisUser, switchState, checkinfo, projectMonthlyReportRt));
     }
 
     @GetMapping("/tomonthshistory")
@@ -257,18 +236,19 @@ public class MonthlyReportController {
     @GetMapping("/hashistorystatistic")
     @ResponseBody
     public ResultVO hasHistoryStatistic() {
-       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
-        if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) 1)) {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.getHistoryStatistic();
+        if (historyMonthlyReportExcelStatistics != null && historyMonthlyReportExcelStatistics.getState().equals((byte) 1)) {
             return ResultUtil.success();
-        } else if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) 0)) {
+        } else if (historyMonthlyReportExcelStatistics != null && historyMonthlyReportExcelStatistics.getState().equals((byte) 0)) {
             return ResultUtil.failed(1004, "历史数据已设置，正在审批中...");
-        } else if (thisProject.getHistoryMonthlyReportExcelStatistics() != null && thisProject.getHistoryMonthlyReportExcelStatistics().getState().equals((byte) -1)) {
+        } else if (historyMonthlyReportExcelStatistics != null && historyMonthlyReportExcelStatistics.getState().equals((byte) -1)) {
             return ResultUtil.failed(1005, "历史数据审批未通过！");
         } else {
             return ResultUtil.failed();
-        }*/
-       return null;
+        }
     }
 
     @PostMapping("/savehistorystatistic")
@@ -295,7 +275,7 @@ public class MonthlyReportController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveHistoryMonthlyStatistic(@RequestBody Map<String, Object> params) {
-       /* Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
+      /*  Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
         String checkinfo = (String) params.get("checkinfo");
         HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.getHistoryStatistic();
         if (historyMonthlyReportExcelStatistics == null) {
@@ -306,8 +286,9 @@ public class MonthlyReportController {
             log.error("【月报错误】当前审批月报历史数据已经审批过，不能重复审批");
             throw new SysException(SysEnum.HISTORY_MONTHLY_STATISTIC_CHECK_CHECKED_ERROR);
         }
-        return ResultUtil.success(projectMonthlyReportService.approveHistoryMonthlyStatistic(switchState, checkinfo, historyMonthlyReportExcelStatistics));*/
-       return null;
+        return ResultUtil.success(projectMonthlyReportService.approveHistoryMonthlyStatistic(switchState, checkinfo, historyMonthlyReportExcelStatistics));
+*/
+      return null;
     }
 
     @GetMapping("/tomonthshistoryshow")
@@ -318,15 +299,14 @@ public class MonthlyReportController {
     @GetMapping("/gethistorystatistic")
     @ResponseBody
     public ResultVO getHistoryStatistic() {
-        /*HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.getHistoryStatistic();
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.getHistoryStatistic();
         HistoryMonthlyReportStatisticVO historyMonthlyReportStatisticVO = new HistoryMonthlyReportStatisticVO();
         if (historyMonthlyReportExcelStatistics != null) {
             BeanUtils.copyProperties(historyMonthlyReportExcelStatistics, historyMonthlyReportStatisticVO);
             return ResultUtil.success(historyMonthlyReportStatisticVO);
         } else {
             return ResultUtil.failed();
-        }*/
-        return null;
+        }
     }
 
     @PostMapping("/managergetmonthlyreports")

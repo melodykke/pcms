@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class ProjectMonthlyReportImgServiceImpl implements ProjectMonthlyReportImgService {
@@ -14,8 +16,14 @@ public class ProjectMonthlyReportImgServiceImpl implements ProjectMonthlyReportI
     @Autowired
     private ProjectMonthlyReportImgMapper projectMonthlyReportImgMapper;
 
+
     @Override
     public ProjectMonthlyReportImg findById(String id) {
         return projectMonthlyReportImgMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int batchSave(List<ProjectMonthlyReportImg> projectMonthlyReportImgs) {
+        return projectMonthlyReportImgMapper.batchInsert(projectMonthlyReportImgs);
     }
 }

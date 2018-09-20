@@ -55,4 +55,10 @@ public interface UserInfoMapper {
      * @return
      */
     Integer batchUpdateBaseInfoId(@Param("userInfos") List<UserInfo> userInfos, @Param("baseInfoId") String baseInfoId);
+
+    /**
+     * 查找当前账号的下一级账号集合
+     * @return
+     */
+    List<UserInfo> findAllInferior(@Param("userId") String userId);
 }

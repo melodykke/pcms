@@ -12,6 +12,9 @@ import java.util.List;
 
 public interface ContractService {
 
+    List<Contract> findByBaseInfoId(String baseInfoId);
+
+
     Contract findById(String id);
     PageInfo<Contract> findPageByState(byte state, int pageNum, int pageSize);
     Contract findWithImgById(String id);

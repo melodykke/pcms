@@ -1,21 +1,19 @@
 package com.gzzhsl.pcms.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.gzzhsl.pcms.dto.UserInfoDTO;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.service.AccountService;
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.AccountPasswordVO;
 import com.gzzhsl.pcms.vo.AccountVO;
 import com.gzzhsl.pcms.vo.ResultVO;
 import com.gzzhsl.pcms.vo.UserInfoVO;
-import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.Account;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +53,7 @@ public class AccountController {
     public String toAccountManagement(){
         return "manage_account";
     }
+
     @PostMapping("/createaccount")
     @ResponseBody
     @RequiresRoles(value = "manager")
@@ -78,15 +77,13 @@ public class AccountController {
     @GetMapping("/getuseraccounts")
     @ResponseBody
     @RequiresRoles(value = "manager")
-    public Page<UserInfoVO> getUserAccounts(@RequestParam(required = false, name = "rows", defaultValue = "15") Integer pageSize,
-                                          @RequestParam(required = false, name = "startIndex") Integer startIndex,
-                                          @RequestParam(required = false, name = "page", defaultValue = "1") Integer pageIndex,
-                                          @RequestParam(required = false, name = "type", defaultValue = "") String type) {
-        Integer page = pageIndex-1;
-        Integer size = pageSize;
-        Sort sort = new Sort(Sort.Direction.ASC, "username");
-        PageRequest pageRequest = new PageRequest(page, size, sort);
-        Page<UserInfoVO> userInfoVOPage = userService.findAll(pageRequest);
+    public PageInfo<UserInfoVO> getUserAccounts(@RequestParam(required = false, name = "rows", defaultValue = "15") Integer pageSize,
+                                                @RequestParam(required = false, name = "startIndex") Integer startIndex,
+                                                @RequestParam(required = false, name = "page", defaultValue = "1") Integer pageNum,
+                                                @RequestParam(required = false, name = "type", defaultValue = "") String type) {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(null, userInfo.getUserId());
+        PageInfo<UserInfoVO> userInfoVOPage = userService.findPageWithAllInferior(pageNum, pageSize, thisUser.getUserId());
         return userInfoVOPage;
     }
 

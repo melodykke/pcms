@@ -143,4 +143,29 @@
             </choose>
         </where>
     </update>
+    <select id="findAllInferior" resultMap="WithRolesResultMap">
+        SELECT u.user_id, u.active, u.create_time, u.name, u.password, u.salt, u.update_time, u.username,
+        u.base_info_id, u.parent_id, u.open_id,
+        r.role_id role_role_id, r.available role_available, r.description role_description, r.role role_role,
+        p.permission_id role_permission_permission_id, p.available role_permission_available, p.name role_permission_name,
+        p.parent_id role_permission_parent_id, p.parent_ids role_permission_parent_ids, p.permission role_permission_permission,
+        p.resource_type role_permission_resource_type, p.url role_permission_url
+        FROM
+        user_info u
+        LEFT JOIN sys_user_role ur on u.user_id = ur.user_id
+        LEFT JOIN sys_role r on ur.role_id = r.role_id
+        LEFT JOIN sys_role_permission rp on r.role_id = rp.role_id
+        LEFT JOIN sys_permission p on rp.permission_id = p.permission_id
+        <where>
+            <choose>
+                <when test="userId != null and userId != ''">
+                    AND u.parent_id = #{userId}
+                </when>
+                <otherwise>
+                    AND 1=2
+                </otherwise>
+            </choose>
+        </where>
+        ORDER BY u.username ASC
+    </select>
 </mapper>

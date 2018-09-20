@@ -30,5 +30,10 @@ public class ProjectMonthlyReportMapperTest {
         ProjectMonthlyReport projectMonthlyReport = projectMonthlyReportMapper.findWithImgById("4028e40e6583a47b016583a8bad80006");
         System.out.println(projectMonthlyReport);
     }
+    @Test
+    public void findByBaseInfoId() throws Exception {
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportMapper.findByBaseInfoId("8a8082816458ab31016458ab49d40091");
+        System.out.println(projectMonthlyReports);
+    }
 
 }

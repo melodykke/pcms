@@ -13,4 +13,6 @@ public interface ProjectMonthlyReportImgMapper {
     List<ProjectMonthlyReportImg> selectAll();
 
     int updateByPrimaryKey(ProjectMonthlyReportImg record);
+
+    int batchInsert(List<ProjectMonthlyReportImg> projectMonthlyReportImgs);
 }

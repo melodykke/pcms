@@ -75,6 +75,19 @@ public class ContractServiceImpl implements ContractService {
     private NotificationService notificationService;
 
     @Override
+    public List<Contract> findByBaseInfoId(String baseInfoId) {
+        if (baseInfoId == null || "".equals(baseInfoId)) {
+            return new ArrayList<>();
+        }
+        return contractMapper.findWithImgByBaseInfoId(baseInfoId);
+    }
+
+
+
+
+
+
+    @Override
     public Contract findById(String id) {
         return contractMapper.selectByPrimaryKey(id);
     }

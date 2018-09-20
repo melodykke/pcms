@@ -8,6 +8,8 @@ import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
 import com.gzzhsl.pcms.mapper.HistoryMonthlyReportExcelStatisticsMapper;
+import com.gzzhsl.pcms.mapper.NotificationMapper;
+import com.gzzhsl.pcms.mapper.ProjectMonthlyReportImgMapper;
 import com.gzzhsl.pcms.mapper.ProjectMonthlyReportMapper;
 import com.gzzhsl.pcms.model.*;
 import com.gzzhsl.pcms.repository.HistoryMonthlyReportExcelStatisticsRepository;
@@ -29,12 +31,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +49,12 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     private HistoryMonthlyReportExcelStatisticsMapper historyMonthlyReportExcelStatisticsMapper;
     @Autowired
     private BaseInfoService baseInfoService;
+    @Autowired
+    private NotificationMapper notificationMapper;
+    @Autowired
+    private ProjectMonthlyReportImgService projectMonthlyReportImgService;
+    @Autowired
+    private FeedbackService feedbackService;
 
 
 
@@ -66,8 +68,6 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     private NotificationRepository notificationRepository;
     @Autowired
     private OperationLogService operationLogService;
-    @Autowired
-    private FeedbackService feedbackService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -91,9 +91,10 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
 
     @Override
-    public ProjectMonthlyReport save(ProjectMonthlyReportVO projectMonthlyReportVO) {
-       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+    public int save(ProjectMonthlyReportVO projectMonthlyReportVO) {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(userInfo.getUsername(), null);
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         // 如果用户对应的Project不存在，则报错
         if (thisProject == null) {
             log.error("【月报错误】 用户对应Project为空，需首先绑定对应的水库工程");
@@ -105,7 +106,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
         }
         // 在审批状态为“已审批”的状态下，若月报提交月份重复，则不允许提交
         Date monthReportDate = projectMonthlyReportVO.getSubmitDate();
-        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportRepository.findAllByBaseInfo(thisProject);
+        List<ProjectMonthlyReport> projectMonthlyReports = projectMonthlyReportMapper.findByBaseInfoId(thisProject.getBaseInfoId());
         for (ProjectMonthlyReport projectMonthlyReport : projectMonthlyReports) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
             String dateString = simpleDateFormat.format(projectMonthlyReport.getSubmitDate());
@@ -115,7 +116,7 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                     log.error("【月报错误】 插入月报与某已存在月报月份一致，并且该已存在月报状态为空或已审批");
                     throw new SysException(SysEnum.MONTHLY_REPORTS_INSERT_ERROR);
                 } else {
-                    projectMonthlyReportRepository.delete(projectMonthlyReport);
+                    projectMonthlyReportMapper.deleteByPrimaryKey(projectMonthlyReport.getProjectMonthlyReportId());
                 }
             }
         }
@@ -123,34 +124,39 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
         if (projectMonthlyReportVO.getRtFileTempPath() == null || projectMonthlyReportVO.getRtFileTempPath() == "") {
             // 没有上传图片的情况，直接对表格进行存储
-            projectMonthlyReport.setBaseInfo(thisProject);
-            ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportRepository.save(projectMonthlyReport);
+            projectMonthlyReport.setBaseInfoId(thisProject.getBaseInfoId());
+            int intRt = projectMonthlyReportMapper.insert(projectMonthlyReport);
             // 把通知提醒也一并存入数据库
             Notification notification = new Notification();
+            notification.setNotificationId(UUIDUtils.getUUIDString());
             notification.setCreateTime(new Date());
-            notification.setSubmitter(projectMonthlyReportRt.getSubmitter());
+            notification.setSubmitter(projectMonthlyReport.getSubmitter());
             notification.setType(NotificationTypeEnum.MONTHLY_REPORT.getMsg());
-            notification.setTypeId(projectMonthlyReportRt.getProjectMonthlyReportId()); // 这里是月报ID
+            notification.setTypeId(projectMonthlyReport.getProjectMonthlyReportId()); // 这里是月报ID
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
-            notification.setYearmonth(formatter.format(projectMonthlyReportRt.getSubmitDate()));
+            notification.setYearmonth(formatter.format(projectMonthlyReport.getSubmitDate()));
             notification.setChecked(false);
-            notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
+            notification.setBaseInfoId(projectMonthlyReport.getBaseInfoId());
             notification.setUrl("/monthlyreport/projectmonthlyreportshow");
-            notificationRepository.save(notification);
+            notificationMapper.insert(notification);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
-                    projectMonthlyReportRt.getCreateTime(),
-                    "提交了没有附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
+                    projectMonthlyReport.getCreateTime(),
+                    "提交了没有附件的"+projectMonthlyReport.getSubmitDate()+"月报. ID:"+projectMonthlyReport.
                             getProjectMonthlyReportId()));
             // 创建webSocket消息
-            WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "月报", "新的月报消息");
-            return projectMonthlyReportRt;
+            UserInfo parent = userService.findParent(thisUser);
+            if (parent != null) {
+                parent = userService.findOneWithRolesAndPrivilegesByUsernameOrId(parent.getUsername(), null);
+            }
+            WebSocketUtil.sendWSNotificationMsg(thisUser, parent, webSocket, "月报", "新的月报消息");
+            return intRt;
         } else {
             // 上传图片的情况，考虑转存
             String rtFileTempPath = projectMonthlyReportVO.getRtFileTempPath();
-            projectMonthlyReport.setBaseInfo(thisProject);
-            ProjectMonthlyReport projectMonthlyReportRt = projectMonthlyReportRepository.save(projectMonthlyReport);
+            projectMonthlyReport.setBaseInfoId(thisProject.getBaseInfoId());
+            int intRt = projectMonthlyReportMapper.insert(projectMonthlyReport);
             Calendar cal = Calendar.getInstance();
-            cal.setTime(projectMonthlyReportRt.getSubmitDate());
+            cal.setTime(projectMonthlyReport.getSubmitDate());
             String date = String.valueOf(cal.get(Calendar.YEAR)) + "/" + String.valueOf(cal.get(Calendar.MONTH) + 1);
             File sourceDestFolder = new File(PathUtil.getFileBasePath(true) + rtFileTempPath);
             String targetDest = PathUtil.getFileBasePath(false) + PathUtil.getMonthlyReportImagePath(thisProject.getPlantName(), date);
@@ -166,36 +172,39 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
                     sourceFile.renameTo(targetFile);
                    // 把存储到新地址的图片的相对路径拿出来构建月报图片对象。
                     ProjectMonthlyReportImg projectMonthlyReportImg = new ProjectMonthlyReportImg();
+                    projectMonthlyReportImg.setProjectMonthlyReportImgId(UUIDUtils.getUUIDString());
                     projectMonthlyReportImg.setCreateTime(new Date());
                     projectMonthlyReportImg.setImgAddr(imgRelativePath);
-                    projectMonthlyReportImg.setProjectMonthlyReport(projectMonthlyReport);
+                    projectMonthlyReportImg.setProjectMonthlyReportId(projectMonthlyReport.getProjectMonthlyReportId());
                     projectMonthlyReportImgs.add(projectMonthlyReportImg);
                 }
             }
-            projectMonthlyReport.setProjectMonthlyReportImgList(projectMonthlyReportImgs);
-            ProjectMonthlyReport projectMonthlyReportRtWithImg = projectMonthlyReportRepository.save(projectMonthlyReport);
+            projectMonthlyReportImgService.batchSave(projectMonthlyReportImgs);
             // 把通知提醒也一并存入数据库
             Notification notification = new Notification();
+            notification.setNotificationId(UUIDUtils.getUUIDString());
             notification.setCreateTime(new Date());
-            notification.setSubmitter(projectMonthlyReportRt.getSubmitter());
+            notification.setSubmitter(projectMonthlyReport.getSubmitter());
             notification.setType(NotificationTypeEnum.MONTHLY_REPORT.getMsg());
-            notification.setTypeId(projectMonthlyReportRt.getProjectMonthlyReportId()); // 这里是月报ID
+            notification.setTypeId(projectMonthlyReport.getProjectMonthlyReportId()); // 这里是月报ID
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
-            notification.setYearmonth(formatter.format(projectMonthlyReportRt.getSubmitDate()));
+            notification.setYearmonth(formatter.format(projectMonthlyReport.getSubmitDate()));
             notification.setChecked(false);
-            notification.setBaseInfoId(thisUser.getBaseInfo().getBaseInfoId());
+            notification.setBaseInfoId(projectMonthlyReport.getBaseInfoId());
             notification.setUrl("/monthlyreport/projectmonthlyreportshow");
-            notificationRepository.save(notification);
+            notificationMapper.insert(notification);
             operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(),
-                    projectMonthlyReportRt.getCreateTime(),
-                    "提交了带附件的"+projectMonthlyReportRt.getSubmitDate()+"月报. ID:"+projectMonthlyReportRt.
+                    projectMonthlyReport.getCreateTime(),
+                    "提交了带附件的"+projectMonthlyReport.getSubmitDate()+"月报. ID:"+projectMonthlyReport.
                             getProjectMonthlyReportId()));
             // 创建webSocket消息
-            WebSocketUtil.sendWSNotificationMsg(thisUser, webSocket, "月报", "新的月报消息");
-            return projectMonthlyReportRtWithImg;
-
-        }*/
-         return null;
+            UserInfo parent = userService.findParent(thisUser);
+            if (parent != null) {
+                parent = userService.findOneWithRolesAndPrivilegesByUsernameOrId(parent.getUsername(), null);
+            }
+            WebSocketUtil.sendWSNotificationMsg(thisUser, parent, webSocket, "月报", "新的月报消息");
+            return intRt;
+        }
     }
 
     @Override
@@ -254,27 +263,32 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
     }
 
     @Override
-    public Feedback approveMonthlyReport(UserInfo thisUser, Boolean switchState, String checkinfo, String projectMonthlyReportId, ProjectMonthlyReport projectMonthlyReportRt) {
-     /*   Feedback feedbackRt = null;
+    public Feedback approveMonthlyReport(UserInfo thisUser, Boolean switchState, String checkinfo, ProjectMonthlyReport projectMonthlyReportRt) {
         if (switchState == false) {
-            projectMonthlyReportRt.setState((byte) 1); // 审批通过
-            ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
-            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(),"月报", projectMonthlyReportId, new Date(),
+            int intRt = projectMonthlyReportMapper.approveMonthlyReport(projectMonthlyReportRt.getProjectMonthlyReportId(), (byte)1);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfoId(), thisUser.getUsername(),
+                    "月报", projectMonthlyReportRt.getProjectMonthlyReportId(), new Date(),
                     "审批通过", (byte) 1, "/monthlyreport/projectmonthlyreportshow");
-            feedbackRt = feedbackService.save(feedback);
-            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批通过了ID为"+feedbackRt.getTargetId()+"的月报"));
+            feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedback.getCreateTime(),
+                    "审批通过了ID为"+feedback.getTargetId()+"的月报"));
+            // 创建webSocket消息
+            List<UserInfo> children = userService.findChildren(thisUser);
+            WebSocketUtil.sendWSFeedbackMsg(thisUser, children, webSocket, "月报", "新的审批消息");
+            return feedback;
         } else {
-            projectMonthlyReportRt.setState((byte) -1); // 审批未通过
-            ProjectMonthlyReport projectMonthlyReportRtRt = projectMonthlyReportRepository.save(projectMonthlyReportRt);
-            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfo().getBaseInfoId(), thisUser.getUsername(), "月报",projectMonthlyReportId, new Date(),
+            int intRt = projectMonthlyReportMapper.approveMonthlyReport(projectMonthlyReportRt.getProjectMonthlyReportId(), (byte)-1);
+            Feedback feedback = FeedbackUtil.buildFeedback(thisUser.getBaseInfoId(), thisUser.getUsername(),
+                    "月报", projectMonthlyReportRt.getProjectMonthlyReportId(), new Date(),
                     "审批未通过：" + checkinfo, (byte) -1, "/monthlyreport/projectmonthlyreportshow");
-            feedbackRt = feedbackService.save(feedback);
-            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedbackRt.getCreateTime(), "审批未通过ID为"+feedbackRt.getTargetId()+"的月报"));
+            feedbackService.save(feedback);
+            operationLogService.save(OperationUtil.buildOperationLog(thisUser.getUserId(), feedback.getCreateTime(),
+                    "审批未通过ID为"+feedback.getTargetId()+"的月报"));
+            // 创建webSocket消息
+            List<UserInfo> children = userService.findChildren(thisUser);
+            WebSocketUtil.sendWSFeedbackMsg(thisUser, children, webSocket, "月报", "新的审批消息");
+            return feedback;
         }
-        // 创建webSocket消息
-        WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "月报", "新的审批消息");
-        return feedbackRt;*/
-     return null;
     }
 
     @Override
@@ -322,11 +336,14 @@ public class ProjectMonthlyReportServiceImpl implements ProjectMonthlyReportServ
 
     @Override
     public HistoryMonthlyReportExcelStatistics getHistoryStatistic() {
-       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
-        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = historyMonthlyReportExcelStatisticsRepository.findByBaseInfo(thisProject);
-        return historyMonthlyReportExcelStatistics;*/
-       return null;
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
+        if (thisProject == null) {
+            return null;
+        }
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = historyMonthlyReportExcelStatisticsMapper.findByBaseInfoId(thisProject.getBaseInfoId());
+        return historyMonthlyReportExcelStatistics;
     }
 
     @Override

@@ -1,13 +1,12 @@
 package com.gzzhsl.pcms.service;
 
-import com.gzzhsl.pcms.entity.OperationLog;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.github.pagehelper.PageInfo;
+import com.gzzhsl.pcms.model.OperationLog;;
 
 import java.util.List;
 
 public interface OperationLogService {
-    OperationLog save(OperationLog operationLog);
-    List<OperationLog> getOperationLogsByUserId(String userId);
-    Page<OperationLog> listAll(Pageable pageable, String userId, String searchParam);
+    int save(OperationLog operationLog);
+    List<OperationLog> findOperationLogsByUserId(String userId);
+    PageInfo<OperationLog> findByConditions(int pageNum, int pageSize, String userId, String searchParam);
 }

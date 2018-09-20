@@ -37,4 +37,18 @@
     select project_monthly_report_img_id, create_time, img_addr, img_desc, project_monthly_report_id
     from project_monthly_report_img
   </select>
+
+  <insert id="batchInsert">
+    insert into project_monthly_report_img (project_monthly_report_img_id, create_time,
+      img_addr, img_desc, project_monthly_report_id
+      )
+    values
+      <foreach collection="list" item="projectMonthlyReportImg" index="index" separator="," open="(" close=")">
+        #{projectMonthlyReportImg.projectMonthlyReportImgId,jdbcType=VARCHAR},
+        #{projectMonthlyReportImg.createTime,jdbcType=TIMESTAMP},
+        #{projectMonthlyReportImg.imgAddr,jdbcType=VARCHAR},
+        #{projectMonthlyReportImg.imgDesc,jdbcType=VARCHAR},
+        #{projectMonthlyReportImg.projectMonthlyReportId,jdbcType=VARCHAR}
+      </foreach>
+  </insert>
 </mapper>

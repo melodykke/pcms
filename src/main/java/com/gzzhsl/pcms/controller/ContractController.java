@@ -5,8 +5,10 @@ import com.gzzhsl.pcms.converter.Contract2VO;
 import com.gzzhsl.pcms.converter.ContractImg2VO;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.BaseInfo;
 import com.gzzhsl.pcms.model.Contract;
 import com.gzzhsl.pcms.model.UserInfo;
+import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.ContractService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.util.FileUtil;
@@ -39,11 +41,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/contract")
 @Slf4j
 public class ContractController {
+
     @Autowired
     private ContractService contractService;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private BaseInfoService baseInfoService;
 
     @GetMapping("/tocontract")
     public String toContract() {
@@ -53,14 +57,14 @@ public class ContractController {
     @GetMapping("/hascontract")
     @ResponseBody
     public ResultVO hasContract() {
-       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
-        List<Contract> contracts = thisProject.getContracts();
-        if (thisProject.getContracts().size() > 0) {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
+        List<Contract> contracts = contractService.findByBaseInfoId(thisProject.getBaseInfoId());
+        if (contracts != null && contracts.size() > 0) {
             return ResultUtil.success();
         }
-        return ResultUtil.failed();*/
-       return null;
+        return ResultUtil.failed();
     }
 
     @PostMapping("/save")

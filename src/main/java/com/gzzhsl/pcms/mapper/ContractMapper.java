@@ -1,6 +1,8 @@
 package com.gzzhsl.pcms.mapper;
 
 import com.gzzhsl.pcms.model.Contract;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface ContractMapper {
@@ -14,7 +16,9 @@ public interface ContractMapper {
 
     int updateByPrimaryKey(Contract record);
 
-    List<Contract> findPageByBaseInfoIdAndState(String baseInfoId, byte state);
+    List<Contract> findPageByBaseInfoIdAndState(@Param("baseInfoId") String baseInfoId, @Param("state") byte state);
 
     Contract findWithImgById(String id);
+
+    List<Contract> findWithImgByBaseInfoId(@Param("baseInfoId") String baseInfoId);
 }

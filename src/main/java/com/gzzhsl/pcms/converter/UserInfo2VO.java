@@ -1,6 +1,6 @@
 package com.gzzhsl.pcms.converter;
 
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.vo.UserInfoVO;
 import org.springframework.beans.BeanUtils;
 

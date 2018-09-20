@@ -2,9 +2,7 @@ package com.gzzhsl.pcms.controller;
 
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
-import com.gzzhsl.pcms.model.BaseInfo;
-import com.gzzhsl.pcms.model.TimeLineItem;
-import com.gzzhsl.pcms.model.UserInfo;
+import com.gzzhsl.pcms.model.*;
 import com.gzzhsl.pcms.service.*;
 import com.gzzhsl.pcms.util.MonthlyReportExcelCalcUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
@@ -57,8 +55,9 @@ public class ReporterController {
     @ResponseBody
     public ResultVO getMonthlyReportPostHistory(String currentDate, String projectMonthlyReportId, HttpServletRequest request, HttpServletResponse response) {
         // 获取当前用户工程，看是否该工程有截止到2018年1月之前的历史数据
-     /*   UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.getUserByUsername(thisUser.getUsername()).getBaseInfo();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findByUsername(userInfo.getUsername());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         Date yearEndDate = new Date(); // 当前时间
         String historyPointTime = "2000-01-01 00:00:00";
         String yearEndTime = currentDate+"-28 23:59:59"; // 查询时间范围的截止日期应为当前
@@ -66,19 +65,19 @@ public class ReporterController {
         calendar.setTime(yearEndDate);
         String yearStartTime = String.valueOf(calendar.get(Calendar.YEAR))+"-01-01 00:00:00"; // 当前时间的年度头一天头一秒
         List<ProjectMonthlyReport> yearProjectMonthlyReports = projectMonthlyReportService.
-                getMonthlyReportsByProjectIdAndYear(thisProject.getBaseInfoId(), yearStartTime, yearEndTime); // 查询截止目前 本年的统计情况;
+                findMonthlyReportsByProjectIdAndPeriod(thisProject.getBaseInfoId(), yearStartTime, yearEndTime); // 查询截止目前 本年的统计情况;
         List<ProjectMonthlyReport> sofarProjectMonthlyReports = projectMonthlyReportService.
-                getMonthlyReportsByProjectIdAndYear(thisProject.getBaseInfoId(), historyPointTime, yearEndTime); // 查询截止目前 历史的统计情况;;
+                findMonthlyReportsByProjectIdAndPeriod(thisProject.getBaseInfoId(), historyPointTime, yearEndTime); // 查询截止目前 历史的统计情况;;
         MonthlyReportExcelModel monthlyReportExcelModel = new MonthlyReportExcelModel();
         MonthlyReportExcelModel monthlyReportExcelModelWithYearParams = monthlyReportExcelService.getMonthExcelModelWithYearParams(monthlyReportExcelModel, yearProjectMonthlyReports);
         MonthlyReportExcelModel monthlyReportExcelModelWithSofarParams = null;
-        if (thisProject.getHistoryMonthlyReportExcelStatistics() != null) {  // 是否存在历史数据
-            monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithYearParams, sofarProjectMonthlyReports, thisProject.getHistoryMonthlyReportExcelStatistics());
+        HistoryMonthlyReportExcelStatistics historyMonthlyReportExcelStatistics = projectMonthlyReportService.getHistoryStatistic();
+        if (historyMonthlyReportExcelStatistics != null) {  // 是否存在历史数据
+            monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithYearParams, sofarProjectMonthlyReports, historyMonthlyReportExcelStatistics);
         } else {
             monthlyReportExcelModelWithSofarParams = monthlyReportExcelService.getMonthExcelModelWithSofarParams(monthlyReportExcelModelWithYearParams, sofarProjectMonthlyReports, null);
         }
-        return ResultUtil.success(monthlyReportExcelModelWithSofarParams);*/
-     return null;
+        return ResultUtil.success(monthlyReportExcelModelWithSofarParams);
     }
 
     @GetMapping("getthiscard")

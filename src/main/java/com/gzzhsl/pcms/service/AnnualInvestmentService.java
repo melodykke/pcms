@@ -12,13 +12,13 @@ public interface AnnualInvestmentService {
     AnnualInvestment managerFindByYearAndProject(String baseInfoId, String year);
     List<AnnualInvestment> getByProjectId(String baseInfoId);
     PageInfo<AnnualInvestment> findPageByState(byte state, int pageNum, int pageSize);
-
+    AnnualInvestment findByBaseInfoIdAndYear(String year, String baseInfoId);
 
 
     AnnualInvestment save(AnnualInvestmentVO annualInvestmentVO);
     boolean containsSameYear(String year);
     AnnualInvestmentVO getById(String id);
-    List<AnnualInvestment> getByYearAndProject(String year, BaseInfo baseInfo);
+
     AnnualInvestment findById(String id);
     Feedback approveAnnualInvestment(UserInfo thisUser, Boolean switchState, String checkinfo, AnnualInvestment thisAnnualInvestment);
 

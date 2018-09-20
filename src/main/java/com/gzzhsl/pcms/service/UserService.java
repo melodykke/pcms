@@ -1,5 +1,6 @@
 package com.gzzhsl.pcms.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.model.PersonInfo;
 import com.gzzhsl.pcms.model.UserInfo;
@@ -68,8 +69,17 @@ public interface UserService {
      */
     Integer batchUpdateBaseInfoId(List<UserInfo> userInfos, String baseInfoId);
 
+    /**
+     * 查找当前账号的下一级账号集合
+     * @return
+     */
+    List<UserInfo> findAllInferior(String userId);
 
-
+    /**
+     * 查找当前账号的下一级账号集合,并将其分页输出
+     * @return
+     */
+    PageInfo<UserInfoVO> findPageWithAllInferior(int pageNum, int pageSize, String userId);
 
 
 
@@ -89,7 +99,7 @@ public interface UserService {
     Integer updateUserBaseInfo(BaseInfo baseInfo, String userId);
     Integer updateUserOpenId(String openId, String userId);
     UserInfo findByOpenId(String openId);
-    Page<UserInfoVO> findAll(Pageable pageable);
+
     Integer toggleActivate(UserInfo userInfo);
     Integer modifyPassword(String password, UserInfo userInfo);
 

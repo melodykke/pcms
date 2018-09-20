@@ -1,9 +1,10 @@
 package com.gzzhsl.pcms.util;
 
-import com.gzzhsl.pcms.entity.BaseInfo;
+
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.model.BaseInfo;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.vo.AccountVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -18,12 +19,12 @@ public class AccountVO2UserInfo {
         subUserInfo.setName(thisUser.getName());
         subUserInfo.setSalt("salt");
         subUserInfo.setActive((byte) 0);
-        BaseInfo project = thisUser.getBaseInfo();
-/*        if (project == null) {
+        String baseInfoId = thisUser.getBaseInfoId();
+/*        if (baseInfoId == null || "".equals(baseInfoId) {
             log.error("【账户错误】配置子账户错误，该账号没有优先配置水库工程");
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);
         }*/
-        subUserInfo.setBaseInfo(project);
+        subUserInfo.setBaseInfoId(baseInfoId);
         subUserInfo.setCreateTime(new Date());
         subUserInfo.setUpdateTime(new Date());
         subUserInfo.setPassword(UserUtil.getEncriPwd(accountVO.getPassword()));
