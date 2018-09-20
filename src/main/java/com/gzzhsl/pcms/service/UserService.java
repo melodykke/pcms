@@ -81,7 +81,7 @@ public interface UserService {
 
 
 
-    UserInfo findByUserId(String uid);
+
     UserInfo getUserByUsername(String username);
     List<UserInfo> getAllUser();
     UserInfo save(UserInfo userInfo);

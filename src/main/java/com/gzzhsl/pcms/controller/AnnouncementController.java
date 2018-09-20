@@ -33,12 +33,12 @@ public class AnnouncementController {
 
     @GetMapping("/getannouncements")
     @ResponseBody
-    public PageInfo<Announcement> getAnnouncements(@RequestParam(required = false, name = "rows", defaultValue = "15") Integer pageSize,
+    public ResultVO getAnnouncements(@RequestParam(required = false, name = "rows", defaultValue = "15") Integer pageSize,
                                                    @RequestParam(required = false, name = "startIndex") Integer startIndex,
                                                    @RequestParam(required = false, name = "page", defaultValue = "1") Integer pageNum,
                                                    @RequestParam(required = false, name = "type", defaultValue = "") String type) {
         PageInfo<Announcement> pageInfo = announcementService.findAnnouncementByPage(pageNum, pageSize);
-        return pageInfo;
+        return ResultUtil.success(pageInfo);
     }
     @GetMapping("gethotlatests")
     @ResponseBody

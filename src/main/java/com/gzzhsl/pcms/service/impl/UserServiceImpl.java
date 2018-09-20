@@ -106,10 +106,10 @@ public class UserServiceImpl implements UserService {
         return userInfoMapper.batchUpdateBaseInfoId(userInfos, baseInfoId);
     }
 
-    @Override
+/*    @Override
     public UserInfo findByUserId(String uid) {
         return userInfoMapper.selectByPrimaryKey(uid);
-    }
+    }*/
 
     @Override
     public UserInfo getUserByUsername(String username) {

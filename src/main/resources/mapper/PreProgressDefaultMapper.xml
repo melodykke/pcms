@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.PreProgressDefaultMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.PreProgressDefault">
+    <id column="pre_progress_defaul_id" jdbcType="INTEGER" property="preProgressDefaulId" />
+    <result column="plan_project" jdbcType="VARCHAR" property="planProject" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from pre_progress_default
+    where pre_progress_defaul_id = #{preProgressDefaulId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.PreProgressDefault">
+    insert into pre_progress_default (pre_progress_defaul_id, plan_project, 
+      serial_number)
+    values (#{preProgressDefaulId,jdbcType=INTEGER}, #{planProject,jdbcType=VARCHAR}, 
+      #{serialNumber,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.PreProgressDefault">
+    update pre_progress_default
+    set plan_project = #{planProject,jdbcType=VARCHAR},
+      serial_number = #{serialNumber,jdbcType=INTEGER}
+    where pre_progress_defaul_id = #{preProgressDefaulId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select pre_progress_defaul_id, plan_project, serial_number
+    from pre_progress_default
+    where pre_progress_defaul_id = #{preProgressDefaulId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select pre_progress_defaul_id, plan_project, serial_number
+    from pre_progress_default
+  </select>
+</mapper>

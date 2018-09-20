@@ -1,8 +1,6 @@
 package com.gzzhsl.pcms.converter;
 
-import com.gzzhsl.pcms.entity.BaseInfoImg;
-import com.gzzhsl.pcms.entity.PreProgressImg;
-import com.gzzhsl.pcms.vo.BaseInfoImgVO;
+import com.gzzhsl.pcms.model.PreProgressImg;
 import com.gzzhsl.pcms.vo.PreProgressImgVO;
 import org.springframework.beans.BeanUtils;
 

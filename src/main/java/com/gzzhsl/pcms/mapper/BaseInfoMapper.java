@@ -13,4 +13,6 @@ public interface BaseInfoMapper {
     List<BaseInfo> selectAll();
 
     int updateByPrimaryKey(BaseInfo record);
+
+    List<BaseInfo> findByRegionId(int regionId);
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.TimeLineItemMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.TimeLineItem">
+    <id column="time_line_item_id" jdbcType="INTEGER" property="timeLineItemId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from time_line_item
+    where time_line_item_id = #{timeLineItemId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.TimeLineItem">
+    insert into time_line_item (time_line_item_id, create_time, msg, 
+      `type`, update_time)
+    values (#{timeLineItemId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{msg,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.TimeLineItem">
+    update time_line_item
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      msg = #{msg,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where time_line_item_id = #{timeLineItemId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select time_line_item_id, create_time, msg, `type`, update_time
+    from time_line_item
+    where time_line_item_id = #{timeLineItemId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select time_line_item_id, create_time, msg, `type`, update_time
+    from time_line_item
+  </select>
+</mapper>

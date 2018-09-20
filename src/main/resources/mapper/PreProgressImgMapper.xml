@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.PreProgressImgMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.PreProgressImg">
+    <id column="pre_progress_img_id" jdbcType="VARCHAR" property="preProgressImgId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="img_addr" jdbcType="VARCHAR" property="imgAddr" />
+    <result column="img_desc" jdbcType="VARCHAR" property="imgDesc" />
+    <result column="pre_progress_id" jdbcType="VARCHAR" property="preProgressId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from pre_progress_img
+    where pre_progress_img_id = #{preProgressImgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.PreProgressImg">
+    insert into pre_progress_img (pre_progress_img_id, create_time, img_addr, 
+      img_desc, pre_progress_id)
+    values (#{preProgressImgId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{imgAddr,jdbcType=VARCHAR}, 
+      #{imgDesc,jdbcType=VARCHAR}, #{preProgressId,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.PreProgressImg">
+    update pre_progress_img
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      img_addr = #{imgAddr,jdbcType=VARCHAR},
+      img_desc = #{imgDesc,jdbcType=VARCHAR},
+      pre_progress_id = #{preProgressId,jdbcType=VARCHAR}
+    where pre_progress_img_id = #{preProgressImgId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select pre_progress_img_id, create_time, img_addr, img_desc, pre_progress_id
+    from pre_progress_img
+    where pre_progress_img_id = #{preProgressImgId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select pre_progress_img_id, create_time, img_addr, img_desc, pre_progress_id
+    from pre_progress_img
+  </select>
+</mapper>

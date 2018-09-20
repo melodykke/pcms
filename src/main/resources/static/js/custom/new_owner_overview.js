@@ -30,7 +30,7 @@ function requestNotice(requestData) {
         dataType: 'json',
         data: requestData || {},
         success: function (data) {
-            var noticeData = data.content;
+            var noticeData = data.list;
             // 分页赋值
             pagerOp.page = data.number+1;
             pagerOp.total = data.totalPages;

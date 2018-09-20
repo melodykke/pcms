@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.PreProgressMapper">
+    <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.PreProgress">
+        <id column="pre_progress_id" jdbcType="VARCHAR" property="preProgressId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="owner" jdbcType="VARCHAR" property="owner"/>
+        <result column="repeat_times" jdbcType="INTEGER" property="repeatTimes"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId"/>
+    </resultMap>
+    <resultMap id="WithImgResultMap" type="com.gzzhsl.pcms.model.PreProgress" extends="BaseResultMap">
+        <collection property="preProgressImgs" columnPrefix="ppi_" resultMap="com.gzzhsl.pcms.mapper.PreProgressImgMapper.BaseResultMap"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from pre_progress
+    where pre_progress_id = #{preProgressId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.gzzhsl.pcms.model.PreProgress">
+    insert into pre_progress (pre_progress_id, create_time, `owner`, 
+      repeat_times, `state`, update_time, 
+      base_info_id)
+    values (#{preProgressId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{owner,jdbcType=VARCHAR}, 
+      #{repeatTimes,jdbcType=INTEGER}, #{state,jdbcType=TINYINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{baseInfoId,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.PreProgress">
+    update pre_progress
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      `owner` = #{owner,jdbcType=VARCHAR},
+      repeat_times = #{repeatTimes,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=TINYINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR}
+    where pre_progress_id = #{preProgressId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select pre_progress_id, create_time, `owner`, repeat_times, `state`, update_time, 
+    base_info_id
+    from pre_progress
+    where pre_progress_id = #{preProgressId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select pre_progress_id, create_time, `owner`, repeat_times, `state`, update_time, 
+    base_info_id
+    from pre_progress
+  </select>
+
+    <select id="findByBaseInfoId" resultMap="BaseResultMap">
+    select pre_progress_id, create_time, `owner`, repeat_times, `state`, update_time,
+    base_info_id
+    from pre_progress
+  WHERE base_info_id = #{baseInfoId}
+  </select>
+    <select id="findWithImgByBaseInfoId" resultMap="WithImgResultMap">
+      select pp.pre_progress_id, pp.create_time, pp.`owner`, pp.repeat_times, pp.`state`, pp.update_time,
+      pp.base_info_id,
+      ppi.pre_progress_img_id ppi_pre_progress_img_id,
+      ppi.create_time ppi_create_time,
+      ppi.img_addr ppi_img_addr,
+      ppi.img_desc ppi_img_desc,
+      ppi.pre_progress_id ppi_pre_progress_id
+    from pre_progress pp
+    LEFT JOIN pre_progress_img ppi ON pp.pre_progress_id = ppi.pre_progress_id
+    WHERE base_info_id = #{baseInfoId}
+    </select>
+</mapper>

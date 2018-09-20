@@ -1,6 +1,6 @@
 package com.gzzhsl.pcms.controller;
 
-import com.gzzhsl.pcms.entity.Region;
+import com.gzzhsl.pcms.model.Region;
 import com.gzzhsl.pcms.service.RegionService;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.ResultVO;

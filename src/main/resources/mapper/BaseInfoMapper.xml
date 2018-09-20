@@ -205,5 +205,20 @@
     region_id
     from base_info
   </select>
-
+  <select id="findByRegionId" resultMap="BaseResultMap">
+     select base_info_id, area_coverage, branch_project_amount, branch_project_overview,
+    catchment_area, cell_project_amount, cell_project_overview, central_accumulative_payment,
+    central_investment, construction_land, county, create_time, dam_type, flood_control_elevation,
+    has_accept_completion, has_project_completed, has_signed_construction_contract, installed_capacity,
+    irrigated_area, land_reclamation_plan, latitude, legal_person_id, legal_person_name,
+    legal_representative_id, legal_representative_name, `level`, livestock, local_accumulative_payment,
+    local_investment, `location`, longitude, max_dam_height, overview, `owner`, parent_id,
+    plant_name, project_source, project_task, project_type, provincial_accumulative_payment,
+    provincial_investment, provincial_loan, remark, rural_human_water, `scale`, spillway,
+    `storage`, supervisor_bid, time_limit, total_investment, unit_project_amount, unit_project_overview,
+    update_time, utilizabl_capacity, water_supply_population, watersupply, `state`, repeat_times,
+    region_id
+    from base_info
+    WHERE region_id = #{regionId}
+  </select>
 </mapper>

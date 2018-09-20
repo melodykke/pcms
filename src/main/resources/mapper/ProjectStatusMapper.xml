@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.ProjectStatusMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.ProjectStatus">
+    <id column="project_status_id" jdbcType="VARCHAR" property="projectStatusId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+    <result column="time_line_item_id" jdbcType="INTEGER" property="timeLineItemId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from project_status
+    where project_status_id = #{projectStatusId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.ProjectStatus">
+    insert into project_status (project_status_id, create_time, update_time, 
+      base_info_id, time_line_item_id)
+    values (#{projectStatusId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{baseInfoId,jdbcType=VARCHAR}, #{timeLineItemId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.ProjectStatus">
+    update project_status
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR},
+      time_line_item_id = #{timeLineItemId,jdbcType=INTEGER}
+    where project_status_id = #{projectStatusId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select project_status_id, create_time, update_time, base_info_id, time_line_item_id
+    from project_status
+    where project_status_id = #{projectStatusId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select project_status_id, create_time, update_time, base_info_id, time_line_item_id
+    from project_status
+  </select>
+  
+  <select id="findByBaseInfoId" resultMap="BaseResultMap">
+   select project_status_id, create_time, update_time, base_info_id, time_line_item_id
+    from project_status
+    WHERE base_info_id = #{baseInfoId}
+    ORDER BY create_time ASC
+  </select>
+</mapper>

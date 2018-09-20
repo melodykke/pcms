@@ -1,13 +1,11 @@
 package com.gzzhsl.pcms.controller;
 
-import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
-import com.gzzhsl.pcms.service.MonthlyReportExcelService;
-import com.gzzhsl.pcms.service.ProjectMonthlyReportService;
-import com.gzzhsl.pcms.service.TimeLineItemService;
-import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
+import com.gzzhsl.pcms.model.BaseInfo;
+import com.gzzhsl.pcms.model.TimeLineItem;
+import com.gzzhsl.pcms.model.UserInfo;
+import com.gzzhsl.pcms.service.*;
 import com.gzzhsl.pcms.util.MonthlyReportExcelCalcUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.CardVO;
@@ -34,6 +32,8 @@ import java.util.List;
 public class ReporterController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private BaseInfoService baseInfoService;
     @Autowired
     private ProjectMonthlyReportService projectMonthlyReportService;
     @Autowired
@@ -84,9 +84,9 @@ public class ReporterController {
     @GetMapping("getthiscard")
     @ResponseBody
     public ResultVO getThisCard() {
-       /* UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject != null) {
             if (!thisProject.getState().equals((byte) 1)) {
                 throw new SysException(SysEnum.NO_PROJECT_IN_THISUSER);
@@ -96,7 +96,7 @@ public class ReporterController {
             cardVO.setLegalPersonName(thisProject.getLegalPersonName());
             cardVO.setScale(thisProject.getScale());
             cardVO.setLevel(thisProject.getLevel());
-            TimeLineItem lastTimeLineItem = timeLineItemService.getLatestOne();
+            TimeLineItem lastTimeLineItem = timeLineItemService.findLatestOne();
             if (lastTimeLineItem == null) {
                 cardVO.setProjectStatus("项目开始");
             } else {
@@ -105,8 +105,7 @@ public class ReporterController {
             return ResultUtil.success(cardVO);
         } else {
             return ResultUtil.failed();
-        }*/
-       return null;
+        }
     }
 
 }

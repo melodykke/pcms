@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gzzhsl.pcms.converter.BaseInfo2ManagerIndexVO;
-import com.gzzhsl.pcms.entity.ProjectStatus;
 import com.gzzhsl.pcms.enums.RedisKeyEnum;
 import com.gzzhsl.pcms.model.BaseInfo;
+import com.gzzhsl.pcms.model.ProjectStatus;
 import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.ProjectStatusService;
 import com.gzzhsl.pcms.util.ResultUtil;
@@ -80,7 +80,7 @@ public class IndexController {
     @GetMapping("/getprojectstatus")
     @ResponseBody
     public ResultVO getProjectStatus() {
-        List<ProjectStatus> projectStatusList = projectStatusService.getProjectStatus();
+        List<ProjectStatus> projectStatusList = projectStatusService.findThisProjectStatus();
         if (projectStatusList == null || projectStatusList.size() == 0) {
             return ResultUtil.failed();
         } else {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.ReservoirCodeMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.ReservoirCode">
+    <id column="reservoir_id" jdbcType="INTEGER" property="reservoirId" />
+    <result column="reservoir_name" jdbcType="VARCHAR" property="reservoirName" />
+    <result column="reservoir_code" jdbcType="VARCHAR" property="reservoirCode" />
+    <result column="base_info_id" jdbcType="VARCHAR" property="baseInfoId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from reservoir_code
+    where reservoir_id = #{reservoirId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.ReservoirCode">
+    insert into reservoir_code (reservoir_id, reservoir_name, reservoir_code, 
+      base_info_id)
+    values (#{reservoirId,jdbcType=INTEGER}, #{reservoirName,jdbcType=VARCHAR}, #{reservoirCode,jdbcType=VARCHAR}, 
+      #{baseInfoId,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.ReservoirCode">
+    update reservoir_code
+    set reservoir_name = #{reservoirName,jdbcType=VARCHAR},
+      reservoir_code = #{reservoirCode,jdbcType=VARCHAR},
+      base_info_id = #{baseInfoId,jdbcType=VARCHAR}
+    where reservoir_id = #{reservoirId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select reservoir_id, reservoir_name, reservoir_code, base_info_id
+    from reservoir_code
+    where reservoir_id = #{reservoirId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select reservoir_id, reservoir_name, reservoir_code, base_info_id
+    from reservoir_code
+  </select>
+  
+  <select id="findByReservoirName" resultMap="BaseResultMap">
+    SELECT reservoir_id, reservoir_name, reservoir_code, base_info_id
+    FROM reservoir_code
+    WHERE reservoir_name = #{reservoirName}
+  </select>
+    <select id="findByBaseInfoId" resultMap="BaseResultMap">
+        SELECT reservoir_id, reservoir_name, reservoir_code, base_info_id
+        FROM reservoir_code
+        WHERE base_info_id = #{baseInfoId}
+    </select>
+</mapper>

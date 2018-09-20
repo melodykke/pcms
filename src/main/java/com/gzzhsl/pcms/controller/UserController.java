@@ -4,8 +4,10 @@ package com.gzzhsl.pcms.controller;
 import com.gzzhsl.pcms.converter.PersonInfo2VO;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.BaseInfo;
 import com.gzzhsl.pcms.model.PersonInfo;
 import com.gzzhsl.pcms.model.UserInfo;
+import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.PersonService;
 import com.gzzhsl.pcms.service.UserService;
 import com.gzzhsl.pcms.util.ResultUtil;
@@ -36,6 +38,8 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
+    private BaseInfoService baseInfoService;
+    @Autowired
     private PersonService personService;
 
     @GetMapping("/personinfo")
@@ -49,7 +53,7 @@ public class UserController {
     @ResponseBody
     public ResultVO getSubject(){
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(thisUser, userInfoVO);
         PersonInfo thisPerson = userService.findPersonInfoByUserId(thisUser.getUserId());
@@ -68,15 +72,15 @@ public class UserController {
     @RequiresRoles(value = {"reporter", "checker"}, logical = Logical.OR)
     @ResponseBody
     public ResultVO getThisProject(HttpServletRequest request, HttpServletResponse response){
-      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject == null || thisProject.getBaseInfoId() == null) {
             return ResultUtil.failed(SysEnum.NO_PROJECT_IN_THISUSER);
         }else {
             request.getSession().setAttribute("thisProject", thisProject);
             return ResultUtil.success();
-        }*/
-      return null;
+        }
     }
 
     @GetMapping("/getaccountinfo")
@@ -141,7 +145,7 @@ public class UserController {
     @PostMapping("/personinfosubmit")
     @ResponseBody
     public ResultVO personInfoSubmit(@RequestBody @Valid PersonInfoVO personInfoVO, BindingResult bindingResult){
-        if (personInfoVO == null) {
+        /*if (personInfoVO == null) {
             log.error("【个人信息】 个人信息错误，没有收到有效的personInfoVO , " +
                     "实际personInfoVO = {}", personInfoVO);
             throw new SysException(SysEnum.PERSON_INFO_ERROR);
@@ -173,7 +177,8 @@ public class UserController {
             log.error("【个人信息】 个人信息持久化错误， 参数不正确");
             throw new SysException(SysEnum.DATA_SUBMIT_FAILED);
         }
-        return ResultUtil.success();
+        return ResultUtil.success();*/
+        return null;
     }
 
 }

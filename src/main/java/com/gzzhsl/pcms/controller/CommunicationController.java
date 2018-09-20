@@ -1,10 +1,10 @@
 package com.gzzhsl.pcms.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gzzhsl.pcms.entity.ReservoirCode;
 import com.gzzhsl.pcms.enums.StationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.ReservoirCode;
 import com.gzzhsl.pcms.service.ReservoirCodeService;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.*;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -34,10 +33,9 @@ public class CommunicationController {
     private ReservoirCodeService reservoirCodeService;
 
 
-
-
     /**
      * 获取某水库检测站点
+     *
      * @param plantName
      * @return
      */
@@ -45,15 +43,15 @@ public class CommunicationController {
     @ResponseBody
     public ResultVO getStations(String plantName) {
         List<StationVO> stationVOs = getMyStaionVO(plantName);
-        if (stationVOs == null || stationVOs.size()==0) {
+        if (stationVOs == null || stationVOs.size() == 0) {
             return ResultUtil.failed(SysEnum.FAIL_TO_FETCH_STATION_INFO_ERROR);
         }
         return ResultUtil.success(stationVOs);
     }
 
     /**
-     *
      * 获取某一水库的所有测站的雨量信息
+     *
      * @param stationId
      * @return
      */
@@ -61,7 +59,7 @@ public class CommunicationController {
     @ResponseBody
     public ResultVO getAllRainfallData(String baseInfoId, String startTime, String endTime) {
         List<StationVO> stationVOs = getMyStaionVO(baseInfoId); // 获取所有的监测站点
-        if (stationVOs == null || stationVOs.size()==0) {
+        if (stationVOs == null || stationVOs.size() == 0) {
             log.error("【雨量信息】 获取监测站点失败！ stationVOs={}", stationVOs);
             throw new SysException(SysEnum.FAIL_TO_FETCH_MONITOR_STATION_ERROR);
         }
@@ -71,26 +69,16 @@ public class CommunicationController {
                 rainfallMonitorStations.add(stationVO);
             }
         }
-        if (rainfallMonitorStations == null || rainfallMonitorStations.size()==0) {
+        if (rainfallMonitorStations == null || rainfallMonitorStations.size() == 0) {
             return ResultUtil.failed(SysEnum.FAIL_TO_FETCH_RAINFALL_ERROR);
         }
-
-        /*Calendar cal=Calendar.getInstance();
-        cal.add(Calendar.DATE,-1);
-        Date time=cal.getTime();
-        String startTimeStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(time); // 当前时间的前一天
-
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 当前时间
-        String endTimeStr = formatter.format(currentTime);*/
-
         List<StationVOWithMonitorData> stationVOWithMonitorDatas = getAllRainFallData(rainfallMonitorStations, startTime, endTime);
         return ResultUtil.success(stationVOWithMonitorDatas);
     }
 
     /**
-     *
      * 获取某一水库的所有测站的雨量信息
+     *
      * @param stationId
      * @return
      */
@@ -98,7 +86,7 @@ public class CommunicationController {
     @ResponseBody
     public ResultVO getAllWaterLevelData(String baseInfoId, String startTime, String endTime) {
         List<StationVO> stationVOs = getMyStaionVO(baseInfoId); // 获取所有的监测站点
-        if (stationVOs == null || stationVOs.size()==0) {
+        if (stationVOs == null || stationVOs.size() == 0) {
             log.error("【水位信息】 获取监测站点失败！ stationVOs={}", stationVOs);
             throw new SysException(SysEnum.FAIL_TO_FETCH_MONITOR_STATION_ERROR);
         }
@@ -108,31 +96,17 @@ public class CommunicationController {
                 waterlevelMonitorStations.add(stationVO);
             }
         }
-        if (waterlevelMonitorStations == null || waterlevelMonitorStations.size()==0) {
+        if (waterlevelMonitorStations == null || waterlevelMonitorStations.size() == 0) {
             return ResultUtil.failed(SysEnum.FAIL_TO_FETCH_WATERLEVEL_ERROR);
         }
-
-        /*Calendar cal=Calendar.getInstance();
-        cal.add(Calendar.DATE,-1);
-        Date time=cal.getTime();
-        String startTimeStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(time); // 当前时间的前一天
-
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 当前时间
-        String endTimeStr = formatter.format(currentTime);*/
-
         List<StationVOWithMonitorData> stationVOWithMonitorDatas = getAllWaterLevelData(waterlevelMonitorStations, startTime, endTime);
         return ResultUtil.success(stationVOWithMonitorDatas);
     }
 
-
-
-
-
-
     /**
      * 根据水库编码获取水库水雨情测站编码(服务器编码)
      * 这里是去雨量服务地址获取所有类型站点列表 服务器端没有做分类
+     *
      * @param proId 水库编码
      * @return
      */
@@ -162,12 +136,13 @@ public class CommunicationController {
 
     /**
      * 判断水库是否在本系统中存在，若存在返回其监测站点
+     *
      * @param plantName
      * @return
      */
     public List<StationVO> getMyStaionVO(String baseInfoId) {
         List<String> proIds = new ArrayList<>();
-        ReservoirCode reservoirCode = reservoirCodeService.getByBaseInfoId(baseInfoId);
+        ReservoirCode reservoirCode = reservoirCodeService.findByBaseInfoId(baseInfoId);
         if (reservoirCode == null) {
             log.error("【监测站点】系统不存在查询的水库名称， reservoirCode={}", reservoirCode);
             ResultUtil.failed(SysEnum.PLANTNAME_NO_EXIST_ERROR);
@@ -180,15 +155,15 @@ public class CommunicationController {
         }
         return stationVOs;
     }
+
     /**
-     *
-     * @param strURL 服务地址
+     * @param strURL    服务地址
      * @param arguments 水库编码集
-     * @param method 调用方法名
+     * @param method    调用方法名
      * @return 该水库所有测站信息的JSON字符串
      */
     public String connect2Service(String strURL, List<String> arguments, String method) {
-        Map<String,Object> params = new LinkedHashMap<>();
+        Map<String, Object> params = new LinkedHashMap<>();
         params.put("arguments", arguments);
         params.put("method", method);
         try {
@@ -211,13 +186,13 @@ public class CommunicationController {
 
             int code = connection.getResponseCode();
             BufferedReader reader;
-            String allTempStr="";
+            String allTempStr = "";
             if (code == HttpURLConnection.HTTP_OK) {
                 InputStream is = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(is));
                 String line;
-                while ((line = reader.readLine()) != null){
-                    allTempStr+=line;
+                while ((line = reader.readLine()) != null) {
+                    allTempStr += line;
                 }
                 reader.close();
             } else {
@@ -232,6 +207,7 @@ public class CommunicationController {
 
     /**
      * 获取到特定水库的所有站点某一时段的所有雨量信息
+     *
      * @param stationVOs
      * @return
      */
@@ -243,7 +219,7 @@ public class CommunicationController {
             ResultUtil.failed(SysEnum.FAIL_TO_FETCH_RAINFALL_ERROR);
         }
         CountDownLatch countDownLatch = new CountDownLatch(stationVOs.size());
-        for (int i=0; i<stationVOs.size(); i++) {
+        for (int i = 0; i < stationVOs.size(); i++) {
             StationVOWithMonitorData stationVOWithMonitorData = new StationVOWithMonitorData();
             BeanUtils.copyProperties(stationVOs.get(i), stationVOWithMonitorData);
             List<String> arguments = new ArrayList<>();
@@ -271,18 +247,19 @@ public class CommunicationController {
             // 个线程countDown()都执行之后才会释放当前线程,程序才能继续往后执行
             countDownLatch.await();
         } catch (InterruptedException e) {
-           log.error("【雨量信息】 多线程获取雨量信息出错 e={}", e);
-           return null;
+            log.error("【雨量信息】 多线程获取雨量信息出错 e={}", e);
+            return null;
         }
         return stationVOWithMonitorDatas;
     }
 
     /**
      * 获取到特定水库的所有站点某一时段的所有水位信息
+     *
      * @param stationVOs
      * @return
      */
-    public  List<StationVOWithMonitorData> getAllWaterLevelData(List<StationVO> stationVOs, String startTimeStr, String endTimeStr) {
+    public List<StationVOWithMonitorData> getAllWaterLevelData(List<StationVO> stationVOs, String startTimeStr, String endTimeStr) {
         List<StationVOWithMonitorData> stationVOWithMonitorDatas = new ArrayList<StationVOWithMonitorData>();
         ObjectMapper objectMapper = new ObjectMapper();
         if (stationVOs.size() == 0 || stationVOs == null) {
@@ -290,7 +267,7 @@ public class CommunicationController {
             ResultUtil.failed(SysEnum.FAIL_TO_FETCH_WATERLEVEL_ERROR);
         }
         CountDownLatch countDownLatch = new CountDownLatch(stationVOs.size());
-        for (int i=0; i<stationVOs.size(); i++) {
+        for (int i = 0; i < stationVOs.size(); i++) {
             StationVOWithMonitorData stationVOWithMonitorData = new StationVOWithMonitorData();
             BeanUtils.copyProperties(stationVOs.get(i), stationVOWithMonitorData);
             List<String> arguments = new ArrayList<>();

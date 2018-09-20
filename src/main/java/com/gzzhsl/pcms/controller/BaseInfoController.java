@@ -1,14 +1,13 @@
 package com.gzzhsl.pcms.controller;
 
-import com.gzzhsl.pcms.entity.BaseInfo;
 import com.gzzhsl.pcms.entity.Feedback;
 import com.gzzhsl.pcms.entity.ProjectMonthlyReport;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.BaseInfo;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.SysRole;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ImageUtil;
 import com.gzzhsl.pcms.util.PathUtil;
 import com.gzzhsl.pcms.util.ResultUtil;
@@ -52,19 +51,20 @@ public class BaseInfoController {
     @GetMapping("/hasbaseinfo")
     @ResponseBody
     public ResultVO hasBaseInfo() {
-      /*  UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
-        if (thisUser.getSysRoleList() == null || thisUser.getSysRoleList().size() == 0) {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(null, userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
+        if (thisUser.getRoles() == null || thisUser.getRoles().size() == 0) {
             return ResultUtil.failed(SysEnum.SUBACCOUNT_NOT_EXIST_ERROR);
         }
-        if (thisUser.getBaseInfo() == null) {
+
+        if (thisProject == null) {
             return ResultUtil.failed();
-        } else if (thisUser.getBaseInfo().getState().equals((byte) -1)) {
+        } else if (thisProject.getState().equals((byte) -1)) {
                 return ResultUtil.success(1310, "审批未通过");
         } else {
             return ResultUtil.success();
-        }*/
-      return null;
+        }
     }
 
     @GetMapping("/getinbaseinfo")
@@ -75,16 +75,15 @@ public class BaseInfoController {
     @GetMapping("/getbaseinfo")
     @ResponseBody
     public ResultVO getBaseInfo() {
-       /* UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        UserInfo thisUser = userService.findByUserId(userInfo.getUserId());
-        if (userService.getUserByUsername(thisUser.getUsername()).getBaseInfo() == null){
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.findOneWithRolesAndPrivilegesByUsernameOrId(null, userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
+        if (thisProject == null){
             log.error("【基本信息】没有配置该用户的项目基本信息");
             throw new SysException(SysEnum.BASE_INFO_NO_RECORD_ERROR);
         }
-        BaseInfoVO baseInfoVO = baseInfoService.getBaseInfoById(thisUser.getBaseInfo().getBaseInfoId());
+        BaseInfoVO baseInfoVO = baseInfoService.findBaseInfoVOById(thisProject.getBaseInfoId());
         return ResultUtil.success(baseInfoVO);
-*/
-       return null;
     }
 
     @PostMapping("/addfiles")

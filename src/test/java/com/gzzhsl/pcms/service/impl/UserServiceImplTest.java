@@ -16,9 +16,9 @@ public class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
-    @Test
+ /*   @Test
     public void findByUserId() throws Exception {
         System.out.println(userService.findByUserId("00B2A067-6BD7-438C-8D4A-9E3E0C9E3DCB"));
-    }
+    }*/
 
 }

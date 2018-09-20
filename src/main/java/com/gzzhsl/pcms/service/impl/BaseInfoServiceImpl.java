@@ -247,9 +247,11 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
     @Override
     public List<BaseInfoVO> findByRegionId(Integer regionId) {
-       /* List<BaseInfo> baseInfos = baseInfoRepository.findByRegionId(regionId);
+        List<BaseInfo> baseInfos = baseInfoMapper.findByRegionId(regionId);
+        if (baseInfos == null || baseInfos.size() == 0) {
+            return new ArrayList<>();
+        }
         List<BaseInfoVO> baseInfoVOs = baseInfos.stream().map(e -> BaseInfo2VO.convert(e)).collect(Collectors.toList());
-        return baseInfoVOs;*/
-       return  null;
+        return baseInfoVOs;
     }
 }

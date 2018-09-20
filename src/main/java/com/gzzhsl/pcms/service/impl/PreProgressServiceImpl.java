@@ -1,15 +1,20 @@
 package com.gzzhsl.pcms.service.impl;
 
 import com.gzzhsl.pcms.converter.PreProgressEntriesSetPreProgress;
-import com.gzzhsl.pcms.entity.*;
 import com.gzzhsl.pcms.enums.NotificationTypeEnum;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.mapper.PreProgressDefaultMapper;
+import com.gzzhsl.pcms.mapper.PreProgressEntryMapper;
+import com.gzzhsl.pcms.mapper.PreProgressMapper;
+import com.gzzhsl.pcms.model.Feedback;
+import com.gzzhsl.pcms.model.PreProgress;
+import com.gzzhsl.pcms.model.PreProgressDefault;
+import com.gzzhsl.pcms.model.PreProgressEntry;
 import com.gzzhsl.pcms.repository.PreProgressDefaultRepository;
 import com.gzzhsl.pcms.repository.PreProgressEntryRepository;
 import com.gzzhsl.pcms.repository.PreProgressRepository;
 import com.gzzhsl.pcms.service.*;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.FeedbackUtil;
 import com.gzzhsl.pcms.util.OperationUtil;
 import com.gzzhsl.pcms.util.PathUtil;
@@ -32,9 +37,16 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PreProgressServiceImpl implements PreProgressService {
     @Autowired
-    private PreProgressDefaultRepository preProgressDefaultRepository;
+    private PreProgressMapper preProgressMapper;
     @Autowired
-    private PreProgressRepository preProgressRepository;
+    private PreProgressDefaultMapper preProgressDefaultMapper;
+
+
+
+
+    @Autowired
+    private PreProgressDefaultRepository preProgressDefaultRepository;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -49,6 +61,19 @@ public class PreProgressServiceImpl implements PreProgressService {
     private NotificationService notificationService;
     @Autowired
     private WebSocket webSocket;
+
+
+
+    @Override
+    public PreProgress findByBaseInfoId(String baseInfoId) {
+        return preProgressMapper.findByBaseInfoId(baseInfoId);
+    }
+
+    @Override
+    public PreProgress findWithImgByBaseInfoId(String baseInfoId) {
+        return preProgressMapper.findWithImgByBaseInfoId(baseInfoId);
+    }
+
     @Override
     public PreProgress save(List<PreProgressEntry> preProgressEntries, String rtFileTempPath) {
         /*UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
@@ -124,22 +149,24 @@ public class PreProgressServiceImpl implements PreProgressService {
 
     @Override
     public List<PreProgressDefault> getAllPreProgressDefault() {
-        return preProgressDefaultRepository.findAll();
+        return preProgressDefaultMapper.selectAll();
     }
 
-    @Override
-    public PreProgress findByBaseInfo(BaseInfo baseInfo) {
-        return preProgressRepository.findByBaseInfo(baseInfo);
-    }
+
 
     @Override
     public PreProgress findByPreProgressId(String preProgressId) {
-        return preProgressRepository.findByPreProgressId(preProgressId);
+        return preProgressMapper.selectByPrimaryKey(preProgressId);
     }
 
     @Override
+    public Feedback approvePreProgress(com.gzzhsl.pcms.model.UserInfo thisUser, Boolean switchState, String checkinfo, String preProgressId) {
+        return null;
+    }
+
+    /*@Override
     public Feedback approvePreProgress(UserInfo thisUser, Boolean switchState, String checkinfo, String preProgressId) {
-    /*    Feedback feedbackRt = null;
+    *//*    Feedback feedbackRt = null;
         PreProgress preProgressRt = preProgressRepository.findByPreProgressId(preProgressId);
         if (preProgressRt.getState().equals((byte) 1)) {
             log.error("【项目前期审批错误】 不能审批已通过项目");
@@ -162,7 +189,7 @@ public class PreProgressServiceImpl implements PreProgressService {
         }
         // 创建webSocket消息
         WebSocketUtil.sendWSFeedbackMsg(thisUser, webSocket, "项目前期", "新的项目前期审批消息");
-        return feedbackRt;*/
-    return null;
-    }
+        return feedbackRt;*//*
+    return null;*/
+
 }

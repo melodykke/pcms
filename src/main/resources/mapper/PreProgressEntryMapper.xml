@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.PreProgressEntryMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.PreProgressEntry">
+    <id column="pre_progress_entry_id" jdbcType="VARCHAR" property="preProgressEntryId" />
+    <result column="approval_date" jdbcType="TIMESTAMP" property="approvalDate" />
+    <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
+    <result column="compile_unit" jdbcType="VARCHAR" property="compileUnit" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="plan_project" jdbcType="VARCHAR" property="planProject" />
+    <result column="reference_number" jdbcType="VARCHAR" property="referenceNumber" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="pre_progress_id" jdbcType="VARCHAR" property="preProgressId" />
+    <result column="approval_unit" jdbcType="VARCHAR" property="approvalUnit" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from pre_progress_entry
+    where pre_progress_entry_id = #{preProgressEntryId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.PreProgressEntry">
+    insert into pre_progress_entry (pre_progress_entry_id, approval_date, 
+      approval_status, compile_unit, create_time, 
+      plan_project, reference_number, serial_number, 
+      pre_progress_id, approval_unit)
+    values (#{preProgressEntryId,jdbcType=VARCHAR}, #{approvalDate,jdbcType=TIMESTAMP}, 
+      #{approvalStatus,jdbcType=VARCHAR}, #{compileUnit,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{planProject,jdbcType=VARCHAR}, #{referenceNumber,jdbcType=VARCHAR}, #{serialNumber,jdbcType=INTEGER}, 
+      #{preProgressId,jdbcType=VARCHAR}, #{approvalUnit,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.PreProgressEntry">
+    update pre_progress_entry
+    set approval_date = #{approvalDate,jdbcType=TIMESTAMP},
+      approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      compile_unit = #{compileUnit,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      plan_project = #{planProject,jdbcType=VARCHAR},
+      reference_number = #{referenceNumber,jdbcType=VARCHAR},
+      serial_number = #{serialNumber,jdbcType=INTEGER},
+      pre_progress_id = #{preProgressId,jdbcType=VARCHAR},
+      approval_unit = #{approvalUnit,jdbcType=VARCHAR}
+    where pre_progress_entry_id = #{preProgressEntryId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select pre_progress_entry_id, approval_date, approval_status, compile_unit, create_time, 
+    plan_project, reference_number, serial_number, pre_progress_id, approval_unit
+    from pre_progress_entry
+    where pre_progress_entry_id = #{preProgressEntryId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select pre_progress_entry_id, approval_date, approval_status, compile_unit, create_time, 
+    plan_project, reference_number, serial_number, pre_progress_id, approval_unit
+    from pre_progress_entry
+  </select>
+</mapper>

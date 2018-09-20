@@ -1,14 +1,15 @@
 package com.gzzhsl.pcms.service.impl;
 
-import com.gzzhsl.pcms.entity.BaseInfo;
-import com.gzzhsl.pcms.entity.ProjectStatus;
-import com.gzzhsl.pcms.entity.TimeLineItem;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.mapper.ProjectStatusMapper;
+import com.gzzhsl.pcms.model.BaseInfo;
+import com.gzzhsl.pcms.model.ProjectStatus;
+import com.gzzhsl.pcms.model.UserInfo;
 import com.gzzhsl.pcms.repository.ProjectStatusRepository;
+import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.ProjectStatusService;
 import com.gzzhsl.pcms.service.TimeLineItemService;
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.ResultUtil;
 import com.gzzhsl.pcms.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
@@ -32,15 +33,17 @@ import java.util.List;
 public class ProjectStatusServiceImpl implements ProjectStatusService {
 
     @Autowired
-    private ProjectStatusRepository projectStatusRepository;
+    private ProjectStatusMapper projectStatusMapper;
+    @Autowired
+    private BaseInfoService baseInfoService;
     @Autowired
     private TimeLineItemService timeLineItemService;
     @Autowired
     private UserService userService;
 
     @Override
-    public ProjectStatus save(ProjectStatus projectStatus) {
-        return projectStatusRepository.save(projectStatus);
+    public Integer save(ProjectStatus projectStatus) {
+        return projectStatusMapper.insert(projectStatus);
     }
 
     @Override
@@ -70,25 +73,16 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
     }
 
     @Override
-    public List<ProjectStatus> getProjectStatus() {
-      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+    public List<ProjectStatus> findThisProjectStatus() {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject == null || !thisProject.getState().equals((byte) 1)) {
             log.error("【项目状态】 项目状态错误，请优先配置项目概况，并等待审批通过！");
             throw new SysException(9996, "项目状态错误，请优先配置项目概况,并等待审批通过！");
         }
-        List<ProjectStatus> projectStatuses = null;
-        Specification querySpecification = new Specification() {
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-                return cb.equal(root.join("baseInfo").get("baseInfoId"), thisProject.getBaseInfoId());
-            }
-        };
-        Sort sort = new Sort(Sort.Direction.ASC, "createTime");
-
-        return projectStatuses = projectStatusRepository.findAll(querySpecification, sort);
-*/
-      return null;
+        List<ProjectStatus> projectStatuses = projectStatusMapper.findByBaseInfoId(thisProject.getBaseInfoId());
+        return projectStatuses;
     }
 
 

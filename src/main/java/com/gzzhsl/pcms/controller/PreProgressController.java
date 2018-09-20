@@ -6,15 +6,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.gzzhsl.pcms.converter.PreProgress2VO;
 import com.gzzhsl.pcms.converter.PreProgressImg2VO;
-import com.gzzhsl.pcms.entity.BaseInfo;
-import com.gzzhsl.pcms.entity.Feedback;
-import com.gzzhsl.pcms.entity.PreProgress;
-import com.gzzhsl.pcms.entity.PreProgressEntry;
 import com.gzzhsl.pcms.enums.SysEnum;
 import com.gzzhsl.pcms.exception.SysException;
+import com.gzzhsl.pcms.model.BaseInfo;
+import com.gzzhsl.pcms.model.PreProgress;
+import com.gzzhsl.pcms.model.PreProgressEntry;
+import com.gzzhsl.pcms.model.UserInfo;
+import com.gzzhsl.pcms.service.BaseInfoService;
 import com.gzzhsl.pcms.service.PreProgressService;
 import com.gzzhsl.pcms.service.UserService;
-import com.gzzhsl.pcms.shiro.bean.UserInfo;
 import com.gzzhsl.pcms.util.*;
 import com.gzzhsl.pcms.vo.PreProgressImgVO;
 import com.gzzhsl.pcms.vo.PreProgressVO;
@@ -45,6 +45,8 @@ public class PreProgressController {
     @Autowired
     private PreProgressService preProgressService;
     @Autowired
+    private BaseInfoService baseInfoService;
+    @Autowired
     private UserService userService;
 
     @GetMapping("/topreprogress")
@@ -55,18 +57,18 @@ public class PreProgressController {
     @GetMapping("/haspreprogress")
     @ResponseBody
     public ResultVO hasPreProgress() {
-      /*  UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = userService.findByUserId(thisUser.getUserId()).getBaseInfo();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【项目前期错误】 获取用户所在工程基本信息出错 , thisProject = {}", thisProject);
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);
         }
-        PreProgress preProgress = preProgressService.findByBaseInfo(thisProject);
+        PreProgress preProgress = preProgressService.findByBaseInfoId(thisProject.getBaseInfoId());
         if (preProgress != null) {
             return ResultUtil.success();
         }
-        return ResultUtil.failed();*/
-      return null;
+        return ResultUtil.failed();
     }
     @PostMapping("/save")
     @ResponseBody
@@ -95,13 +97,14 @@ public class PreProgressController {
     @GetMapping("/getpreprogress")
     @ResponseBody
     public ResultVO getPreProgress() {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        BaseInfo thisProject = thisUser.getBaseInfo();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        UserInfo thisUser = userService.selectByPrimaryKey(userInfo.getUserId());
+        BaseInfo thisProject = baseInfoService.findBaseInfoById(thisUser.getBaseInfoId());
         if (thisProject == null || thisProject.getBaseInfoId() == null ||  thisProject.getBaseInfoId() == "") {
             log.error("【项目前期错误】 获取用户所在工程基本信息出错 , thisProject = {}", thisProject);
             throw new SysException(SysEnum.ACCOUNT_NO_PROJECT);
         }
-        PreProgress preProgress = preProgressService.findByBaseInfo(thisProject);
+        PreProgress preProgress = preProgressService.findWithImgByBaseInfoId(thisProject.getBaseInfoId());
         List<PreProgressImgVO> preProgressImgVOList = preProgress.getPreProgressImgs().stream().map(e -> PreProgressImg2VO.convert(e)).collect(Collectors.toList());
         PreProgressVO preProgressVO = PreProgress2VO.convert(preProgress);
         preProgressVO.setPlantName(thisProject.getPlantName());
@@ -125,7 +128,7 @@ public class PreProgressController {
     @ResponseBody
     @RequiresRoles(value = {"checker"})
     public ResultVO approveBaseInfo(@RequestBody Map<String, Object> params) {
-        UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+       /* UserInfo thisUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         BaseInfo thisProject = thisUser.getBaseInfo();
         PreProgress thisPreProgress = preProgressService.findByBaseInfo(thisProject);
         Boolean switchState = (boolean) params.get("switchState"); // true: 按钮未通过 false：按钮通过
@@ -153,7 +156,7 @@ public class PreProgressController {
             return ResultUtil.success(feedback);
         } else {
             return ResultUtil.failed(feedback);
-        }
-
+        }*/
+        return  null;
     }
 }

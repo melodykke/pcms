@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzzhsl.pcms.mapper.RegionMapper">
+  <resultMap id="BaseResultMap" type="com.gzzhsl.pcms.model.Region">
+    <id column="region_id" jdbcType="INTEGER" property="regionId" />
+    <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+    <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from region
+    where region_id = #{regionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzzhsl.pcms.model.Region">
+    insert into region (region_id, region_code, region_name, 
+      parent_id)
+    values (#{regionId,jdbcType=INTEGER}, #{regionCode,jdbcType=VARCHAR}, #{regionName,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzzhsl.pcms.model.Region">
+    update region
+    set region_code = #{regionCode,jdbcType=VARCHAR},
+      region_name = #{regionName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER}
+    where region_id = #{regionId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select region_id, region_code, region_name, parent_id
+    from region
+    where region_id = #{regionId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select region_id, region_code, region_name, parent_id
+    from region
+  </select>
+
+  <select id="findByParentIdNotIn" resultMap="BaseResultMap">
+     select region_id, region_code, region_name, parent_id
+    from region
+    WHERE parent_id NOT  IN
+    <choose>
+      <when test="list != null and list.size != 0">
+        <foreach collection="list" open="(" close=")" separator="," index="index" item="item">
+          #{item}
+        </foreach>
+      </when>
+      <otherwise>
+        (NULL)
+      </otherwise>
+    </choose>
+  </select>
+
+    <select id="findByParentId" resultMap="BaseResultMap">
+    select region_id, region_code, region_name, parent_id
+    from region
+    WHERE parent_id = #{parentId};
+    </select>
+</mapper>
